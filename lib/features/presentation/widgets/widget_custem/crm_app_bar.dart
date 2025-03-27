@@ -1,9 +1,10 @@
-
-import 'package:crm/features/data/resources/icon_resources.dart';
-import 'package:crm/features/presentation/widgets/widget_custem/crm_app_logo.dart';
-import 'package:crm/features/presentation/widgets/widget_custem/crm_container.dart';
-import 'package:crm/features/presentation/widgets/widget_custem/crm_profile.dart';
+import 'package:crm_flutter/features/data/resources/icon_resources.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_app_logo.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_container.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 
 class CrmAppBar extends StatelessWidget {
   final Widget? leading;

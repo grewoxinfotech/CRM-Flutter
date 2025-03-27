@@ -1,5 +1,5 @@
-import 'package:crm/features/presentation/widgets/widget_custem/crm_container.dart';
-import 'package:crm/features/presentation/widgets/widget_custem/crm_headline.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_container.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_headline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

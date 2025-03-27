@@ -1,5 +1,4 @@
-
-import 'package:crm/features/data/resources/color_resources.dart';
+import 'package:crm_flutter/features/data/resources/color_resources.dart';
 import 'package:flutter/material.dart';
 
 ThemeData LightThemeMode = ThemeData(

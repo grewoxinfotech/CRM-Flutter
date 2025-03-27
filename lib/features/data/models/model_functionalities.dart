@@ -1,5 +1,6 @@
-import 'package:crm/features/data/resources/image_resources.dart';
+import 'package:crm_flutter/features/data/resources/image_resources.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class FunctionModel {
   final String? imagePath;
