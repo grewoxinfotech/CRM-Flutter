@@ -1,3 +1,4 @@
+import 'package:crm_flutter/features/data/resources/icon_resources.dart';
 import 'package:crm_flutter/features/data/resources/image_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class FunctionModel {
     List<FunctionModel> functionitems = [];
     functionitems.add(
       FunctionModel(
-        imagePath: ImageResources.PROJECTS,
+        imagePath: IconResources.PROJECTS,
         title: "Project",
         unitId: "project",
         color: Color(0xffFF5900),
@@ -30,7 +31,7 @@ class FunctionModel {
     );
     functionitems.add(
       FunctionModel(
-        imagePath: ImageResources.LEADS,
+        imagePath: IconResources.LEADS,
         title: "Leads",
         unitId: "leads",
         color: Color(0xffFFBD21),
@@ -39,7 +40,7 @@ class FunctionModel {
     );
     functionitems.add(
       FunctionModel(
-        imagePath: ImageResources.TASK,
+        imagePath: IconResources.TASK,
         title: "Task",
         unitId: "task",
         color: Color(0xff0AC947),
@@ -48,7 +49,7 @@ class FunctionModel {
     );
     functionitems.add(
       FunctionModel(
-        imagePath: ImageResources.CUSTOMER,
+        imagePath: IconResources.CUSTOMER,
         title: "Customer",
         unitId: "customer",
         color: Color(0xff6D5DD3),
@@ -57,7 +58,7 @@ class FunctionModel {
     );
     functionitems.add(
       FunctionModel(
-        imagePath: ImageResources.EMPLAYEE,
+        imagePath: IconResources.EMPLAYEE,
         title: "Employee",
         unitId: "employee",
         color: Color(0xff2B648F),
@@ -66,7 +67,7 @@ class FunctionModel {
     );
     functionitems.add(
       FunctionModel(
-        imagePath: ImageResources.CLIENTS,
+        imagePath: IconResources.CLIENTS,
         title: "Clients",
         unitId: "clients",
         color: Color(0xffFFCC01),
@@ -75,7 +76,7 @@ class FunctionModel {
     );
     functionitems.add(
       FunctionModel(
-        imagePath: ImageResources.CONTRACT,
+        imagePath: IconResources.CONTRACT,
         title: "Contract",
         unitId: "contract",
         color: Color(0xff3400AD),
@@ -84,7 +85,7 @@ class FunctionModel {
     );
     functionitems.add(
       FunctionModel(
-        imagePath: ImageResources.DOCUMENT,
+        imagePath: IconResources.DOCUMENT,
         title: "Document",
         unitId: "document",
         color: Color(0xff00B2FF),

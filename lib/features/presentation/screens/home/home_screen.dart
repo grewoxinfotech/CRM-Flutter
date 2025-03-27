@@ -1,6 +1,6 @@
 import 'package:crm_flutter/features/presentation/widgets/widget/attendance/attendance_widget.dart';
 import 'package:crm_flutter/features/presentation/widgets/widget/build_wellcome_text.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/functionalities/build_app_functions_section.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget/functionalities/functionalities_widgets.dart';
 import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
                 space(),
                 AttendanceWidget(),
                 space(),
-                buildAppFunctionsSection(context),
+                FunctionalitiesWidgets(),
                 space(),
                 // buildNearestEvents(context, size),
               ],
