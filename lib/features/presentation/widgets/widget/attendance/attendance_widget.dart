@@ -15,6 +15,7 @@ class AttendanceWidget extends StatelessWidget {
     return CrmContainer(
       width: 500,
       padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
           const CrmHeadline(title: "Attendance", showViewAll: false),

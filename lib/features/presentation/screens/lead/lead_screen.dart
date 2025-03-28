@@ -1,14 +1,13 @@
-import 'package:crm_flutter/features/presentation/screens/home/home_view_model.dart';
+import 'package:crm_flutter/features/presentation/screens/lead/features/lead_view_model.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class LeadScreen extends StatelessWidget {
+  const LeadScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Widget space() => const SizedBox(height: 20);
-    List<HomeViewModel> widgets = [];
-    widgets = HomeViewModel.getWidgets();
+    List<LeadViewModel> widgets = [];
+    widgets = LeadViewModel.getWidgets();
     return Container(
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -19,7 +18,7 @@ class HomeScreen extends StatelessWidget {
             int widgetIndex = i ~/ 2;
             return widgets[widgetIndex].widget;
           } else if (i % 2 != 0) {
-            return space();
+            return SizedBox(height: 20,);
           }
         },
       ),

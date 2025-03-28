@@ -1,5 +1,6 @@
 import 'package:crm_flutter/features/data/resources/icon_resources.dart';
 import 'package:crm_flutter/features/data/resources/image_resources.dart';
+import 'package:crm_flutter/features/presentation/screens/lead/lead_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +10,8 @@ class FunctionModel {
   final String? unitId;
   final Color? color;
   final int? num;
+  final Widget? widget;
+
 
   const FunctionModel({
     this.title,
@@ -16,6 +19,7 @@ class FunctionModel {
     this.unitId,
     this.color,
     this.num,
+    this.widget,
   });
 
   static List<FunctionModel> getFunctionitems() {
@@ -36,6 +40,7 @@ class FunctionModel {
         unitId: "leads",
         color: Color(0xffFFBD21),
         num: 26,
+        widget: LeadScreen()
       ),
     );
     functionitems.add(

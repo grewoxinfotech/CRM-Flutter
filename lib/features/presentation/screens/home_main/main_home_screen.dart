@@ -1,3 +1,5 @@
+import 'package:crm_flutter/features/presentation/screens/home/home_screen.dart';
+import 'package:crm_flutter/features/presentation/screens/lead/lead_screen.dart';
 import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,15 +10,22 @@ class MainHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          CrmAppBar(),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [],
+      backgroundColor: Get.theme.colorScheme.background,
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            CrmAppBar(),
+            SliverToBoxAdapter(
+              child: const Column(
+                children: [
+                  const SizedBox(height: 20),
+                  const HomeScreen(),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
