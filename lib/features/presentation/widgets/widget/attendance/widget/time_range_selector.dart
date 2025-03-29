@@ -1,19 +1,37 @@
 import 'package:flutter/material.dart';
-import "package:get/get.dart";
+import 'package:get/get.dart';
+
 class TimeRangeSelector extends StatelessWidget {
-  const TimeRangeSelector({super.key});
+  final Function(String) onSelected;
+  TimeRangeSelector({super.key, required this.onSelected});
+
+  final List<String> items = ["Week", "Month", "Year"];
+  final RxString selectedItem = "Week".obs;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: ["Week", "Month", "Year"].map((period) {
+      children: items.map((item) {
         return GestureDetector(
-          onTap: () {},
-          child: Text(period,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Get.theme.colorScheme.primary)),
+          onTap: () {
+            selectedItem.value = item;
+            onSelected(item); // Notify parent about selection
+          },
+          child: Obx(() => _text(item, selectedItem.value == item)),
         );
       }).toList(),
+    );
+  }
+
+  Widget _text(String text, bool isSelected) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+        color: isSelected ? Get.theme.colorScheme.primary : Colors.black,
+      ),
     );
   }
 }

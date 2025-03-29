@@ -1,15 +1,14 @@
-
-import 'package:crm/auth/login/login_controller.dart';
-import 'package:crm/auth/widgets/auth_elevated_button.dart';
-import 'package:crm/auth/widgets/auth_text_form_field.dart';
-import 'package:crm/care/uitl/validators.dart';
-import 'package:crm/features/data/resources/icon_resources.dart';
-import 'package:crm/features/presentation/widgets/widget_custem/crm_app_logo.dart';
-import 'package:crm/features/presentation/widgets/widget_custem/crm_container.dart';
+import 'package:crm_flutter/auth/login/login_controller.dart';
+import 'package:crm_flutter/auth/widgets/auth_elevated_button.dart';
+import 'package:crm_flutter/auth/widgets/auth_text_form_field.dart';
+import 'package:crm_flutter/care/uitl/validators.dart';
+import 'package:crm_flutter/features/data/resources/icon_resources.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_app_logo.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatelessWidget{
   const LoginScreen({super.key});
 
   @override

@@ -1,0 +1,27 @@
+import 'package:crm_flutter/features/presentation/screens/lead/features/lead_view_model.dart';
+import 'package:flutter/material.dart';
+
+class LeadScreen extends StatelessWidget {
+  const LeadScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<LeadViewModel> widgets = [];
+    widgets = LeadViewModel.getWidgets();
+    return Container(
+      child: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: widgets.length * 2 - 1,
+        itemBuilder: (context, i) {
+          if (i % 2 == 0) {
+            int widgetIndex = i ~/ 2;
+            return widgets[widgetIndex].widget;
+          } else if (i % 2 != 0) {
+            return SizedBox(height: 20,);
+          }
+        },
+      ),
+    );
+  }
+}

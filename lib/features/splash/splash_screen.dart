@@ -1,5 +1,5 @@
-import 'package:crm/features/presentation/widgets/widget_custem/crm_app_logo.dart';
-import 'package:crm/features/splash/splash_controller.dart';
+import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_app_logo.dart';
+import 'package:crm_flutter/features/splash/splash_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
