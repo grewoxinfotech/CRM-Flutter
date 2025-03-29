@@ -1,6 +1,6 @@
 import 'package:crm_flutter/features/presentation/screens/home/home_screen.dart';
-import 'package:crm_flutter/features/presentation/screens/lead/lead_screen.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_app_bar.dart';
+import 'package:crm_flutter/features/presentation/screens/lead/lead_screen/lead_screen.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

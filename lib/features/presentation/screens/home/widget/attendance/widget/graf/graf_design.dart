@@ -1,5 +1,5 @@
-import 'package:crm_flutter/features/presentation/widgets/widget/attendance/widget/graf/graf.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/attendance/widget/graf/graf_controller.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/attendance/widget/graf/graf.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/attendance/widget/graf/graf_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

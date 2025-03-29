@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_container.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

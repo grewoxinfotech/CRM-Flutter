@@ -1,11 +1,11 @@
 
 import 'dart:convert';
 
-import 'package:crm_flutter/auth/login/login_model.dart';
-import 'package:crm_flutter/auth/sign_up_success/sign_up_success_screen.dart';
 import 'package:crm_flutter/care/uitl/validators.dart';
 import 'package:crm_flutter/features/data/resources/url_resources.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_snack_bar.dart';
+import 'package:crm_flutter/features/presentation/screens/auth/login/login_model.dart';
+import 'package:crm_flutter/features/presentation/screens/auth/sign_up_success/sign_up_success_screen.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

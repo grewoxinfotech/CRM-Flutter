@@ -1,8 +1,8 @@
-import 'package:crm_flutter/features/presentation/screens/lead/features/lead_view_model.dart';
+import 'package:crm_flutter/features/presentation/screens/lead/lead_screen/features/lead_view_model.dart';
 import 'package:flutter/material.dart';
 
-class LeadScreen extends StatelessWidget {
-  const LeadScreen({super.key});
+class LeadWidgets extends StatelessWidget {
+  const LeadWidgets({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class LeadScreen extends StatelessWidget {
             int widgetIndex = i ~/ 2;
             return widgets[widgetIndex].widget;
           } else if (i % 2 != 0) {
-            return SizedBox(height: 20,);
+            return const SizedBox(height: 20,);
           }
         },
       ),

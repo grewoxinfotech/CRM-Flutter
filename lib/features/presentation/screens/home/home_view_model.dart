@@ -1,7 +1,7 @@
-import 'package:crm_flutter/features/presentation/widgets/widget/attendance/attendance_widget.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/date_container_widget.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/functionalities/functionalities_widgets.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/wellcome_text.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/attendance/attendance_widget.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/date_container_widget.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/functionalities/functionalities_widgets.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/wellcome_text.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewModel {

@@ -40,6 +40,7 @@ dependencies:
   percent_indicator:
   carousel_slider:
   fl_chart:
+  flutter_native_splash:
 
 dev_dependencies:
   flutter_test:

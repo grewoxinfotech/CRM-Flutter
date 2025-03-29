@@ -1,10 +1,8 @@
 import 'package:crm_flutter/features/data/resources/icon_resources.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_app_logo.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_container.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_profile.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_app_logo.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 
 class CrmAppBar extends StatelessWidget {
   final Widget? leading;
@@ -27,11 +25,12 @@ class CrmAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Colors.transparent,
       scrolledUnderElevation: 0,
+      automaticallyImplyLeading: false,
       pinned: true,
       toolbarHeight: 70,
       titleSpacing: 10,
       title: CrmContainer(
-        width: 500,
+        width: 2000,
         height: 70,
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Row(

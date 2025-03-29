@@ -1,4 +1,4 @@
-import 'package:crm_flutter/features/presentation/widgets/widget/attendance/widget/graf/graf_design_2.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/attendance/widget/graf/graf_design_2.dart';
 import 'package:flutter/material.dart';
 
 class CircularProgressBar extends StatelessWidget {

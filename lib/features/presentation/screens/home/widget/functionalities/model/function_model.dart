@@ -1,6 +1,6 @@
 import 'package:crm_flutter/features/data/resources/icon_resources.dart';
 import 'package:crm_flutter/features/data/resources/image_resources.dart';
-import 'package:crm_flutter/features/presentation/screens/lead/lead_screen.dart';
+import 'package:crm_flutter/features/presentation/screens/lead/lead_screen/lead_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,15 +24,6 @@ class FunctionModel {
 
   static List<FunctionModel> getFunctionitems() {
     List<FunctionModel> functionitems = [];
-    functionitems.add(
-      FunctionModel(
-        imagePath: IconResources.PROJECTS,
-        title: "Project",
-        unitId: "project",
-        color: Color(0xffFF5900),
-        num: 23,
-      ),
-    );
     functionitems.add(
       FunctionModel(
         imagePath: IconResources.LEADS,
@@ -86,15 +77,6 @@ class FunctionModel {
         unitId: "contract",
         color: Color(0xff3400AD),
         num: 66,
-      ),
-    );
-    functionitems.add(
-      FunctionModel(
-        imagePath: IconResources.DOCUMENT,
-        title: "Document",
-        unitId: "document",
-        color: Color(0xff00B2FF),
-        num: 88,
       ),
     );
     return functionitems;
