@@ -1,5 +1,6 @@
 import 'package:crm_flutter/config/themes/theme.dart';
 import 'package:crm_flutter/features/presentation/screens/home_main/main_home_screen.dart';
+import 'package:crm_flutter/list_screen.dart';
 import 'package:crm_flutter/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,7 @@ void main() {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: LightThemeMode,
-      home: MainHomeScreen(),
+      home: ListScreen(),
     ),
   );
 }

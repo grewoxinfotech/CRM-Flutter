@@ -1,7 +1,7 @@
-import 'package:crm_flutter/auth/widgets/auth_elevated_button.dart';
+import 'package:crm_flutter/features/presentation/screens/auth/widgets/auth_elevated_button.dart';
 import 'package:crm_flutter/features/presentation/screens/home/home_screen.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_app_logo.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_container.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_app_logo.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

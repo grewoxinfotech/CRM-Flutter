@@ -1,8 +1,8 @@
-import 'package:crm_flutter/features/presentation/widgets/widget/attendance/widget/attendance_button.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/attendance/widget/graf/graf_design.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/attendance/widget/time_range_selector.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_container.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_headline.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/attendance/widget/attendance_button.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/attendance/widget/graf/graf_design.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/attendance/widget/time_range_selector.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_headline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

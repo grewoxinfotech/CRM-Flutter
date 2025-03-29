@@ -1,9 +1,7 @@
-import 'package:crm_flutter/features/presentation/screens/home/home_screen.dart';
-import 'package:crm_flutter/features/presentation/screens/lead/lead_screen.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/functionalities/function_model.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget/functionalities/widget/functions_box.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_container.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_headline.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/functionalities/model/function_model.dart';
+import 'package:crm_flutter/features/presentation/screens/home/widget/functionalities/widget/functions_box.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_headline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,12 +26,13 @@ class FunctionalitiesWidgets extends StatelessWidget {
       child: Column(
         children: [
           const CrmHeadline(title: "App Functionalities"),
+          const SizedBox(height: 20),
           SizedBox(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                mainAxisExtent: 150,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,

@@ -1,5 +1,5 @@
 import 'package:crm_flutter/features/presentation/screens/lead/widgets/lead_summery/lesd_summery_tile.dart';
-import 'package:crm_flutter/features/presentation/widgets/widget_custem/crm_headline.dart';
+import 'package:crm_flutter/features/presentation/widgets/crm_headline.dart';
 import 'package:flutter/cupertino.dart';
 
 class LeadSummaryView extends StatelessWidget {
