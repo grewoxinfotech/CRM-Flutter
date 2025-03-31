@@ -43,6 +43,8 @@ dependencies:
   flutter_native_splash:
   flutter_secure_storage: ^9.2.4
   intl: ^0.20.2
+  loading_animation_widget:
+
 
 
 dev_dependencies:
