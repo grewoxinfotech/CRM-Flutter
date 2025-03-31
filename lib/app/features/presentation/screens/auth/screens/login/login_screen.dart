@@ -97,12 +97,10 @@ class LoginScreen extends StatelessWidget{
                     onPressed: () {
                       controller.email.text = "grewox1001@yopmail.com";
                       controller.password.text = "MyStrongP@ssw0rd!";
-<<<<<<< HEAD:lib/features/presentation/screens/auth/login/login_screen.dart
-=======
+
 
                       // "login": "grewox1001@yopmail.com",
                       // "password": "MyStrongP@ssw0rd!"
->>>>>>> 8a1646637b1187ec6ad96e704762e8dd357cbf7d:lib/app/features/presentation/screens/auth/screens/login/login_screen.dart
                     },
                     child: const Text('Forgot Password?'),
                   ),
