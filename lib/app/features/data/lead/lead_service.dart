@@ -3,15 +3,19 @@ import 'package:crm_flutter/app/features/data/resources/url_resources.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../care/secure_storage.dart';
+
 class LeadService extends GetConnect {
-  final String apiUrl = UrlResources.Leads; // Replace with your API endpoint
+  final String apiUrl = UrlResources.Leads;
 
   Future<List<LeadModel>> fetchLeads() async {
     try {
-      SharedPreferences profile = await SharedPreferences.getInstance();
-      String? token = profile.getString("tokan");
 
-      token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdyZXdveDEwMDEiLCJlbWFpbCI6ImdyZXdveDEwMDFAeW9wbWFpbC5jb20iLCJwaG9uZSI6bnVsbCwiaWQiOiJkMnV5a3hiVkNXNWwyMWxKWHVPNmpFTyIsInJvbGUiOiJ6bXVneWZ4T2V6MENCZTNhZU96bWRMRSIsInJvbGVOYW1lIjoiY2xpZW50IiwiY3JlYXRlZF9ieSI6InN1cGVyYWRtaW4iLCJpYXQiOjE3NDMyNDg1MzksImV4cCI6MTc0MzMzNDkzOX0.r1ucIhwkICdcHCne9MwWz40WQlbMj1Oi_HzzqduflKA";
+      String? token = await SecureStorage.getToken();
+
+      if (token == null) {
+        throw Exception("No token found. Please log in again.");
+      }
 
       final response = await get(
         apiUrl,

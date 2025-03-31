@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:crm_flutter/app/care/uitl/validators.dart';
+import 'package:crm_flutter/app/care/util//validators.dart';
 import 'package:crm_flutter/app/features/data/resources/url_resources.dart';
 import 'package:crm_flutter/app/features/presentation/screens/auth/screens/sign_up_success/sign_up_success_screen.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_snack_bar.dart';
@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../../../../care/secure_storage.dart';
 
 class LoginController extends GetxController {
   TextEditingController email = TextEditingController();
@@ -41,21 +43,16 @@ class LoginController extends GetxController {
           if (response.statusCode == 200) {
             var data = jsonDecode(response.body);
             if (data["success"]) {
-              // CrmSnackbar("Login SucsessFul", "${response.statusCode}", false);
               String token = data["data"]["token"];
-              SharedPreferences profile = await SharedPreferences.getInstance();
-              profile.setString("token", token.toString());
-              profile.setBool("islogin", true);
+              await SecureStorage.saveToken(token); // Save token securely
+
               print("Login Successful, Token: $token");
               Get.off(SignUpSuccessScreen());
             } else {
-              crmSnackbar("Login Failed", "${data["message"]}", isError: true);
-              print("Login Failed: ${data["message"]}");
+              crmSnackbar("Login Failed", data["message"], isError: true);
             }
           } else {
-            print(
-              "Server Error: ${response.statusCode}, Response: ${response.body}",
-            );
+            print("Server Error: ${response.statusCode}, Response: ${response.body}");
           }
         } catch (e) {
           print("Error: $e");
