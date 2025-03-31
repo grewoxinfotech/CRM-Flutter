@@ -11,6 +11,7 @@ class LeadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
+      appBar: PreferredSize(preferredSize: const Size.fromHeight(70), child: CrmAppBar()),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Get.to(LeadsAddScreen()),
         label: Text(
@@ -24,20 +25,7 @@ class LeadScreen extends StatelessWidget {
         icon: Icon(color: Colors.black, Icons.add),
         backgroundColor: Get.theme.colorScheme.surface,
       ),
-      body: CustomScrollView(
-        slivers: [
-          CrmAppBar(),
-          SliverToBoxAdapter(
-            child: const Column(
-              children: [
-                const SizedBox(height: 0),
-                const LeadModelView(),
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: const LeadModelView(),
     );
   }
 }

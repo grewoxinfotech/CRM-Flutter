@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/features/presentation/screens/home/home_screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/home_main/main_home_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/leads_add_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/lead_overview_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_screen/lead_screen.dart';
 import 'package:crm_flutter/app/test_screen.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +62,7 @@ class ScreenModel {
     screens.add(ScreenModel(title: "Home Screen", suntitle: "home", widget: HomeScreen()));
     screens.add(ScreenModel(title: "Lead Screen", suntitle: "leads", widget: LeadScreen()));
     screens.add(ScreenModel(title: "Lead Add Screen", suntitle: "leads", widget: LeadsAddScreen()));
+    screens.add(ScreenModel(title: "Lead Add Screen", suntitle: "leads", widget: LeadOverviewScreen()));
     return screens;
   }
 }

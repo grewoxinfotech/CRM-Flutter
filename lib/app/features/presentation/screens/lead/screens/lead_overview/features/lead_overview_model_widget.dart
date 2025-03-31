@@ -1,0 +1,18 @@
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview_id_information.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview_id_information_2.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview_information.dart';
+import 'package:flutter/cupertino.dart';
+
+class LeadOverviewModelWidget {
+  final Widget? widget;
+
+  LeadOverviewModelWidget({required this.widget});
+
+  static List<LeadOverviewModelWidget> getWidgets() {
+    return [
+      LeadOverviewModelWidget(widget: LeadOverviewIdInformation()),
+      LeadOverviewModelWidget(widget: LeadOverviewInformation()),
+      LeadOverviewModelWidget(widget: LeadOverviewIdInformation2()),
+    ];
+  }
+}

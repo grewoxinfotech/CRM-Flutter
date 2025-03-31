@@ -34,8 +34,6 @@ class LeadView extends StatelessWidget {
                     return DateFormat('dd MMM yyyy').format(dateTime); // Format as "29 Mar 2025"
                   }
                   String formattedDate = formatDate(controller.leadsList[i].createdAt.toString());
-
-
                   return LeadTile(
                     claint_name: controller.leadsList[i].firstName ?? "No name",
                     company_name: controller.leadsList[i].leadTitle ?? "No name",
@@ -46,7 +44,7 @@ class LeadView extends StatelessWidget {
                     date: formattedDate.toString(),
                   );
                 },
-                separatorBuilder: (context, i) => SizedBox(height: 10), // Adds spacing between items
+                separatorBuilder: (context, i) => const SizedBox(height: 10),
               ),
             ),
           ),

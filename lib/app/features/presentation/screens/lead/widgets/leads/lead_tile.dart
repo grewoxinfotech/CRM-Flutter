@@ -11,7 +11,6 @@ class LeadTile extends StatelessWidget {
   final String date;
   final GestureTapCallback? onTap;
 
-
   //
   // final String? id ;
   // final String? leadTitle ;
@@ -62,7 +61,6 @@ class LeadTile extends StatelessWidget {
   //   required this.createdAt,
   //   required this.updatedAt,
   // });
-
 
   const LeadTile({
     super.key,
@@ -132,7 +130,7 @@ class LeadTile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            amount.toString()+".00",
+                            amount.toString() + ".00",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -151,10 +149,7 @@ class LeadTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Divider(
-                    color: Colors.grey,
-                    height: 20,
-                  ),
+                  Divider(color: Colors.grey, height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
