@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/care/uitl/validators.dart';
+import 'package:crm_flutter/app/care/util/validators.dart';
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
 import 'package:crm_flutter/app/features/presentation/screens/auth/screens/login/features/login_controller.dart';
 import 'package:crm_flutter/app/features/presentation/screens/auth/widgets/auth_elevated_button.dart';
