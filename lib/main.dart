@@ -1,7 +1,8 @@
-import 'package:crm_flutter/config/themes/theme.dart';
-import 'package:crm_flutter/features/presentation/screens/home_main/main_home_screen.dart';
-import 'package:crm_flutter/list_screen.dart';
-import 'package:crm_flutter/test_screen.dart';
+
+import 'package:crm_flutter/app/config/themes/theme.dart';
+import 'package:crm_flutter/app/features/presentation/screens/splash/splash_screen.dart';
+import 'package:crm_flutter/app/list_screen.dart';
+import 'package:crm_flutter/app/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
