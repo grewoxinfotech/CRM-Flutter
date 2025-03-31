@@ -96,8 +96,8 @@ class LoginScreen extends StatelessWidget{
                   ),
                   TextButton(
                     onPressed: () {
-                      controller.email.text = "superadmin";
-                      controller.password.text = "SuperAdmin@123";
+                      controller.email.text = "grewox1001@yopmail.com";
+                      controller.password.text = "MyStrongP@ssw0rd!";
                     },
                     child: const Text('Forgot Password?'),
                   ),

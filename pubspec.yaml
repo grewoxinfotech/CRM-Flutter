@@ -41,6 +41,7 @@ dependencies:
   carousel_slider:
   fl_chart:
   flutter_native_splash:
+  flutter_secure_storage:
 
 dev_dependencies:
   flutter_test:
