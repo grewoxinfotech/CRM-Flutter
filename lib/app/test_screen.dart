@@ -1,4 +1,5 @@
-import 'package:crm_flutter/app/features/presentation/widgets/Crm_Bottem_Bar.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview_id_information_2.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview_information.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +20,7 @@ class _TestScreenState extends State<TestScreen> {
           padding: const EdgeInsets.all(0.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [CrmBottemBar()],
+            children: [LeadOverviewIdInformation2()],
           ),
         ),
       ),

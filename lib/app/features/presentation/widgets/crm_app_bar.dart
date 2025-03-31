@@ -22,17 +22,15 @@ class CrmAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return SliverAppBar(
-      backgroundColor: Colors.transparent,
-      scrolledUnderElevation: 0,
-      automaticallyImplyLeading: false,
-      pinned: true,
-      toolbarHeight: 70,
-      titleSpacing: 10,
-      title: CrmContainer(
-        width: 2000,
-        height: 70,
+    return SafeArea(
+      child: CrmContainer(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        margin: const EdgeInsets.only(left: 5,top: 5,right: 5),
+        boxShadow: [BoxShadow(
+          color: Colors.black26,
+          blurRadius: 20,
+          spreadRadius: -10,
+        )],
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

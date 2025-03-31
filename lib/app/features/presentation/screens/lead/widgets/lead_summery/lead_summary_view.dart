@@ -14,23 +14,22 @@ class LeadSummaryView extends StatelessWidget {
           title: "Lead Summery",
           padding: const EdgeInsets.symmetric(horizontal: 30),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 10,),
         SizedBox(
           height: 100,
-          child: ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            itemCount: 100,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: 5,
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, i) {
-              if (i % 2 == 0) {
-                int c = i ~/ 2;
-                return LesdSummeryTile(title: "Crm", count: c,onTap: (){
-                  print(UrlResources.Leads);
-                },);
-              } else if (i % 2 != 0) {
-                return SizedBox(width: 10);
-              }
-            },
+            separatorBuilder: (context, i) => const SizedBox(width: 10),
+            itemBuilder:
+                (context, i) => LesdSummeryTile(
+                  title: "Crm",
+                  count: i,
+                  onTap: () {
+                    print(UrlResources.Leads);
+                  },
+                ),
           ),
         ),
       ],

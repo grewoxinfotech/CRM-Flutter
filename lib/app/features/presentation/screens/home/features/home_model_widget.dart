@@ -7,22 +7,19 @@ import 'package:flutter/material.dart';
 class HomeModelWidget {
   final Widget? widget;
   HomeModelWidget({required this.widget});
-
   static List<HomeModelWidget> getWidgets() {
-    List<HomeModelWidget> widgets = [];
+    return [
+      // wellcome text
+      HomeModelWidget(widget: WellcomeText()),
 
-    // wellcome text
-    widgets.add(HomeModelWidget(widget: WellcomeText()));
+      // date lap box
+      HomeModelWidget(widget: DateContainerWidget(fd: "20/dd/205", ld: "21/dd/2006"),),
 
-    // date lap box
-    widgets.add(HomeModelWidget(widget: DateContainerWidget(fd: "20/dd/205", ld: "21/dd/2006")));
+      // attandens box
+      HomeModelWidget(widget: AttendanceWidget()),
 
-    // attandens box
-    widgets.add(HomeModelWidget(widget: AttendanceWidget()));
-
-    // finction box
-    widgets.add(HomeModelWidget(widget: FunctionsWidgets()));
-
-    return widgets;
+      // finction box
+      HomeModelWidget(widget: FunctionsWidgets()),
+    ];
   }
 }

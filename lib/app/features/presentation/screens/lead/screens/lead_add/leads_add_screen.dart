@@ -1,4 +1,3 @@
-
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/features/lead_add_model_view.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/features/lead_add_model_widget.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_app_bar.dart';
@@ -13,21 +12,10 @@ class LeadsAddScreen extends StatelessWidget {
     List<LeadAddModelView> widgets = [];
     widgets = LeadAddModelView.getWidgets();
     return Scaffold(
+      appBar: PreferredSize(preferredSize: const Size.fromHeight(70
+      ), child: CrmAppBar()),
       backgroundColor: Get.theme.colorScheme.background,
-      body: CustomScrollView(
-        slivers: [
-          CrmAppBar(),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                const LeadAddModelWidget(),
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: const LeadAddModelWidget(),
     );
   }
 }

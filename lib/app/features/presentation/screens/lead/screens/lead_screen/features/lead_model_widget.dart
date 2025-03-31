@@ -8,14 +8,9 @@ class LeadModelWidget {
   const LeadModelWidget({required this.widget});
 
   static List<LeadModelWidget> getWidgets() {
-    List<LeadModelWidget> widgets = [];
-
-    // leads horisontal box
-    widgets.add(LeadModelWidget(widget: LeadSummaryView()));
-
-    // leads box
-    widgets.add(LeadModelWidget(widget: LeadView()));
-
-    return widgets;
+    return [
+      LeadModelWidget(widget: LeadSummaryView()),
+      LeadModelWidget(widget: LeadView()),
+    ];
   }
 }

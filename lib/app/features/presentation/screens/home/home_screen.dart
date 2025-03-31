@@ -10,12 +10,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
-      body: CustomScrollView(
-        slivers: [
-          const CrmAppBar(),
-          SliverToBoxAdapter(child: const HomeModelView()),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: CrmAppBar(),
       ),
+      body: const HomeModelView(),
     );
   }
 }

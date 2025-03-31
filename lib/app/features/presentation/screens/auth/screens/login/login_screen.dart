@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget{
 
               Obx(
                 () => Form(
-                  key: formkey,
+                  key: controller.formkey,
                   child: Column(
                     children: [
                       AuthTextFormField(
@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget{
                       AuthTextFormField(
                         title: "Password",
                         controller: controller.password,
-                        validator: (password) => password_validation(password!),
+                       // validator: (password) => password_validation(password!),
                         obscureText:
                             (controller.obscurePassword.value) ? true : false,
                         suffixIcon: GestureDetector(
@@ -95,12 +95,8 @@ class LoginScreen extends StatelessWidget{
                   ),
                   TextButton(
                     onPressed: () {
-                      controller.email.text = "grewox1001@yopmail.com";
-                      controller.password.text = "MyStrongP@ssw0rd!";
-
-
-                      // "login": "grewox1001@yopmail.com",
-                      // "password": "MyStrongP@ssw0rd!"
+                      controller.email.text;
+                      controller.password.text;
                     },
                     child: const Text('Forgot Password?'),
                   ),

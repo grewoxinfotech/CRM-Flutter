@@ -6,27 +6,14 @@ class HomeModelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget space() => const SizedBox(height: 10);
-    List<HomeModelWidget> widgets = [];
-    widgets = HomeModelWidget.getWidgets();
+    Widget space() => const SizedBox(height: 20);
+    final List<HomeModelWidget> widgets = HomeModelWidget.getWidgets();
     return Container(
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: widgets.length * 2 - 1,
-        itemBuilder: (context, i) {
-          if (i % 2 == 0) {
-
-            int widgetIndex = i ~/ 2;
-
-            return widgets[widgetIndex].widget;
-
-          } else if (i % 2 != 0) {
-
-            return space();
-
-          }
-        },
+      child: ListView.separated(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        itemCount: widgets.length,
+        separatorBuilder: (context,i) => space(),
+        itemBuilder: (context, i) => widgets[i].widget,
       ),
     );
   }

@@ -40,8 +40,11 @@ dependencies:
   percent_indicator:
   carousel_slider:
   fl_chart:
+<<<<<<< HEAD
   flutter_native_splash:
   flutter_secure_storage: ^9.2.4
+=======
+>>>>>>> ee58893ae7bfa29c569c73f7e440f77fbca82d45
   intl: ^0.20.2
   loading_animation_widget:
 
