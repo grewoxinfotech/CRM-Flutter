@@ -8,122 +8,81 @@ class LeadOverviewInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return CrmContainer(
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(15),
       child: Column(
         children: [
-          CrmContainer(
-            color: Colors.green.shade50,
-            child: ListTile(
-              leading: CrmContainer(
-                width: 40,
-                height: 40,
-                color: Colors.green.shade600,
-                borderRadius: BorderRadius.circular(14),
-                child: Icon(Icons.price_change_rounded, color: Colors.white),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  tile(
+                    "Lead Value",
+                    "15648/-",
+                    Colors.green,
+                    Icons.ac_unit_outlined,
+                  ),
+                  const SizedBox(height: 10),
+                  tile(
+                    "Created",
+                    "3/35/2025",
+                    Colors.purple,
+                    Icons.ac_unit_outlined,
+                  ),
+                ],
               ),
-              title: Text(
-                "LEAD VALUE",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.green.shade600,
-                ),
+              Column(
+                children: [
+                  tile("Interest Level", "Hight", Colors.red, Icons.add),
+                  const SizedBox(height: 10),
+                  tile("Lead Mamber", "45", Colors.pink, Icons.man_2_rounded),
+                ],
               ),
-              subtitle: Text(
-                "465,462,168,416",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.green.shade300,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          CrmContainer(
-            color: Colors.yellow.shade50,
-            child: ListTile(
-              leading: CrmContainer(
-                width: 40,
-                height: 40,
-                color: Colors.yellow.shade600,
-                borderRadius: BorderRadius.circular(14),
-                child: Icon(Icons.speed_rounded, color: Colors.white),
-              ),
-              title: Text(
-                "INTEREST LEVEL",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.yellow.shade600,
-                ),
-              ),
-              subtitle: Text(
-                "Medium Interest",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.yellow.shade600,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          CrmContainer(
-            color: Colors.blue.shade50,
-            child: ListTile(
-              leading: CrmContainer(
-                width: 40,
-                height: 40,
-                color: Colors.blue.shade600,
-                borderRadius: BorderRadius.circular(14),
-                child: Icon(Icons.date_range_rounded, color: Colors.white),
-              ),
-              title: Text(
-                "CREATED",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.blue.shade600,
-                ),
-              ),
-              subtitle: Text(
-                "3/30/2025",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.blue.shade300,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          CrmContainer(
-            color: Colors.red.shade50,
-            child: ListTile(
-              leading: CrmContainer(
-                width: 40,
-                height: 40,
-                color: Colors.red.shade600,
-                borderRadius: BorderRadius.circular(14),
-                child: Icon(Icons.man_2_rounded, color: Colors.white),
-              ),
-              title: Text(
-                "LEAD MEMBERS",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.red.shade600,
-                ),
-              ),
-              subtitle: Text(
-                "125",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.red.shade300,
-                ),
-              ),
-            ),
+            ],
           ),
         ],
       ),
     );
   }
+}
+
+Widget tile(String title, String subtitle, Color color, icon) {
+  return CrmContainer(
+    width: 150,
+    height: 75,
+    padding: const EdgeInsets.all(10),
+    color: color.withOpacity(0.15),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: color.withOpacity(0.75),
+              ),
+            ),
+            Icon(icon, color: color.withOpacity(0.75),size: 18),
+          ],
+        ),
+        Divider(
+          height: 10,
+          color: color.withOpacity(0.2),
+        ),
+        Text(
+          subtitle,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            color: color.withOpacity(1),
+          ),
+        ),
+      ],
+    ),
+  );
 }

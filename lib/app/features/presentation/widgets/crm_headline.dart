@@ -5,12 +5,14 @@ class CrmHeadline extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final GestureTapCallback? onTap;
   final bool showViewAll;
+  final String showtext;
 
   const CrmHeadline({
     super.key,
     required this.title,
     this.padding,
     this.onTap,
+    this.showtext = "View All",
     this.showViewAll = false, // Default value set
   });
 
@@ -30,7 +32,7 @@ class CrmHeadline extends StatelessWidget {
             GestureDetector(
               onTap: onTap,
               child: Text(
-                "View all", // Typo fixed ("Views all" -> "View all")
+                showtext, // Typo fixed ("Views all" -> "View all")
                 style: TextStyle(
                   fontSize: 16,
                   color: Theme.of(context).colorScheme.primary,

@@ -9,20 +9,32 @@ class LeadOverviewIdInformation2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: GridView.builder(
-        padding: const EdgeInsets.all(20),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisExtent: 100,
+    return Column(
+      children: [
+        CrmContainer(
+          padding: const EdgeInsets.all(15),
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  tile("Source", "Phone", (){}),
+                  const SizedBox(height: 10),
+                  tile("Category", "Manufacturing", (){}),
+                ],
+              ),
+              Column(
+                children: [
+                  tile("Stage", "Qualified", (){}),
+                  const SizedBox(height: 10),
+                  tile("Status", "Cancelled", (){}),
+                ],
+              ),
+            ],
+          ),
         ),
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: title.length,
-        shrinkWrap: true,
-        itemBuilder: (context, i) {
-          return tile(title[i], "123", () {});
-        },
-      ),
+      ],
     );
   }
 }
@@ -33,11 +45,13 @@ Widget tile(String title, String subtitle, GestureTapCallback onTap) {
     child: Container(
       alignment: Alignment.center,
       child: CrmContainer(
+        padding: const EdgeInsets.all(10),
         width: 150,
-        height: 85,
-        padding: const EdgeInsets.all(20),
+        height: 80,
+        color: Get.theme.colorScheme.background,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               title.toString(),
@@ -46,6 +60,10 @@ Widget tile(String title, String subtitle, GestureTapCallback onTap) {
                 fontWeight: FontWeight.w700,
                 color: Get.theme.colorScheme.primary,
               ),
+            ),
+            Divider(
+              height: 10,
+              color: Get.theme.colorScheme.primary.withOpacity(0.25),
             ),
             Text(subtitle.toString(), style: TextStyle(fontSize: 14)),
           ],
