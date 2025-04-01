@@ -1,9 +1,11 @@
-import 'package:crm_flutter/app/features/data/lead/lead_controller.dart';
+import 'package:crm_flutter/app/features/data/lead/lead_home/lead_controller.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/widgets/leads/lead_tile.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_headline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../screens/lead_overview/lead_overview_screen.dart';
 
 
 class LeadView extends StatelessWidget {
@@ -32,19 +34,29 @@ class LeadView extends StatelessWidget {
                 itemCount: controller.leadsList.length,
                 shrinkWrap: true,
                 itemBuilder: (context, i) {
-                  String formatDate(String dateString) {
-                    DateTime dateTime = DateTime.parse(dateString); // Convert to DateTime
-                    return DateFormat('dd MMM yyyy').format(dateTime); // Format as "29 Mar 2025"
-                  }
-                  String formattedDate = formatDate(controller.leadsList[i].createdAt.toString());
-                  return LeadTile(
-                    claint_name: controller.leadsList[i].firstName ?? "No name",
-                    company_name: controller.leadsList[i].leadTitle ?? "No name",
-                    amount: i, // or any logic for amount
-                    source: controller.leadsList[i].source.toString(),
-                    status: "Good",
-                    status_color: Colors.green,
-                    date: formattedDate.toString(),
+                  final lead = controller.leadsList[i];
+
+                  String formattedDate = DateFormat('dd MMM yyyy').format(
+                    DateTime.parse(lead.createdAt ?? DateTime.now().toString()),
+                  );
+
+                  return GestureDetector(
+                    onTap: () {
+                      if (lead.id != null) {
+                        Get.to(() => LeadOverviewScreen(leadId: lead.id!));
+                      } else {
+                        Get.snackbar('Error', 'Lead ID is missing');
+                      }
+                    },
+                    child: LeadTile(
+                      claint_name: lead.firstName ?? "No name",
+                      company_name: lead.leadTitle ?? "No name",
+                      amount: lead.leadValue ?? "0",
+                      source: lead.source ?? "Unknown",
+                      status: "Good",
+                      status_color: Colors.green,
+                      date: formattedDate,
+                    ),
                   );
                 },
                 separatorBuilder: (context, i) => const SizedBox(height: 10),

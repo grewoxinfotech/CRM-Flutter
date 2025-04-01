@@ -5,26 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeadOverviewScreen extends StatelessWidget {
-  const LeadOverviewScreen({super.key});
+
+  final String leadId;
+
+  LeadOverviewScreen({super.key, required this.leadId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(70),
-      //   child: CrmAppBar(),
-      // ),
-      // bottomNavigationBar: BottomAppBar(
-      //   color: Colors.transparent,
-      //   elevation: 0,
-      //   padding: const EdgeInsets.all(0),
-      //   child: CrmBottomNavigationBar(),
-      // ),
-
-
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: CrmAppBar(),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.transparent,
+        elevation: 0,
+        padding: const EdgeInsets.all(0),
+        child: CrmBottomNavigationBar(),
+      ),
       resizeToAvoidBottomInset: true,
-      body: SafeArea(child: const LeadOverviewModelView()),
+      body: SafeArea(
+        child: LeadOverviewModelView(leadId: leadId),
+      ),
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../../data/lead/lead_home/lead_model.dart';
+
 class LeadOverviewWidgetBasicDetails extends StatelessWidget {
   // final String firstname;
   // final String lastname;
@@ -17,6 +19,11 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
   //   required this.phone,
   //   required this.location,
   // });
+
+  final LeadModel lead;
+
+  const LeadOverviewWidgetBasicDetails({Key? key, required this.lead})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +42,9 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                 color: Colors.blue.shade50,
                 alignment: Alignment.center,
                 child: Text(
-                  "T",
+                  lead.leadTitle != null && lead.leadTitle!.isNotEmpty
+                      ? lead.leadTitle![0]
+                      : "L",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                 ),
               ),
@@ -50,15 +59,17 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Test123",
+                        "${lead.leadTitle}",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: Colors.black,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        "Company",
+                        "Company: ${lead.companyName}",
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
@@ -92,7 +103,24 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text("abcd@gmail.com"),
+                    RichText(
+                      text: TextSpan(
+                        text: "Email: ", // Title highlighted
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: lead.email ?? "N/A", // Data
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 Divider(color: Colors.grey.shade300, height: 20),
@@ -109,7 +137,24 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text("+91 4568514520"),
+                    RichText(
+                      text: TextSpan(
+                        text: "Telephone: ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: lead.telephone ?? "N/A",
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 Divider(color: Colors.grey.shade300, height: 20),
@@ -126,7 +171,24 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text("Surat ,Gujrat"),
+                    RichText(
+                      text: TextSpan(
+                        text: "City: ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: "lead.city" ?? "N/A",
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ],
