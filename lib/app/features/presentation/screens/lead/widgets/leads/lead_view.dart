@@ -20,6 +20,8 @@ class LeadView extends StatelessWidget {
           CrmHeadline(
             title: "Leads",
             padding: const EdgeInsets.symmetric(horizontal: 30),
+            showViewAll: true,
+            showtext: "All Filters",
           ),
           const SizedBox(height: 10),
           Obx(
