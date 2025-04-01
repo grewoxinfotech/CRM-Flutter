@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_custom_delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,7 +29,15 @@ class LeadOverviewButtons extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              showCustomDeleteDialog(
+                context,
+                onConfirm: () {
+                  print("Item deleted successfully!");
+                },
+              );
+
+            },
             style: ElevatedButton.styleFrom(
               fixedSize: const Size(150, 30),
               backgroundColor: Get.theme.colorScheme.error,

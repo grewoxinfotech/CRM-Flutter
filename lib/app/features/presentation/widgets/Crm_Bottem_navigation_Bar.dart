@@ -64,3 +64,4 @@ class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
     );
   }
 }
+
