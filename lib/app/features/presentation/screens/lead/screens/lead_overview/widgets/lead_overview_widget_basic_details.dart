@@ -1,8 +1,22 @@
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LeadOverviewWidgetBasicDetails extends StatelessWidget {
-  const LeadOverviewWidgetBasicDetails({super.key});
+  // final String firstname;
+  // final String lastname;
+  // final String email;
+  // final String phone;
+  // final String location;
+  //
+  // LeadOverviewWidgetBasicDetails({
+  //   super.key,
+  //   required this.firstname,
+  //   required this.lastname,
+  //   required this.email,
+  //   required this.phone,
+  //   required this.location,
+  // });
 
   @override
   Widget build(BuildContext context) {
@@ -15,30 +29,41 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
           Row(
             children: [
               CrmContainer(
-                width: 50,
-                height: 50,
+                width: 75,
+                height: 75,
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.blue.shade50,
                 alignment: Alignment.center,
-                child: Text("T",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),),
+                child: Text(
+                  "T",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                ),
               ),
-              SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Test123",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black,
-                    ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: CrmContainer(
+                  height: 75,
+                  borderRadius: BorderRadius.circular(10),
+                  padding: const EdgeInsets.all(10),
+                  color: Get.theme.colorScheme.background,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Test123",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        "Company",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "Company",
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
@@ -48,53 +73,63 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
             indent: 10,
             endIndent: 10,
           ),
+
           CrmContainer(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.blue.shade50,
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 15,
-                child: Icon(Icons.email, size: 20),
-              ),
-              title: Text(
-                "Email",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
-              subtitle: Text("abcd@gmail.com"),
-            ),
-          ),
-          const SizedBox(height: 10),
-          CrmContainer(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.green.shade50,
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 15,
-                backgroundColor: Colors.green,
-                child: Icon(Icons.phone_iphone_rounded, size: 20,),
-              ),
-              title: Text(
-                "Phone",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
-              subtitle: Text("+91 4568514520"),
-            ),
-          ),
-          const SizedBox(height: 10),
-          CrmContainer(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.grey.shade200,
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 15,
-                backgroundColor: Colors.grey,
-                child: Icon(Icons.location_on_rounded, size: 20),
-              ),
-              title: Text(
-                "Location",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
-              subtitle: Text("Surat ,Gujrat"),
+            padding: const EdgeInsets.all(10),
+            color: Get.theme.colorScheme.background,
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 10,
+                      child: Icon(
+                        Icons.email_rounded,
+                        color: Get.theme.colorScheme.surface,
+                        size: 13,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text("abcd@gmail.com"),
+                  ],
+                ),
+                Divider(color: Colors.grey.shade300, height: 20),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 10,
+                      child: Icon(
+                        Icons.phone_iphone_rounded,
+                        color: Get.theme.colorScheme.surface,
+                        size: 13,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text("+91 4568514520"),
+                  ],
+                ),
+                Divider(color: Colors.grey.shade300, height: 20),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 10,
+                      child: Icon(
+                        Icons.location_on_rounded,
+                        color: Get.theme.colorScheme.surface,
+                        size: 13,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text("Surat ,Gujrat"),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
