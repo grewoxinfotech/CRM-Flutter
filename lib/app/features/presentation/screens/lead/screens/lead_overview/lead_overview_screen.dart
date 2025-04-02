@@ -16,47 +16,45 @@ class LeadOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
-<<<<<<< Updated upstream
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: CrmAppBar(),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.transparent,
-        elevation: 0,
-        padding: const EdgeInsets.all(0),
-        child: CrmBottomNavigationBar(),
-      ),
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: LeadOverviewModelView(leadId: leadId),
-=======
+appBar: AppBar(
+  title: Text("Lead",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),),
+  centerTitle: true,
+  backgroundColor: Get.theme.colorScheme.surface,
+
+),
       body: SafeArea(
         child: Stack(
           children: [
             Column(
               children: [
-                SizedBox(height: 110),
-                Expanded(child: const LeadOverviewModelView()), /// view all list in this said
+                const SizedBox(height: 40),
+                Expanded(child: LeadOverviewModelView(leadId: leadId)), /// view all list in this said
               ],
             ),
             Column(
               children: [
-                CrmAppBar(),
                 const SizedBox(height: 5),
+
                 CrmTabBar(
                   items: [
                     // all tabs items
-                    TabItem(imagePath: IconResources.NOTIFICATION, label: "left"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Overview"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Lead Member"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Files"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Estimates"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Reminder"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Notes"),TabItem(imagePath: "assets/icons/white.svg", label: "Overview"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Lead Member"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Files"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Estimates"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Reminder"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Notes"),
                   ],
                 ),
-                Expanded(child: SizedBox()), // size for content screen
-                CrmBottomNavigationBar(), // bottem navigation bar
               ],
             ),
           ],
         ),
->>>>>>> Stashed changes
       ),
     );
   }

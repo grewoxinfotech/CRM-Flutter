@@ -1,44 +1,75 @@
-import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/features/presentation/widgets/Crm_Bottem_navigation_Bar.dart';
-import 'package:crm_flutter/app/features/presentation/widgets/crm_teb_bar.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TestScreen extends StatefulWidget {
+class TestScreen extends StatelessWidget {
   const TestScreen({super.key});
 
-  @override
-  State<TestScreen> createState() => _TestScreenState();
-}
-
-class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(0.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CrmTabBar(items: [
-                TabItem(imagePath: IconResources.NOTIFICATION, label: "notification"),
-                TabItem(imagePath: IconResources.NOTIFICATION, label: "notification"),
-                TabItem(imagePath: IconResources.NOTIFICATION, label: "notification"),
-                TabItem(imagePath: IconResources.NOTIFICATION, label: "notification"),
-                TabItem(imagePath: IconResources.NOTIFICATION, label: "notification"),
-                TabItem(imagePath: IconResources.NOTIFICATION, label: "notification"),
-              ]),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CrmContainer(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.horizontal(left: Radius.circular(15)),
+                    child: SizedBox(
+                      height: 100,
+                      width: 100, // Fixed width for better alignment5
+                      child: Image.network(
+                        "https://images.pexels.com/photos/31300173/pexels-photo-31300173/free-photo-of-vibrant-blue-poison-dart-frog-on-leaf.jpeg?auto=compress&cs=tinysrgb&w=600",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 100,
+                        padding: const EdgeInsets.all(10),
+                      child: Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "mandak",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                              ),
+                              const Text(
+                                "vaddi mandak",
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            alignment: Alignment.bottomRight,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+
+                                Icon(Icons.edit, size: 24),
+                                const SizedBox(width: 10,),
+                                Icon(Icons.delete, size: 24),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
