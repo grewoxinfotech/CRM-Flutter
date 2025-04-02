@@ -4,17 +4,27 @@ import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview_information.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../../../../data/lead/lead_home/lead_model.dart';
+
 class LeadOverviewModelWidget {
   final Widget? widget;
 
   LeadOverviewModelWidget({required this.widget});
-// api call this location
-  static List<LeadOverviewModelWidget> getWidgets() {
+  // api call this location
+
+  static List<LeadOverviewModelWidget> getWidgets(LeadModel lead) {
     return [
-      LeadOverviewModelWidget(widget: LeadOverviewWidgetBasicDetails()),
-      LeadOverviewModelWidget(widget: LeadOverviewInformation()),
-      LeadOverviewModelWidget(widget: LeadOverviewIdInformation2()),
+      LeadOverviewModelWidget(widget: LeadOverviewWidgetBasicDetails(lead: lead)),
+      LeadOverviewModelWidget(widget: LeadOverviewInformation(lead: lead,)),
+      LeadOverviewModelWidget(widget: LeadOverviewIdInformation2(lead: lead,)),
       LeadOverviewModelWidget(widget: LeadOverviewButtons()),
+
+      //For Backup
+      // LeadOverviewModelWidget(widget: LeadOverviewWidgetBasicDetails()),
+      // LeadOverviewModelWidget(widget: LeadOverviewInformation(lead: lead)),
+      // LeadOverviewModelWidget(widget: LeadOverviewIdInformation2(lead: lead)),
+      // LeadOverviewModelWidget(widget: LeadOverviewButtons(leadId: lead.id!)),
+
     ];
   }
 }

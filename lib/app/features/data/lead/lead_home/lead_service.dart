@@ -1,7 +1,7 @@
-import 'package:crm_flutter/app/features/data/lead/lead_model.dart';
+import 'package:crm_flutter/app/features/data/lead/lead_home/lead_model.dart';
 import 'package:crm_flutter/app/features/data/resources/url_resources.dart';
 import 'package:get/get.dart';
-import '../../../care/secure_storage.dart';
+import '../../../../care/secure_storage.dart';
 
 class LeadService extends GetConnect {
   final String apiUrl = UrlResources.Leads;

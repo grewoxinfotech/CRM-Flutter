@@ -2,8 +2,12 @@ import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../../data/lead/lead_home/lead_model.dart';
+
 class LeadOverviewIdInformation2 extends StatelessWidget {
-  LeadOverviewIdInformation2({super.key});
+  final LeadModel lead;
+
+  LeadOverviewIdInformation2({Key? key, required this.lead}) : super(key: key);
 
   final List title = ["SOURCE", "STAGE", "CATEGORY", "STATUS"];
 
@@ -19,16 +23,16 @@ class LeadOverviewIdInformation2 extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  tile("Source", "Phone", (){}),
+                  tile("Source", "${lead.source}", (){}),
                   const SizedBox(height: 10),
-                  tile("Category", "Manufacturing", (){}),
+                  tile("Category", "${lead.category}", (){}),
                 ],
               ),
               Column(
                 children: [
-                  tile("Stage", "Qualified", (){}),
+                  tile("Stage", "${lead.leadStage}", (){}),
                   const SizedBox(height: 10),
-                  tile("Status", "Cancelled", (){}),
+                  tile("Status", "${lead.status}", (){}),
                 ],
               ),
             ],

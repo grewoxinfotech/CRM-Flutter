@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class LeadTile extends StatelessWidget {
   final String claint_name;
   final String company_name;
-  final int amount;
+  final String amount;
   final String source;
   final String status;
   final Color status_color;
