@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeadOverviewScreen extends StatelessWidget {
-
   final String leadId;
 
   LeadOverviewScreen({super.key, required this.leadId});
@@ -25,9 +24,7 @@ class LeadOverviewScreen extends StatelessWidget {
         child: CrmBottomNavigationBar(),
       ),
       resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: LeadOverviewModelView(leadId: leadId),
-      ),
+      body: SafeArea(child: LeadOverviewModelView(leadId: leadId)),
     );
   }
 }

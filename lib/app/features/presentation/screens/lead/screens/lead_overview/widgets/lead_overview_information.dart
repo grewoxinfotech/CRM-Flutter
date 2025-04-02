@@ -8,10 +8,10 @@ import 'package:intl/intl.dart';
 import '../../../../../../data/lead/lead_home/lead_model.dart';
 
 class LeadOverviewInformation extends StatelessWidget {
-
   final LeadModel lead;
 
-  const LeadOverviewInformation({Key? key, required this.lead}) : super(key: key);
+  const LeadOverviewInformation({Key? key, required this.lead})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,7 @@ class LeadOverviewInformation extends StatelessWidget {
         children: [
           tile(
             "Lead Value",
-            lead.leadMembers != null ?
-            "${lead.leadValue}" : "0",
+            lead.leadMembers != null ? "${lead.leadValue}" : "0",
             Colors.green,
             Icons.ac_unit_outlined,
             double.infinity,
@@ -40,9 +39,15 @@ class LeadOverviewInformation extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-             // dummy Interest Level
+              // dummy Interest Level
               tile("Interest Level", "Hight", Colors.red, Icons.add, 150),
-              tile("Lead Mamber", lead.leadMembers != null ? "${lead.leadMembers}" : "0",  Colors.pink, Icons.man_2_rounded, 150),
+              tile(
+                "Lead Mamber",
+                lead.leadMembers != null ? "${lead.leadMembers}" : "0",
+                Colors.pink,
+                Icons.man_2_rounded,
+                150,
+              ),
             ],
           ),
         ],

@@ -23,16 +23,16 @@ class LeadOverviewIdInformation2 extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  tile("Source", "${lead.source}", (){}),
+                  tile("Source", "${lead.source}", () {}),
                   const SizedBox(height: 10),
-                  tile("Category", "${lead.category}", (){}),
+                  tile("Category", "${lead.category}", () {}),
                 ],
               ),
               Column(
                 children: [
-                  tile("Stage", "${lead.leadStage}", (){}),
+                  tile("Stage", "${lead.leadStage}", () {}),
                   const SizedBox(height: 10),
-                  tile("Status", "${lead.status}", (){}),
+                  tile("Status", "${lead.status}", () {}),
                 ],
               ),
             ],

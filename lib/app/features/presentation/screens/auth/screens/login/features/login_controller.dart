@@ -36,6 +36,8 @@ class LoginController extends GetxController {
       "password": passwordText,
     }));
 
+
+
     try {
       var response = await http.post(
         Uri.parse(UrlResources.LOGIN),

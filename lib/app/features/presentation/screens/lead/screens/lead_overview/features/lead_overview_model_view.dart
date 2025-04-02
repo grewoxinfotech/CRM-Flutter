@@ -19,7 +19,7 @@ class LeadOverviewModelView extends StatelessWidget {
       }
 
       if (leadController.leadsList.isEmpty) {
-        return const Center(child: Text("No Lead Data Available"));
+        return const Center(child: Text("No Lead Data Available."));
       }
 
       final lead = leadController.leadsList.firstWhere(
