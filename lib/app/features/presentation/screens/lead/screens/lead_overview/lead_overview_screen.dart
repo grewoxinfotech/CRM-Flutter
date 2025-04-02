@@ -49,7 +49,7 @@ class LeadOverviewScreen extends StatelessWidget {
                 CrmTabBar(
                   items: [
                     TabItem(imagePath: "assets/icons/white.svg", label: "Overview"),
-                    TabItem(imagePath: "assets/icons/white.svg", label: "Lead Member"),
+                    TabItem(imagePath: "assets/icons/white.svg", label: "Lead Members"),
                     TabItem(imagePath: "assets/icons/white.svg", label: "Files"),
                     TabItem(imagePath: "assets/icons/white.svg", label: "Estimates"),
                     TabItem(imagePath: "assets/icons/white.svg", label: "Reminder"),

@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import 'services/internet_service.dart' show InternetService;
+
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  Get.put(InternetService());
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(statusBarColor: Colors.black12),
   );
+
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
