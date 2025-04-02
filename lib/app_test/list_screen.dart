@@ -62,7 +62,7 @@ class ScreenModel {
       ScreenModel(title: "Home Screen", suntitle: "home", widget: HomeScreen()),
       ScreenModel(title: "Lead Screen", suntitle: "leads", widget: LeadScreen()),
       ScreenModel(title: "Lead Add Screen", suntitle: "leads", widget: LeadsAddScreen()),
-      ScreenModel(title: "Lead Over View Screen", suntitle: "leads", widget: LeadOverviewScreen()),
+      ScreenModel(title: "Lead Over View Screen", suntitle: "leads", widget: LeadOverviewScreen(leadId: "aKH5RLo3mdHWPbUAjUNikpZ")),
     ];
   }
 }

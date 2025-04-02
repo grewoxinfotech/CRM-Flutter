@@ -3,9 +3,15 @@ import 'dart:ffi';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+import '../../../../../../data/lead/lead_home/lead_model.dart';
 
 class LeadOverviewInformation extends StatelessWidget {
-  const LeadOverviewInformation({super.key});
+
+  final LeadModel lead;
+
+  const LeadOverviewInformation({Key? key, required this.lead}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +22,27 @@ class LeadOverviewInformation extends StatelessWidget {
         children: [
           tile(
             "Lead Value",
-            "15648/-",
+            lead.leadMembers != null ?
+            "${lead.leadValue}" : "0",
             Colors.green,
             Icons.ac_unit_outlined,
-              double.infinity
+            double.infinity,
           ),
           const SizedBox(height: 10),
           tile(
             "Created",
-            "3/35/2025",
+            DateFormat('dd/MM/yyyy').format(DateTime.parse(lead.createdAt!)),
             Colors.purple,
             Icons.ac_unit_outlined,
-              double.infinity
+            double.infinity,
           ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
-              tile("Interest Level", "Hight", Colors.red, Icons.add,150),
-              tile("Lead Mamber", "45", Colors.pink, Icons.man_2_rounded,150),
-
+             // dummy Interest Level
+              tile("Interest Level", "Hight", Colors.red, Icons.add, 150),
+              tile("Lead Mamber", lead.leadMembers != null ? "${lead.leadMembers}" : "0",  Colors.pink, Icons.man_2_rounded, 150),
             ],
           ),
         ],
@@ -45,7 +51,7 @@ class LeadOverviewInformation extends StatelessWidget {
   }
 }
 
-Widget tile(String title, String subtitle, Color color, icon,double? width) {
+Widget tile(String title, String subtitle, Color color, icon, double? width) {
   return CrmContainer(
     width: width,
     height: 75,
@@ -67,13 +73,10 @@ Widget tile(String title, String subtitle, Color color, icon,double? width) {
                 color: color.withOpacity(0.75),
               ),
             ),
-            Icon(icon, color: color.withOpacity(0.75),size: 18),
+            Icon(icon, color: color.withOpacity(0.75), size: 18),
           ],
         ),
-        Divider(
-          height: 10,
-          color: color.withOpacity(0.2),
-        ),
+        Divider(height: 10, color: color.withOpacity(0.2)),
         Text(
           subtitle,
           style: TextStyle(
