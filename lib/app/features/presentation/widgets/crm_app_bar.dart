@@ -25,7 +25,7 @@ class CrmAppBar extends StatelessWidget {
     return SafeArea(
       child: CrmContainer(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        margin: const EdgeInsets.symmetric(horizontal: 13),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         boxShadow: [BoxShadow(
           color: Colors.black26,
           blurRadius: 20,
