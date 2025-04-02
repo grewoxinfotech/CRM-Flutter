@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,13 +13,14 @@ class CrmTabBar extends StatelessWidget {
     return CrmContainer(
         height: 40,
         padding: const EdgeInsets.all(5),
+        borderRadius: BorderRadius.circular(10),
         margin: const EdgeInsets.symmetric(horizontal: 10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: ListView.separated(
             itemCount: items.length,
             scrollDirection: Axis.horizontal,
-            separatorBuilder: (context, index) => const SizedBox(width: 5),
+            separatorBuilder: (context, index) => VerticalDivider(width: 10,color:Get.theme.colorScheme.outline,indent: 5,endIndent: 5),
             itemBuilder: (context, index) {
               controller.selectedIndex.value == index;
               print(items.length.toString());
@@ -33,20 +35,20 @@ class CrmTabBar extends StatelessWidget {
                       decoration: BoxDecoration(
                         color:
                             controller.selectedIndex.value == index
-                                ? Get.theme.colorScheme.primary.withOpacity(0.2)
-                                : Get.theme.colorScheme.background,
-                        borderRadius: BorderRadius.circular(12),
+                                ? Get.theme.colorScheme.primary.withOpacity(1)
+                                : Get.theme.colorScheme.surface.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            items[index].imagePath,
-                            width: 15,
+                          CrmIcon(
+                            iconPath: items[index].imagePath,
+                            size: 15,
                             color:
                             controller.selectedIndex.value == index
-                                ? Get.theme.colorScheme.primary
-                                : Colors.grey,
+                                ? Get.theme.colorScheme.surface
+                                : Get.theme.colorScheme.primary,
                           ),
                           const SizedBox(width: 5),
                           Text(
@@ -54,8 +56,8 @@ class CrmTabBar extends StatelessWidget {
                             style: TextStyle(
                               color:
                               controller.selectedIndex.value == index
-                                  ? Get.theme.colorScheme.primary
-                                  : Colors.grey,
+                                  ? Get.theme.colorScheme.surface
+                                  : Get.theme.colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

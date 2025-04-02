@@ -61,7 +61,7 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                       Text(
                         "${lead.leadTitle}",
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w800,
                           color: Colors.black,
                         ),
@@ -69,8 +69,8 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        "Company: ${lead.companyName}",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                        "${lead.companyName}",
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -103,22 +103,11 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    RichText(
-                      text: TextSpan(
-                        text: "Email: ", // Title highlighted
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: lead.email ?? "N/A", // Data
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
+                    Text(
+                      lead.email ?? "N/A", // Data
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey[700],
                       ),
                     ),
                   ],
@@ -137,22 +126,11 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    RichText(
-                      text: TextSpan(
-                        text: "Telephone: ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: lead.telephone ?? "N/A",
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
+                    Text(
+                      lead.telephone ?? "N/A",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey[700],
                       ),
                     ),
                   ],
@@ -171,22 +149,11 @@ class LeadOverviewWidgetBasicDetails extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    RichText(
-                      text: TextSpan(
-                        text: "City: ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: "lead.city" ?? "N/A",
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
+                    Text(
+                      "lead.city" ?? "N/A",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey[700],
                       ),
                     ),
                   ],
