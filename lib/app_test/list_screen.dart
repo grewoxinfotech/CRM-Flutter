@@ -1,7 +1,8 @@
-import 'package:crm_flutter/app/features/presentation/screens/auth/screens/login/login_screen.dart';
+import 'package:crm_flutter/app/auth/screens/login/login_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/home_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/leads_add_screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/lead_overview_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/screens/lead_notes/lead_note_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/screens/lead_overview/lead_overview_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_screen/lead_screen.dart';
 import 'package:crm_flutter/app_test/test_screen.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,7 @@ class ScreenModel {
       ScreenModel(title: "Lead Screen", suntitle: "leads", widget: LeadScreen()),
       ScreenModel(title: "Lead Add Screen", suntitle: "leads", widget: LeadsAddScreen()),
       ScreenModel(title: "Lead Over View Screen", suntitle: "leads", widget: LeadOverviewScreen(leadId: "aKH5RLo3mdHWPbUAjUNikpZ")),
+      ScreenModel(title: "Lead Note Screen", suntitle: "leads", widget: LeadNoteScreen()),
     ];
   }
 }

@@ -1,3 +1,5 @@
-class ImageResources {
+class ImgRes {
+
+
 
 }

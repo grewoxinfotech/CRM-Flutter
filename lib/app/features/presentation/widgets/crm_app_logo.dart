@@ -16,7 +16,7 @@ class CrmAppLogo extends StatelessWidget {
       children: [
         Hero(
           tag: "applogo",
-          child: Image.asset(IconResources.LOGO, width: width ?? 40),
+          child: Image.asset(ICRes.appLogo, width: width ?? 40),
         ),
         if (showTitle) ...[
           const SizedBox(width: 15),

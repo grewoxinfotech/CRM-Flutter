@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../screens/lead_overview/lead_overview_screen.dart';
+import '../../screens/lead_overview/screens/lead_overview/lead_overview_screen.dart';
 
 
 class LeadView extends StatelessWidget {

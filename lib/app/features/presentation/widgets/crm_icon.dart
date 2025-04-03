@@ -6,6 +6,7 @@ class CrmIcon extends StatelessWidget {
 
   final Color color;
   final String iconPath;
+  final GestureTapCallback? onTap;
   final AlignmentGeometry alignment;
 
   const CrmIcon({
@@ -13,18 +14,22 @@ class CrmIcon extends StatelessWidget {
     this.size,
     this.color = Colors.black,
     required this.iconPath,
+    this.onTap,
     this.alignment = Alignment.center,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      iconPath,
-      color: color,
-      height: size ?? 24,
-      width: size ?? 24,
-      alignment: alignment,
-      allowDrawingOutsideViewBox: true,
+    return GestureDetector(
+      onTap: onTap,
+      child: SvgPicture.asset(
+        iconPath,
+        color: color,
+        height: size ?? 24,
+        width: size ?? 24,
+        alignment: alignment,
+        allowDrawingOutsideViewBox: true,
+      ),
     );
   }
 }

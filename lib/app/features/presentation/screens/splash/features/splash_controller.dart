@@ -1,5 +1,5 @@
 
-import 'package:crm_flutter/app/features/presentation/screens/auth/screens/login/login_screen.dart';
+import 'package:crm_flutter/app/auth/screens/login/login_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/home_screen.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';

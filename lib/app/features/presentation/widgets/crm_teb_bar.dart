@@ -43,7 +43,7 @@ class CrmTabBar extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CrmIcon(
-                            iconPath: items[index].imagePath,
+                            iconPath: items[index].iconPath,
                             size: 15,
                             color:
                             controller.selectedIndex.value == index
@@ -75,10 +75,10 @@ class CrmTabBar extends StatelessWidget {
 }
 
 class TabItem {
-  final String imagePath;
+  final String iconPath;
   final String label;
 
-  TabItem({required this.imagePath, required this.label});
+  TabItem({required this.iconPath, required this.label});
 }
 
 class CrmTabBarController extends GetxController {

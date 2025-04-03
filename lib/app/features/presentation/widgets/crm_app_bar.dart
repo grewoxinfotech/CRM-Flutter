@@ -39,11 +39,11 @@ class CrmAppBar extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: Image.asset(IconResources.SEARCH, width: 24),
+                  icon: Image.asset(ICRes.appLogo, width: 24),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Image.asset(IconResources.NOTIFICATION, width: 24),
+                  icon: Image.asset(ICRes.appLogo, width: 24),
                 ),
                 SizedBox(width: 10),
                 CrmProfile(radius: 15, child: Text("G")),

@@ -1,6 +1,6 @@
 
-import 'package:crm_flutter/app/features/presentation/screens/auth/widgets/auth_elevated_button.dart';
-import 'package:crm_flutter/app/features/presentation/screens/auth/widgets/auth_text_form_field.dart';
+import 'package:crm_flutter/app/auth/widgets/auth_elevated_button.dart';
+import 'package:crm_flutter/app/auth/widgets/auth_text_form_field.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/features/lead_add_controller.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_headline.dart';
 import 'package:flutter/material.dart';

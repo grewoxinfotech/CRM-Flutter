@@ -44,7 +44,7 @@ dependencies:
   flutter_secure_storage:
   intl: ^0.20.2
   loading_animation_widget:
-  flutter_svg:
+  flutter_svg: ^2.0.17
   connectivity_plus:
 
 
@@ -73,6 +73,24 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icons/comments/
+    - assets/icons/employee/
+    - assets/icons/functions/
+    - assets/icons/mamber/
+    - assets/icons/native_icons/actions/
+    - assets/icons/native_icons/auth/
+    - assets/icons/native_icons/business/
+    - assets/icons/native_icons/date_time/
+    - assets/icons/native_icons/file/
+    - assets/icons/native_icons/media/
+    - assets/icons/native_icons/navigation/
+    - assets/icons/native_icons/navigation/arrow/
+    - assets/icons/native_icons/notifivations/
+    - assets/icons/native_icons/producticity/
+    - assets/icons/native_icons/social/
+    - assets/icons/native_icons/system/
+    - assets/icons/native_icons/ui/
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -108,7 +126,7 @@ flutter:
         - asset: assets/fonts/NuNunito_Sans/NunitoSans_10pt-Light.ttf
           weight: 300
         - asset: assets/fonts/NuNunito_Sans/NunitoSans_10pt-ExtraLight.ttf
-          weight: 100
+          weight: 200
   # fonts:
   #   - family: Schyler
   #     fonts:
