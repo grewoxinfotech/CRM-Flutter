@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'services/internet_service.dart' show InternetService;
+import 'app/care/network/network_service.dart' show NetworkService;
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  Get.put(InternetService());
+  Get.put(NetworkService());
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(statusBarColor: Colors.black12),
   );

@@ -20,8 +20,7 @@ class LesdSummeryTile extends StatelessWidget {
       onTap: onTap,
       child: CrmContainer(
         width: 150,
-        height: 100,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,

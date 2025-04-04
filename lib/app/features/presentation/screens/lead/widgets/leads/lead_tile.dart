@@ -1,5 +1,8 @@
+import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LeadTile extends StatelessWidget {
   final String claint_name;
@@ -80,13 +83,14 @@ class LeadTile extends StatelessWidget {
       onTap: onTap,
       child: CrmContainer(
         width: 500,
-        height: 125,
-        padding: const EdgeInsets.all(20),
+        height: 90,
+        padding: const EdgeInsets.all(10),
+        borderRadius: BorderRadius.circular(15),
         child: Row(
           children: [
             Container(
-              width: 4,
-              height: 80,
+              width: 5,
+              height: 75,
               decoration: BoxDecoration(
                 color: status_color,
                 borderRadius: BorderRadius.circular(5),
@@ -109,8 +113,8 @@ class LeadTile extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.black,
                               fontWeight: FontWeight.w700,
+                              color: Colors.black,
                             ),
                           ),
                           Text(
@@ -119,8 +123,8 @@ class LeadTile extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey,
                               fontWeight: FontWeight.w500,
+                              color: Colors.grey,
                             ),
                           ),
                         ],
@@ -149,19 +153,18 @@ class LeadTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Divider(color: Colors.grey, height: 20),
+                  Divider(color: Get.theme.colorScheme.outline, height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.check_circle_outline_rounded,
+                            CrmIcon(iconPath: ICRes.task,
                               color: status_color,
-                              size: 14,
+                              width: 15,
                             ),
-                            const SizedBox(width: 2),
+                            const SizedBox(width: 5),
                             Text(
                               status.toString(),
                               style: TextStyle(
@@ -175,10 +178,10 @@ class LeadTile extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Icon(
-                            Icons.date_range_rounded,
+                          CrmIcon(
+                            iconPath: ICRes.calendar,
                             color: status_color,
-                            size: 14,
+                            width: 15,
                           ),
                           const SizedBox(width: 5),
                           Text(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 ThemeData LightThemeMode = ThemeData(
   appBarTheme: AppBarTheme(
+
     backgroundColor: Colors.transparent,
     elevation: 0,
     scrolledUnderElevation: 0,

@@ -2,33 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CrmIcon extends StatelessWidget {
-  final double? size;
-
-  final Color color;
   final String iconPath;
   final GestureTapCallback? onTap;
+  final double? width;
+  final double? height;
+  final Color color;
   final AlignmentGeometry alignment;
 
   const CrmIcon({
     super.key,
-    this.size,
-    this.color = Colors.black,
     required this.iconPath,
     this.onTap,
+    this.width = 24,
+    this.height,
+    this.color = Colors.black,
     this.alignment = Alignment.center,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap ?? () => print(iconPath),
       child: SvgPicture.asset(
         iconPath,
         color: color,
-        height: size ?? 24,
-        width: size ?? 24,
+        width: width,
+        height: height,
         alignment: alignment,
-        allowDrawingOutsideViewBox: true,
       ),
     );
   }

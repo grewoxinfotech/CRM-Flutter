@@ -1,6 +1,7 @@
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_app_logo.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_profile.dart';
 import 'package:flutter/material.dart';
 
@@ -24,29 +25,24 @@ class CrmAppBar extends StatelessWidget {
 
     return SafeArea(
       child: CrmContainer(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        height: 60,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         margin: const EdgeInsets.symmetric(horizontal: 10),
-        boxShadow: [BoxShadow(
-          color: Colors.black26,
-          blurRadius: 20,
-          spreadRadius: -10,
-        )],
+        boxShadow: [
+          BoxShadow(color: Colors.black26, blurRadius: 20, spreadRadius: -10),
+        ],
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CrmAppLogo(width: 40),
             Row(
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(ICRes.appLogo, width: 24),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(ICRes.appLogo, width: 24),
-                ),
-                SizedBox(width: 10),
-                CrmProfile(radius: 15, child: Text("G")),
+                CrmIcon(iconPath: ICRes.search),
+                const SizedBox(width: 20),
+                CrmIcon(iconPath: ICRes.notifications),
+                const SizedBox(width: 18),
+                CrmProfile(radius: 15 , child: Text("G")),
+                const SizedBox(width: 5),
               ],
             ),
           ],

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 
-class InternetService extends GetxController {
+class NetworkService extends GetxController {
   final RxBool isConnected = true.obs;
 
   late StreamSubscription _subscription;

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ColorResources {
   static Color BACK = Color(0xff0A1629);
 
-   static Color PRIMARY = Color(0xff3F8CFF);
+   static Color PRIMARY = Color(0xff426DD4);
    static Color OUTLINE = Color(0xffD8E0F0);
    static Color SURFACE = Color(0xffFFFFFF);
    static Color ERROR = Colors.redAccent;

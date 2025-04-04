@@ -7,13 +7,12 @@ class LeadModelView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<LeadModelWidget> widgets = LeadModelWidget.getWidgets();
-    return Container(
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        itemCount: widgets.length,
-        separatorBuilder: (context, i) => const SizedBox(height: 20),
-        itemBuilder: (context, i) => widgets[i].widget,
-      ),
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: widgets.length,
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      separatorBuilder: (context, i) => const SizedBox(height: 15),
+      itemBuilder: (context, i) => widgets[i].widget,
     );
   }
 }

@@ -12,14 +12,14 @@ class LeadSummaryView extends StatelessWidget {
       children: [
         CrmHeadline(
           title: "Lead Summery",
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
         ),
-        const SizedBox(height: 10,),
+        const SizedBox(height: 10),
         SizedBox(
-          height: 100,
+          height: 80,
           child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: 5,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             scrollDirection: Axis.horizontal,
             separatorBuilder: (context, i) => const SizedBox(width: 10),
             itemBuilder:

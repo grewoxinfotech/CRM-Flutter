@@ -1,16 +1,21 @@
+import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
 
 class CrmBottomNavigationBar extends StatefulWidget {
   @override
   _CrmBottomNavigationBarState createState() => _CrmBottomNavigationBarState();
 }
 
-class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
-  int selectedIndex = 0;
+final CrmBottemNavigationBarController controller = Get.put(
+  CrmBottemNavigationBarController(),
+);
 
+class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
   final List<Map<String, dynamic>> navItems = [
+    {"icon": Icons.home, "label": "Home"},
     {"icon": Icons.home, "label": "Home"},
     {"icon": Icons.notifications, "label": "Alerts"},
     {"icon": Icons.settings, "label": "Settings"},
@@ -20,42 +25,64 @@ class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return CrmContainer(
-      height: 70,
-      width: double.infinity,
+      height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(navItems.length, (index) {
-          bool isSelected = index == selectedIndex;
-          return AnimatedContainer(
-            duration: Duration(milliseconds: 200),
-            height: isSelected ? 40 : 40,
-            width: isSelected ? 100 : 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: isSelected ? Get.theme.colorScheme.primary : Colors.transparent,
-            ),
-            child: GestureDetector(
-              onTap: () => setState(() => selectedIndex = index),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: isSelected
-                        ? Get.theme.colorScheme.primary
-                        : Colors.transparent,
-                    child: Icon(navItems[index]["icon"],
-                        size: isSelected ? 24 : 24,
-                        color: isSelected
-                            ? Colors.white
-                            : Get.theme.colorScheme.primary,),
+        children: List.generate(navItems.length, (i) {
+          controller.selectedIndex.value == i;
+          print(navItems.length.toString());
+          return GestureDetector(
+            onTap: () => controller.changescreen(i),
+            child: FittedBox(
+              child: Obx(
+                () => AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  height: controller.selectedIndex.value == i ? 40 : 40,
+                  width: controller.selectedIndex.value == i ? 40 : 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color:
+                        (controller.selectedIndex.value == i)
+                            ? Get.theme.colorScheme.primary
+                            : Colors.transparent,
                   ),
-                  if (isSelected)
-                    Text(navItems[index]["label"],
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                ],
+                  child: GestureDetector(
+                    onTap:
+                        () => setState(
+                          () => (controller.selectedIndex.value = i),
+                        ),
+                    child: Column(
+                      children: [
+                        CrmIcon(iconPath: ICRes.task),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          physics: NeverScrollableScrollPhysics(),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor:
+                                    (controller.selectedIndex.value == i)
+                                        ? Get.theme.colorScheme.primary
+                                        : Colors.transparent,
+                                child: Icon(
+                                  navItems[i]["icon"],
+                                  size:
+                                      (controller.selectedIndex.value == i)
+                                          ? 24
+                                          : 24,
+                                  color:
+                                      (controller.selectedIndex.value == i)
+                                          ? Colors.white
+                                          : Get.theme.colorScheme.primary,
+                                ),
+                              ),],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           );
@@ -65,3 +92,10 @@ class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
   }
 }
 
+class CrmBottemNavigationBarController extends GetxController {
+  RxInt selectedIndex = 0.obs;
+
+  void changescreen(int index) {
+    selectedIndex.value = index;
+  }
+}

@@ -22,7 +22,7 @@
 
 
 import 'package:crm_flutter/app/features/presentation/screens/home/features/home_model_widget.dart';
-import 'package:crm_flutter/app/features/presentation/widgets/internet_status_widget.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_network_status_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomeModelView extends StatelessWidget {
@@ -35,7 +35,7 @@ class HomeModelView extends StatelessWidget {
 
     return Column(
       children: [
-        InternetStatusWidget(),
+        CrmNetworkStatusBar(),
         Expanded(
           child: ListView.separated(
             padding: EdgeInsets.symmetric(vertical: 20),

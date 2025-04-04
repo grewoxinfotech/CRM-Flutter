@@ -23,7 +23,7 @@ class FunctionModelWidget {
     List<FunctionModelWidget> widgets = [];
     widgets.add(
       FunctionModelWidget(
-        imagePath: ICRes.appLogo,
+        imagePath: ICRes.leads,
         title: "Leads",
         unitId: "leads",
         color: Color(0xffFFBD21),
@@ -33,7 +33,7 @@ class FunctionModelWidget {
     );
     widgets.add(
       FunctionModelWidget(
-        imagePath: ICRes.appLogo,
+        imagePath: ICRes.task,
         title: "Task",
         unitId: "task",
         color: Color(0xff0AC947),
@@ -42,7 +42,7 @@ class FunctionModelWidget {
     );
     widgets.add(
       FunctionModelWidget(
-        imagePath: ICRes.appLogo,
+        imagePath: ICRes.custemer,
         title: "Customer",
         unitId: "customer",
         color: Color(0xff6D5DD3),
@@ -51,7 +51,7 @@ class FunctionModelWidget {
     );
     widgets.add(
       FunctionModelWidget(
-        imagePath: ICRes.appLogo,
+        imagePath: ICRes.employee,
         title: "Employee",
         unitId: "employee",
         color: Color(0xff2B648F),
@@ -60,7 +60,7 @@ class FunctionModelWidget {
     );
     widgets.add(
       FunctionModelWidget(
-        imagePath: ICRes.appLogo,
+        imagePath: ICRes.clients,
         title: "Clients",
         unitId: "clients",
         color: Color(0xffFFCC01),
@@ -69,7 +69,7 @@ class FunctionModelWidget {
     );
     widgets.add(
       FunctionModelWidget(
-        imagePath: ICRes.appLogo,
+        imagePath: ICRes.contract,
         title: "Contract",
         unitId: "contract",
         color: Color(0xff3400AD),

@@ -30,7 +30,7 @@ class CrmContainer extends StatelessWidget {
       width: width,
       height: height,
       padding: padding,
-      margin: margin,
+      margin: margin ,
       alignment: alignment,
       decoration: BoxDecoration(
         color: color ?? Theme.of(context).colorScheme.surface,

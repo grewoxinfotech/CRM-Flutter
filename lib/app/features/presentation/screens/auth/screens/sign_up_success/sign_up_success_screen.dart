@@ -1,7 +1,8 @@
 
-import 'package:crm_flutter/app/auth/widgets/auth_elevated_button.dart';
+import 'package:crm_flutter/app/features/presentation/screens/auth/widgets/auth_elevated_button.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/home_screen.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_app_logo.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_button.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class SignUpSuccessScreen extends StatelessWidget {
         child: Column(
           children: [
             CrmContainer(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.all(20),
               child: Column(
                 children: [
@@ -32,7 +33,8 @@ class SignUpSuccessScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 20),
-                  AuthElevatedButton(
+                  CrmButton(
+                    width: 500,
                     title: "Let's Start",
                     onPressed: () => Get.offAll(HomeScreen()),
                   ),

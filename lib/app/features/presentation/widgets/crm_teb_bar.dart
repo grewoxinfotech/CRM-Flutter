@@ -44,7 +44,7 @@ class CrmTabBar extends StatelessWidget {
                         children: [
                           CrmIcon(
                             iconPath: items[index].iconPath,
-                            size: 15,
+                            width: 15,
                             color:
                             controller.selectedIndex.value == index
                                 ? Get.theme.colorScheme.surface

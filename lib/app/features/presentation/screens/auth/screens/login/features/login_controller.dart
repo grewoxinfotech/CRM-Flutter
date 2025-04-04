@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:crm_flutter/app/auth/screens/sign_up_success/sign_up_success_screen.dart';
 import 'package:crm_flutter/app/care/secure_storage.dart';
 import 'package:crm_flutter/app/care/util//validators.dart';
 import 'package:crm_flutter/app/features/data/resources/url_resources.dart';
+import 'package:crm_flutter/app/features/presentation/screens/auth/screens/sign_up_success/sign_up_success_screen.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

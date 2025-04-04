@@ -3,7 +3,7 @@ class ICRes {
   static String IconPath = "assets/icons/";
 
   // app logo icon in png
-  static String appLogo = IconPath + "app_logo.png";
+  static String appLogoPNG = IconPath + "app_logo.png";
 
   // comments icons
   static String CommentsPath = IconPath + "comments/";
@@ -16,8 +16,13 @@ class ICRes {
 
   // functions icons
   static String FunctionsPath = IconPath + "functions/";
-  static String client = FunctionsPath + "ic_clients.svg";
+  static String clients = FunctionsPath + "ic_clients.svg";
   static String contract = FunctionsPath + "ic_contract.svg";
+  static String custemer = FunctionsPath + "ic_custemer.svg";
+  static String document = FunctionsPath + "ic_document.svg";
+  static String employees = FunctionsPath + "ic_employee.svg";
+  static String leads = FunctionsPath + "ic_leads.svg";
+  static String project = FunctionsPath + "ic_project.svg";
   static String task = FunctionsPath + "ic_task.svg";
 
   // members icons
@@ -48,7 +53,7 @@ class ICRes {
   // auth icons
   static String AuthPath = NativeIconPath + "auth/";
   static String logout = AuthPath + "ic_logout.svg";
-  static String viewPassword = AuthPath + "ic_viewpassword.svg";
+  static String viewPassword =  AuthPath + "ic_viewpassword.svg";
 
   // business icons
   static String BusinessPath = NativeIconPath + "business/";

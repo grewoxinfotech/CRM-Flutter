@@ -1,7 +1,6 @@
-import 'package:crm_flutter/app/auth/screens/login/login_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/auth/screens/login/login_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/home_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/leads_add_screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/screens/lead_notes/lead_note_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/screens/lead_overview/lead_overview_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_screen/lead_screen.dart';
 import 'package:crm_flutter/app_test/test_screen.dart';
@@ -26,8 +25,21 @@ class ListScreen extends StatelessWidget {
           itemBuilder: (context, i) {
             return Card(
               child: ListTile(
-                title: Text(screens[i].title),
-                subtitle: Text(screens[i].suntitle),
+                leading: Text("${i+1}.",style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black
+                ),),
+                title: Text(screens[i].title,style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                    color: Colors.black
+                ),),
+                trailing: Text(screens[i].suntitle,style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey
+                ),),
                 onTap: () {
                   Get.to(screens[i].widget);
                 },
@@ -60,13 +72,12 @@ class ScreenModel {
 
   static List<ScreenModel> getScreen (){
     return [
-      ScreenModel(title: "Login Screen", suntitle: "Login", widget: LoginScreen()),
-      ScreenModel(title: "Test Screen", suntitle: "app_test", widget: TestScreen()),
-      ScreenModel(title: "Home Screen", suntitle: "home", widget: HomeScreen()),
-      ScreenModel(title: "Lead Screen", suntitle: "leads", widget: LeadScreen()),
-      ScreenModel(title: "Lead Add Screen", suntitle: "leads", widget: LeadsAddScreen()),
-      ScreenModel(title: "Lead Over View Screen", suntitle: "leads", widget: LeadOverviewScreen(leadId: "aKH5RLo3mdHWPbUAjUNikpZ")),
-      ScreenModel(title: "Lead Note Screen", suntitle: "leads", widget: LeadNoteScreen()),
+      ScreenModel(title: "Test", suntitle: "Test", widget: TestScreen()),
+      ScreenModel(title: "Login", suntitle: "Auth", widget: LoginScreen()),
+      ScreenModel(title: "Home", suntitle: "Home", widget: HomeScreen()),
+      ScreenModel(title: "Lead", suntitle: "Lead", widget: LeadScreen()),
+      ScreenModel(title: "Lead Add", suntitle: "lead", widget: LeadsAddScreen()),
+      ScreenModel(title: "Lead Overview", suntitle: "lead", widget: LeadOverviewScreen(leadId: "aKH5RLo3mdHWPbUAjUNikpZ")),
     ];
   }
 }

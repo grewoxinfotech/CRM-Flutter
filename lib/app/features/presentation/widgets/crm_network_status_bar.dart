@@ -1,12 +1,12 @@
+import 'package:crm_flutter/app/care/network/network_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../services/internet_service.dart';
 
-class InternetStatusWidget extends StatelessWidget {
+class CrmNetworkStatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      bool isConnected = Get.find<InternetService>().isConnected.value;
+      bool isConnected = Get.find<NetworkService>().isConnected.value;
       return isConnected
           ? SizedBox.shrink()
           : Container(

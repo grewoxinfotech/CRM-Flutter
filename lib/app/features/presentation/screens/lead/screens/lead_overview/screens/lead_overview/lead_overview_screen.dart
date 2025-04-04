@@ -1,7 +1,10 @@
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/leads_add_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/screens/lead_file/features/lead_file_model_view.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/screens/lead_overview/features/lead_overview_model_view.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/Crm_Bottem_navigation_Bar.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_app_bar.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,9 +16,9 @@ class LeadOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CrmTabBarController navigation_controller = Get.put(CrmTabBarController());
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
-
       appBar: AppBar(
         title: Text(
           "Lead",
@@ -24,23 +27,20 @@ class LeadOverviewScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Get.theme.colorScheme.surface,
       ),
-
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.transparent,
-        elevation: 0,
-        padding: const EdgeInsets.all(0),
-        child: CrmBottomNavigationBar(),
-      ),
-
       resizeToAvoidBottomInset: true,
-
+      floatingActionButton: Obx(()=> (navigation_controller.selectedIndex.value == 0)? SizedBox() : FloatingActionButton(
+        onPressed: () => Get.to(LeadsAddScreen()),
+        child: CrmIcon(iconPath: ICRes.add, color: Colors.white),
+        backgroundColor: Get.theme.colorScheme.primary,
+      ),),
       body: SafeArea(
         child: Stack(
           children: [
             Column(
               children: [
                 const SizedBox(height: 40),
-                Expanded(child: LeadOverviewModelView(leadId: leadId)),
+                // Expanded(child: LeadOverviewModelView(leadId: leadId)),
+                Expanded(child: Obx(()=> (navigation_controller.selectedIndex.value == 0)?LeadOverviewModelView(leadId: leadId):LeadFileModelView())),
               ],
             ),
             Column(
