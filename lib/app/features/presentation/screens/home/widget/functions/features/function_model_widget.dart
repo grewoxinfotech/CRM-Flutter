@@ -51,7 +51,7 @@ class FunctionModelWidget {
     );
     widgets.add(
       FunctionModelWidget(
-        imagePath: ICRes.employee,
+        imagePath: ICRes.employees,
         title: "Employee",
         unitId: "employee",
         color: Color(0xff2B648F),

@@ -9,6 +9,8 @@ class CrmButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Color? backgroundColor;
   final BorderRadiusGeometry? borderRadius;
+  final Color? titleTextColor;
+
 
 
   CrmButton({
@@ -20,6 +22,7 @@ class CrmButton extends StatelessWidget {
     this.fontSize,
     this.backgroundColor,
     this.borderRadius,
+    this.titleTextColor,
   });
 
   @override
@@ -33,7 +36,7 @@ class CrmButton extends StatelessWidget {
       ),
       child: Text(
         title,
-        style: TextStyle(fontSize: fontSize ?? 16,fontWeight: FontWeight.w700, color: Colors.white),
+        style: TextStyle(fontSize: fontSize ?? 16,fontWeight: FontWeight.w700, color: titleTextColor ?? Colors.white),
       ),
     );
   }

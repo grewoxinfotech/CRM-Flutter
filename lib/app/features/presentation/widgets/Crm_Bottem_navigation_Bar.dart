@@ -15,18 +15,22 @@ final CrmBottemNavigationBarController controller = Get.put(
 
 class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
   final List<Map<String, dynamic>> navItems = [
-    {"icon": Icons.home, "label": "Home"},
-    {"icon": Icons.home, "label": "Home"},
-    {"icon": Icons.notifications, "label": "Alerts"},
-    {"icon": Icons.settings, "label": "Settings"},
-    {"icon": Icons.person, "label": "Profile"},
+    {"icon": ICRes.add, "label": "Home"},
+    {"icon": ICRes.add, "label": "Home"},
+    {"icon": ICRes.notifications, "label": "Alerts"},
+    {"icon": ICRes.settings, "label": "Settings"},
+    {"icon": ICRes.pin, "label": "Profile"},
   ];
 
   @override
   Widget build(BuildContext context) {
     return CrmContainer(
       height: 60,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      boxShadow: [
+        BoxShadow(color: Colors.black26, blurRadius: 20, spreadRadius: -10),
+
+      ],
+      margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(navItems.length, (i) {
@@ -34,55 +38,32 @@ class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
           print(navItems.length.toString());
           return GestureDetector(
             onTap: () => controller.changescreen(i),
-            child: FittedBox(
-              child: Obx(
-                () => AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  height: controller.selectedIndex.value == i ? 40 : 40,
-                  width: controller.selectedIndex.value == i ? 40 : 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color:
-                        (controller.selectedIndex.value == i)
-                            ? Get.theme.colorScheme.primary
-                            : Colors.transparent,
-                  ),
-                  child: GestureDetector(
-                    onTap:
-                        () => setState(
-                          () => (controller.selectedIndex.value = i),
-                        ),
-                    child: Column(
-                      children: [
-                        CrmIcon(iconPath: ICRes.task),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          physics: NeverScrollableScrollPhysics(),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor:
-                                    (controller.selectedIndex.value == i)
-                                        ? Get.theme.colorScheme.primary
-                                        : Colors.transparent,
-                                child: Icon(
-                                  navItems[i]["icon"],
-                                  size:
-                                      (controller.selectedIndex.value == i)
-                                          ? 24
-                                          : 24,
-                                  color:
-                                      (controller.selectedIndex.value == i)
-                                          ? Colors.white
-                                          : Get.theme.colorScheme.primary,
-                                ),
-                              ),],
-                          ),
-                        ),
-                      ],
+            child: Obx(
+                  () => Stack(
+                alignment: Alignment.center,
+                children: [
+                  AnimatedContainer(
+                    height: 40,
+                    width: 40,
+                    duration: Duration(milliseconds: 100),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color:
+                      (controller.selectedIndex.value == i)
+                          ? Get.theme.colorScheme.primary
+                          : Colors.transparent,
                     ),
                   ),
-                ),
+                  CrmIcon(
+                    onTap: () => controller.changescreen(i),
+                    iconPath: navItems[i]["icon"],
+                    color:
+                    controller.selectedIndex == i
+                        ? Get.theme.colorScheme.surface
+                        : Get.theme.colorScheme.primary,
+                  ),
+                ],
               ),
             ),
           );
@@ -94,6 +75,13 @@ class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
 
 class CrmBottemNavigationBarController extends GetxController {
   RxInt selectedIndex = 0.obs;
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    selectedIndex.value = 0;
+  }
 
   void changescreen(int index) {
     selectedIndex.value = index;

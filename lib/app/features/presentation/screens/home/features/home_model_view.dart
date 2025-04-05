@@ -1,4 +1,4 @@
-// import 'package:crm_flutter/app/features/presentation/screens/home/features/home_model_widget.dart';
+// import 'package:crm_flutter/app/features/presentation/widgets/home/features/home_model_widget.dart';
 // import 'package:flutter/material.dart';
 //
 // class HomeModelView extends StatelessWidget {

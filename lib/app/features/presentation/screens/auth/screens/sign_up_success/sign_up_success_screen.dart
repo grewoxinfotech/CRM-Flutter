@@ -1,6 +1,7 @@
 
 import 'package:crm_flutter/app/features/presentation/screens/auth/widgets/auth_elevated_button.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/home_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/home_main/home_main_screen.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_app_logo.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_button.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
@@ -36,7 +37,7 @@ class SignUpSuccessScreen extends StatelessWidget {
                   CrmButton(
                     width: 500,
                     title: "Let's Start",
-                    onPressed: () => Get.offAll(HomeScreen()),
+                    onPressed: () => Get.offAll(HomeMainScreen()),
                   ),
                 ],
               ),

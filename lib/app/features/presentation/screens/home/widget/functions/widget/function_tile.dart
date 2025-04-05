@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,7 +35,7 @@ class FunctionTile extends StatelessWidget {
               alignment: Alignment.center,
               color: color,
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(icon, width: 25),
+              child: CrmIcon(iconPath: icon, width: 24,color: Colors.white,),
             ),
             const SizedBox(height: 15),
             Text(

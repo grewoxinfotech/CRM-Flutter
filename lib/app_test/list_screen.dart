@@ -1,7 +1,7 @@
 import 'package:crm_flutter/app/features/presentation/screens/auth/screens/login/login_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/home_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/leads_add_screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/screens/lead_overview/lead_overview_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/lead_overview_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_screen/lead_screen.dart';
 import 'package:crm_flutter/app_test/test_screen.dart';
 import 'package:flutter/material.dart';

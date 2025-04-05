@@ -11,7 +11,7 @@ void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   Get.put(NetworkService());
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(statusBarColor: Colors.black12),
+    SystemUiOverlayStyle(statusBarColor: Colors.transparent),
   );
 
   runApp(

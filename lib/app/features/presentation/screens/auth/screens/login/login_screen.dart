@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/care/util/validators.dart';
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/features/presentation/screens/auth/screens/login/features/login_controller.dart';
+import 'package:crm_flutter/app/features/data/auth/auth_controller.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_app_logo.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_button.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
@@ -14,7 +14,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LoginController controller = Get.put(LoginController());
+    AuthController controller = Get.put(AuthController());
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
@@ -79,26 +79,27 @@ class LoginScreen extends StatelessWidget {
                       Obx(
                         () => Checkbox(
                           value: controller.rememberMe.value,
-                          onChanged: (value) => controller.rememberMe.value = value!,
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: 2,
-                          ),
+                          onChanged:
+                              (value) => controller.rememberMe.value = value!,
+                          side: BorderSide(color: Colors.black, width: 2),
                           focusColor: Colors.green,
                           checkColor: Get.theme.colorScheme.primary,
                           activeColor: Colors.transparent,
-
                         ),
                       ),
                       const Text('Remember me'),
                     ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      controller.email.text;
-                      controller.password.text;
-                    },
-                    child: const Text('Forgot Password?'),
+                  GestureDetector(
+                    onTap: () => controller.forgotPassword(),
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Get.theme.colorScheme.primary,
+                      ),
+                    ),
                   ),
                 ],
               ),

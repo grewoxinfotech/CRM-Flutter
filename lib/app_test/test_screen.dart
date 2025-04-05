@@ -19,8 +19,6 @@ class TestScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CrmAppBar(),
-            const SizedBox(height: 10,),
             CrmBottomNavigationBar()
           ],
         ),
