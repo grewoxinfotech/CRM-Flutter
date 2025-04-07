@@ -1,41 +1,27 @@
-import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
-class NetworkService extends GetxController {
-  final RxBool isConnected = true.obs;
+class NetworkStatusService extends GetxService {
+  final RxBool hasInternet = true.obs;
 
-  late StreamSubscription _subscription;
+  Future<NetworkStatusService> init() async {
+    _startMonitoring();
+    return this;
+  }
 
-  @override
-  void onInit() {
-    super.onInit();
-    checkInternet();
-    _subscription = Connectivity().onConnectivityChanged.listen((results) {
-      if (results is List<ConnectivityResult>) {
-        isConnected.value = results.contains(ConnectivityResult.mobile) ||
-            results.contains(ConnectivityResult.wifi);
-      } else if (results is ConnectivityResult) {
-        isConnected.value = (results == ConnectivityResult.mobile ||
-            results == ConnectivityResult.wifi);
-      }
+  void _startMonitoring() {
+    Connectivity().onConnectivityChanged.listen((_) => _checkInternet());
+    _checkInternet();
+    InternetConnection().onStatusChange.listen((status) {
+      hasInternet.value = status == InternetStatus.connected;
     });
   }
 
-  void checkInternet() async {
-    var results = await Connectivity().checkConnectivity();
-    if (results is List<ConnectivityResult>) {
-      isConnected.value = results.contains(ConnectivityResult.mobile) ||
-          results.contains(ConnectivityResult.wifi);
-    } else if (results is ConnectivityResult) {
-      isConnected.value = (results == ConnectivityResult.mobile ||
-          results == ConnectivityResult.wifi);
-    }
-  }
-
-  @override
-  void onClose() {
-    _subscription.cancel();
-    super.onClose();
+  Future<void> _checkInternet() async {
+    final status = await InternetConnection().hasInternetAccess;
+    hasInternet.value = status;
   }
 }

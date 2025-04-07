@@ -1,4 +1,6 @@
+import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,33 +27,33 @@ class LeadNoteTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmContainer(
-        height: 70,
+        height: 145,
         padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.symmetric(horizontal: 15),
         child: Row(
           children: [
             Container(
-              width: 60,
-              height: 60,
+              width: 135,
+              height: 135,
               decoration: BoxDecoration(
                 color: Colors.blue.shade50,
                 borderRadius: BorderRadius.circular(10),
                 image:
-                (url != null)
-                    ? DecorationImage(image: NetworkImage(url.toString()))
-                    : null,
+                    (url != null)
+                        ? DecorationImage(image: NetworkImage(url.toString()))
+                        : null,
               ),
               alignment: Alignment.center,
               child:
-              (url == null)
-                  ? Text(
-                title![0].toString(),
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
-              )
-                  : null,
+                  (url == null)
+                      ? Text(
+                        title![0].toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      )
+                      : null,
             ),
             const SizedBox(width: 5),
             Expanded(
@@ -62,8 +64,9 @@ class LeadNoteTile extends StatelessWidget {
                   horizontal: 10,
                   vertical: 5,
                 ),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,21 +89,31 @@ class LeadNoteTile extends StatelessWidget {
                             color: Colors.grey,
                           ),
                         ),
+                        Text(
+                          "05:45am",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          "05/06/2025",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: Text(
-                        role.toString(),
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CrmIcon(iconPath: ICRes.edit, color: Colors.green),
+                        const SizedBox(width: 5),
+                        CrmIcon(iconPath: ICRes.delete, color: Colors.red),
+                      ],
                     ),
                   ],
                 ),

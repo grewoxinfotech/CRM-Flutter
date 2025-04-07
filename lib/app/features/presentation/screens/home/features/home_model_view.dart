@@ -35,7 +35,6 @@ class HomeModelView extends StatelessWidget {
 
     return Column(
       children: [
-        CrmNetworkStatusBar(),
         Expanded(
           child: ListView.separated(
             padding: EdgeInsets.symmetric(vertical: 20),

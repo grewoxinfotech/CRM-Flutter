@@ -4,6 +4,8 @@ import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_members/features/lead_member_model_view.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_notes/features/lead_note_model_view.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview/features/lead_overview_model_view.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/Crm_Bottem_navigation_Bar.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_button.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +13,22 @@ import 'package:get/get.dart';
 
 class LeadOverviewScreen extends StatelessWidget {
   final String leadId;
+  final PageController _pageController = PageController();
+  final CrmBottemNavigationBarController navigatorController = Get.put(
+    CrmBottemNavigationBarController(),
+  );
 
   LeadOverviewScreen({super.key, required this.leadId});
 
   @override
   Widget build(BuildContext context) {
     CrmTabBarController navigation_controller = Get.put(CrmTabBarController());
+    final widgets = [
+      LeadOverviewModelView(leadId: leadId),
+      LeadMemberModelView(),
+      LeadFileModelView(),
+      LeadNoteModelView(),
+    ];
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
@@ -24,42 +36,46 @@ class LeadOverviewScreen extends StatelessWidget {
           "Lead",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
         ),
+        actions: [
+          CrmButton(
+            title: "To Deal",
+            onPressed: () {},
+            width: 80,
+            height: 20,
+            fontSize: 15,
+            backgroundColor: Colors.green,
+          ),
+          SizedBox(width: 10),
+        ],
         centerTitle: true,
         backgroundColor: Get.theme.colorScheme.surface,
       ),
       resizeToAvoidBottomInset: true,
-      floatingActionButton: Obx(
-        () {
-          return (navigation_controller.selectedIndex.value == 0)
-                ? SizedBox()
-                : FloatingActionButton(
-                  onPressed: () => Get.to(LeadsAddScreen()),
-                  child: CrmIcon(iconPath: ICRes.add, color: Colors.white),
-                  backgroundColor: Get.theme.colorScheme.primary,
-                );
-        },
-      ),
+      floatingActionButton: Obx(() {
+        return (navigation_controller.selectedIndex.value == 0)
+            ? SizedBox()
+            : FloatingActionButton(
+              onPressed: () => Get.to(LeadsAddScreen()),
+              child: CrmIcon(iconPath: ICRes.add, color: Colors.white),
+              backgroundColor: Get.theme.colorScheme.primary,
+            );
+      }),
       body: SafeArea(
         child: Stack(
           children: [
             Column(
               children: [
                 const SizedBox(height: 40),
-                // Expanded(child: LeadOverviewModelView(leadId: leadId)),
                 Expanded(
-                  child: Obx(() {
-                    if (navigation_controller.selectedIndex.value == 0) {
-                      return LeadOverviewModelView(leadId: leadId);
-                    } else if (navigation_controller.selectedIndex.value == 1) {
-                      return LeadMemberModelView();
-                    } else if (navigation_controller.selectedIndex.value == 2) {
-                      return LeadFileModelView();
-                    } else if (navigation_controller.selectedIndex.value == 3) {
-                      return LeadNoteModelView();
-                    } else {
-                      return SizedBox();
-                    }
-                  }),
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: widgets.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, i) {
+                      navigation_controller.selectedIndex == i;
+                      return widgets[i];
+                    },
+                  ),
                 ),
               ],
             ),

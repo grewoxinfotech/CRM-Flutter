@@ -1,7 +1,6 @@
 import 'package:crm_flutter/app/features/data/lead/lead_home/lead_model.dart';
 import 'package:crm_flutter/app/features/data/lead/lead_home/lead_service.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LeadController extends GetxController {
   var isLoading = true.obs;

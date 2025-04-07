@@ -30,6 +30,7 @@ class CrmButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.all(0),
         fixedSize: Size(width ?? 150, height ?? 48),
         backgroundColor: backgroundColor ?? Get.theme.colorScheme.primary,
         shape: RoundedRectangleBorder(borderRadius: borderRadius ??  BorderRadius.circular(10)),

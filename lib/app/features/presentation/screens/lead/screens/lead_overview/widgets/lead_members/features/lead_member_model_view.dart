@@ -14,9 +14,12 @@ class LeadMemberModelView extends StatelessWidget {
       separatorBuilder: (context, i) => const SizedBox(height: 5),
       itemBuilder: (context, i) {
         return LeadMemberTile(
-          title: "Name",
+          title: "Test",
           subTitle: "test@gmail.com",
           role: "EMP",
+          onTap: (){
+            print("Employee : "+ (i+1).toString());
+          },
         );
       },
     );

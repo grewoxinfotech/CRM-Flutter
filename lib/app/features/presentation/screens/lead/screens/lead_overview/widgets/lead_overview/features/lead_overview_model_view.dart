@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 class LeadOverviewModelView extends StatelessWidget {
 
   final String leadId;
-  LeadOverviewModelView({super.key, required this.leadId});
+  LeadOverviewModelView({super.key, this.leadId =""});
 
   final LeadController leadController = Get.put(LeadController());
 
@@ -22,9 +22,7 @@ class LeadOverviewModelView extends StatelessWidget {
         return const Center(child: Text("No Lead Data Available."));
       }
 
-      final lead = leadController.leadsList.firstWhere(
-              (lead) => lead.id == leadId,
-          orElse: () => LeadModel());
+      final lead = leadController.leadsList.firstWhere((lead) => lead.id == leadId,orElse: () => LeadModel());
 
       if (lead.id == null) {
         return const Center(child: Text("Lead not found"));

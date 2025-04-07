@@ -13,9 +13,9 @@ class LeadFileModelView extends StatelessWidget {
       separatorBuilder: (context, i) => const SizedBox(height: 5),
       itemBuilder: (context, i) {
         return LeadFileTile(
-          title: "Hiren",
-          subTitle: "Hirenss",
-          fileFormat: "MAN",
+          title: "Froge",
+          subTitle: "froge.png",
+          fileFormat: "PNG",
           onTap: (){
             print("open");
           },

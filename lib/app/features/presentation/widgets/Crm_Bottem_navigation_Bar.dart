@@ -19,7 +19,7 @@ class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
     {"icon": ICRes.add, "label": "Home"},
     {"icon": ICRes.notifications, "label": "Alerts"},
     {"icon": ICRes.settings, "label": "Settings"},
-    {"icon": ICRes.pin, "label": "Profile"},
+    {"icon": ICRes.employee, "label": "Profile"},
   ];
 
   @override

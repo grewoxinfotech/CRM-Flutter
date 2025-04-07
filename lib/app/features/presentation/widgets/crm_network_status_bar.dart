@@ -1,24 +1,42 @@
 import 'package:crm_flutter/app/care/network/network_service.dart';
+import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CrmNetworkStatusBar extends StatelessWidget {
+  const CrmNetworkStatusBar({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      bool isConnected = Get.find<NetworkService>().isConnected.value;
-      return isConnected
-          ? SizedBox.shrink()
-          : Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(7),
-            color: Colors.red,
-            child: Text(
-              "No Internet Connection!",
-              style: TextStyle(color: Colors.white, fontSize: 14),
-              textAlign: TextAlign.center,
+    final network = Get.find<NetworkStatusService>();
+    return Obx(
+      () => AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          color: Get.theme.colorScheme.error,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 5),
+        height: network.hasInternet.value ? 0 : 30,
+        width: 250,
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.wifi_off_rounded,size: 18,color: Colors.white,),
+            const SizedBox(width: 10),
+            Text(
+              "No Internet Connection",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+              ),
             ),
-          );
-    });
+          ],
+        ),
+      ),
+    );
   }
 }
