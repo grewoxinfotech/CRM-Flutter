@@ -3,30 +3,47 @@ import 'package:crm_flutter/app/features/data/lead/lead_home/lead_service.dart';
 import 'package:get/get.dart';
 
 class LeadController extends GetxController {
-  var isLoading = true.obs;
-  var leadsList = <LeadModel>[].obs;
-  final LeadService leadService = LeadService();
+  late final LeadService leadService;
+  final RxList<LeadModel> leadsList = <LeadModel>[].obs;
+  final RxBool isLoading = false.obs;
 
   var lead = LeadModel().obs;
 
   @override
   void onInit() {
     super.onInit();
+        leadService = LeadService();
+
     fetchLeads();
   }
 
-  void fetchLeads() async {
+  Future<void> fetchLeads() async {
     try {
-      isLoading(true);
-      var leads = await leadService.fetchLeads();
+      isLoading.value = true;
+      final leads = await leadService.fetchLeads();
       leadsList.assignAll(leads);
-      print("object");
-      print("Leads fetched successfully: ${leads.length} leads found");
     } catch (e) {
-      print("Error: $e");
-      Get.snackbar("Error", "Failed to fetch leads");
+      Get.snackbar("Error", "Failed to load leads");
     } finally {
-      isLoading(false);
+      isLoading.value = false;
+    }
+  }
+
+  Future<bool> deleteLead(String leadId) async {
+    try {
+      bool success = await leadService.deleteLead(leadId);
+      if (success) {
+        leadsList.removeWhere((lead) => lead.id == leadId);
+        Get.back();
+        Get.snackbar("Success", "Lead deleted successfully");
+        return true;
+      } else {
+        Get.snackbar("Error", "Failed to delete lead");
+        return false;
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong");
+      return false;
     }
   }
 
