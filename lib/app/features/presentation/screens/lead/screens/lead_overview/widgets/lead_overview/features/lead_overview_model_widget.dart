@@ -5,6 +5,9 @@ import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_
 import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview/widgets/lead_overview_widget_basic_details.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_custom_delete_dialog.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+
+import '../../../../../../../../data/lead/lead_home/lead_controller.dart';
 
 
 class LeadOverviewModelWidget {
@@ -14,6 +17,8 @@ class LeadOverviewModelWidget {
   // api call this location
 
   static List<LeadOverviewModelWidget> getWidgets(BuildContext context ,LeadModel lead) {
+    final LeadController leadController = Get.find();
+
     return [
       LeadOverviewModelWidget(widget: LeadOverviewWidgetBasicDetails(lead: lead)),
       LeadOverviewModelWidget(widget: LeadOverviewInformation(lead: lead,)),
@@ -24,7 +29,11 @@ class LeadOverviewModelWidget {
           context: context,
           entityType: entityType,
           onConfirm: () {
-            print("$entityType deleted successfully!");
+            if (lead.id != null) {
+              leadController.deleteLead(lead.id!);
+            } else {
+              Get.snackbar("Error", "Lead ID not found!");
+            }
           },
           onCancel: () {
             print("$entityType deletion canceled!");

@@ -9,13 +9,17 @@ class LeadService extends GetConnect {
   Future<List<LeadModel>> fetchLeads() async {
     try {
       String? token = await SecureStorage.getToken();
-      if (token == null) throw Exception("No token found. Please log in again.");
+      if (token == null)
+        throw Exception("No token found. Please log in again.");
 
       final response = await get(
         apiUrl,
-        headers: {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
       );
-
+      //print("------------------------------------$token");
       if (response.statusCode == 200 && response.body is Map<String, dynamic>) {
         var jsonData = response.body;
         if (jsonData.containsKey("data") && jsonData["data"] is List) {
@@ -26,12 +30,34 @@ class LeadService extends GetConnect {
         throw Exception("Invalid API response format");
       }
       throw Exception("Failed to load leads: ${response.statusText}");
-
     } catch (e) {
       print("Error fetching leads: $e");
       throw Exception("Error fetching leads");
     }
   }
+
+  Future<bool> deleteLead(String leadId) async {
+    try {
+      String? token = await SecureStorage.getToken();
+      if (token == null)
+        throw Exception("No token found. Please log in again.");
+
+      final response = await delete(
+        "$apiUrl/$leadId",
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception("Failed to delete lead: ${response.statusText}");
+      }
+    } catch (e) {
+      print("Error deleting lead: $e");
+      return false;
+    }
+  }
 }
-
-
