@@ -22,7 +22,7 @@
 
 
 import 'package:crm_flutter/app/features/presentation/screens/home/features/home_model_widget.dart';
-import 'package:crm_flutter/app/features/presentation/widgets/crm_network_status_bar.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_no_internet.dart';
 import 'package:flutter/material.dart';
 
 class HomeModelView extends StatelessWidget {

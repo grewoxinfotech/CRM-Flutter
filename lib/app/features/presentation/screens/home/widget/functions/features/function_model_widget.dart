@@ -1,5 +1,5 @@
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_screen/lead_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/lead/leads_screen.dart';
 import 'package:flutter/material.dart';
 
 class FunctionModelWidget {
@@ -28,7 +28,7 @@ class FunctionModelWidget {
         unitId: "leads",
         color: Color(0xffFFBD21),
         num: 26,
-        widget: LeadScreen(),
+        widget: LeadsScreen(),
       ),
     );
     widgets.add(

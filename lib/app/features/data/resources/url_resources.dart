@@ -4,5 +4,6 @@ class UrlResources {
   static String LOGIN = AUTH + "login";
 
   static String Leads = BASE_URL + "leads";
+  static String Deals = BASE_URL + "deals";
 
 }

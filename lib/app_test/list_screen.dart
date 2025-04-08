@@ -1,9 +1,9 @@
 import 'package:crm_flutter/app/features/presentation/screens/auth/screens/login/login_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/home_screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_add/leads_add_screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_overview/widgets/lead_overview/lead_overview_screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead/screens/lead_screen/lead_screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/splash/splash_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/deal/deal_details_Screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/deal/deals_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/lead/lead_detail_screen.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/lead/leads_screen.dart';
 import 'package:crm_flutter/app_test/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +17,7 @@ class ListScreen extends StatelessWidget {
     screens = ScreenModel.getScreen();
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
-      appBar: AppBar(title: Text("All screen")),
+      appBar: AppBar(title: Text("All test")),
       body: SingleChildScrollView(
         child: ListView.builder(
           padding: const EdgeInsets.all(10),
@@ -76,9 +76,10 @@ class ScreenModel {
       ScreenModel(title: "Test", suntitle: "Test", widget: TestScreen()),
       ScreenModel(title: "Login", suntitle: "Auth", widget: LoginScreen()),
       ScreenModel(title: "Home", suntitle: "Home", widget: HomeScreen()),
-      ScreenModel(title: "Lead", suntitle: "Lead", widget: LeadScreen()),
-      ScreenModel(title: "Lead Add", suntitle: "lead", widget: LeadsAddScreen()),
-      ScreenModel(title: "Lead Overview", suntitle: "lead", widget: LeadOverviewScreen(leadId: "aKH5RLo3mdHWPbUAjUNikpZ")),
+      ScreenModel(title: "Lead", suntitle: "Lead", widget: LeadsScreen()),
+      ScreenModel(title: "Lead Detail", suntitle: "Lead", widget: LeadDetailsScreen(leadId: "aKH5RLo3mdHWPbUAjUNikpZ")),
+      ScreenModel(title: "Deal", suntitle: "Deal", widget: DealsScreen()),
+      ScreenModel(title: "Deal Detail", suntitle: "Deal", widget: DealDetailsScreen(leadId: "aKH5RLo3mdHWPbUAjUNikpZ")),
     ];
   }
 }

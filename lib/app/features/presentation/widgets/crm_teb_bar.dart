@@ -88,9 +88,15 @@ class TabItem {
 }
 
 class CrmTabBarController extends GetxController {
-  var selectedIndex = 0.obs;
+  RxInt selectedIndex = 0.obs;
+  PageController pageController = PageController();
 
   void changeTab(int index) {
     selectedIndex.value = index;
+    pageController.jumpToPage(index);
+  }
+
+  void onPageChanged(int index) {
+    selectedIndex.value = index; // this should trigger Obx
   }
 }
