@@ -1,81 +1,69 @@
+// 📁 function_model.dart
+
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/deal/deals_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/lead/leads_screen.dart';
 import 'package:flutter/material.dart';
 
-class FunctionModelWidget {
-  final String? imagePath;
-  final String? title;
-  final String? unitId;
-  final Color? color;
-  final int? num;
-  final Widget? widget;
+class FunctionModel {
+  final String title;
+  final String iconPath;
+  final Color color;
+  final int count;
+  final Widget Function()? screenBuilder;
 
-  const FunctionModelWidget({
-    this.title,
-    this.imagePath,
-    this.unitId,
-    this.color,
-    this.num,
-    this.widget,
+  const FunctionModel({
+    required this.title,
+    required this.iconPath,
+    required this.color,
+    required this.count,
+    this.screenBuilder,
   });
 
-  static List<FunctionModelWidget> getwidgets() {
-    List<FunctionModelWidget> widgets = [];
-    widgets.add(
-      FunctionModelWidget(
-        imagePath: ICRes.leads,
-        title: "Leads",
-        unitId: "leads",
-        color: Color(0xffFFBD21),
-        num: 26,
-        widget: LeadsScreen(),
-      ),
-    );
-    widgets.add(
-      FunctionModelWidget(
-        imagePath: ICRes.task,
-        title: "Task",
-        unitId: "task",
-        color: Color(0xff0AC947),
-        num: 56,
-      ),
-    );
-    widgets.add(
-      FunctionModelWidget(
-        imagePath: ICRes.custemer,
-        title: "Customer",
-        unitId: "customer",
-        color: Color(0xff6D5DD3),
-        num: 10,
-      ),
-    );
-    widgets.add(
-      FunctionModelWidget(
-        imagePath: ICRes.employees,
-        title: "Employee",
-        unitId: "employee",
-        color: Color(0xff2B648F),
-        num: 04,
-      ),
-    );
-    widgets.add(
-      FunctionModelWidget(
-        imagePath: ICRes.clients,
-        title: "Clients",
-        unitId: "clients",
-        color: Color(0xffFFCC01),
-        num: 45,
-      ),
-    );
-    widgets.add(
-      FunctionModelWidget(
-        imagePath: ICRes.contract,
-        title: "Contract",
-        unitId: "contract",
-        color: Color(0xff3400AD),
-        num: 66,
-      ),
-    );
-    return widgets;
-  }
+  static List<FunctionModel> all() => [
+    FunctionModel(
+      title: 'Leads',
+      iconPath: ICRes.leads,
+      color: const Color(0xffFFBD21),
+      count: 26,
+      screenBuilder: () => LeadsScreen(),
+    ),
+    FunctionModel(
+      title: 'Deals',
+      iconPath: ICRes.leads,
+      color: const Color(0xff28B999),
+      count: 26,
+      screenBuilder: () => DealsScreen(),
+    ),
+    FunctionModel(
+      title: 'Tasks',
+      iconPath: ICRes.task,
+      color: const Color(0xff0AC947),
+      count: 56,
+    ),
+    FunctionModel(
+      title: 'Customer',
+      iconPath: ICRes.custemer,
+      color: const Color(0xff6D5DD3),
+      count: 10,
+    ),
+    FunctionModel(
+      title: 'Employee',
+      iconPath: ICRes.employees,
+      color: const Color(0xff2B648F),
+      count: 4,
+    ),
+    FunctionModel(
+      title: 'Clients',
+      iconPath: ICRes.clients,
+      color: const Color(0xffFFCC01),
+      count: 45,
+    ),
+    FunctionModel(
+      title: 'Contract',
+      iconPath: ICRes.contract,
+      color: const Color(0xff3400AD),
+      count: 66,
+    ),
+  ];
 }

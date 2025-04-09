@@ -1,6 +1,6 @@
-import 'package:crm_flutter/app/features/data/lead/lead_home/lead_controller.dart';
+import 'package:crm_flutter/app/features/data/deal/deal_controller.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/deal/deal_details_Screen.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/deal/deal_tile.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/widgets/deal_tile.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_headline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 class DealsScreen extends StatelessWidget {
   DealsScreen({super.key});
 
-  LeadController controller = Get.put(LeadController());
+  DealController controller = Get.put(DealController());
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +22,27 @@ class DealsScreen extends StatelessWidget {
       ),
       body: ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 15),
-        itemCount: controller.leadsList.length,
+        itemCount: controller.dealsList.length,
         separatorBuilder: (context, s) => const SizedBox(height: 10),
         itemBuilder: (context, i) {
-          final lead = controller.leadsList[i];
+          final deal = controller.dealsList[i];
 
           String formattedDate = DateFormat(
             'dd MMM yyyy',
-          ).format(DateTime.parse(lead.createdAt ?? DateTime.now().toString()));
+          ).format(DateTime.parse(deal.createdAt ?? DateTime.now().toString()));
           return DealTile(
-            claint_name: lead.firstName ?? "No name",
-            company_name: lead.leadTitle ?? "No name",
-            amount: lead.leadValue ?? "0",
-            source: lead.source ?? "Unknown",
+            claint_name: deal.dealName ?? "No name",
+            company_name: deal.dealTitle ?? "No name",
+            amount: deal.updatedBy ?? "0",
+            source: deal.stage ?? "Unknown",
             status: "Good",
             status_color: Colors.red,
             date: formattedDate,
             onTap:
                 () =>
-                    (lead.id != null)
-                        ? Get.to(() => DealDetailsScreen(leadId: lead.id!))
-                        : Get.snackbar('Error', 'Lead ID is missing'),
+                    (deal.id != null)
+                        ? Get.to(() => DealDetailsScreen(dealId: deal.id!))
+                        : Get.snackbar('Error', 'deal ID is missing'),
           );
         },
       ),

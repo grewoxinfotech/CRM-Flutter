@@ -1,6 +1,6 @@
+import 'package:get/get.dart';
 import 'package:crm_flutter/app/features/data/lead/lead_home/lead_model.dart';
 import 'package:crm_flutter/app/features/data/lead/lead_home/lead_service.dart';
-import 'package:get/get.dart';
 
 class LeadController extends GetxController {
   late final LeadService leadService;
@@ -12,8 +12,7 @@ class LeadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-        leadService = LeadService();
-
+    leadService = LeadService();
     fetchLeads();
   }
 
@@ -46,24 +45,4 @@ class LeadController extends GetxController {
       return false;
     }
   }
-
-  // Function to fetch lead data from the API
-  // void fetchLeads() async {
-  //   if (leadsList.isNotEmpty) return; // Prevents multiple API calls
-  //
-  //   try {
-  //     isLoading(true);
-  //     var fetchedLeads = await leadService.fetchLeads();
-  //     if (fetchedLeads.isNotEmpty) {
-  //       leadsList.assignAll(fetchedLeads);
-  //       print("Leads fetched successfully: ${leadsList.length} leads found");
-  //     }
-  //   } catch (error) {
-  //     print("Error fetching leads: $error");
-  //   } finally {
-  //     isLoading(false);
-  //   }
-  // }
-
-
 }

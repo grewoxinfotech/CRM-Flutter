@@ -10,18 +10,18 @@ class WellcomeText extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
-          const Text(
+          Text(
             "Hi Evan, Welcome back!",
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               color: Colors.grey,
               fontWeight: FontWeight.w400,
             ),
           ),
-          const SizedBox(height: 5),
-          const Text(
+          SizedBox(height: 5),
+          Text(
             "Dashboard",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
+            style: TextStyle(fontSize: 36, fontWeight: FontWeight.w700),
           ),
         ],
       ),

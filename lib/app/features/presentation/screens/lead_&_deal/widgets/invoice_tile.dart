@@ -25,7 +25,7 @@ class InvoiceTile extends StatelessWidget {
       child: CrmContainer(
         height: 70,
         padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.symmetric(horizontal: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 15),
         child: Row(
           children: [
             Container(

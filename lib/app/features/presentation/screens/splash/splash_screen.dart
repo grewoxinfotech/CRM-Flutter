@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/features/presentation/screens/splash/features/splash_controller.dart';
+import 'package:crm_flutter/app/features/data/splash_controller/splash_controller.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,8 +8,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SplashController controller = Get.put(SplashController()); // Inject Controller
-    controller.splash();
+    Get.put(SplashController()); // Inject Controller
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(child: CrmAppLogo(width: 150)),

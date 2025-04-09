@@ -1,11 +1,20 @@
-class auth_model {
+
+class UserModel {
+  String email;
+  String password;
+
+  UserModel({required this.email, required this.password});
+}
+
+
+class AuthModel {
   bool? success;
   String? message;
   Data? data;
 
-  auth_model({this.success, this.message, this.data});
+  AuthModel({this.success, this.message, this.data});
 
-  auth_model.fromJson(Map<String, dynamic> json) {
+  AuthModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;

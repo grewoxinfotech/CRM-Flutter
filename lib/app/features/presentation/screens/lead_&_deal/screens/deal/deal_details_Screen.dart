@@ -1,24 +1,24 @@
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/deal/deal_overview.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/file_view_model.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/invoice_view_model.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/member_view_model.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/notes_view_model.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/overview_view_model.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/payment_view_model.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DealDetailsScreen extends StatelessWidget {
-  final String leadId;
+  final String dealId;
 
-  const DealDetailsScreen({super.key, required this.leadId});
+  const DealDetailsScreen({super.key, required this.dealId});
 
   @override
   Widget build(BuildContext context) {
     CrmTabBarController controller = Get.put(CrmTabBarController());
     List widgets = [
-      OverviewViewModel(leadId: leadId),
+      DealOverview(dealId: dealId),
       FileViewModel(),
       MemberViewModel(),
       NotesViewModel(),

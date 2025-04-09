@@ -1,7 +1,6 @@
-
-import 'package:crm_flutter/app/features/presentation/screens/home/widget/attendance/widget/attendance_button.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/widget/attendance/widget/graf/features/graf_design.dart';
 import 'package:crm_flutter/app/features/presentation/screens/home/widget/attendance/widget/time_range_selector.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_button.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_headline.dart';
 import 'package:flutter/material.dart';
@@ -14,22 +13,24 @@ class AttendanceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final AttendanceController controller = Get.put(AttendanceController()); // Controller Initialization
     return CrmContainer(
-      width: 500,
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      width: 600,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         children: [
-          const CrmHeadline(title: "Attendance", showViewAll: false),
+          const CrmHeadline(
+            title: "Attendance",
+            padding: EdgeInsets.symmetric(horizontal: 10),
+          ),
           const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              CustomCircularProgress(percentage: 20,width: 150,),
+              CustomCircularProgress(percentage: 92, width: 150),
               Column(
                 children: [
-                  AttendanceButton(title: "Punch In", onPressed: () {}),
-                  const SizedBox(height: 5),
-                  AttendanceButton(title: "Punch Out", onPressed: () {}),
+                  CrmButton(title: "Punch In", onPressed: () {},width: 100,height: 30,),
+                  CrmButton(title: "Punch Out", onPressed: () {},width: 100,height: 30,),
                 ],
               ),
             ],
@@ -38,7 +39,9 @@ class AttendanceWidget extends StatelessWidget {
           TimeRangeSelector(
             onSelected: (selected) {
               controller.selectedRange.value = selected;
-              print("Selected Time Range: $selected"); // Selected value print hoga
+              print(
+                "Selected Time Range: $selected",
+              ); // Selected value print hoga
             },
           ),
         ],
@@ -46,6 +49,7 @@ class AttendanceWidget extends StatelessWidget {
     );
   }
 }
+
 class AttendanceController extends GetxController {
   RxString selectedRange = "Week".obs;
 }

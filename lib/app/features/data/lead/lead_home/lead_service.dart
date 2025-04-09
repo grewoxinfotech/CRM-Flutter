@@ -1,7 +1,7 @@
+import 'package:crm_flutter/app/care/secure_storage.dart';
 import 'package:crm_flutter/app/features/data/lead/lead_home/lead_model.dart';
 import 'package:crm_flutter/app/features/data/resources/url_resources.dart';
 import 'package:get/get.dart';
-import '../../../../care/secure_storage.dart';
 
 class LeadService extends GetConnect {
   final String apiUrl = UrlResources.Leads;
@@ -9,8 +9,7 @@ class LeadService extends GetConnect {
   Future<List<LeadModel>> fetchLeads() async {
     try {
       String? token = await SecureStorage.getToken();
-      if (token == null)
-        throw Exception("No token found. Please log in again.");
+      if (token == null) throw Exception("No token found. Please log in again.");
 
       final response = await get(
         apiUrl,
@@ -19,7 +18,7 @@ class LeadService extends GetConnect {
           'Content-Type': 'application/json',
         },
       );
-      //print("------------------------------------$token");
+
       if (response.statusCode == 200 && response.body is Map<String, dynamic>) {
         var jsonData = response.body;
         if (jsonData.containsKey("data") && jsonData["data"] is List) {
@@ -29,6 +28,7 @@ class LeadService extends GetConnect {
         }
         throw Exception("Invalid API response format");
       }
+
       throw Exception("Failed to load leads: ${response.statusText}");
     } catch (e) {
       print("Error fetching leads: $e");
@@ -39,8 +39,7 @@ class LeadService extends GetConnect {
   Future<bool> deleteLead(String leadId) async {
     try {
       String? token = await SecureStorage.getToken();
-      if (token == null)
-        throw Exception("No token found. Please log in again.");
+      if (token == null) throw Exception("No token found. Please log in again.");
 
       final response = await delete(
         "$apiUrl/$leadId",
@@ -50,10 +49,11 @@ class LeadService extends GetConnect {
         },
       );
 
-      if (response.statusCode == 200) {
-        return true;
+      if (response.statusCode == 200 && response.body is Map<String, dynamic>) {
+        return response.body["success"] == true;
       } else {
-        throw Exception("Failed to delete lead: ${response.statusText}");
+        print("Delete failed: ${response.statusText}");
+        return false;
       }
     } catch (e) {
       print("Error deleting lead: $e");

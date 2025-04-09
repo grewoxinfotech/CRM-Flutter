@@ -9,8 +9,7 @@ class DealService extends GetConnect {
   Future<List<DealModel>> fetchDeals() async {
     try {
       String? token = await SecureStorage.getToken();
-      if (token == null)
-        throw Exception("No token found. Please log in again.");
+      if (token == null) throw Exception("No token found. Please log in again.");
 
       final response = await get(
         apiUrl,
@@ -29,10 +28,36 @@ class DealService extends GetConnect {
         }
         throw Exception("Invalid API response format");
       }
+
       throw Exception("Failed to load deals: ${response.statusText}");
     } catch (e) {
       print("Error fetching deals: $e");
       throw Exception("Error fetching deals");
+    }
+  }
+
+  Future<bool> deleteDeal(String dealId) async {
+    try {
+      String? token = await SecureStorage.getToken();
+      if (token == null) throw Exception("No token found. Please log in again.");
+
+      final response = await delete(
+        "$apiUrl/$dealId",
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200 && response.body is Map<String, dynamic>) {
+        return response.body["success"] == true;
+      } else {
+        print("Delete failed: ${response.statusText}");
+        return false;
+      }
+    } catch (e) {
+      print("Error deleting deal: $e");
+      return false;
     }
   }
 }

@@ -1,10 +1,10 @@
 class DealModel {
   String? id;
-  String? leadTitle;
+  String? dealTitle;
   String? dealName;
+  String? currency;
   String? pipeline;
   String? stage;
-  String? currency;
   int? price;
   String? closedDate;
   String? project;
@@ -16,7 +16,7 @@ class DealModel {
 
   DealModel(
       {this.id,
-        this.leadTitle,
+        this.dealTitle,
         this.dealName,
         this.pipeline,
         this.stage,
@@ -32,7 +32,7 @@ class DealModel {
 
   DealModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    leadTitle = json['leadTitle'];
+    dealTitle = json['dealTitle'];
     dealName = json['dealName'];
     pipeline = json['pipeline'];
     stage = json['stage'];
@@ -50,7 +50,7 @@ class DealModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['leadTitle'] = this.leadTitle;
+    data['dealTitle'] = this.dealTitle;
     data['dealName'] = this.dealName;
     data['pipeline'] = this.pipeline;
     data['stage'] = this.stage;

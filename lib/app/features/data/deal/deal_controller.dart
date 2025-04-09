@@ -1,8 +1,6 @@
+import 'package:get/get.dart';
 import 'package:crm_flutter/app/features/data/deal/deal_model.dart';
 import 'package:crm_flutter/app/features/data/deal/deal_service.dart';
-import 'package:crm_flutter/app/features/data/lead/lead_home/lead_model.dart';
-import 'package:crm_flutter/app/features/data/lead/lead_home/lead_service.dart';
-import 'package:get/get.dart';
 
 class DealController extends GetxController {
   var isLoading = true.obs;
@@ -22,7 +20,6 @@ class DealController extends GetxController {
       isLoading(true);
       var deals = await dealService.fetchDeals();
       dealsList.assignAll(deals);
-      print("object");
       print("Deals fetched successfully: ${deals.length} deals found");
     } catch (e) {
       print("Error: $e");
@@ -32,23 +29,21 @@ class DealController extends GetxController {
     }
   }
 
-// Function to fetch lead data from the API
-// void fetchLeads() async {
-//   if (leadsList.isNotEmpty) return; // Prevents multiple API calls
-//
-//   try {
-//     isLoading(true);
-//     var fetchedLeads = await leadService.fetchLeads();
-//     if (fetchedLeads.isNotEmpty) {
-//       leadsList.assignAll(fetchedLeads);
-//       print("Leads fetched successfully: ${leadsList.length} leads found");
-//     }
-//   } catch (error) {
-//     print("Error fetching leads: $error");
-//   } finally {
-//     isLoading(false);
-//   }
-// }
-
-
+  Future<bool> deleteDeal(String dealId) async {
+    try {
+      bool success = await dealService.deleteDeal(dealId);
+      if (success) {
+        dealsList.removeWhere((deal) => deal.id == dealId);
+        Get.back();
+        Get.snackbar("Success", "Deal deleted successfully");
+        return true;
+      } else {
+        Get.snackbar("Error", "Failed to delete deal");
+        return false;
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong");
+      return false;
+    }
+  }
 }

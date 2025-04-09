@@ -1,21 +1,23 @@
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
+import 'package:crm_flutter/app/features/data/deal/deal_controller.dart';
 import 'package:crm_flutter/app/features/data/lead/lead_home/lead_controller.dart';
 import 'package:crm_flutter/app/features/data/lead/lead_home/lead_model.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_button.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
+import 'package:crm_flutter/app/features/presentation/widgets/crm_custom_delete_dialog.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class OverviewViewModel extends StatelessWidget {
+class LeadOverview extends StatelessWidget {
   // final String
 
   final String leadId;
   final LeadController leadController = Get.put(LeadController());
   final List title = ["SOURCE", "STAGE", "CATEGORY", "STATUS"];
 
-  OverviewViewModel({super.key, required this.leadId});
+  LeadOverview({super.key, required this.leadId});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class OverviewViewModel extends StatelessWidget {
     }
 
     final lead = leadController.leadsList.firstWhere(
-      (lead) => lead.id == leadId,
+          (lead) => lead.id == leadId,
       orElse: () => LeadModel(),
     );
 
@@ -37,7 +39,7 @@ class OverviewViewModel extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           CrmContainer(
@@ -220,7 +222,7 @@ class OverviewViewModel extends StatelessWidget {
                   backgroundColor: Get.theme.colorScheme.surface,
                   titleTextColor: Colors.red,
                   fontSize: 20,
-                  onPressed: () {},
+                  onPressed: () => showCustomDeleteDialog(context: context, entityType: lead.leadTitle.toString(), onConfirm: ()=> leadController.deleteLead(leadId), onCancel: (){}),
                 ),
               ),
             ],

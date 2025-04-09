@@ -1,4 +1,6 @@
+import 'package:crm_flutter/app/features/presentation/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CrmProfile extends StatelessWidget {
   final double? radius;
@@ -14,12 +16,15 @@ class CrmProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "profile_logo",
-      child: CircleAvatar(
-        foregroundImage: foregroundImage,
-        radius: radius ?? 20,
-        child: child,
+    return GestureDetector(
+      onTap: ()=> Get.to(ProfileScreen()),
+      child: Hero(
+        tag: "profile_logo",
+        child: CircleAvatar(
+          foregroundImage: foregroundImage,
+          radius: radius ?? 20,
+          child: child,
+        ),
       ),
     );
   }

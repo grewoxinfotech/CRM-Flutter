@@ -1,8 +1,8 @@
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
+import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/lead/lead_overview.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/file_view_model.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/member_view_model.dart';
 import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/notes_view_model.dart';
-import 'package:crm_flutter/app/features/presentation/screens/lead_&_deal/screens/screens/overview_view_model.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +16,7 @@ class LeadDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     CrmTabBarController controller = Get.put(CrmTabBarController());
     List widgets = [
-      OverviewViewModel(leadId: leadId),
+      LeadOverview(leadId: leadId),
       FileViewModel(),
       MemberViewModel(),
       NotesViewModel(),
@@ -31,7 +31,7 @@ class LeadDetailsScreen extends StatelessWidget {
         children: [
           Column(
             children: [
-              const SizedBox(height: 40,),
+              const SizedBox(height: 40),
               Expanded(
                 child: PageView.builder(
                   itemCount: widgets.length,
@@ -61,7 +61,7 @@ class LeadDetailsScreen extends StatelessWidget {
                 ],
               ),
             ],
-          )
+          ),
         ],
       ),
     );
