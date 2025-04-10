@@ -1,6 +1,6 @@
-import 'package:crm_flutter/app/care/secure_storage.dart';
 import 'package:crm_flutter/app/features/presentation/screens/auth/screens/login/login_screen.dart';
 import 'package:crm_flutter/app/features/presentation/screens/dashboard/dashboard.dart';
+import 'package:crm_flutter/app/services/secure_storage_service.dart';
 import 'package:get/get.dart';
 
 class SplashController extends GetxController {

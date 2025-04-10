@@ -1,4 +1,4 @@
-class ImgRes {
+class IMGRes {
 
 
 

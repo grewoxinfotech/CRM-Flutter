@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class CrmHeadline extends StatelessWidget {
   final String title;
-  final EdgeInsetsGeometry? padding;
   final GestureTapCallback? onTap;
-  final bool showViewAll;
+  final EdgeInsetsGeometry? padding;
   final String showtext;
+  final bool showViewAll;
 
   const CrmHeadline({
     super.key,
@@ -22,7 +22,7 @@ class CrmHeadline extends StatelessWidget {
       padding: padding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             title,

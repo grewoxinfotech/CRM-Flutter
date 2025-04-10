@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 class Dashboard extends StatelessWidget {
   Dashboard({super.key});
 
-  final CrmBottemNavigationBarController navigationBarController = Get.put(
-    CrmBottemNavigationBarController(),
+  final NavigationBarController navigationBarController = Get.put(
+    NavigationBarController(),
   );
 
   @override
@@ -21,10 +21,10 @@ class Dashboard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 50.0),
               child: Obx(
-                    () =>
-                navigationBarController.selectedIndex.value == 0
-                    ? const HomeViewModel()
-                    : SizedBox(),
+                () =>
+                    navigationBarController.selectedIndex.value == 0
+                        ? const HomeViewModel()
+                        : SizedBox(),
               ),
             ),
             Column(

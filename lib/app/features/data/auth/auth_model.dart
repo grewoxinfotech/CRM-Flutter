@@ -1,11 +1,9 @@
-
 class UserModel {
   String email;
   String password;
 
   UserModel({required this.email, required this.password});
 }
-
 
 class AuthModel {
   bool? success;
@@ -97,50 +95,51 @@ class User {
   String? createdAt;
   String? updatedAt;
 
-  User(
-      {this.id,
-        this.employeeId,
-        this.username,
-        this.password,
-        this.email,
-        this.roleId,
-        this.profilePic,
-        this.firstName,
-        this.lastName,
-        this.phoneCode,
-        this.phone,
-        this.address,
-        this.state,
-        this.city,
-        this.country,
-        this.zipcode,
-        this.website,
-        this.gender,
-        this.joiningDate,
-        this.leaveDate,
-        this.branch,
-        this.department,
-        this.designation,
-        this.salary,
-        this.accountholder,
-        this.accountnumber,
-        this.bankname,
-        this.ifsc,
-        this.gstIn,
-        this.banklocation,
-        this.cvPath,
-        this.links,
-        this.eSignature,
-        this.accounttype,
-        this.clientId,
-        this.clientPlanId,
-        this.documents,
-        this.resetPasswordOTP,
-        this.resetPasswordOTPExpiry,
-        this.createdBy,
-        this.updatedBy,
-        this.createdAt,
-        this.updatedAt});
+  User({
+    this.id,
+    this.employeeId,
+    this.username,
+    this.password,
+    this.email,
+    this.roleId,
+    this.profilePic,
+    this.firstName,
+    this.lastName,
+    this.phoneCode,
+    this.phone,
+    this.address,
+    this.state,
+    this.city,
+    this.country,
+    this.zipcode,
+    this.website,
+    this.gender,
+    this.joiningDate,
+    this.leaveDate,
+    this.branch,
+    this.department,
+    this.designation,
+    this.salary,
+    this.accountholder,
+    this.accountnumber,
+    this.bankname,
+    this.ifsc,
+    this.gstIn,
+    this.banklocation,
+    this.cvPath,
+    this.links,
+    this.eSignature,
+    this.accounttype,
+    this.clientId,
+    this.clientPlanId,
+    this.documents,
+    this.resetPasswordOTP,
+    this.resetPasswordOTPExpiry,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];

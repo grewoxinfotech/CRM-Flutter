@@ -9,61 +9,57 @@ class CrmBottomNavigationBar extends StatefulWidget {
   _CrmBottomNavigationBarState createState() => _CrmBottomNavigationBarState();
 }
 
-final CrmBottemNavigationBarController controller = Get.put(
-  CrmBottemNavigationBarController(),
-);
+final navigationBarController = Get.put(NavigationBarController());
 
 class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
   final List<Map<String, dynamic>> navItems = [
     {"icon": ICRes.add, "label": "Home"},
-    {"icon": ICRes.add, "label": "Home"},
+    {"icon": ICRes.notifications, "label": "Alerts"},
     {"icon": ICRes.notifications, "label": "Alerts"},
     {"icon": ICRes.settings, "label": "Settings"},
-    {"icon": ICRes.employee, "label": "Profile"},
+    {"icon": ICRes.project, "label": "Profile"},
   ];
 
   @override
   Widget build(BuildContext context) {
     return CrmContainer(
-      height: 60,
+      width: 600,
+      height: 50,
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      padding: const EdgeInsets.all(5),
       boxShadow: [
-        BoxShadow(color: Colors.black26, blurRadius: 20, spreadRadius: -10),
-
+        BoxShadow(
+          color: Get.theme.colorScheme.shadow.withAlpha(100),
+          blurRadius: 20,
+        ),
       ],
-      margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(navItems.length, (i) {
-          controller.selectedIndex.value == i;
-          print(navItems.length.toString());
+          navigationBarController.selectedIndex.value == i;
           return GestureDetector(
-            onTap: () => controller.changescreen(i),
+            onTap: () => navigationBarController.changescreen(i),
             child: Obx(
-                  () => Stack(
+              () => AnimatedContainer(
+                height: 40,
+                width: 40,
+                duration: const Duration(milliseconds: 100),
                 alignment: Alignment.center,
-                children: [
-                  AnimatedContainer(
-                    height: 40,
-                    width: 40,
-                    duration: Duration(milliseconds: 100),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color:
-                      (controller.selectedIndex.value == i)
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color:
+                      (navigationBarController.selectedIndex.value == i)
                           ? Get.theme.colorScheme.primary
-                          : Colors.transparent,
-                    ),
-                  ),
-                  CrmIcon(
-                    onTap: () => controller.changescreen(i),
-                    iconPath: navItems[i]["icon"],
-                    color:
-                    controller.selectedIndex == i
-                        ? Get.theme.colorScheme.surface
-                        : Get.theme.colorScheme.primary,
-                  ),
-                ],
+                          : Get.theme.colorScheme.surface,
+                ),
+                child: CrmIcon(
+                  onTap: () => navigationBarController.changescreen(i),
+                  iconPath: navItems[i]["icon"],
+                  color:
+                      (navigationBarController.selectedIndex.value == i)
+                          ? Get.theme.colorScheme.surface
+                          : Get.theme.colorScheme.primary,
+                ),
               ),
             ),
           );
@@ -73,17 +69,15 @@ class _CrmBottomNavigationBarState extends State<CrmBottomNavigationBar> {
   }
 }
 
-class CrmBottemNavigationBarController extends GetxController {
+class NavigationBarController extends GetxController {
   RxInt selectedIndex = 0.obs;
+
+  void changescreen(int index) => selectedIndex(index);
 
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    selectedIndex.value = 0;
-  }
-
-  void changescreen(int index) {
-    selectedIndex.value = index;
+    selectedIndex(0);
   }
 }

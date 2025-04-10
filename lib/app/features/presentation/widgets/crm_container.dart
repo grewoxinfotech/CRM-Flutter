@@ -21,7 +21,7 @@ class CrmContainer extends StatelessWidget {
     this.color,
     this.borderRadius,
     this.boxShadow,
-    this.child, // Child ko optional rakha
+    this.child,
   });
 
   @override
@@ -39,9 +39,7 @@ class CrmContainer extends StatelessWidget {
             boxShadow ??
             [
               BoxShadow(
-                color: Theme.of(context).colorScheme.shadow.withOpacity(
-                  0.1,
-                ), // Optimized for better performance
+                color: Theme.of(context).colorScheme.shadow.withAlpha(50), // Optimized for better performance
                 blurRadius: 56,
                 offset: Offset(0, 6),
               ),

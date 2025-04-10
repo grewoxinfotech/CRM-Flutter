@@ -53,7 +53,7 @@ class ICRes {
   // auth icons
   static String AuthPath = NativeIconPath + "auth/";
   static String logout = AuthPath + "ic_logout.svg";
-  static String viewPassword =  AuthPath + "ic_viewpassword.svg";
+  static String viewPassword = AuthPath + "ic_viewpassword.svg";
 
   // business icons
   static String BusinessPath = NativeIconPath + "business/";
@@ -77,6 +77,7 @@ class ICRes {
 
   // navigation icons
   static String NavigationPath = NativeIconPath + "navigation/";
+
   // arrows novifgation icons
   static String Arrow = NavigationPath + "arrow/";
   static String arrowDown = Arrow + "ic_arrow_down.svg";
@@ -92,7 +93,6 @@ class ICRes {
   // notifivations icons
   static String NotifivationsPath = NativeIconPath + "notifivations/";
   static String notifications = NotifivationsPath + "ic_notifications.svg";
-
 
   // producticity icons
   static String ProducticityPath = NativeIconPath + "producticity/";

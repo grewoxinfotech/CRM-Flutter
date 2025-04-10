@@ -25,60 +25,36 @@ class CrmFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title != null) // Null check added to prevent empty text rendering
-          Row(
-            children: [
-              const SizedBox(width: 10),
-              Text(
-                title!,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: ColorResources.TEXT_SECONDARY,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
+        Text(
+          title!,
+          style: TextStyle(
+            fontSize: 16,
+            color: COLORRes.TEXT_SECONDARY,
+            fontWeight: FontWeight.w700,
           ),
-        if (title != null) const SizedBox(height: 15),
-        // Only add space if title exists
+        ),
+        const SizedBox(height: 5),
         TextFormField(
           obscureText: obscureText,
           controller: controller,
           validator: validator,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(15),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.primary,
-                width: 1,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.outline,
-                width: 1,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.error,
-                width: 1,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.error,
-                width: 1,
-              ),
-            ),
+            focusedBorder: tile(Get.theme.colorScheme.primary),
+            enabledBorder: tile(Get.theme.colorScheme.outline),
+            focusedErrorBorder: tile(Get.theme.colorScheme.error),
+            errorBorder: tile(Get.theme.colorScheme.error),
             suffixIcon: suffixIcon,
           ),
         ),
       ],
     );
   }
+}
+
+InputBorder? tile(Color color) {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(14),
+    borderSide: BorderSide(color: color, width: 1),
+  );
 }

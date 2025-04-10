@@ -1,7 +1,6 @@
 import 'package:crm_flutter/app/config/themes/resources/icon_resources.dart';
-import 'package:crm_flutter/app/features/data/deal/deal_controller.dart';
-import 'package:crm_flutter/app/features/data/lead/lead_home/lead_controller.dart';
-import 'package:crm_flutter/app/features/data/lead/lead_home/lead_model.dart';
+import 'package:crm_flutter/app/features/data/lead/lead_controller.dart';
+import 'package:crm_flutter/app/features/data/lead/lead_model.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_button.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_container.dart';
 import 'package:crm_flutter/app/features/presentation/widgets/crm_custom_delete_dialog.dart';
@@ -30,7 +29,7 @@ class LeadOverview extends StatelessWidget {
     }
 
     final lead = leadController.leadsList.firstWhere(
-          (lead) => lead.id == leadId,
+      (lead) => lead.id == leadId,
       orElse: () => LeadModel(),
     );
 
@@ -222,7 +221,13 @@ class LeadOverview extends StatelessWidget {
                   backgroundColor: Get.theme.colorScheme.surface,
                   titleTextColor: Colors.red,
                   fontSize: 20,
-                  onPressed: () => showCustomDeleteDialog(context: context, entityType: lead.leadTitle.toString(), onConfirm: ()=> leadController.deleteLead(leadId), onCancel: (){}),
+                  onPressed:
+                      () => showCustomDeleteDialog(
+                        context: context,
+                        entityType: lead.leadTitle.toString(),
+                        onConfirm: () => leadController.deleteLead(leadId),
+                        onCancel: () {},
+                      ),
                 ),
               ),
             ],

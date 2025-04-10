@@ -14,7 +14,21 @@ class AuthBackground extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Get.theme.colorScheme.background,
 
-        title: CrmAppLogo(showTitle: true),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CrmAppLogo(),
+            const SizedBox(width: 5),
+            Text(
+              "Grewox",
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w700,
+                color: Get.theme.colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
       ),
       body: child,
     );

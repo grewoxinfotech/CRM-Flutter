@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/care/secure_storage.dart';
+import 'package:crm_flutter/app/services/secure_storage_service.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {

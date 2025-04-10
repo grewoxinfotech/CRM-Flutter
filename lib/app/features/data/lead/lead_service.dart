@@ -1,15 +1,16 @@
-import 'package:crm_flutter/app/care/secure_storage.dart';
-import 'package:crm_flutter/app/features/data/lead/lead_home/lead_model.dart';
-import 'package:crm_flutter/app/features/data/resources/url_resources.dart';
+import 'package:crm_flutter/app/features/data/lead/lead_model.dart';
+import 'package:crm_flutter/app/features/resources/url_resources.dart';
+import 'package:crm_flutter/app/services/secure_storage_service.dart';
 import 'package:get/get.dart';
 
 class LeadService extends GetConnect {
-  final String apiUrl = UrlResources.Leads;
+  final String apiUrl = UrlRes.Leads;
 
   Future<List<LeadModel>> fetchLeads() async {
     try {
-      String? token = await SecureStorage.getToken();
-      if (token == null) throw Exception("No token found. Please log in again.");
+      final String? token = await SecureStorage.getToken();
+      if (token == null)
+        throw Exception("No token found. Please log in again.");
 
       final response = await get(
         apiUrl,
@@ -39,7 +40,8 @@ class LeadService extends GetConnect {
   Future<bool> deleteLead(String leadId) async {
     try {
       String? token = await SecureStorage.getToken();
-      if (token == null) throw Exception("No token found. Please log in again.");
+      if (token == null)
+        throw Exception("No token found. Please log in again.");
 
       final response = await delete(
         "$apiUrl/$leadId",

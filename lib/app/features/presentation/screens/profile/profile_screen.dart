@@ -11,9 +11,12 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<ProfileController>(() => ProfileController());
+    final profileController = Get.find<ProfileController>();
 
-    ProfileController profileController = Get.put(ProfileController());
-    AuthController authController = Get.put(AuthController());
+    Get.lazyPut<AuthController>(() => AuthController());
+    final authController = Get.find<AuthController>();
+
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
       body: SafeArea(
@@ -27,17 +30,15 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CrmProfile(
-                      radius: 50,
-                    ),
-                    Divider(
-                      color: Colors.grey[300],
-                    ),
+                    CrmProfile(radius: 50),
+                    Divider(color: Colors.grey[300]),
 
-                    Obx(()=> Text(profileController.username.value)),
-                    
-                    CrmButton(title: "Logout", onPressed: ()=> authController.logout())
+                    Obx(() => Text(profileController.username.value)),
 
+                    CrmButton(
+                      title: "Logout",
+                      onPressed: () => authController.logout(),
+                    ),
                   ],
                 ),
               ),

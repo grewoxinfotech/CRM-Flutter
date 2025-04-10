@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 class CrmTabBar extends StatelessWidget {
   CrmTabBar({Key? key, required this.items}) : super(key: key);
   final List<TabItem> items;
+
   final CrmTabBarController controller = Get.put(CrmTabBarController());
 
   @override
@@ -13,8 +14,8 @@ class CrmTabBar extends StatelessWidget {
     return CrmContainer(
       height: 40,
       padding: const EdgeInsets.all(5),
-      borderRadius: BorderRadius.circular(10),
       margin: const EdgeInsets.symmetric(horizontal: 10),
+      borderRadius: BorderRadius.circular(10),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: ListView.separated(
@@ -92,11 +93,11 @@ class CrmTabBarController extends GetxController {
   PageController pageController = PageController();
 
   void changeTab(int index) {
-    selectedIndex.value = index;
+    selectedIndex(index);
     pageController.jumpToPage(index);
   }
 
   void onPageChanged(int index) {
-    selectedIndex.value = index; // this should trigger Obx
+    selectedIndex(index); // this should trigger Obx
   }
 }

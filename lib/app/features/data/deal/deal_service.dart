@@ -1,10 +1,10 @@
-import 'package:crm_flutter/app/care/secure_storage.dart';
+import 'package:crm_flutter/app/features/resources/url_resources.dart';
+import 'package:crm_flutter/app/services/secure_storage_service.dart';
 import 'package:crm_flutter/app/features/data/deal/deal_model.dart';
-import 'package:crm_flutter/app/features/data/resources/url_resources.dart';
 import 'package:get/get.dart';
 
 class DealService extends GetConnect {
-  final String apiUrl = UrlResources.Deals;
+  final String apiUrl = UrlRes.Deals;
 
   Future<List<DealModel>> fetchDeals() async {
     try {
