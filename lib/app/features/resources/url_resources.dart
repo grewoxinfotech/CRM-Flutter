@@ -4,6 +4,11 @@ class UrlRes {
   static String LOGIN = AUTH + "login";
 
   static String Leads = BASE_URL + "leads";
+  static String Lead_Add = BASE_URL + "leads";
+
+
+
   static String Deals = BASE_URL + "deals";
+  static String Deal_Add = BASE_URL + "deals";
 
 }

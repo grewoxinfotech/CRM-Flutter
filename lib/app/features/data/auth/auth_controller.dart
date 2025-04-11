@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:crm_flutter/app/features/presentation/screens/auth/screens/sign_up_success/sign_up_success_screen.dart';
-import 'package:crm_flutter/app/features/presentation/widgets/Crm_Bottem_navigation_Bar.dart';
-import 'package:crm_flutter/app/features/presentation/widgets/crm_snack_bar.dart';
 import 'package:crm_flutter/app/features/resources/url_resources.dart';
+import 'package:crm_flutter/app/features/screens/auth/sign_up_success/sign_up_success_screen.dart';
+import 'package:crm_flutter/app/features/widgets/crm_snack_bar.dart';
 import 'package:crm_flutter/app/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +13,16 @@ class AuthController extends GetxController {
   RxBool isLoggedIn = false.obs;
   RxString username = "".obs;
   RxString token = "".obs;
+  bool _autoLoginCalled = false;
+
+  @override
+  void onInit() {
+    if (!_autoLoginCalled) {
+      autoLogin();
+      _autoLoginCalled = true;
+    }
+    super.onInit();
+  }
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -21,12 +30,6 @@ class AuthController extends GetxController {
   RxBool obscurePassword = true.obs;
   RxBool rememberMe = false.obs;
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
-  @override
-  void onInit() {
-    autoLogin();
-    super.onInit();
-  }
 
   void onscure() => obscurePassword.value = !obscurePassword.value;
 
@@ -36,7 +39,8 @@ class AuthController extends GetxController {
   }
 
   void login_button(String email, String password) async {
-    if (formkey == true) {
+    var isformkey = formkey.currentState!;
+    if (isformkey != true) {
       isLoading(true);
       try {
         var response = await http.post(

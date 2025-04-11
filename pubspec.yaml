@@ -46,6 +46,7 @@ dependencies:
   flutter_svg:
   fl_chart:
   intl:
+  dropdown_button2:
   http:
   url_launcher:
   flutter_staggered_grid_view:
