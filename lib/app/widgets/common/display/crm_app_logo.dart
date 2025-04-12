@@ -1,0 +1,20 @@
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:flutter/material.dart';
+
+class CrmAppLogo extends StatelessWidget {
+  final double? width;
+  final GestureTapCallback? onTap;
+
+  const CrmAppLogo({super.key, this.width, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: "applogo",
+      child: GestureDetector(
+        onTap: onTap,
+        child: Image.asset(ICRes.appLogoPNG, width: width ?? 40),
+      ),
+    );
+  }
+}
