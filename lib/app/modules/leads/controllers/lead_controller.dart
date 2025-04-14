@@ -55,7 +55,7 @@ class LeadController extends GetxController {
     isLoading(true);
     try {
       await Future.delayed(const Duration(seconds: 2));
-      Get.to(LeadAddScreen1());// Optional delay for splash animation
+      Get.to(LeadAddScreen());// Optional delay for splash animation
       isLoading(false);
     } catch (e) {
       isLoading(false);

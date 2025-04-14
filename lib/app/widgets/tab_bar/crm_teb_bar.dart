@@ -18,17 +18,17 @@ class CrmTabBar extends StatelessWidget {
     return CrmCard(
       height: 40,
       padding: PaddingRes.all1,
-      margin: MarginRes.horizontal1,
-      borderRadius: BorderRes.borderR1,
+      margin: MarginRes.horizontal2,
+      borderRadius: BorderRes.borderR3,
       child: ClipRRect(
-        borderRadius: BorderRes.borderR1,
+        borderRadius: BorderRes.borderR4,
         child: ListView.separated(
           itemCount: items.length,
           scrollDirection: Axis.horizontal,
           separatorBuilder:
               (context, index) => VerticalDivider(
+                color: Get.theme.disabledColor,
                 width: 10,
-                color: Get.theme.colorScheme.outline,
                 indent: 5,
                 endIndent: 5,
               ),
@@ -42,29 +42,30 @@ class CrmTabBar extends StatelessWidget {
                   () => AnimatedContainer(
                     alignment: Alignment.center,
                     duration: const Duration(milliseconds: 100),
-                    padding: PaddingRes.all3,
+                    padding: PaddingRes.all2,
                     decoration: BoxDecoration(
                       color:
                           controller.selectedIndex.value == index
-                              ? Get.theme.colorScheme.primary.withOpacity(1)
-                              : Get.theme.colorScheme.surface.withOpacity(0.15),
-                      borderRadius: BorderRes.borderR2,
+                              ? Get.theme.colorScheme.primary
+                              : null,
+                      borderRadius: BorderRes.borderR4,
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CrmIc(
                           iconPath: items[index].iconPath,
-                          width: 15,
+                          width: 18,
                           color:
                               controller.selectedIndex.value == index
                                   ? Get.theme.colorScheme.surface
                                   : Get.theme.colorScheme.primary,
                         ),
-                        Space(size: 10),
+                        const Space(size: 5),
                         Text(
                           items[index].label,
                           style: TextStyle(
+                            fontSize: 18,
                             color:
                                 controller.selectedIndex.value == index
                                     ? Get.theme.colorScheme.surface

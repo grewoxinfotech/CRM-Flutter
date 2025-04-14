@@ -7,7 +7,7 @@ void crmSnackbar(String title, String msg, {bool isError = false}) {
     msg,
     snackPosition: SnackPosition.BOTTOM,
     margin: PaddingRes.all5,
-    animationDuration: const Duration(milliseconds: 300),
+    animationDuration: const Duration(milliseconds: 3000),
     colorText: Get.theme.colorScheme.surface,
     backgroundColor:
         (isError) ? Get.theme.colorScheme.error : Get.theme.colorScheme.primary,

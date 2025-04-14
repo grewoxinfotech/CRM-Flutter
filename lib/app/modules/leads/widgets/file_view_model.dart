@@ -3,7 +3,8 @@ import 'package:crm_flutter/app/widgets/leads_and_deal/file_tile.dart';
 import 'package:flutter/material.dart';
 
 class FileViewModel extends StatelessWidget {
-  const FileViewModel({super.key});
+  final String? id;
+  const FileViewModel({super.key, this.id});
 
   @override
   Widget build(BuildContext context) {

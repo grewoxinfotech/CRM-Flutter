@@ -2,7 +2,8 @@ import 'package:crm_flutter/app/widgets/leads_and_deal/note_tile.dart';
 import 'package:flutter/material.dart';
 
 class NotesViewModel extends StatelessWidget {
-  const NotesViewModel({super.key});
+  final String? id;
+  const NotesViewModel({super.key,this. id});
 
   @override
   Widget build(BuildContext context) {

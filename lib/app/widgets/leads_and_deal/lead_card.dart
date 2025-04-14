@@ -1,29 +1,63 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size/border_res.dart';
+import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LeadTile extends StatelessWidget {
-  final String claint_name;
-  final String company_name;
-  final String amount;
-  final String source;
-  final String status;
-  final Color status_color;
-  final String date;
+class LeadCard extends StatelessWidget {
   final GestureTapCallback? onTap;
+  final String? id;
+  final String? leadTitle;
+  final String? leadStage;
+  final String? currency;
+  final String? leadValue;
+  final String? firstName;
+  final String? lastName;
+  final String? phoneCode;
+  final String? telephone;
+  final String? email;
+  final String? assigned;
+  final String? leadMembers;
+  final String? source;
+  final String? category;
+  final String? files;
+  final String? status;
+  final String? tag;
+  final String? companyName;
+  final String? clientId;
+  final String? createdBy;
+  final String? updatedBy;
+  final String? createdAt;
+  final String? updatedAt;
 
-  const LeadTile({
-    super.key,
+  const LeadCard({
     this.onTap,
-    required this.claint_name,
-    required this.company_name,
-    required this.amount,
-    required this.source,
-    required this.status,
-    required this.status_color,
-    required this.date,
+    this.id,
+    this.leadTitle,
+    this.leadStage,
+    this.currency,
+    this.leadValue,
+    this.firstName,
+    this.lastName,
+    this.phoneCode,
+    this.telephone,
+    this.email,
+    this.assigned,
+    this.leadMembers,
+    this.source,
+    this.category,
+    this.files,
+    this.status,
+    this.tag,
+    this.companyName,
+    this.clientId,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
+    super.key,
   });
 
   @override
@@ -31,17 +65,16 @@ class LeadTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        width: 600,
         height: 90,
-        padding: const EdgeInsets.all(10),
-        borderRadius: BorderRadius.circular(15),
+        padding: PaddingRes.all2,
+        borderRadius: BorderRes.borderR3,
         child: Row(
           children: [
             Container(
               width: 5,
               height: 75,
               decoration: BoxDecoration(
-                color: status_color,
+                color: Get.theme.colorScheme.primary,
                 borderRadius: BorderRadius.circular(5),
               ),
             ),
@@ -57,7 +90,7 @@ class LeadTile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            claint_name.toString(),
+                            leadTitle.toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -67,7 +100,7 @@ class LeadTile extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            company_name.toString(),
+                            companyName.toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -83,7 +116,7 @@ class LeadTile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            amount.toString() + ".00",
+                            leadValue.toString() + ".00",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -111,7 +144,7 @@ class LeadTile extends StatelessWidget {
                           children: [
                             CrmIc(
                               iconPath: ICRes.task,
-                              color: status_color,
+                              color: Get.theme.colorScheme.primary,
                               width: 15,
                             ),
                             const SizedBox(width: 5),
@@ -119,7 +152,7 @@ class LeadTile extends StatelessWidget {
                               status.toString(),
                               style: TextStyle(
                                 fontSize: 14,
-                                color: status_color,
+                                color: Get.theme.colorScheme.primary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -130,12 +163,12 @@ class LeadTile extends StatelessWidget {
                         children: [
                           CrmIc(
                             iconPath: ICRes.calendar,
-                            color: status_color,
+                            color: Get.theme.colorScheme.primary,
                             width: 15,
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            date.toString(),
+                            createdAt.toString(),
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,

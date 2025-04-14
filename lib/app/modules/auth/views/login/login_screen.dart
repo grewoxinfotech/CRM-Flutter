@@ -1,4 +1,7 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
+import 'package:crm_flutter/app/care/constants/size/space.dart';
+import 'package:crm_flutter/app/care/utils/validation.dart';
 import 'package:crm_flutter/app/modules/auth/controllers/auth_controller.dart';
 import 'package:crm_flutter/app/modules/auth/views/auth_background/auth_background.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
@@ -14,133 +17,138 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthController controller = Get.put(AuthController());
+    final AuthController controller = Get.put(AuthController());
+
     return AuthBackground(
-      child: Obx(() {
-        return controller.isLoading.value != true
-            ? CrmLoadingCircle()
-            : SingleChildScrollView(
-              child: CrmCard(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Sign In to Grewox',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Get.theme.colorScheme.onPrimary,
-                        fontWeight: FontWeight.w800,
+      child: Padding(
+        padding: PaddingRes.all3,
+        child: Obx(() {
+          return controller.isLoading.value
+              ? const CrmLoadingCircle()
+              : SingleChildScrollView(
+                child: CrmCard(
+                  padding: PaddingRes.all4,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Sign In to Grewox',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Get.theme.colorScheme.onPrimary,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    Form(
-                      key: controller.formkey,
-                      child: Column(
-                        children: [
-                          CrmTextField(
-                            title: "Email Address",
-                            controller: controller.email,
-                            // validator: (email) => emailValidation(email!),
-                          ),
-                          const SizedBox(height: 10),
-                          Obx(
-                            () => CrmTextField(
-                              title: "Password",
-                              controller: controller.password,
-                              // validator: (password) => passwordValidation(password!),
-                              obscureText:
-                                  (controller.obscurePassword.value)
-                                      ? true
-                                      : false,
-                              suffixIcon: Container(
-                                height: 50,
-                                width: 50,
-                                alignment: Alignment.center,
-                                child: CrmIc(
-                                  iconPath: ICRes.viewPassword,
-                                  onTap: () => controller.onscure(),
-                                  height: 24,
-                                  width: 24,
-                                  color:
-                                      (controller.obscurePassword.value)
-                                          ? Get.theme.colorScheme.outline
-                                          : Get.theme.colorScheme.primary,
+                      Space(size: 30),
+                      Form(
+                        key: controller.formKey,
+                        child: Column(
+                          children: [
+                            CrmTextField(
+                              title: "Email Address",
+                              controller: controller.emailController,
+                              validator:
+                                  (value) => emailValidation(value ?? ''),
+                            ),
+                            const SizedBox(height: 10),
+                            Obx(
+                              () => CrmTextField(
+                                title: "Password",
+                                controller: controller.passwordController,
+                                validator:
+                                    (value) => passwordValidation(value ?? ''),
+                                obscureText: controller.obscurePassword.value,
+                                suffixIcon: Container(
+                                  height: 50,
+                                  width: 50,
+                                  alignment: Alignment.center,
+                                  child: CrmIc(
+                                    iconPath: ICRes.viewPassword,
+                                    onTap: controller.togglePasswordVisibility,
+                                    height: 24,
+                                    width: 24,
+                                    color:
+                                        controller.obscurePassword.value
+                                            ? Get.theme.colorScheme.outline
+                                            : Get.theme.colorScheme.primary,
+                                  ),
                                 ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Space(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Obx(
+                            () => Row(
+                              children: [
+                                Checkbox(
+                                  value: controller.rememberMe.value,
+                                  onChanged:
+                                      (value) =>
+                                          controller.rememberMe.value =
+                                              value ?? false,
+                                  side: const BorderSide(
+                                    color: Colors.black,
+                                    width: 2,
+                                  ),
+                                  checkColor: Get.theme.colorScheme.primary,
+                                  activeColor: Colors.transparent,
+                                ),
+                                Text(
+                                  'Remember me',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Get.theme.colorScheme.onPrimary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: controller.fillTestCredentials,
+                            child: Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Get.theme.colorScheme.primary,
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Obx(
-                              () => Checkbox(
-                                value: controller.rememberMe.value,
-                                onChanged:
-                                    (value) =>
-                                        controller.rememberMe.value = value!,
-                                side: BorderSide(color: Colors.black, width: 2),
-                                focusColor: Colors.green,
-                                checkColor: Get.theme.colorScheme.primary,
-                                activeColor: Colors.transparent,
-                              ),
-                            ),
-                            Text(
-                              'Remember me',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Get.theme.colorScheme.onPrimary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () => controller.forgotPassword(),
+                      Space(size: 20),
+                      CrmButton(
+                        title: "Login",
+                        onTap: () => controller.login(),
+                      ),
+                      Space(size: 20),
+                      InkWell(
+                        onTap: () {
+                          print("Create account tapped");
+                        },
+                        child: Center(
                           child: Text(
-                            'Forgot Password?',
+                            "Don’t have an account?",
                             style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                               color: Get.theme.colorScheme.primary,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    CrmButton(
-                      title: "Sign in",
-                      onTap:
-                          () => controller.login_button(
-                            controller.email.text,
-                            controller.password.text,
-                          ),
-                    ),
-                    const SizedBox(height: 20),
-                    InkWell(
-                      onTap: () {
-                        print("Create account Link");
-                      },
-                      child: Text(
-                        "Don’t have an account?",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Get.theme.colorScheme.primary,
-                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-      }),
+              );
+        }),
+      ),
     );
   }
 }

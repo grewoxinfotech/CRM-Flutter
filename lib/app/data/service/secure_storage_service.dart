@@ -1,55 +1,69 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
-  static final _storage = FlutterSecureStorage();
+  static final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  static const _tokenKey = "auth_token";
-  static const _usernameKey = "username";
-  static const _rememberMeKey = "remember_me";
-  static const _userKey = "user_data";
+  // Keys
+  static const String _keyToken = 'authToken';
+  static const String _keyUsername = 'username';
+  static const String _keyRememberMe = 'rememberMe';
+  static const String _keyLoggedIn = 'islogin';
 
-  // Save token
+  // Token
   static Future<void> saveToken(String token) async {
-    await _storage.write(key: _tokenKey, value: token);
+    await _storage.write(key: _keyToken, value: token.toString());
   }
 
-  // Get token
   static Future<String?> getToken() async {
-    return await _storage.read(key: _tokenKey);
+    return _storage.read(key: _keyToken);
   }
 
-  // Save username/email
+  static Future<void> deleteToken() async {
+    await _storage.delete(key: _keyToken);
+  }
+
+  // Username
   static Future<void> saveUsername(String username) async {
-    await _storage.write(key: _usernameKey, value: username);
+    await _storage.write(key: _keyUsername, value: username);
   }
 
-  // Get username/email
   static Future<String?> getUsername() async {
-    return await _storage.read(key: _usernameKey);
+    return _storage.read(key: _keyUsername);
   }
 
-  // Save remember me flag
-  static Future<void> saveRememberMe(bool remember) async {
-    await _storage.write(key: _rememberMeKey, value: remember.toString());
+  static Future<void> deleteUsername() async {
+    await _storage.delete(key: _keyUsername);
   }
 
-  // Get remember me flag
+  // isLoggedIn
+  static Future<void> saveLoggedIn(bool value) async {
+    await _storage.write(key: _keyLoggedIn, value: value.toString());
+  }
+
+  static Future<bool> getLoggedIn() async {
+    final value = await _storage.read(key: _keyLoggedIn);
+    return value?.toLowerCase() == "true";
+  }
+
+  static Future<void> deleteLoggedIn() async {
+    await _storage.delete(key: _keyLoggedIn);
+  }
+
+  // Remember Me
+  static Future<void> saveRememberMe(bool value) async {
+    await _storage.write(key: _keyRememberMe, value: value.toString());
+  }
+
   static Future<bool> getRememberMe() async {
-    String? value = await _storage.read(key: _rememberMeKey);
-    return value == 'true';
+    final value = await _storage.read(key: _keyRememberMe);
+    return value?.toLowerCase() == 'true';
   }
 
-  // Save full user data (if needed)
-  static Future<void> saveUserData(String userData) async {
-    await _storage.write(key: _userKey, value: userData);
+  static Future<void> deleteRememberMe() async {
+    await _storage.delete(key: _keyRememberMe);
   }
 
-  // Get full user data (if needed)
-  static Future<String?> getUserData() async {
-    return await _storage.read(key: _userKey);
-  }
-
-  // Clear all
+  // Clear everything
   static Future<void> clearAll() async {
     await _storage.deleteAll();
   }

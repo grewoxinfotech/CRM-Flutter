@@ -7,11 +7,11 @@ ThemeData lightTheme = ThemeData(
     elevation: 0.0,
     scrolledUnderElevation: 0.0,
     centerTitle: true,
-    backgroundColor: ColorRes.primary,
+    backgroundColor: Colors.transparent,
     titleTextStyle: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.w700,
-      color: ColorRes.white,
+      color: ColorRes.textPrimary,
       fontFamily: FontRes.nuNunitoSans,
     ),
   ),

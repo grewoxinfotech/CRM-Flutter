@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/care/theme/themes.dart';
 import 'package:crm_flutter/app/care/utils/network_service.dart';
-import 'package:crm_flutter/app/modules/splash/views/splash_screen.dart';
+import 'package:crm_flutter/app/widgets/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

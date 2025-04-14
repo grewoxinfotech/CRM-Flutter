@@ -1,108 +1,94 @@
 import 'dart:convert';
 
 import 'package:crm_flutter/app/care/constants/url_res.dart';
-import 'package:crm_flutter/app/data/service/auth_service.dart';
-import 'package:crm_flutter/app/modules/auth/views/sign_up_success/sign_up_success_screen.dart';
+import 'package:crm_flutter/app/data/service/secure_storage_service.dart';
+import 'package:crm_flutter/app/modules/dashboard/views/dashboard_screen.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AuthController extends GetxController {
-  RxBool isLoading = false.obs;
-  RxBool isLoggedIn = false.obs;
-  RxString username = "".obs;
-  RxString token = "".obs;
-  bool _autoLoginCalled = false;
+  // Observables
+  final isLoading = false.obs;
+  final isLoggedIn = false.obs;
+  final username = ''.obs;
+  final token = ''.obs;
+  final obscurePassword = true.obs;
+  final rememberMe = false.obs;
 
-  @override
-  void onInit() {
-    if (!_autoLoginCalled) {
-      autoLogin();
-      _autoLoginCalled = true;
-    }
-    super.onInit();
+  // Form and field controllers
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  void togglePasswordVisibility() => obscurePassword.toggle();
+
+  void fillTestCredentials() {
+    emailController.text = "grewox1001@yopmail.com";
+    passwordController.text = "MyStrongP@ssw0rd!";
   }
 
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  Future<void> login() async {
+    if (!(formKey.currentState?.validate() ?? false)) return;
 
-  RxBool obscurePassword = true.obs;
-  RxBool rememberMe = false.obs;
-  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+    final loginData = {
+      "login": emailController.text.trim(),
+      "password": passwordController.text.trim(),
+    };
 
-  void onscure() => obscurePassword.value = !obscurePassword.value;
-
-  void forgotPassword() {
-    email.text = "grewox1001@yopmail.com";
-    password.text = "MyStrongP@ssw0rd!";
-  }
-
-  void login_button(String email, String password) async {
-    var isformkey = formkey.currentState!;
-    if (isformkey != true) {
-      isLoading(true);
+    if (rememberMe.value) {
       try {
-        var response = await http.post(
+        isLoading(true);
+
+        final response = await http.post(
           Uri.parse(UrlRes.LOGIN),
           headers: {"Content-Type": "application/json"},
-          body: jsonEncode({"login": email, "password": password}),
+          body: jsonEncode(loginData),
         );
 
-        var data = jsonDecode(response.body);
+        print(UrlRes.LOGIN);
+
+        final data = jsonDecode(response.body);
+
         if (response.statusCode == 200 && data["success"]) {
-          String fetchedToken = data["data"]["token"];
-          String fetchedUsername = data["data"]["user"]["username"] ?? email;
-
-          if (rememberMe.value) {
-            await SecureStorage.saveToken(fetchedToken);
-            await SecureStorage.saveUsername(fetchedUsername);
-            await SecureStorage.saveRememberMe(true);
-          } else {
-            await SecureStorage.clearAll(); // Don't remember anything
-          }
-
+          final fetchedToken = data["data"]["token"];
+          final fetchedUsername =
+              data["data"]["user"]["username"] ?? loginData["login"];
+          await SecureStorage.saveToken(fetchedToken);
+          await SecureStorage.saveUsername(fetchedUsername);
+          await SecureStorage.saveRememberMe(true);
+          await SecureStorage.saveLoggedIn(true);
           token(fetchedToken);
           username(fetchedUsername);
           isLoggedIn(true);
-
-          Get.offAll(() => SignUpSuccessScreen());
+          Get.offAll(() => DashboardScreen());
+        } else if (response.statusCode == 502) {
+          crmSnackbar(
+            "Login Failed",
+            data["message"] ?? "servowe error 520",
+            isError: true,
+          );
         } else {
-          crmSnackbar("Login Failed", data["message"], isError: true);
+          crmSnackbar(
+            "Login Failed",
+            data["message"] ?? "Unknown error",
+            isError: true,
+          );
         }
-        isLoading(false);
       } catch (e) {
         crmSnackbar("Error", "Something went wrong: $e", isError: true);
+      } finally {
         isLoading(false);
       }
-      isLoading(false);
     }
-    isLoading(false);
   }
 
-  void autoLogin() async {
-    isLoading(true);
-    bool shouldRemember = await SecureStorage.getRememberMe();
-    if (!shouldRemember) return;
-    String? savedToken = await SecureStorage.getToken();
-    String? savedUsername = await SecureStorage.getUsername();
-
-    if (savedToken != null) {
-      token(savedToken);
-      username(savedUsername ?? "");
-      isLoggedIn(true);
-      Get.offAll(() => SignUpSuccessScreen());
-      isLoading(false);
-    }
-    isLoading(false);
-  }
-
-  void logout() async {
+  Future<void> logout() async {
     isLoading(true);
     await SecureStorage.clearAll();
-    token("");
-    username("");
+    token('');
+    username('');
     isLoggedIn(false);
     Get.offAllNamed('/login');
     isLoading(false);
@@ -110,12 +96,8 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
-    isLoading(false);
-    obscurePassword(true);
-    rememberMe(false);
-    email.dispose();
-    password.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     super.onClose();
   }
 }

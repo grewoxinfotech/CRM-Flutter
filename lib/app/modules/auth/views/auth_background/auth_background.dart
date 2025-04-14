@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,14 +11,13 @@ class AuthBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
         backgroundColor: Get.theme.colorScheme.background,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CrmAppLogo(),
-            const SizedBox(width: 5),
+            Space(),
             Text(
               "Grewox",
               style: TextStyle(

@@ -2,7 +2,8 @@ import 'package:crm_flutter/app/widgets/leads_and_deal/member_tile.dart';
 import 'package:flutter/material.dart';
 
 class MemberViewModel extends StatelessWidget {
-  const MemberViewModel({super.key});
+  final String? id;
+  const MemberViewModel({super.key,this. id});
 
   @override
   Widget build(BuildContext context) {

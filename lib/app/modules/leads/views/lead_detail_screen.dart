@@ -17,9 +17,9 @@ class LeadDetailsScreen extends StatelessWidget {
     CrmTabBarController controller = Get.put(CrmTabBarController());
     List widgets = [
       LeadOverview(leadId: leadId),
-      FileViewModel(),
-      MemberViewModel(),
-      NotesViewModel(),
+      FileViewModel(id: leadId),
+      MemberViewModel(id: leadId),
+      NotesViewModel(id: leadId),
     ];
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,

@@ -38,7 +38,7 @@ class AttendanceWidget extends StatelessWidget {
                     height: 40,
                     boxShadow: [
                       BoxShadow(
-                        color: Get.theme.colorScheme.primary.withAlpha(100),
+                        color: Get.theme.colorScheme.primary.withAlpha(75),
                         blurRadius: 10,
                         offset: Offset(0, 6),
                       ),
@@ -52,7 +52,7 @@ class AttendanceWidget extends StatelessWidget {
                     height: 40,
                     boxShadow: [
                       BoxShadow(
-                        color: Get.theme.colorScheme.primary.withAlpha(100),
+                        color: Get.theme.colorScheme.primary.withAlpha(75),
                         blurRadius: 10,
                         offset: Offset(0, 6),
                       ),
