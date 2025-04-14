@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/care/constants/size/border_res.dart';
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,7 +38,7 @@ class CrmCard extends StatelessWidget {
       alignment: alignment ?? Alignment.center,
       decoration: BoxDecoration(
         color: color ?? Get.theme.colorScheme.surface,
-        borderRadius: borderRadius ?? BorderRes.borderR1,
+        borderRadius: borderRadius ?? BorderRadius.circular(24),
         border: border,
         boxShadow:
             boxShadow ??

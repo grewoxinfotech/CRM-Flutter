@@ -1,6 +1,3 @@
-import 'package:crm_flutter/app/care/constants/size/margin_res.dart';
-import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/data/models/function_model.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_headline.dart';
@@ -15,13 +12,13 @@ class FunctionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<FunctionModel> functions = FunctionModel.getFunctions();
     return CrmCard(
-      margin: MarginRes.horizontal4,
-      padding: PaddingRes.all2,
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           CrmHeadline(title: "App Functionalities"),
 
-          Space(size: 10),
+          const SizedBox(height: 10),
           GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,

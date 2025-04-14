@@ -1,6 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/size/border_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +34,7 @@ class CrmTextField extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        Space(size: 5),
+        const SizedBox(height: 5),
         TextFormField(
           obscureText: obscureText,
           controller: controller,
@@ -57,7 +55,7 @@ class CrmTextField extends StatelessWidget {
 
 InputBorder? tile(Color color) {
   return OutlineInputBorder(
-    borderRadius: BorderRes.borderR3,
+    borderRadius: BorderRadius.circular(15),
     borderSide: BorderSide(color: color, width: 1),
   );
 }

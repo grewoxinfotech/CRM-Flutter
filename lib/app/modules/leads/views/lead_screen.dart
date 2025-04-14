@@ -1,6 +1,4 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/modules/leads/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/leads/views/lead_add_screen.dart';
 import 'package:crm_flutter/app/modules/leads/views/lead_detail_screen.dart';
@@ -34,7 +32,7 @@ class LeadsScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-        padding: PaddingRes.all3,
+        padding: const EdgeInsets.all(15),
         child: Obx(() {
           if (leadController.isLoading.value == false) {
             if (leadController.leadsList.length <= 0) {
@@ -78,7 +76,7 @@ class LeadsScreen extends StatelessWidget {
             } else {
               return ListView.separated(
                 itemCount: leadController.leadsList.length,
-                separatorBuilder: (context, s) => const Space(size: 10),
+                separatorBuilder: (context, s) => const SizedBox(height: 10),
                 itemBuilder: (context, i) {
                   final lead = leadController.leadsList[i];
 

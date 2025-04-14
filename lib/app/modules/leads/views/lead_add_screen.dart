@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/modules/leads/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
@@ -72,7 +71,7 @@ class LeadAddScreen extends StatelessWidget {
                 : ListView.separated(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
                   itemCount: textFields.length,
-                  separatorBuilder: (context, i) => Space(),
+                  separatorBuilder: (context, i) => const SizedBox(height: 10),
                   itemBuilder: (context, i) => textFields[i],
                 ),
       ),

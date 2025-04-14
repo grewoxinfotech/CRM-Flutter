@@ -1,6 +1,3 @@
-import 'package:crm_flutter/app/care/constants/size/margin_res.dart';
-import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf/features/graf_design.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/time_range_selector.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
@@ -19,12 +16,12 @@ class AttendanceWidget extends StatelessWidget {
     ); // Controller Initialization
     return CrmCard(
       width: 600,
-      padding: PaddingRes.all2,
-      margin: MarginRes.horizontal4,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
           const CrmHeadline(title: "Attendance"),
-          Space(size: 30),
+          const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -44,7 +41,7 @@ class AttendanceWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Space(size: 15),
+                  const SizedBox(height: 15),
                   CrmButton(
                     title: "Punch Out",
                     onTap: () {},
@@ -62,7 +59,7 @@ class AttendanceWidget extends StatelessWidget {
               ),
             ],
           ),
-          Space(size: 30),
+          const SizedBox(height: 30),
           TimeRangeSelector(
             onSelected: (selected) {
               controller.selectedRange.value = selected;

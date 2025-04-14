@@ -113,7 +113,6 @@ class ICRes {
   static const call = "${UiPath}ic_call.svg";
   static const emoji = "${UiPath}ic_emoji.svg";
   static const location = "${UiPath}ic_location.svg";
-  static const mailPNG = "${UiPath}ic_mail.png";
   static const mailSVG = "${UiPath}ic_mail.svg";
   static const mention = "${UiPath}ic_mention.svg";
 }

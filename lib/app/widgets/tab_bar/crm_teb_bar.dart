@@ -1,7 +1,3 @@
-import 'package:crm_flutter/app/care/constants/size/border_res.dart';
-import 'package:crm_flutter/app/care/constants/size/margin_res.dart';
-import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +13,11 @@ class CrmTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CrmCard(
       height: 40,
-      padding: PaddingRes.all1,
-      margin: MarginRes.horizontal2,
-      borderRadius: BorderRes.borderR3,
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      borderRadius: BorderRadius.circular(15),
       child: ClipRRect(
-        borderRadius: BorderRes.borderR4,
+        borderRadius: BorderRadius.circular(10),
         child: ListView.separated(
           itemCount: items.length,
           scrollDirection: Axis.horizontal,
@@ -42,13 +38,13 @@ class CrmTabBar extends StatelessWidget {
                   () => AnimatedContainer(
                     alignment: Alignment.center,
                     duration: const Duration(milliseconds: 100),
-                    padding: PaddingRes.all2,
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color:
                           controller.selectedIndex.value == index
                               ? Get.theme.colorScheme.primary
                               : null,
-                      borderRadius: BorderRes.borderR4,
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,7 +57,7 @@ class CrmTabBar extends StatelessWidget {
                                   ? Get.theme.colorScheme.surface
                                   : Get.theme.colorScheme.primary,
                         ),
-                        const Space(size: 5),
+                    const SizedBox(height: 5),
                         Text(
                           items[index].label,
                           style: TextStyle(

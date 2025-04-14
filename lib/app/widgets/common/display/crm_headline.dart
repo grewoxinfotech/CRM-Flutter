@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/care/constants/size/margin_res.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +20,7 @@ class CrmHeadline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? MarginRes.horizontal2,
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

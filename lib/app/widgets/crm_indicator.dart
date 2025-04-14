@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:flutter/material.dart';
 
 class CrmIndicator extends StatelessWidget {
@@ -12,7 +11,7 @@ class CrmIndicator extends StatelessWidget {
     return Row(
       children: [
         CircleAvatar(backgroundColor: color, radius: 10),
-        Space(size: 10),
+        const SizedBox(height: 10),
         Text(text, style: TextStyle(fontWeight: FontWeight.w700)),
       ],
     );

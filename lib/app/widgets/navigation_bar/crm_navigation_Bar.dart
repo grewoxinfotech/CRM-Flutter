@@ -1,6 +1,4 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/care/constants/size/border_res.dart';
-import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +17,9 @@ class CrmNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CrmCard(
       height: 50,
-      padding: PaddingRes.all1,
-      margin: PaddingRes.all2,
-      borderRadius: BorderRes.borderR2,
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.all(10),
+      borderRadius: BorderRadius.circular(20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(navItems.length, (i) {
@@ -35,7 +33,7 @@ class CrmNavigationBar extends StatelessWidget {
                 duration: const Duration(milliseconds: 100),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRes.borderR3,
+                  borderRadius: BorderRadius.circular(15),
                   color:
                       (navigationBarController.selectedIndex.value == i)
                           ? Get.theme.colorScheme.primary

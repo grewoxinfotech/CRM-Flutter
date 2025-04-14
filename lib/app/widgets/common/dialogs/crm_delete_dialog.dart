@@ -1,6 +1,4 @@
 import 'package:crm_flutter/app/care/constants/font_res.dart';
-import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +20,7 @@ class CrmDeleteDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: CrmCard(
-        padding: PaddingRes.all2,
+        padding: const EdgeInsets.all(10),
         width: 300,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -38,7 +36,7 @@ class CrmDeleteDialog extends StatelessWidget {
                 decoration: TextDecoration.none,
               ),
             ),
-            Space(size: 10),
+            const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               child: Text(
@@ -53,7 +51,7 @@ class CrmDeleteDialog extends StatelessWidget {
                 ),
               ),
             ),
-            Space(size: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

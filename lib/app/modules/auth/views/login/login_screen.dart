@@ -1,6 +1,4 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/care/utils/validation.dart';
 import 'package:crm_flutter/app/modules/auth/controllers/auth_controller.dart';
 import 'package:crm_flutter/app/modules/auth/views/auth_background/auth_background.dart';
@@ -21,13 +19,13 @@ class LoginScreen extends StatelessWidget {
 
     return AuthBackground(
       child: Padding(
-        padding: PaddingRes.all3,
+        padding: EdgeInsets.all(15),
         child: Obx(() {
           return controller.isLoading.value
               ? const CrmLoadingCircle()
               : SingleChildScrollView(
                 child: CrmCard(
-                  padding: PaddingRes.all4,
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -39,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      Space(size: 30),
+                      const SizedBox(height: 30),
                       Form(
                         key: controller.formKey,
                         child: Column(
@@ -78,7 +76,7 @@ class LoginScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Space(),
+                      const SizedBox(height: 10,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -122,12 +120,12 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Space(size: 20),
+                      const SizedBox(height: 20),
                       CrmButton(
                         title: "Login",
                         onTap: () => controller.login(),
                       ),
-                      Space(size: 20),
+                      const SizedBox(height: 20),
                       InkWell(
                         onTap: () {
                           print("Create account tapped");

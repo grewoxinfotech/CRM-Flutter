@@ -1,7 +1,4 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/care/constants/size/border_res.dart';
-import 'package:crm_flutter/app/care/constants/size/margin_res.dart';
-import 'package:crm_flutter/app/care/constants/size/space.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -27,16 +24,16 @@ class CrmAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CrmCard(
       height: 50,
-      margin: MarginRes.horizontal2,
-      borderRadius: BorderRes.borderR2,
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      borderRadius: BorderRadius.circular(20),
       child: AppBar(
         backgroundColor: Colors.transparent,
         leading: Container(alignment: Alignment.center, child: CrmAppLogo()),
         actions: [
           CrmIc(iconPath: ICRes.search),
-          Space(size: 15),
+          const SizedBox(height: 15),
           CrmIc(iconPath: ICRes.notifications),
-          Space(size: 15),
+          const SizedBox(height: 15),
           CrmProfileAvatar(
             radius: 15,
             child: Text(
@@ -48,7 +45,7 @@ class CrmAppBar extends StatelessWidget {
               ),
             ),
           ),
-          Space(size: 10),
+          const SizedBox(height: 10),
         ],
       ),
     );

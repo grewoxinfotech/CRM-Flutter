@@ -1,6 +1,4 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/care/constants/size/border_res.dart';
-import 'package:crm_flutter/app/care/constants/size/padding_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -66,8 +64,8 @@ class LeadCard extends StatelessWidget {
       onTap: onTap,
       child: CrmCard(
         height: 90,
-        padding: PaddingRes.all2,
-        borderRadius: BorderRes.borderR3,
+        padding: const EdgeInsets.all(10),
+        borderRadius: BorderRadius.circular(15),
         child: Row(
           children: [
             Container(

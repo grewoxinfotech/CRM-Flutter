@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/care/constants/size/border_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class FunctionCard extends StatelessWidget {
       onTap: onTap,
       child: CrmCard(
         color: Get.theme.colorScheme.primary.withAlpha(10),
-        borderRadius: BorderRes.borderR2,
+        borderRadius: BorderRadius.circular(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -34,7 +33,7 @@ class FunctionCard extends StatelessWidget {
               width: 50,
               height: 50,
               color: color,
-        borderRadius: BorderRes.borderR3,
+        borderRadius: BorderRadius.circular(15),
               child: CrmIc(
                 iconPath: iconPath.toString(),
                 color: Get.theme.colorScheme.surface,
