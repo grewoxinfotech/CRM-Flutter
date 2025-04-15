@@ -1,6 +1,8 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/data/models/lead_model.dart';
 import 'package:crm_flutter/app/data/service/lead_service.dart';
 import 'package:crm_flutter/app/modules/leads/views/lead_add_screen.dart';
+import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +10,8 @@ class LeadController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxList<LeadModel> leadsList = <LeadModel>[].obs;
   final LeadService leadService = LeadService();
+  final context = Get.context!;
+
 
   final TextEditingController leadTitle = TextEditingController();
   final TextEditingController interestLevel = TextEditingController();
@@ -72,10 +76,10 @@ class LeadController extends GetxController {
       isLoading(false);
     } catch (e) {
       print("Error: $e");
-      Get.snackbar("Error", "Failed to load leads");
+      CrmSnackBar.showAwesomeSnackbar( title: "Error", message: "Failed to load leads", contentType: ContentType.warning,color: Get.theme.colorScheme.error);
+    }finally {
       isLoading(false);
     }
-    isLoading(false);
   }
 
   Future<bool> deleteLead(String leadId) async {

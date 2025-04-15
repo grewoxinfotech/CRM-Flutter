@@ -1,9 +1,8 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';import 'package:get/get.dart';
 
 class CrmSnackBar {
   static void showAwesomeSnackbar({
-    required BuildContext context,
     required String title,
     required String message,
     required ContentType contentType,
@@ -24,7 +23,7 @@ class CrmSnackBar {
       ),
     );
 
-    ScaffoldMessenger.of(context)
+    ScaffoldMessenger.of(Get.context!)
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
   }

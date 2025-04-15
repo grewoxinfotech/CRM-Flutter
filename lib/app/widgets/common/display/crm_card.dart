@@ -44,8 +44,8 @@ class CrmCard extends StatelessWidget {
             boxShadow ??
             [
               BoxShadow(
-                color: Get.theme.colorScheme.shadow.withAlpha(20),
-                blurRadius: 20,
+                color: Get.theme.colorScheme.shadow,
+                blurRadius: 58,
                 offset: Offset(0, 6),
               ),
             ],

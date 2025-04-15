@@ -31,9 +31,9 @@ class CrmAppBar extends StatelessWidget {
         leading: Container(alignment: Alignment.center, child: CrmAppLogo()),
         actions: [
           CrmIc(iconPath: ICRes.search),
-          const SizedBox(height: 15),
+          const SizedBox(width: 15),
           CrmIc(iconPath: ICRes.notifications),
-          const SizedBox(height: 15),
+          const SizedBox(width: 15),
           CrmProfileAvatar(
             radius: 15,
             child: Text(
@@ -45,7 +45,7 @@ class CrmAppBar extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(width: 10),
         ],
       ),
     );

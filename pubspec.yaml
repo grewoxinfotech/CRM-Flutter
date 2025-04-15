@@ -38,7 +38,6 @@ dependencies:
   connectivity_plus:
   internet_connection_checker_plus:
   flutter_secure_storage:
-  font_awesome_flutter:
   flutter_spinkit:
   awesome_snackbar_content:
   loading_animation_widget:
@@ -55,6 +54,7 @@ dependencies:
   flutter_localization:
   file_picker:
   path_provider:
+  font_awesome_flutter:
 
 dev_dependencies:
   flutter_test:

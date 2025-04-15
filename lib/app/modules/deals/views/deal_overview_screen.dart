@@ -14,7 +14,7 @@ class DealOverview extends StatelessWidget {
   // final String
 
   final String dealId;
-  final DealController dealController = Get.put(DealController());
+  final DealController dealController = Get.find();
   final List title = ["SOURCE", "STAGE", "CATEGORY", "STATUS"];
 
   DealOverview({super.key, required this.dealId});

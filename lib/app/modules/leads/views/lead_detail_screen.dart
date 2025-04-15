@@ -14,7 +14,7 @@ class LeadDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CrmTabBarController controller = Get.put(CrmTabBarController());
+    CrmTabBarController controller = Get.find();
     List widgets = [
       LeadOverview(leadId: leadId),
       FileViewModel(id: leadId),

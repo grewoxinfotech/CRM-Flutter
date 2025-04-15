@@ -16,7 +16,7 @@ class DealDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CrmTabBarController controller = Get.put(CrmTabBarController());
+    CrmTabBarController controller = Get.find();
     List widgets = [
       DealOverview(dealId: dealId),
       FileViewModel(),

@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:crm_flutter/app/data/service/secure_storage_service.dart';
+import 'package:crm_flutter/app/modules/auth/views/login/login_screen.dart';
 import 'package:crm_flutter/app/modules/dashboard/views/dashboard_screen.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart'as http;
-
+import 'package:http/http.dart' as http;
 
 class AuthController extends GetxController {
   final isLoading = false.obs;
@@ -36,7 +36,6 @@ class AuthController extends GetxController {
 
     if (!rememberMe.value) {
       CrmSnackBar.showAwesomeSnackbar(
-        context: context,
         title: "Remember Me",
         message: "Please enable 'Remember Me' to continue.",
         contentType: ContentType.help,
@@ -77,14 +76,12 @@ class AuthController extends GetxController {
         Get.offAll(() => DashboardScreen());
 
         CrmSnackBar.showAwesomeSnackbar(
-          context: context,
           title: "Welcome!",
           message: "Login successful!",
           contentType: ContentType.success,
         );
       } else {
         CrmSnackBar.showAwesomeSnackbar(
-          context: context,
           title: "Login Failed",
           message: data["message"] ?? "Unknown error",
           contentType: ContentType.warning,
@@ -92,7 +89,6 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
-        context: context,
         title: "Error",
         message: "Something went wrong: $e",
         contentType: ContentType.failure,
@@ -108,7 +104,7 @@ class AuthController extends GetxController {
     token('');
     username('');
     isLoggedIn(false);
-    Get.offAllNamed('/login');
+    Get.offAll(LoginScreen());
     isLoading(false);
   }
 

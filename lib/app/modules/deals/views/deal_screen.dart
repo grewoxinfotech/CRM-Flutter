@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 class DealsScreen extends StatelessWidget {
   DealsScreen({super.key});
 
-  DealController dealController = Get.put(DealController());
+  DealController dealController = Get.find();
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/bindings/binding.dart';
 import 'package:crm_flutter/app/care/theme/themes.dart';
 import 'package:crm_flutter/app/care/utils/network_service.dart';
 import 'package:crm_flutter/app/widgets/splash/splash.dart';
@@ -11,6 +12,7 @@ void main() async {
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
+      initialBinding: AppBinding(),
       home: SplashScreen(),
     ),
   );

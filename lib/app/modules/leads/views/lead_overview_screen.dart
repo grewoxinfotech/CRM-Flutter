@@ -13,7 +13,7 @@ class LeadOverview extends StatelessWidget {
   // final String
 
   final String leadId;
-  final LeadController leadController = Get.put(LeadController());
+  final LeadController leadController = Get.find();
   final List title = ["SOURCE", "STAGE", "CATEGORY", "STATUS"];
 
   LeadOverview({super.key, required this.leadId});

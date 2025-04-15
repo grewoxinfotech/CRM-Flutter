@@ -1,14 +1,18 @@
 class UrlRes {
-  static String BASE_URL = "https://crm-api.grewox.com/api/v1";
-  static String AUTH = BASE_URL + "/auth";
-  static String LOGIN = AUTH + "/login";
+  static const String BASE_URL = "https://crm-api.grewox.com/api/v1";
 
-  static String Leads = BASE_URL + "/leads";
-  static String Lead_Add = BASE_URL + "/leads";
+  static const String AUTH = "$BASE_URL/auth";
+  static const String LOGIN = "$AUTH/login";
 
+  static const String Leads = "$BASE_URL/leads";
+  static const String Lead_Add = "$BASE_URL/leads";
 
+  static const String Deals = "$BASE_URL/deals";
+  static const String Deal_Add = "$BASE_URL/deals";
 
-  static String Deals = BASE_URL + "/deals";
-  static String Deal_Add = BASE_URL + "/deals";
-
+  // const task api url
+  static const String task = "${BASE_URL}/tasks";
+  static const String taskAdd = "${BASE_URL}/task";
+  static const String taskEdit = "${BASE_URL}/task";
+  static const String taskDelete = "${BASE_URL}/task";
 }

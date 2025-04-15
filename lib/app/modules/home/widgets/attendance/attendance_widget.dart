@@ -25,7 +25,7 @@ class AttendanceWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              CustomCircularProgress(percentage: 92, width: 140),
+              CustomCircularProgress(percentage: 24, width: 140),
               Column(
                 children: [
                   CrmButton(

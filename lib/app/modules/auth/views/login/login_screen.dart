@@ -15,13 +15,12 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController controller = Get.put(AuthController());
-
+    final AuthController authController = Get.put(AuthController());
     return AuthBackground(
       child: Padding(
         padding: EdgeInsets.all(15),
         child: Obx(() {
-          return controller.isLoading.value
+          return authController.isLoading.value
               ? const CrmLoadingCircle()
               : SingleChildScrollView(
                 child: CrmCard(
@@ -39,12 +38,12 @@ class LoginScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 30),
                       Form(
-                        key: controller.formKey,
+                        key: authController.formKey,
                         child: Column(
                           children: [
                             CrmTextField(
                               title: "Email Address",
-                              controller: controller.emailController,
+                              controller: authController.emailController,
                               validator:
                                   (value) => emailValidation(value ?? ''),
                             ),
@@ -52,21 +51,23 @@ class LoginScreen extends StatelessWidget {
                             Obx(
                               () => CrmTextField(
                                 title: "Password",
-                                controller: controller.passwordController,
+                                controller: authController.passwordController,
                                 validator:
                                     (value) => passwordValidation(value ?? ''),
-                                obscureText: controller.obscurePassword.value,
+                                obscureText:
+                                    authController.obscurePassword.value,
                                 suffixIcon: Container(
                                   height: 50,
                                   width: 50,
                                   alignment: Alignment.center,
                                   child: CrmIc(
                                     iconPath: ICRes.viewPassword,
-                                    onTap: controller.togglePasswordVisibility,
+                                    onTap:
+                                        authController.togglePasswordVisibility,
                                     height: 24,
                                     width: 24,
                                     color:
-                                        controller.obscurePassword.value
+                                        authController.obscurePassword.value
                                             ? Get.theme.colorScheme.outline
                                             : Get.theme.colorScheme.primary,
                                   ),
@@ -76,7 +77,7 @@ class LoginScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10,),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -84,10 +85,10 @@ class LoginScreen extends StatelessWidget {
                             () => Row(
                               children: [
                                 Checkbox(
-                                  value: controller.rememberMe.value,
+                                  value: authController.rememberMe.value,
                                   onChanged:
                                       (value) =>
-                                          controller.rememberMe.value =
+                                          authController.rememberMe.value =
                                               value ?? false,
                                   side: const BorderSide(
                                     color: Colors.black,
@@ -108,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           GestureDetector(
-                            onTap: controller.fillTestCredentials,
+                            onTap: authController.fillTestCredentials,
                             child: Text(
                               'Forgot Password?',
                               style: TextStyle(
@@ -123,7 +124,7 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       CrmButton(
                         title: "Login",
-                        onTap: () => controller.login(),
+                        onTap: () => authController.login(),
                       ),
                       const SizedBox(height: 20),
                       InkWell(

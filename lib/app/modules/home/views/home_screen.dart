@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/modules/home/widgets/attendance/attendance_widget.dart';
 import 'package:crm_flutter/app/modules/home/widgets/date_container_widget.dart';
 import 'package:crm_flutter/app/modules/home/widgets/functions_widget.dart';
 import 'package:crm_flutter/app/modules/home/widgets/wellcome_text.dart';
@@ -12,21 +11,17 @@ class HomeScreen extends StatelessWidget {
     List widgets = [
       WellcomeText(),
       DateContainerWidget(fd: "Nov 16, 2020", ld: "Dec 16, 2020"),
-      AttendanceWidget(),
+      // AttendanceWidget(),
       FunctionsWidget(),
     ];
 
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.separated(
-            padding: EdgeInsets.symmetric(vertical: 30),
-            itemCount: widgets.length,
-            separatorBuilder: (context, i) => const SizedBox(height: 10),
-            itemBuilder: (context, i) => widgets[i],
-          ),
-        ),
-      ],
+    return ListView.separated(
+      padding: EdgeInsets.symmetric(vertical: 30),
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: widgets.length,
+      separatorBuilder: (context, i) => const SizedBox(height: 10),
+      itemBuilder: (context, i) => widgets[i],
     );
   }
 }

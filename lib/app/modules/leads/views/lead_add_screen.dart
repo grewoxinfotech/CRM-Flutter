@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 class LeadAddScreen extends StatelessWidget {
   LeadAddScreen({super.key});
 
-  LeadController leadController = Get.put(LeadController());
+  LeadController leadController = Get.find();
 
   @override
   Widget build(BuildContext context) {

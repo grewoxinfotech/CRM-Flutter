@@ -35,7 +35,7 @@ class SplashController extends GetxController {
     if (isLogin == true && rememberMe && token != null && token.isNotEmpty) {
       Get.offAll(() => DashboardScreen());
     } else {
-      Get.offAll(() => DashboardScreen());
+      Get.offAll(() => LoginScreen());
     }
   }
 }

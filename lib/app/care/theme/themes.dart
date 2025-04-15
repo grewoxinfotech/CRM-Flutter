@@ -16,7 +16,6 @@ ThemeData lightTheme = ThemeData(
     ),
   ),
   fontFamily: FontRes.nuNunitoSans,
-
   primaryColor: ColorRes.primary,
   scaffoldBackgroundColor: ColorRes.background,
 
@@ -24,6 +23,7 @@ ThemeData lightTheme = ThemeData(
     primary: ColorRes.primary,
     background: ColorRes.background,
     surface: ColorRes.surface,
+    shadow: ColorRes.shadow,
     error: ColorRes.error,
     onPrimary: ColorRes.textPrimary,
     onSecondary: ColorRes.textSecondary,
