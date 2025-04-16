@@ -1,42 +1,77 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/modules/leads/controllers/lead_controller.dart';
-import 'package:crm_flutter/app/data/models/lead_model.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
-import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class LeadOverview extends StatelessWidget {
-  // final String
+class LeadOverviewCard extends StatelessWidget {
+  final String? id;
+  final String? inquiryId;
+  final String? leadTitle;
+  final String? leadStage;
+  final String? pipeline;
+  final String? currency;
+  final String? leadValue;
+  final String? companyName;
+  final String? firstName;
+  final String? lastName;
+  final String? phoneCode;
+  final String? telephone;
+  final String? email;
+  final String? address;
+  final String? leadMembers;
+  final String? source;
+  final String? category;
+  final String? files;
+  final String? status;
+  final String? interestLevel;
+  final String? leadScore;
+  final String? isConverted;
+  final String? clientId;
+  final String? createdBy;
+  final String? updatedBy;
+  final String? createdAt;
+  final String? updatedAt;
+  final GestureTapCallback? onDelete;
+  final GestureTapCallback? onEdit;
 
-  final String leadId;
-  final LeadController leadController = Get.find();
-  final List title = ["SOURCE", "STAGE", "CATEGORY", "STATUS"];
-
-  LeadOverview({super.key, required this.leadId});
+  const LeadOverviewCard({
+    super.key,
+    this.id,
+    this.inquiryId,
+    this.leadTitle,
+    this.leadStage,
+    this.pipeline,
+    this.currency,
+    this.leadValue,
+    this.companyName,
+    this.firstName,
+    this.lastName,
+    this.phoneCode,
+    this.telephone,
+    this.email,
+    this.address,
+    this.leadMembers,
+    this.source,
+    this.category,
+    this.files,
+    this.status,
+    this.interestLevel,
+    this.leadScore,
+    this.isConverted,
+    this.clientId,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
+    this.onDelete,
+    this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (leadController.isLoading.value) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (leadController.leadsList.isEmpty) {
-      return const Center(child: Text("No Lead Data Available."));
-    }
-
-    final lead = leadController.leadsList.firstWhere(
-          (lead) => lead.id == leadId,
-      orElse: () => LeadModel(),
-    );
-
-    if (lead.id == null) {
-      return const Center(child: Text("Lead not found"));
-    }
-
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -57,9 +92,7 @@ class LeadOverview extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        lead.leadTitle != null && lead.leadTitle!.isNotEmpty
-                            ? lead.leadTitle![0]
-                            : "T", // xxx
+                        leadTitle.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
@@ -80,7 +113,7 @@ class LeadOverview extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              lead.leadTitle.toString(),
+                              leadTitle.toString(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -90,7 +123,7 @@ class LeadOverview extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              lead.companyName.toString(),
+                              companyName.toString(),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -116,9 +149,9 @@ class LeadOverview extends StatelessWidget {
                   color: Get.theme.colorScheme.background,
                   child: Column(
                     children: [
-                      items(ICRes.mailSVG, lead.email ?? "N/A"),
+                      items(ICRes.mailSVG, email ?? "N/A"),
                       Divider(color: Colors.grey.shade300, height: 10),
-                      items(ICRes.call, lead.telephone ?? "N/A"),
+                      items(ICRes.call, telephone ?? "N/A"),
                       Divider(color: Colors.grey.shade300, height: 10),
                       items(ICRes.location, "lead.city" ?? "N/A"),
                     ],
@@ -134,7 +167,7 @@ class LeadOverview extends StatelessWidget {
               children: [
                 tile(
                   "Lead Value",
-                  lead.leadMembers != null ? "${lead.leadValue}" : "0",
+                  leadMembers.toString(),
                   Colors.green,
                   Icons.ac_unit_outlined,
                   double.infinity,
@@ -144,7 +177,7 @@ class LeadOverview extends StatelessWidget {
                   "Created",
                   DateFormat(
                     'dd/MM/yyyy',
-                  ).format(DateTime.parse(lead.createdAt.toString())),
+                  ).format(DateTime.parse(createdAt.toString())),
                   Colors.purple,
                   Icons.ac_unit_outlined,
                   double.infinity,
@@ -167,7 +200,7 @@ class LeadOverview extends StatelessWidget {
                     Expanded(
                       child: tile(
                         "Lead Mamber",
-                        lead.leadMembers != null ? "${lead.leadMembers}" : "0",
+                        leadMembers.toString(),
                         Colors.pink,
                         Icons.man_2_rounded,
                         0,
@@ -185,17 +218,17 @@ class LeadOverview extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Expanded(child: tile2("Source", "${lead.source}")),
+                    Expanded(child: tile2("Source", source.toString())),
                     const SizedBox(width: 5),
-                    Expanded(child: tile2("Category", "${lead.category}")),
+                    Expanded(child: tile2("Category", category.toString())),
                   ],
                 ),
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    Expanded(child: tile2("Stage", "${lead.leadStage}")),
+                    Expanded(child: tile2("Stage", leadStage.toString())),
                     const SizedBox(width: 5),
-                    Expanded(child: tile2("Status", "${lead.status}")),
+                    Expanded(child: tile2("Status", status.toString())),
                   ],
                 ),
               ],
@@ -208,7 +241,7 @@ class LeadOverview extends StatelessWidget {
               Expanded(
                 child: CrmButton(
                   title: "Edit",
-                  onTap: () {},
+                  onTap: onEdit,
                   backgroundColor: Get.theme.colorScheme.surface,
                   titleTextStyle: TextStyle(
                     fontSize: 20,
@@ -226,11 +259,7 @@ class LeadOverview extends StatelessWidget {
                     fontSize: 20,
                     color: Get.theme.colorScheme.error,
                   ),
-                  onTap:
-                      () => CrmDeleteDialog(
-                    entityType: lead.leadTitle.toString(),
-                    onConfirm: () => leadController.deleteLead(leadId),
-                  ),
+                  onTap: onDelete,
                 ),
               ),
             ],
@@ -278,19 +307,19 @@ Widget tile(String title, String subtitle, Color color, icon, double? width) {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: color.withOpacity(0.75),
+                color: color.withAlpha(150),
               ),
             ),
-            Icon(icon, color: color.withOpacity(0.75), size: 18),
+            Icon(icon, color: color.withAlpha(150), size: 18),
           ],
         ),
-        Divider(height: 10, color: color.withOpacity(0.2)),
+        Divider(height: 10, color: color.withAlpha(50)),
         Text(
           subtitle,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: color.withOpacity(1),
+            color: color,
           ),
         ),
       ],
@@ -316,10 +345,7 @@ Widget tile2(String title, String subtitle) {
             color: Get.theme.colorScheme.primary,
           ),
         ),
-        Divider(
-          height: 10,
-          color: Get.theme.colorScheme.primary.withOpacity(0.25),
-        ),
+        Divider(height: 10, color: Get.theme.colorScheme.primary.withAlpha(70)),
         Text(
           subtitle.toString(),
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),

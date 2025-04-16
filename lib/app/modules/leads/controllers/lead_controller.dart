@@ -12,7 +12,6 @@ class LeadController extends GetxController {
   final LeadService leadService = LeadService();
   final context = Get.context!;
 
-
   final TextEditingController leadTitle = TextEditingController();
   final TextEditingController interestLevel = TextEditingController();
   final TextEditingController leadValue = TextEditingController();
@@ -29,8 +28,6 @@ class LeadController extends GetxController {
   final TextEditingController companyName = TextEditingController();
   final TextEditingController address = TextEditingController();
 
-
-
   @override
   void onInit() {
     super.onInit();
@@ -39,27 +36,10 @@ class LeadController extends GetxController {
 
   Future<void> addLead() async {
     print("press : Add Lead Button");
-    final String _leadTitle = leadTitle.text.toString();
-    final String _interestLevel = interestLevel.text.toString();
-    final String _leadValue = leadValue.text.toString();
-    final String _pipeline = pipeline.text.toString();
-    final String _stage = stage.text.toString();
-    final String _source = source.text.toString();
-    final String _status = status.text.toString();
-    final String _category = category.text.toString();
-    final String _teamMembers = teamMembers.text.toString();
-    final String _firstName = firstName.text.toString();
-    final String _lastName = lastName.text.toString();
-    final String _email = email.text.toString();
-    final String _phoneNumber = phoneNumber.text.toString();
-    final String _companyName = companyName.text.toString();
-    final String _address = address.text.toString();
-
-
     isLoading(true);
     try {
       await Future.delayed(const Duration(seconds: 2));
-      Get.to(LeadAddScreen());// Optional delay for splash animation
+      Get.to(LeadAddScreen()); // Optional delay for splash animation
       isLoading(false);
     } catch (e) {
       isLoading(false);
@@ -72,12 +52,15 @@ class LeadController extends GetxController {
     try {
       final leads = await leadService.fetchLeads();
       leadsList.assignAll(leads);
-      print("Deals fetched successfully: ${leads.length} deals found");
-      isLoading(false);
     } catch (e) {
       print("Error: $e");
-      CrmSnackBar.showAwesomeSnackbar( title: "Error", message: "Failed to load leads", contentType: ContentType.warning,color: Get.theme.colorScheme.error);
-    }finally {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Failed to load leads : $e",
+        contentType: ContentType.warning,
+        color: Get.theme.colorScheme.error,
+      );
+    } finally {
       isLoading(false);
     }
   }

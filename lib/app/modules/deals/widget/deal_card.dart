@@ -4,58 +4,74 @@ import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LeadCard extends StatelessWidget {
-  final GestureTapCallback? onTap;
+class DealCard extends StatelessWidget {
   final String? id;
-  final String? leadTitle;
-  final String? leadStage;
+  final String? dealTitle;
   final String? currency;
-  final String? leadValue;
+  final String? value;
+  final String? pipeline;
+  final String? stage;
+  final String? status;
+  final String? label;
+  final String? closedDate;
   final String? firstName;
   final String? lastName;
-  final String? phoneCode;
-  final String? telephone;
   final String? email;
-  final String? assigned;
-  final String? leadMembers;
+  final String? phone;
   final String? source;
-  final String? category;
-  final String? files;
-  final String? status;
-  final String? tag;
   final String? companyName;
+  final String? website;
+  final String? address;
+  final String? products;
+  final String? files;
+  final String? assignedTo;
   final String? clientId;
+  final String? isWon;
+  final String? companyId;
+  final String? contactId;
   final String? createdBy;
   final String? updatedBy;
   final String? createdAt;
   final String? updatedAt;
+  final Color? color;
+  final GestureTapCallback? onTap;
+  final GestureTapCallback? onDelete;
+  final GestureTapCallback? onEdit;
 
-  const LeadCard({
-    this.onTap,
+  const DealCard({
+    super.key,
     this.id,
-    this.leadTitle,
-    this.leadStage,
+    this.color,
+    this.dealTitle,
     this.currency,
-    this.leadValue,
+    this.value,
+    this.pipeline,
+    this.stage,
+    this.status,
+    this.label,
+    this.closedDate,
     this.firstName,
     this.lastName,
-    this.phoneCode,
-    this.telephone,
     this.email,
-    this.assigned,
-    this.leadMembers,
+    this.phone,
     this.source,
-    this.category,
-    this.files,
-    this.status,
-    this.tag,
     this.companyName,
+    this.website,
+    this.address,
+    this.files,
+    this.assignedTo,
     this.clientId,
+    this.isWon,
+    this.companyId,
+    this.contactId,
     this.createdBy,
     this.updatedBy,
     this.createdAt,
     this.updatedAt,
-    super.key,
+    this.onTap,
+    this.onDelete,
+    this.onEdit,
+    this.products,
   });
 
   @override
@@ -63,6 +79,7 @@ class LeadCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
+        width: 500,
         height: 90,
         padding: const EdgeInsets.all(10),
         borderRadius: BorderRadius.circular(15),
@@ -72,7 +89,7 @@ class LeadCard extends StatelessWidget {
               width: 5,
               height: 75,
               decoration: BoxDecoration(
-                color: Get.theme.colorScheme.primary,
+                color: color,
                 borderRadius: BorderRadius.circular(5),
               ),
             ),
@@ -88,7 +105,7 @@ class LeadCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            leadTitle.toString(),
+                            dealTitle.toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -114,7 +131,7 @@ class LeadCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            leadValue.toString() + ".00",
+                            "$value.00",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -142,7 +159,7 @@ class LeadCard extends StatelessWidget {
                           children: [
                             CrmIc(
                               iconPath: ICRes.task,
-                              color: Get.theme.colorScheme.primary,
+                              color: color,
                               width: 15,
                             ),
                             const SizedBox(width: 5),
@@ -150,7 +167,7 @@ class LeadCard extends StatelessWidget {
                               status.toString(),
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Get.theme.colorScheme.primary,
+                                color: color,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -161,7 +178,7 @@ class LeadCard extends StatelessWidget {
                         children: [
                           CrmIc(
                             iconPath: ICRes.calendar,
-                            color: Get.theme.colorScheme.primary,
+                            color: color,
                             width: 15,
                           ),
                           const SizedBox(width: 5),

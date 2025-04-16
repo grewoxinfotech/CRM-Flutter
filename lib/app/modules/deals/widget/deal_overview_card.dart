@@ -1,8 +1,7 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/data/models/deal_model.dart';
-import 'package:crm_flutter/app/modules/deals/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/data/models/file_model.dart';
+import 'package:crm_flutter/app/data/models/system/product_model.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
-import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -10,34 +9,74 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class DealOverview extends StatelessWidget {
-  // final String
+class DealOverviewCard extends StatelessWidget {
+  final String? id;
+  final String? dealTitle;
+  final String? currency;
+  final String? value;
+  final String? pipeline;
+  final String? stage;
+  final String? status;
+  final String? label;
+  final String? closedDate;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final String? phone;
+  final String? source;
+  final String? companyName;
+  final String? website;
+  final String? address;
+  final String? products;
+  final String? files;
+  final String? assignedTo;
+  final String? clientId;
+  final String? isWon;
+  final String? companyId;
+  final String? contactId;
+  final String? createdBy;
+  final String? updatedBy;
+  final String? createdAt;
+  final String? updatedAt;
+  final GestureTapCallback? onDelete;
+  final GestureTapCallback? onEdit;
 
-  final String dealId;
-  final DealController dealController = Get.find();
-  final List title = ["SOURCE", "STAGE", "CATEGORY", "STATUS"];
-
-  DealOverview({super.key, required this.dealId});
+  const DealOverviewCard({
+    super.key,
+    this.id,
+    this.dealTitle,
+    this.currency,
+    this.value,
+    this.pipeline,
+    this.stage,
+    this.status,
+    this.label,
+    this.closedDate,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phone,
+    this.source,
+    this.companyName,
+    this.website,
+    this.address,
+    this.files,
+    this.assignedTo,
+    this.clientId,
+    this.isWon,
+    this.companyId,
+    this.contactId,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
+    this.onDelete,
+    this.onEdit,
+    this.products,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (dealController.isLoading.value) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (dealController.dealsList.isEmpty) {
-      return const Center(child: Text("No Lead Data Available."));
-    }
-
-    final deal = dealController.dealsList.firstWhere(
-          (deal) => deal.id == dealId,
-      orElse: () => DealModel(),
-    );
-
-    if (deal.id == null) {
-      return const Center(child: Text("Lead not found"));
-    }
-
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -58,9 +97,7 @@ class DealOverview extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        deal.dealName != null && deal.dealName!.isNotEmpty
-                            ? deal.dealName![0]
-                            : "T", // xxx
+                        dealTitle.toString(), // xxx
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
@@ -81,7 +118,7 @@ class DealOverview extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              deal.dealName.toString(),
+                              dealTitle.toString(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -91,7 +128,7 @@ class DealOverview extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              deal.leadTitle.toString(),
+                              dealTitle.toString(),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -117,9 +154,9 @@ class DealOverview extends StatelessWidget {
                   color: Get.theme.colorScheme.background,
                   child: Column(
                     children: [
-                      items(ICRes.mailSVG, deal.currency.toString() ?? "N/A"),
+                      items(ICRes.mailSVG, currency.toString() ?? "N/A"),
                       Divider(color: Colors.grey.shade300, height: 10),
-                      items(ICRes.call, deal.price.toString() ?? "N/A"),
+                      items(ICRes.call, value.toString() ?? "N/A"),
                       Divider(color: Colors.grey.shade300, height: 10),
                       items(ICRes.location, "deal.city" ?? "N/A"),
                     ],
@@ -135,7 +172,7 @@ class DealOverview extends StatelessWidget {
               children: [
                 tile(
                   "Deal Value",
-                  deal.currency.toString() + " : " + deal.price.toString(),
+                  value.toString(),
                   Colors.green,
                   Icons.ac_unit_outlined,
                   double.infinity,
@@ -145,7 +182,7 @@ class DealOverview extends StatelessWidget {
                   "Created",
                   DateFormat(
                     'dd/MM/yyyy',
-                  ).format(DateTime.parse(deal.createdAt.toString())),
+                  ).format(DateTime.parse(createdAt.toString())),
                   Colors.purple,
                   Icons.ac_unit_outlined,
                   double.infinity,
@@ -168,9 +205,9 @@ class DealOverview extends StatelessWidget {
                     Expanded(
                       child: tile(
                         "Deal Mamber",
-                        deal.project != null ? "${deal.project}" : "0",
+                        "s",
                         Colors.pink,
-                        FontAwesomeIcons.manatSign,
+                        FontAwesomeIcons.arrowRightFromBracket,
                         0,
                       ),
                     ),
@@ -186,17 +223,17 @@ class DealOverview extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Expanded(child: tile2("Source", "${deal.project}")),
+                    Expanded(child: tile2("Source", dealTitle.toString())),
                     const SizedBox(width: 5),
-                    Expanded(child: tile2("Category", "${deal.project}")),
+                    Expanded(child: tile2("Category", dealTitle.toString())),
                   ],
                 ),
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    Expanded(child: tile2("Stage", "${deal.project}")),
+                    Expanded(child: tile2("Stage", dealTitle.toString())),
                     const SizedBox(width: 5),
-                    Expanded(child: tile2("Status", "${deal.project}")),
+                    Expanded(child: tile2("Status", dealTitle.toString())),
                   ],
                 ),
               ],
@@ -209,7 +246,7 @@ class DealOverview extends StatelessWidget {
               Expanded(
                 child: CrmButton(
                   title: "Edit",
-                  onTap: () {},
+                  onTap: onEdit,
                   backgroundColor: Get.theme.colorScheme.surface,
                   titleTextStyle: TextStyle(
                     fontSize: 20,
@@ -228,11 +265,7 @@ class DealOverview extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     color: Get.theme.colorScheme.error,
                   ),
-                  onTap:
-                      () => CrmDeleteDialog(
-                    entityType: deal.dealName.toString(),
-                    onConfirm: () => dealController.deleteDeal(dealId),
-                  ),
+                  onTap: onDelete,
                 ),
               ),
             ],
@@ -280,19 +313,19 @@ Widget tile(String title, String subtitle, Color color, icon, double? width) {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: color.withOpacity(0.75),
+                color: color.withAlpha(150),
               ),
             ),
-            Icon(icon, color: color.withOpacity(0.75), size: 18),
+            Icon(icon, color: color.withAlpha(150), size: 18),
           ],
         ),
-        Divider(height: 10, color: color.withOpacity(0.2)),
+        Divider(height: 10, color: color.withAlpha(100)),
         Text(
           subtitle,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: color.withOpacity(1),
+            color: color.withAlpha(20),
           ),
         ),
       ],
@@ -320,7 +353,7 @@ Widget tile2(String title, String subtitle) {
         ),
         Divider(
           height: 10,
-          color: Get.theme.colorScheme.primary.withOpacity(0.25),
+          color: Get.theme.colorScheme.primary.withAlpha(50),
         ),
         Text(
           subtitle.toString(),

@@ -124,7 +124,11 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       CrmButton(
                         title: "Login",
-                        onTap: () => authController.login(),
+                        onTap:
+                            () => authController.login(
+                              authController.emailController.text.trim(),
+                              authController.passwordController.text.trim(),
+                            ),
                       ),
                       const SizedBox(height: 20),
                       InkWell(

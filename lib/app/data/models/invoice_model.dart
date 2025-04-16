@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-class LeadModel {
+import 'package:crm_flutter/app/data/models/lead_model.dart';
+
+class InvoiceModel {
   final String? id;
   final String? inquiryId;
   final String? leadTitle;
@@ -29,7 +31,7 @@ class LeadModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  LeadModel({
+  InvoiceModel({
     this.id,
     this.inquiryId,
     this.leadTitle,
@@ -59,8 +61,13 @@ class LeadModel {
     this.updatedAt,
   });
 
-  factory LeadModel.fromJson(Map<String, dynamic> json) {
-    return LeadModel(
+  factory InvoiceModel.fromJson(Map<String, dynamic> json) {
+    final decodedMembers =
+        json['lead_members'] is String
+            ? jsonDecode(json['lead_members'])['lead_members'] as List
+            : [];
+
+    return InvoiceModel(
       id: json['id'],
       inquiryId: json['inquiry_id'],
       leadTitle: json['leadTitle'],
@@ -75,15 +82,15 @@ class LeadModel {
       telephone: json['telephone'],
       email: json['email'],
       address: json['address'],
-      leadMembers: List<String>.from(
-        jsonDecode(json['lead_members'])['lead_members'],
-      ),
+      leadMembers: List<String>.from(decodedMembers),
       source: json['source'],
       category: json['category'],
       files:
-          (jsonDecode(json['files']) as List)
-              .map((e) => FileModel.fromJson(e))
-              .toList(),
+          json['files'] is String
+              ? (jsonDecode(json['files']) as List)
+                  .map((e) => FileModel.fromJson(e))
+                  .toList()
+              : [],
       status: json['status'],
       interestLevel: json['interest_level'],
       leadScore: json['lead_score'],
@@ -98,48 +105,33 @@ class LeadModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
-      "inquiry_id": inquiryId,
-      "leadTitle": leadTitle,
-      "leadStage": leadStage,
-      "pipeline": pipeline,
-      "currency": currency,
-      "leadValue": leadValue,
-      "company_name": companyName,
-      "firstName": firstName,
-      "lastName": lastName,
-      "phoneCode": phoneCode,
-      "telephone": telephone,
-      "email": email,
-      "address": address,
-      "lead_members": jsonEncode({"lead_members": leadMembers}),
-      "source": source,
-      "category": category,
-      "files": jsonEncode(files!.map((e) => e.toJson()).toList()),
-      "status": status,
-      "interest_level": interestLevel,
-      "lead_score": leadScore,
-      "is_converted": isConverted,
-      "client_id": clientId,
-      "created_by": createdBy,
-      "updated_by": updatedBy,
-      "createdAt": createdAt!.toIso8601String(),
-      "updatedAt": updatedAt!.toIso8601String(),
+      'id': id,
+      'inquiry_id': inquiryId,
+      'leadTitle': leadTitle,
+      'leadStage': leadStage,
+      'pipeline': pipeline,
+      'currency': currency,
+      'leadValue': leadValue,
+      'company_name': companyName,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phoneCode': phoneCode,
+      'telephone': telephone,
+      'email': email,
+      'address': address,
+      'lead_members': jsonEncode({'lead_members': leadMembers}),
+      'source': source,
+      'category': category,
+      'files': jsonEncode(files!.map((e) => e.toJson()).toList()),
+      'status': status,
+      'interest_level': interestLevel,
+      'lead_score': leadScore,
+      'is_converted': isConverted,
+      'client_id': clientId,
+      'created_by': createdBy,
+      'updated_by': updatedBy,
+      'createdAt': createdAt!.toIso8601String(),
+      'updatedAt': updatedAt!.toIso8601String(),
     };
-  }
-}
-
-class FileModel {
-  final String filename;
-  final String url;
-
-  FileModel({required this.filename, required this.url});
-
-  factory FileModel.fromJson(Map<String, dynamic> json) {
-    return FileModel(filename: json['filename'], url: json['url']);
-  }
-
-  Map<String, dynamic> toJson() {
-    return {"filename": filename, "url": url};
   }
 }

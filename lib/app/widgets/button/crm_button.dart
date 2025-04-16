@@ -12,7 +12,7 @@ class CrmButton extends StatelessWidget {
   final List<BoxShadow>? boxShadow;
   final BorderRadiusGeometry? borderRadius;
 
-  CrmButton({
+  const CrmButton({
     super.key,
     required this.title,
     required this.onTap,
@@ -26,18 +26,16 @@ class CrmButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CrmCard(
-        width: width ?? 150,
-        height: height ?? 48,
-        color: backgroundColor ?? Get.theme.colorScheme.primary,
-        borderRadius: borderRadius ?? BorderRadius.circular(10),
-        boxShadow: boxShadow,
+    final button = CrmCard(
+      width: width ?? 150,
+      height: height ?? 48,
+      color: backgroundColor ?? Get.theme.colorScheme.primary,
+      borderRadius: borderRadius ?? BorderRadius.circular(10),
+      boxShadow: boxShadow,
+      child: Center(
         child: Text(
           title,
-          style:
-              titleTextStyle ??
+          style: titleTextStyle ??
               TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -45,6 +43,17 @@ class CrmButton extends StatelessWidget {
               ),
         ),
       ),
+    );
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Hero(
+        tag: "button",
+        child: Material(
+          color: Colors.transparent,
+          child: button,
+        ),
+      )
     );
   }
 }

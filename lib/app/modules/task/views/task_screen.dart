@@ -14,8 +14,13 @@ class TaskScreen extends StatelessWidget {
     TaskController taskController = Get.put(TaskController());
     taskController.getTask("/EFdfN60unjUbWVIrrTptpeE");
     return Scaffold(
-
-      appBar: AppBar(leading: CrmBackButton(),title: Text("Tasks",style: TextStyle(color: Colors.white),),backgroundColor: Get.theme.colorScheme.primary, centerTitle: false),
+      appBar: AppBar(
+        leading: CrmBackButton(
+          color: Get.theme.colorScheme.onPrimary,
+        ),
+        title: Text("Tasks"),
+        centerTitle: false,
+      ),
       floatingActionButton: CrmButton(
         title: "Add Task",
         onTap: () => Get.to(TaskAddScreen()),

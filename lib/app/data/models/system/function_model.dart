@@ -35,7 +35,7 @@ class FunctionModel {
         iconPath: ICRes.leads,
         color: const Color(0xffFFBD21),
         count: leadController.leadsList.length,
-        screenBuilder: LeadsScreen(),
+        screenBuilder: LeadScreen(),
       ),
     );
     functions.add(
@@ -48,15 +48,7 @@ class FunctionModel {
       ),
     );
 
-    functions.add(
-      FunctionModel(
-        title: 'Tast',
-        iconPath: ICRes.taskBox,
-        color: const Color(0xff0AC947),
-        count: 2,
-        screenBuilder: TestScreen(),
-      ),
-    );
+
     functions.add(
       FunctionModel(
         title: 'Tasks',
@@ -96,6 +88,15 @@ class FunctionModel {
         iconPath: ICRes.contract,
         color: const Color(0xff3400AD),
         count: 66,
+      ),
+    );
+    functions.add(
+      FunctionModel(
+        title: 'Test',
+        iconPath: ICRes.taskBox,
+        color: const Color(0xff0AC947),
+        count: 2,
+        screenBuilder: TestScreen(),
       ),
     );
     return functions;

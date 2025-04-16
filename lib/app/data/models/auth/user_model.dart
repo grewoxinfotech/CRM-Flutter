@@ -1,21 +1,3 @@
-class AuthModel {
-  final String? token;
-  final UserModel user;
-
-  AuthModel({this.token,required this.user});
-
-  factory AuthModel.fromJson(Map<String, dynamic> json) {
-    return AuthModel(
-      token: json['token'],
-      user: UserModel.fromJson(json['user']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'token': token, 'user': user.toJson()};
-  }
-}
-
 class UserModel {
   final String? id;
   final String? employeeId;
@@ -41,16 +23,16 @@ class UserModel {
   final String? department;
   final String? designation;
   final String? salary;
-  final String? accountholder;
-  final String? accountnumber;
-  final String? bankname;
+  final String? accountHolder;
+  final String? accountNumber;
+  final String? bankName;
   final String? ifsc;
   final String? gstIn;
-  final String? banklocation;
+  final String? bankLocation;
   final String? cvPath;
   final String? links;
   final String? eSignature;
-  final String? accounttype;
+  final String? accountType;
   final String? clientId;
   final String? clientPlanId;
   final String? documents;
@@ -86,16 +68,16 @@ class UserModel {
     this.department,
     this.designation,
     this.salary,
-    this.accountholder,
-    this.accountnumber,
-    this.bankname,
+    this.accountHolder,
+    this.accountNumber,
+    this.bankName,
     this.ifsc,
     this.gstIn,
-    this.banklocation,
+    this.bankLocation,
     this.cvPath,
     this.links,
     this.eSignature,
-    this.accounttype,
+    this.accountType,
     this.clientId,
     this.clientPlanId,
     this.documents,
@@ -133,16 +115,16 @@ class UserModel {
       department: json['department'],
       designation: json['designation'],
       salary: json['salary'],
-      accountholder: json['accountholder'],
-      accountnumber: json['accountnumber'],
-      bankname: json['bankname'],
+      accountHolder: json['accountholder'],
+      accountNumber: json['accountnumber'],
+      bankName: json['bankname'],
       ifsc: json['ifsc'],
       gstIn: json['gstIn'],
-      banklocation: json['banklocation'],
+      bankLocation: json['banklocation'],
       cvPath: json['cv_path'],
       links: json['links'],
       eSignature: json['e_signature'],
-      accounttype: json['accounttype'],
+      accountType: json['accounttype'],
       clientId: json['client_id'],
       clientPlanId: json['client_plan_id'],
       documents: json['documents'],
@@ -181,16 +163,16 @@ class UserModel {
       'department': department,
       'designation': designation,
       'salary': salary,
-      'accountholder': accountholder,
-      'accountnumber': accountnumber,
-      'bankname': bankname,
+      'accountholder': accountHolder,
+      'accountnumber': accountNumber,
+      'bankname': bankName,
       'ifsc': ifsc,
       'gstIn': gstIn,
-      'banklocation': banklocation,
+      'banklocation': bankLocation,
       'cv_path': cvPath,
       'links': links,
       'e_signature': eSignature,
-      'accounttype': accounttype,
+      'accounttype': accountType,
       'client_id': clientId,
       'client_plan_id': clientPlanId,
       'documents': documents,
