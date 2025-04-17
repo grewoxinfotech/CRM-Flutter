@@ -50,9 +50,10 @@ class LeadAddScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton: Obx(
         () =>
-            (leadController.isLoading.value != false)
-                ? SizedBox()
-                : CrmButton(
+            // (leadController.isLoading.value != false)
+            //     ? SizedBox()
+            //     :
+            CrmButton(
                   width: Get.width - 30,
                   title: "Add Lead",
                   onTap: () => leadController.addLead(),
@@ -66,9 +67,10 @@ class LeadAddScreen extends StatelessWidget {
       ),
       body: Obx(
         () =>
-            (leadController.isLoading.value != false)
-                ? CrmLoadingCircle()
-                : ListView.separated(
+            // (leadController.isLoading.value != false)
+            //     ? CrmLoadingCircle()
+            //     :
+          ListView.separated(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
                   itemCount: textFields.length,
                   separatorBuilder: (context, i) => const SizedBox(height: 10),

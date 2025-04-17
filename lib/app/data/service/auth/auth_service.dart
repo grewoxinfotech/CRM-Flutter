@@ -3,7 +3,8 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
-import 'package:crm_flutter/app/data/service/secure_storage_service.dart';
+import 'package:crm_flutter/app/data/models/user_model/user_model.dart';
+import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/modules/auth/views/login/login_screen.dart';
 import 'package:crm_flutter/app/modules/dashboard/views/dashboard_screen.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
@@ -15,21 +16,23 @@ class AuthService extends GetConnect {
     final loginData = {"login": email, "password": password};
     try {
       final response = await http.post(
-        Uri.parse(UrlRes.LOGIN),
-        headers: {"Content-type": "application/json"},
+        Uri.parse(UrlRes.login),
+        headers: {UrlRes.contentType: UrlRes.applicationJson},
         body: jsonEncode(loginData),
       );
 
-      final data = await jsonDecode(response.body);
+      final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data["success"] == true) {
-        final getToken = data['data']['token'];
-        final getUserName = data['data']['user']['username'] ?? loginData["login"];
-        await SecureStorage.saveToken(getToken);
-        await SecureStorage.saveUsername(getUserName);
+        final token = data['data']['token'];
+        final user = UserModel.fromJson(data['data']['user']);
+        await SecureStorage.saveToken(token);
+        await SecureStorage.saveUserData(user);
         await SecureStorage.saveRememberMe(true);
         await SecureStorage.saveLoggedIn(true);
+
         Get.offAll(DashboardScreen());
+
         CrmSnackBar.showAwesomeSnackbar(
           title: "Welcome!",
           message: "Login successful!",

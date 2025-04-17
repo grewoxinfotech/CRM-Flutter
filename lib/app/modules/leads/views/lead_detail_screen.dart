@@ -21,15 +21,15 @@ class LeadDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     CrmTabBarController controller = Get.find();
     LeadController leadController = Get.put(LeadController());
-    if (leadController.isLoading.value) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    // if (leadController.isLoading.value) {
+    //   return const Center(child: CircularProgressIndicator());
+    // }
 
-    if (leadController.leadsList.isEmpty) {
+    if (leadController.lead.isEmpty) {
       return const Center(child: Text("No Lead Data Available."));
     }
 
-    final lead = leadController.leadsList.firstWhere(
+    final lead = leadController.lead.firstWhere(
       (lead) => lead.id == id,
       orElse: () => LeadModel(),
     );

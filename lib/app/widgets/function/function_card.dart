@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 class FunctionCard extends StatelessWidget {
   final GestureTapCallback? onTap;
   final String? title;
-  final String? subTitle;
   final String? iconPath;
   final Color? color;
 
@@ -15,7 +14,6 @@ class FunctionCard extends StatelessWidget {
     this.iconPath,
     this.color,
     this.title,
-    this.subTitle,
     this.onTap,
   });
 
@@ -48,14 +46,6 @@ class FunctionCard extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
                     color: Get.theme.colorScheme.onPrimary,
-                  ),
-                ),
-
-                Text(
-                  subTitle.toString() + " Items",
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Get.theme.colorScheme.onSecondary,
                   ),
                 ),
               ],

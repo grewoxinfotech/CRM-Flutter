@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crm_flutter/app/data/models/user_model/user_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
@@ -8,6 +11,7 @@ class SecureStorage {
   static const String _keyUsername = 'username';
   static const String _keyRememberMe = 'rememberMe';
   static const String _keyLoggedIn = 'islogin';
+  static const String _KeyUserData = 'user';
 
   // Token
   static Future<void> saveToken(String token) async {
@@ -22,6 +26,27 @@ class SecureStorage {
     await _storage.delete(key: _keyToken);
   }
 
+  // user data
+  static Future<void> saveUserData(UserModel data) async {
+    return await _storage.write(
+      key: _KeyUserData,
+      value: jsonEncode(data.toJson()),
+    );
+  }
+
+  static Future<UserModel?> getUserData() async {
+    final jsonString = await _storage.read(key: _KeyUserData);
+    if (jsonString == null) return null;
+
+    final jsonMap = jsonDecode(jsonString); // ✅ convert string to map
+    return UserModel.fromJson(jsonMap);
+  }
+
+
+  static Future<void> deleteUserData() async {
+    await _storage.delete(key: _KeyUserData);
+  }
+
   // Username
   static Future<void> saveUsername(String username) async {
     await _storage.write(key: _keyUsername, value: username);
@@ -30,6 +55,7 @@ class SecureStorage {
   static Future<String?> getUsername() async {
     return _storage.read(key: _keyUsername);
   }
+
 
   static Future<void> deleteUsername() async {
     await _storage.delete(key: _keyUsername);

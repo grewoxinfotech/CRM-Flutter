@@ -1,13 +1,27 @@
+import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
+
 class UrlRes {
-  static const String BASE_URL = "https://crm-api.grewox.com/api/v1";
+  static const String baseURL = "https://crm-api.grewox.com/api/v1";
 
-  static const String AUTH = "$BASE_URL/auth";
+  static const String auth = "$baseURL/auth";
 
-  static const String LOGIN = "$AUTH/login";
+  static const String login = "$auth/login";
 
-  static const String Leads = "$BASE_URL/leads";
+  static const String leads = "$baseURL/leads";
 
-  static const String Deals = "$BASE_URL/deals";
+  static const String deals = "$baseURL/deals";
 
-  static const String task = "${BASE_URL}/tasks";
+  static const String task = "$baseURL/tasks";
+
+  // headers from api
+  static const String contentType = "Content-type";
+  static const String applicationJson = "application/json";
+
+  // headers for auth
+  static const String authorization = "Authorization";
+
+  static Future<Map<String, String>> getHeaders() async {
+    final token = await SecureStorage.getToken();
+    return {contentType: applicationJson, authorization: "Bearer $token"};
+  }
 }

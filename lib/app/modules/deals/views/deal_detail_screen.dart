@@ -22,11 +22,11 @@ class DealDetailScreen extends StatelessWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (dealController.dealsList.isEmpty) {
+    if (dealController.deal.isEmpty) {
       return const Center(child: Text("No Lead Data Available."));
     }
 
-    final deal = dealController.dealsList.firstWhere(
+    final deal = dealController.deal.firstWhere(
       (deal) => deal.id == id,
       orElse: () => DealModel(),
     );

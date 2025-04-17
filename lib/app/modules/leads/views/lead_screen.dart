@@ -28,11 +28,12 @@ class LeadScreen extends StatelessWidget {
         title: Text("Leads"),
       ),
       floatingActionButton: addButton(),
-      body: Obx(() {
-        if (leadController.isLoading.value == false) {
-          if (leadController.leadsList.isEmpty) {
-            return Center(
-              child: SizedBox(
+      body: FutureBuilder(
+        future: leadController.getLeads(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -41,9 +42,9 @@ class LeadScreen extends StatelessWidget {
                       width: 50,
                       color: Get.theme.colorScheme.onBackground,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 10),
                     Text(
-                      "No Lead Found!",
+                      "No Leads",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -52,65 +53,62 @@ class LeadScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            );
+              );
+            } else {
+              return ListView.separated(
+                itemCount: snapshot.data!.length,
+                separatorBuilder: (context, s) => const SizedBox(height: 10),
+                itemBuilder: (context, i) {
+                  final lead = leadController.lead[i];
+                  String formattedDate = DateFormat('dd MM yyyy').format(
+                    DateTime.parse(
+                      (lead.createdAt.toString().isNotEmpty)
+                          ? lead.createdAt.toString()
+                          : DateTime.now().toString(),
+                    ),
+                  );
+                  return LeadCard(
+                    id: lead.id.toString(),
+                    inquiryId: lead.inquiryId.toString(),
+                    leadTitle: lead.leadTitle.toString(),
+                    leadStage: lead.leadStage.toString(),
+                    pipeline: lead.pipeline.toString(),
+                    currency: lead.currency.toString(),
+                    leadValue: lead.leadValue.toString(),
+                    companyName: lead.companyName.toString(),
+                    firstName: lead.firstName.toString(),
+                    lastName: lead.lastName.toString(),
+                    phoneCode: lead.phoneCode.toString(),
+                    telephone: lead.telephone.toString(),
+                    email: lead.email.toString(),
+                    address: lead.address.toString(),
+                    leadMembers: lead.leadMembers.toString(),
+                    source: lead.source.toString(),
+                    category: lead.category.toString(),
+                    files: lead.files.toString(),
+                    status: lead.status.toString(),
+                    interestLevel: lead.interestLevel.toString(),
+                    leadScore: lead.leadScore.toString(),
+                    isConverted: lead.isConverted.toString(),
+                    clientId: lead.clientId.toString(),
+                    createdBy: lead.createdBy.toString(),
+                    updatedBy: lead.updatedBy.toString(),
+                    createdAt: formattedDate.toString(),
+                    updatedAt: lead.updatedAt.toString(),
+                    onTap:
+                        () =>
+                            (lead.id != null)
+                                ? Get.to(() => LeadDetailsScreen(id: lead.id!))
+                                : Get.snackbar('Error', 'Lead ID is missing'),
+                  );
+                },
+              );
+            }
           } else {
-            return ListView.separated(
-              itemCount: leadController.leadsList.length,
-              separatorBuilder: (context, s) => const SizedBox(height: 10),
-              itemBuilder: (context, i) {
-                final lead = leadController.leadsList[i];
-
-                String formattedDate = DateFormat('dd MM yyyy').format(
-                  DateTime.parse(
-                    (lead.createdAt.toString().isNotEmpty)
-                        ? lead.createdAt.toString()
-                        : DateTime.now().toString(),
-                  ),
-                );
-                return LeadCard(
-                  id: lead.id.toString(),
-                  inquiryId: lead.inquiryId.toString(),
-                  leadTitle: lead.leadTitle.toString(),
-                  leadStage: lead.leadStage.toString(),
-                  pipeline: lead.pipeline.toString(),
-                  currency: lead.currency.toString(),
-                  leadValue: lead.leadValue.toString(),
-                  companyName: lead.companyName.toString(),
-                  firstName: lead.firstName.toString(),
-                  lastName: lead.lastName.toString(),
-                  phoneCode: lead.phoneCode.toString(),
-                  telephone: lead.telephone.toString(),
-                  email: lead.email.toString(),
-                  address: lead.address.toString(),
-                  leadMembers: lead.leadMembers.toString(),
-                  source: lead.source.toString(),
-                  category: lead.category.toString(),
-                  files: lead.files.toString(),
-                  status: lead.status.toString(),
-                  interestLevel: lead.interestLevel.toString(),
-                  leadScore: lead.leadScore.toString(),
-                  isConverted: lead.isConverted.toString(),
-                  clientId: lead.clientId.toString(),
-                  createdBy: lead.createdBy.toString(),
-                  updatedBy: lead.updatedBy.toString(),
-                  createdAt: formattedDate.toString(),
-                  updatedAt: lead.updatedAt.toString(),
-                  onTap:
-                      () =>
-                          (lead.id != null)
-                              ? Get.to(
-                                () => LeadDetailsScreen(id: lead.id!),
-                              )
-                              : Get.snackbar('Error', 'Lead ID is missing'),
-                );
-              },
-            );
+            return CrmLoadingCircle();
           }
-        } else {
-          return CrmLoadingCircle();
-        }
-      }),
+        },
+      ),
     );
   }
 }

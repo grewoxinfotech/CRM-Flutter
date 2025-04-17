@@ -1,6 +1,4 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/data/models/file_model.dart';
-import 'package:crm_flutter/app/data/models/system/product_model.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -351,10 +349,7 @@ Widget tile2(String title, String subtitle) {
             color: Get.theme.colorScheme.primary,
           ),
         ),
-        Divider(
-          height: 10,
-          color: Get.theme.colorScheme.primary.withAlpha(50),
-        ),
+        Divider(height: 10, color: Get.theme.colorScheme.primary.withAlpha(50)),
         Text(
           subtitle.toString(),
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),

@@ -1,7 +1,4 @@
-import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,13 +10,13 @@ class TaskCard extends StatelessWidget {
   final String? project;
   final String? lead;
   final String? file;
-  final DateTime? startDate;
-  final DateTime? dueDate;
-  final Map<String, dynamic>? assignTo;
+  final String? startDate;
+  final String? dueDate;
+  final String? assignTo;
   final String? status;
   final String? priority;
   final String? description;
-  final DateTime? reminderDate;
+  final String? reminderDate;
   final String? clientId;
   final String? taskReporter;
   final String? createdBy;
@@ -29,29 +26,29 @@ class TaskCard extends StatelessWidget {
   final GestureTapCallback? onDelete;
 
   const TaskCard({
-    Key? key,
+    super.key,
     this.id,
-    required this.relatedId,
-    required this.taskName,
-    required this.category,
-    required this.project,
-    required this.lead,
-    required this.file,
-    required this.startDate,
-    required this.dueDate,
-    required this.assignTo,
-    required this.status,
-    required this.priority,
-    required this.description,
-    required this.reminderDate,
-    required this.clientId,
-    required this.taskReporter,
-    required this.createdBy,
-    required this.updatedBy,
+    this.relatedId,
+    this.taskName,
+    this.category,
+    this.project,
+    this.lead,
+    this.file,
+    this.startDate,
+    this.dueDate,
+    this.assignTo,
+    this.status,
+    this.priority,
+    this.description,
+    this.reminderDate,
+    this.clientId,
+    this.taskReporter,
+    this.createdBy,
+    this.updatedBy,
     this.onTap,
     this.onEdit,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   Color getPriorityColor(String p) {
     switch (p.toLowerCase()) {
@@ -84,89 +81,118 @@ class TaskCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${taskName}",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Get.theme.colorScheme.onPrimary,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CrmCard(
+              margin: const EdgeInsets.all(5),
+              borderRadius: BorderRadius.circular(19),
+              color: Get.theme.colorScheme.background,
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Text(
+                    "G",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                      color: Get.theme.colorScheme.surface,
+                    ),
+                  ),
                 ),
+                title: Text(
+                  createdBy.toString(),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16,color: Get.theme.colorScheme.onPrimary),
+                ),
+                subtitle: Text(taskName.toString(),
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14,color: Get.theme.colorScheme.onSecondary),
+                ),
+                trailing: Icon(Icons.menu),
               ),
-              const SizedBox(height: 5),
-              // 🔖 Status & Priority
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: getStatusColor(status!).withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      status!,
-                      style: TextStyle(
-                        color: getStatusColor(status!),
-                        fontWeight: FontWeight.w600,
+            ),
+            Divider(
+              color: Get.theme.dividerColor,
+              height:   0,
+              indent: 20,
+              endIndent: 20,
+            ),
+            Row(
+              children: [
+                CrmCard(
+                  color: Get.theme.colorScheme.background,
+                  height: 40,
+                  width: 10,
+                  borderRadius: BorderRadius.horizontal(right: Radius.elliptical(10,20)),
+                  boxShadow: [],
+                ),
+                const SizedBox(width: 10,),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: getStatusColor(status!).withAlpha(50),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text(
+                          status!,
+                          style: TextStyle(
+                            color: getStatusColor(status!),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  SizedBox(width: 5,),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: getPriorityColor(priority!).withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      priority!,
-                      style: TextStyle(
-                        color: getPriorityColor(priority!),
-                        fontWeight: FontWeight.w600,
+                      SizedBox(width: 5),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: getPriorityColor(priority!).withAlpha(50),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text(
+                          priority!,
+                          style: TextStyle(
+                            color: getPriorityColor(priority!),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  // 📅 Dates Row
-                  Text("${startDate!.toLocal().toString().split(' ')[0]}"),
-                  Text("${dueDate!.toLocal().toString().split(' ')[0]}"),
-                ],
-              ),
-              // 👥 Assign To + 👤 Client
+                ),
+                const SizedBox(width: 10,),
 
-              // 📝 Description
-              if (description != null && description!.isNotEmpty) ...[
-                Text("${description!}"),
+                CrmCard(
+                  color: Get.theme.colorScheme.background,
+                  height: 40,
+                  width: 10,
+                  borderRadius: BorderRadius.horizontal(left: Radius.elliptical(10,20)),
+
+                ),
               ],
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  CrmIc(
-                    iconPath: ICRes.edit,
-                    width: 30,
-                    color: ColorRes.success,
-                    onTap: onEdit,
-                  ),
-                  const SizedBox(width: 10),
-                  CrmIc(
-                    iconPath: ICRes.delete,
-                    width: 30,
-                    color: ColorRes.error,
-                    onTap: onDelete,
-                  ),
-                ],
+            ),
+            Divider(
+              height: 0,
+              color: Get.theme.dividerColor,
+              indent: 20,
+              endIndent: 20,
+            ),
+            CrmCard(
+              color: Get.theme.colorScheme.background,
+              borderRadius: BorderRadius.circular(19),
+              margin: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(10),
+              child: Text(description.toString(),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14,color: Get.theme.colorScheme.onPrimary),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

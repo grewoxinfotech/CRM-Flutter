@@ -4,6 +4,7 @@ import 'package:crm_flutter/app/modules/deals/views/deal_detail_screen.dart';
 import 'package:crm_flutter/app/modules/deals/widget/deal_card.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
+import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -27,135 +28,145 @@ class DealsScreen extends StatelessWidget {
         centerTitle: false,
         backgroundColor: Colors.transparent,
       ),
-      body: Obx(
-        () => ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          itemCount: dealController.dealsList.length,
-          separatorBuilder: (context, s) => const SizedBox(height: 10),
-          itemBuilder: (context, i) {
-            final deal = dealController.dealsList[i];
+      body: FutureBuilder(future: dealController.getDeals(), builder: (context , snapshot) {
+        if (snapshot.hasData){
+          if (snapshot.data!.isEmpty) {
+            return Center(child: Text("No data"),);
+          }
+          else {
+            return ListView.separated(
+              itemCount: snapshot.data!.length,
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              separatorBuilder: (context, s) => const SizedBox(height: 10),
+              itemBuilder: (context, i) {
+                final deal = dealController.deal[i];
 
-            String formattedDate = DateFormat('dd MMM yyyy').format(
-              DateTime.parse(
-                deal.createdAt.toString() ?? DateTime.now().toString(),
-              ),
-            );
-            return DealCard(
-              id: (deal.id.toString().isEmpty) ? "N/A" : deal.id.toString(),
-              color: Get.theme.colorScheme.error,
-              dealTitle:
+                String formattedDate = DateFormat('dd MMM yyyy').format(
+                  DateTime.parse(
+                    deal.createdAt.toString() ?? DateTime.now().toString(),
+                  ),
+                );
+                return DealCard(
+                  id: (deal.id.toString().isEmpty) ? "N/A" : deal.id.toString(),
+                  color: Get.theme.colorScheme.error,
+                  dealTitle:
                   (deal.dealTitle.toString().isEmpty)
                       ? "N/A"
                       : deal.dealTitle.toString(),
-              currency:
+                  currency:
                   (deal.currency.toString().isEmpty)
                       ? "N/A"
                       : deal.currency.toString(),
-              value:
+                  value:
                   (deal.value.toString().isEmpty)
                       ? "N/A"
                       : deal.value.toString(),
-              pipeline:
+                  pipeline:
                   (deal.pipeline.toString().isEmpty)
                       ? "N/A"
                       : deal.pipeline.toString(),
-              stage:
+                  stage:
                   (deal.stage.toString().isEmpty)
                       ? "N/A"
                       : deal.stage.toString(),
-              status:
+                  status:
                   (deal.status.toString().isEmpty)
                       ? "N/A"
                       : deal.status.toString(),
-              label:
+                  label:
                   (deal.label.toString().isEmpty)
                       ? "N/A"
                       : deal.label.toString(),
-              closedDate:
+                  closedDate:
                   (deal.closedDate.toString().isEmpty)
                       ? "N/A"
                       : deal.closedDate.toString(),
-              firstName:
+                  firstName:
                   (deal.firstName.toString().isEmpty)
                       ? "N/A"
                       : deal.firstName.toString(),
-              lastName:
+                  lastName:
                   (deal.lastName.toString().isEmpty)
                       ? "N/A"
                       : deal.lastName.toString(),
-              email:
+                  email:
                   (deal.email.toString().isEmpty)
                       ? "N/A"
                       : deal.email.toString(),
-              phone:
+                  phone:
                   (deal.phone.toString().isEmpty)
                       ? "N/A"
                       : deal.phone.toString(),
-              source:
+                  source:
                   (deal.source.toString().isEmpty)
                       ? "N/A"
                       : deal.source.toString(),
-              companyName:
+                  companyName:
                   (deal.companyName.toString().isEmpty)
                       ? "N/A"
                       : deal.companyName.toString(),
-              website:
+                  website:
                   (deal.website.toString().isEmpty)
                       ? "N/A"
                       : deal.website.toString(),
-              address:
+                  address:
                   (deal.address.toString().isEmpty)
                       ? "N/A"
                       : deal.address.toString(),
-              files:
+                  files:
                   (deal.files.toString().isEmpty)
                       ? "N/A"
                       : deal.files.toString(),
-              assignedTo:
+                  assignedTo:
                   (deal.assignedTo.toString().isEmpty)
                       ? "N/A"
                       : deal.assignedTo.toString(),
-              clientId:
+                  clientId:
                   (deal.clientId.toString().isEmpty)
                       ? "N/A"
                       : deal.clientId.toString(),
-              isWon:
+                  isWon:
                   (deal.isWon.toString().isEmpty)
                       ? "N/A"
                       : deal.isWon.toString(),
-              companyId:
+                  companyId:
                   (deal.companyId.toString().isEmpty)
                       ? "N/A"
                       : deal.companyId.toString(),
-              contactId:
+                  contactId:
                   (deal.contactId.toString().isEmpty)
                       ? "N/A"
                       : deal.contactId.toString(),
-              createdBy:
+                  createdBy:
                   (deal.createdBy.toString().isEmpty)
                       ? "N/A"
                       : deal.createdBy.toString(),
-              updatedBy:
+                  updatedBy:
                   (deal.updatedBy.toString().isEmpty)
                       ? "N/A"
                       : deal.updatedBy.toString(),
-              createdAt: formattedDate,
+                  createdAt: formattedDate,
 
-              updatedAt:
+                  updatedAt:
                   (deal.updatedAt.toString().isEmpty)
                       ? "N/A"
                       : deal.updatedAt.toString(),
-              onTap:
-                  () =>
-                      (deal.id != null)
-                          ? Get.to(() => DealDetailScreen(id: deal.id!))
-                          : Get.snackbar('Error', 'deal ID is missing'),
-              onDelete: () {},
-              onEdit: () {},
+                  onTap:
+                      () =>
+                  (deal.id != null)
+                      ? Get.to(() => DealDetailScreen(id: deal.id!))
+                      : Get.snackbar('Error', 'deal ID is missing'),
+                  onDelete: () {},
+                  onEdit: () {},
+                );
+              },
             );
-          },
-        ),
-      ),
+          }
+        }
+        else {
+          return CrmLoadingCircle();
+        }
+      })
     );
   }
 }

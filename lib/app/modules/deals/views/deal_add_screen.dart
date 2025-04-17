@@ -52,7 +52,7 @@ class DealAddScreen extends StatelessWidget {
                 : CrmButton(
                   width: Get.width - 30,
                   title: "Add Deal",
-                  onTap: () => dealController.addDeal(),
+                  onTap: () {},
                 ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -25,7 +25,7 @@ class CrmCard extends StatelessWidget {
     this.border,
     this.borderRadius,
     this.boxShadow,
-    required this.child,
+    this.child,
   });
 
   @override

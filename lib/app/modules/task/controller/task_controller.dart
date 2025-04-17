@@ -1,15 +1,17 @@
+import 'dart:math';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/data/models/task_model.dart';
 import 'package:crm_flutter/app/data/service/task_service.dart';
+import 'package:crm_flutter/app/data/service/user/user_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class TaskController extends GetxController {
-  RxBool isLoading = true.obs;
-  final RxList<TaskModel> tasksList = <TaskModel>[].obs;
+  final RxList<TaskModel> task = <TaskModel>[].obs;
+  final UserService userService = Get.put(UserService());
   final TaskService taskService = TaskService();
-  final context = Get.context!;
 
   final TextEditingController id = TextEditingController();
   final TextEditingController relatedId = TextEditingController();
@@ -32,33 +34,19 @@ class TaskController extends GetxController {
 
   Future<void> addTask() async {}
 
-  Future<void> getTask(String id) async {
-    isLoading(true);
-    try {
-      final data = await taskService.fetchTasks(id);
-      tasksList.assignAll(data);
-      print("task data fetched successfully : ${data.length} data found!");
-    } catch (e) {
-      print("Error : $e");
-      CrmSnackBar.showAwesomeSnackbar(
-        title: "Error",
-        message: "Failed to load Tasks",
-        contentType: ContentType.warning,
-        color: Get.theme.colorScheme.error,
-      );
-    } finally {
-      isLoading(false);
-    }
+  Future<List> getTasks() async {
+    final data = await taskService.getTasks("/${userService.user.value!.id}");
+    task.assignAll(data.map((e) => TaskModel.fromJson(e)).toList());
+    return data;
   }
 
   Future<void> editTask(String id) async {}
 
   Future<bool> deleteTask(String id) async {
-    isLoading(true);
     try {
       bool success = await taskService.deleteTask(id);
       if (success) {
-        tasksList.removeWhere((task) => task.id == id);
+        task.removeWhere((task) => task.id == id);
         Get.back();
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
@@ -81,9 +69,7 @@ class TaskController extends GetxController {
         contentType: ContentType.failure,
       );
       return false;
-    } finally {
-      isLoading(false);
-    }
+    } finally {}
   }
 
   @override
@@ -110,4 +96,3 @@ class TaskController extends GetxController {
     updatedBy.dispose();
   }
 }
-

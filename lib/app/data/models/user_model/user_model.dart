@@ -5,6 +5,7 @@ class UserModel {
   final String? password;
   final String? email;
   final String? roleId;
+  final String? roleName;
   final String? profilePic;
   final String? firstName;
   final String? lastName;
@@ -40,8 +41,8 @@ class UserModel {
   final String? resetPasswordOTPExpiry;
   final String? createdBy;
   final String? updatedBy;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  final String? createdAt;
+  final String? updatedAt;
 
   UserModel({
     this.id,
@@ -50,6 +51,7 @@ class UserModel {
     this.password,
     this.email,
     this.roleId,
+    this.roleName,
     this.profilePic,
     this.firstName,
     this.lastName,
@@ -97,6 +99,7 @@ class UserModel {
       password: json['password'],
       email: json['email'],
       roleId: json['role_id'],
+      roleName: json['roleName'],
       profilePic: json['profilePic'],
       firstName: json['firstName'],
       lastName: json['lastName'],
@@ -132,8 +135,8 @@ class UserModel {
       resetPasswordOTPExpiry: json['resetPasswordOTPExpiry'],
       createdBy: json['created_by'],
       updatedBy: json['updated_by'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 
@@ -145,6 +148,7 @@ class UserModel {
       'password': password,
       'email': email,
       'role_id': roleId,
+      'roleName': roleName,
       'profilePic': profilePic,
       'firstName': firstName,
       'lastName': lastName,
