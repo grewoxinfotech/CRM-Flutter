@@ -1,41 +1,41 @@
-class NoteModel {
+class AnnouncementModel {
   final String id;
-  final String relatedId;
-  final String noteTitle;
-  final String notetype;
-  final String? employees;
+  final String title;
   final String description;
+  final String? branch;
+  final String time;
+  final String date;
   final String clientId;
   final String createdBy;
   final String? updatedBy;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  NoteModel({
+  AnnouncementModel({
     required this.id,
-    required this.relatedId,
-    required this.noteTitle,
-    required this.notetype,
-    required this.employees,
+    this.branch,
+    this.updatedBy,
+    required this.title,
     required this.description,
+    required this.time,
+    required this.date,
     required this.clientId,
     required this.createdBy,
-    required this.updatedBy,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory NoteModel.fromJson(Map<String, dynamic> json) {
-    return NoteModel(
+  factory AnnouncementModel.fromJson(Map<String, dynamic> json) {
+    return AnnouncementModel(
       id: json['id'],
-      relatedId: json['related_id'],
-      noteTitle: json['note_title'],
-      notetype: json['notetype'],
-      employees: json['employees'],
+      branch: json['branch'],
+      updatedBy: json['updated_by'],
+      title: json['title'],
       description: json['description'],
+      time: json['time'],
+      date: json['date'],
       clientId: json['client_id'],
       createdBy: json['created_by'],
-      updatedBy: json['updated_by'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
@@ -44,14 +44,14 @@ class NoteModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'related_id': relatedId,
-      'note_title': noteTitle,
-      'notetype': notetype,
-      'employees': employees,
+      'branch': branch,
+      'updated_by': updatedBy,
+      'title': title,
       'description': description,
+      'time': time,
+      'date': date,
       'client_id': clientId,
       'created_by': createdBy,
-      'updated_by': updatedBy,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };

@@ -1,5 +1,5 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/data/models/deal_model.dart';
+import 'package:crm_flutter/app/data/models/crm/deal/deal_model.dart';
 import 'package:crm_flutter/app/modules/deals/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/deals/widget/deal_overview_card.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';

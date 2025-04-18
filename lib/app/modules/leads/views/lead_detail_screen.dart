@@ -1,5 +1,5 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/data/models/lead_model.dart';
+import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
 import 'package:crm_flutter/app/modules/leads/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/leads/widgets/lead_overview_card.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';

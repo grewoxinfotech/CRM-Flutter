@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/data/models/system/function_model.dart';
 import 'package:crm_flutter/app/modules/functions/controller/function_controller.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_headline.dart';

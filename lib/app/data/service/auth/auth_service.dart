@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
-import 'package:crm_flutter/app/data/models/user_model/user_model.dart';
+import 'package:crm_flutter/app/data/models/user/user/user_model.dart';
 import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/modules/auth/views/login/login_screen.dart';
 import 'package:crm_flutter/app/modules/dashboard/views/dashboard_screen.dart';

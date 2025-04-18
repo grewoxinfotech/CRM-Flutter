@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/data/models/user_model/user_model.dart';
+import 'package:crm_flutter/app/data/models/user/user/user_model.dart';
 import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
 import 'package:get/get.dart';
 
