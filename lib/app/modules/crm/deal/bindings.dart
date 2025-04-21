@@ -1,11 +1,9 @@
 import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dart';
-import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:get/get.dart';
 
-class AppBinding extends Bindings {
+class DealBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<DealController>(() => DealController());
-    Get.lazyPut<LeadController>(() => LeadController());
   }
 }

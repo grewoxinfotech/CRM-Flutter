@@ -1,10 +1,7 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
-import 'package:crm_flutter/app/widgets/profile/crm_profile_avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CrmAppBar extends StatelessWidget {
   final Widget? leading;
@@ -22,31 +19,47 @@ class CrmAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CrmCard(
-      height: 50,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      borderRadius: BorderRadius.circular(20),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: Container(alignment: Alignment.center, child: CrmAppLogo()),
+        leading: Align(
+          alignment: Alignment.center,
+          child: CrmAppLogo(width: 45),
+        ),
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w800,
+          color: Colors.black,
+        ),
         actions: [
-          CrmIc(iconPath: ICRes.search),
-          const SizedBox(width: 15),
-          CrmIc(iconPath: ICRes.notifications),
-          const SizedBox(width: 15),
-          CrmProfileAvatar(
+          CrmIc(iconPath: ICRes.search, color: Colors.black),
+          const SizedBox(width: 12),
+          CrmIc(iconPath: ICRes.notifications, color: Colors.black),
+          const SizedBox(width: 12),
+          CircleAvatar(
             radius: 15,
             child: Text(
               "G",
               style: TextStyle(
                 fontSize: 20,
-                color: Get.theme.colorScheme.surface,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
               ),
             ),
           ),
-          const SizedBox(width: 10),
         ],
+        elevation: 5.0,
+        titleSpacing: 0,
+        scrolledUnderElevation: 5.0,
+        primary: false,
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        shadowColor: Colors.black26,
+        surfaceTintColor: Colors.transparent,
+        actionsPadding: EdgeInsets.only(right: 15),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
     );
   }

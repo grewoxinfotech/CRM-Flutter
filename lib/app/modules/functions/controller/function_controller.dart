@@ -2,13 +2,13 @@ import 'dart:ui';
 
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/data/models/system/function_model.dart';
-import 'package:crm_flutter/app/modules/deals/controllers/deal_controller.dart';
-import 'package:crm_flutter/app/modules/deals/views/deal_screen.dart';
-import 'package:crm_flutter/app/modules/leads/controllers/lead_controller.dart';
-import 'package:crm_flutter/app/modules/leads/views/lead_screen.dart';
-import 'package:crm_flutter/app/modules/task/controller/task_controller.dart';
-import 'package:crm_flutter/app/modules/task/views/task_add_screen.dart';
-import 'package:crm_flutter/app/modules/task/views/task_screen.dart';
+import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/modules/crm/deal/views/deal_screen.dart';
+import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
+import 'package:crm_flutter/app/modules/crm/lead/views/lead_screen.dart';
+import 'package:crm_flutter/app/modules/task/task/controller/task_controller.dart';
+import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
+import 'package:crm_flutter/test_screen.dart';
 import 'package:get/get.dart';
 
 class FunctionController extends GetxController{
@@ -69,7 +69,7 @@ class FunctionController extends GetxController{
         iconPath: ICRes.taskBox,
         color: const Color(0xff0AC947),
         count: 2,
-        screenBuilder: TaskAddScreen(),
+        screenBuilder: TestScreen(),
       ),
     ];
   }

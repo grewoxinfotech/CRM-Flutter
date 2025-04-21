@@ -1,7 +1,7 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
-import 'package:crm_flutter/app/modules/auth/views/login/login_screen.dart';
 import 'package:crm_flutter/app/modules/dashboard/views/dashboard_screen.dart';
+import 'package:crm_flutter/app/modules/super_admin/auth/views/login/login_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,7 +27,7 @@ class SplashController extends GetxController {
   }
 
   void splash() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds:  1));
     bool isLogin = await SecureStorage.getLoggedIn();
     bool rememberMe = await SecureStorage.getRememberMe();
     String? token = await SecureStorage.getToken();
