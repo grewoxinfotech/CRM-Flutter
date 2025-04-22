@@ -81,15 +81,13 @@ class TaskCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
+        padding: const EdgeInsets.all(5),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CrmCard(
-              margin: const EdgeInsets.all(5),
-              borderRadius: BorderRadius.circular(19),
-              color: Get.theme.colorScheme.background,
-              child: ListTile(
-                leading: CircleAvatar(
+            AppBar(
+              leading: Container(
+                alignment: Alignment.center,
+                child: CircleAvatar(
                   child: Text(
                     "G",
                     style: TextStyle(
@@ -99,97 +97,112 @@ class TaskCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                title: Text(
-                  createdBy.toString(),
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16,color: Get.theme.colorScheme.onPrimary),
-                ),
-                subtitle: Text(taskName.toString(),
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14,color: Get.theme.colorScheme.onSecondary),
-                ),
-                trailing: Icon(Icons.menu),
               ),
-            ),
-            Divider(
-              color: Get.theme.dividerColor,
-              height:   0,
-              indent: 20,
-              endIndent: 20,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    createdBy.toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: Get.theme.colorScheme.onPrimary,
+                    ),
+                  ),
+                  Text(
+                    taskName.toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: Get.theme.colorScheme.onSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    if (value == 'edit') {
+                      onEdit?.call();
+                    } else if (value == 'delete') {
+                      onDelete?.call();
+                    }
+                  },
+                  itemBuilder:
+                      (context) => [
+                    const PopupMenuItem(
+                      value: 'edit',
+                      child: Text('Edit'),
+                    ),
+                    const PopupMenuItem(
+                      value: 'delete',
+                      child: Text('Delete'),
+                    ),
+                  ],
+                ),
+              ],
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(19),
+              ),
             ),
             Row(
               children: [
-                CrmCard(
-                  color: Get.theme.colorScheme.background,
-                  height: 40,
-                  width: 10,
-                  borderRadius: BorderRadius.horizontal(right: Radius.elliptical(10,20)),
-                  boxShadow: [],
-                ),
-                const SizedBox(width: 10,),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: getStatusColor(status!).withAlpha(50),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Text(
-                          status!,
-                          style: TextStyle(
-                            color: getStatusColor(status!),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: getPriorityColor(priority!).withAlpha(50),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Text(
-                          priority!,
-                          style: TextStyle(
-                            color: getPriorityColor(priority!),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ],
+                SizedBox(width: 5),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: getStatusColor(status!).withAlpha(50),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    status!,
+                    style: TextStyle(
+                      color: getStatusColor(status!),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 10,),
-
-                CrmCard(
-                  color: Get.theme.colorScheme.background,
-                  height: 40,
-                  width: 10,
-                  borderRadius: BorderRadius.horizontal(left: Radius.elliptical(10,20)),
-
+                SizedBox(width: 5),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: getPriorityColor(priority!).withAlpha(50),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    priority!,
+                    style: TextStyle(
+                      color: getPriorityColor(priority!),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
+                SizedBox(width: 5),
               ],
             ),
-            Divider(
-              height: 0,
-              color: Get.theme.dividerColor,
-              indent: 20,
-              endIndent: 20,
-            ),
-            CrmCard(
-              color: Get.theme.colorScheme.background,
-              borderRadius: BorderRadius.circular(19),
-              margin: const EdgeInsets.all(5),
-              padding: const EdgeInsets.all(10),
-              child: Text(description.toString(),
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14,color: Get.theme.colorScheme.onPrimary),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+              child: RichText(
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                    color: Get.theme.colorScheme.onPrimary,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "Description :\n",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14,
+                      ),
+                    ),
+                    TextSpan(text: description.toString()),
+                  ],
+                ),
               ),
             ),
           ],

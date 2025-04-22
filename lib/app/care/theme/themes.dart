@@ -6,8 +6,8 @@ ThemeData lightTheme = ThemeData(
   appBarTheme: AppBarTheme(
     elevation: 0.0,
     scrolledUnderElevation: 0.0,
-    centerTitle: true,
     backgroundColor: Colors.transparent,
+    titleSpacing: 0,
     titleTextStyle: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.w700,

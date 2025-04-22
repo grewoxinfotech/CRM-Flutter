@@ -6,32 +6,50 @@ import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class TaskScreen extends StatelessWidget {
   TaskScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TaskController taskController = Get.put(TaskController());
+    final taskController = Get.put(TaskController());
+
     return Scaffold(
       appBar: AppBar(
         leading: CrmBackButton(color: Get.theme.colorScheme.onPrimary),
-        title: Text("Tasks"),
+        title: const Text("Tasks"),
         centerTitle: false,
       ),
       floatingActionButton: CrmButton(
         title: "Add Task",
-        onTap: () => Get.to(TaskAddScreen()),
+        onTap: () => Get.to(() => TaskAddScreen()),
       ),
       body: FutureBuilder(
         future: taskController.getTasks(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!.isEmpty) {
-              return Center(child: Text("No task"));
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CrmLoadingCircle();
+          } else if (snapshot.hasError) {
+            return Center(
+              child: SizedBox(
+                width: 250,
+                child: Text(
+                  'Server Error : \n${snapshot.error}',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            );
+          } else if (snapshot.hasData) {
+            final tasks = taskController.task;
+            if (tasks.isEmpty) {
+              return const Center(child: Text("No tasks available."));
             } else {
               return ListView.separated(
-                itemCount: snapshot.data!.length,
+                itemCount: tasks.length,
                 padding: const EdgeInsets.only(
                   top: 15,
                   left: 15,
@@ -40,112 +58,43 @@ class TaskScreen extends StatelessWidget {
                 ),
                 separatorBuilder: (context, i) => const SizedBox(height: 10),
                 itemBuilder: (context, i) {
-                  final data = taskController.task[i];
+                  final data = tasks[i];
+                  String formatDate(String? dateString) {
+                    try {
+                      final date = DateTime.parse(dateString ?? '');
+                      return DateFormat('dd MM yyyy').format(date);
+                    } catch (e) {
+                      return DateFormat('dd MM yyyy').format(DateTime.now());
+                    }
+                  }
+
                   return TaskCard(
-                    id:
-                        (data.id.toString().isEmpty)
-                            ? "N/A"
-                            : data.id.toString(),
-                    relatedId:
-                        (data.relatedId.toString().isEmpty)
-                            ? "N/A"
-                            : data.relatedId.toString(),
-                    taskName:
-                        (data.taskName.toString().isEmpty)
-                            ? "N/A"
-                            : data.taskName.toString(),
-                    category:
-                        (data.category.toString().isEmpty)
-                            ? "N/A"
-                            : data.category.toString(),
-                    project:
-                        (data.project.toString().isEmpty)
-                            ? "N/A"
-                            : data.project.toString(),
-                    lead:
-                        (data.lead.toString().isEmpty)
-                            ? "N/A"
-                            : data.lead.toString(),
-                    file:
-                        (data.file.toString().isEmpty)
-                            ? "N/A"
-                            : data.file.toString(),
-                    startDate:
-                        (data.startDate.toString().isEmpty)
-                            ? "N/A"
-                            : data.startDate.toString(),
-                    dueDate:
-                        (data.dueDate.toString().isEmpty)
-                            ? "N/A"
-                            : data.dueDate.toString(),
-                    assignTo:
-                        (data.assignTo.toString().isEmpty)
-                            ? "N/A"
-                            : data.assignTo.toString(),
-                    status:
-                        (data.status.toString().isEmpty)
-                            ? "N/A"
-                            : data.status.toString(),
-                    priority:
-                        (data.priority.toString().isEmpty)
-                            ? "N/A"
-                            : data.priority.toString(),
-                    description:
-                        (data.description.toString().isEmpty)
-                            ? "N/A"
-                            : data.description.toString(),
-                    reminderDate:
-                        (data.reminderDate.toString().isEmpty)
-                            ? "N/A"
-                            : data.reminderDate.toString(),
-                    clientId:
-                        (data.clientId.toString().isEmpty)
-                            ? "N/A"
-                            : data.clientId.toString(),
-                    taskReporter:
-                        (data.taskReporter.toString().isEmpty)
-                            ? "N/A"
-                            : data.taskReporter.toString(),
-                    createdBy:
-                        (data.createdBy.toString().isEmpty)
-                            ? "N/A"
-                            : data.createdBy.toString(),
-                    updatedBy:
-                        (data.updatedBy.toString().isEmpty)
-                            ? "N/A"
-                            : data.updatedBy.toString(),
-                    onTap: () {},
-                    onEdit: () {},
+                    id: data.id ?? "N/A",
+                    relatedId: data.relatedId ?? "N/A",
+                    taskName: data.taskName ?? "N/A",
+                    category: data.category ?? "N/A",
+                    project: data.project ?? "N/A",
+                    lead: data.lead ?? "N/A",
+                    file: data.file ?? "N/A",
+                    startDate: formatDate(data.startDate.toString()),
+                    dueDate: formatDate(data.dueDate.toString()),
+                    status: data.status ?? "N/A",
+                    priority: data.priority ?? "N/A",
+                    description: data.description ?? "N/A",
+                    reminderDate: formatDate(data.reminderDate.toString()),
+                    clientId: data.clientId ?? "N/A",
+                    taskReporter: data.taskReporter ?? "N/A",
+                    createdBy: data.createdBy ?? "N/A",
+                    updatedBy: data.updatedBy ?? "N/A",
                     onDelete: () {
-                      PopupMenuButton<String>(
-                        icon: Icon(Icons.more_vert),
-                        onSelected: (value) {
-                          // Handle your action here
-                          if (value == 'edit') {
-                            // Navigate or show dialog
-                          } else if (value == 'delete') {
-                            // Delete something
-                          }
-                        },
-                        itemBuilder:
-                            (BuildContext context) => [
-                              const PopupMenuItem(
-                                value: 'edit',
-                                child: Text('Edit'),
-                              ),
-                              const PopupMenuItem(
-                                value: 'delete',
-                                child: Text('Delete'),
-                              ),
-                            ],
-                      );
+                      taskController.deleteTask(data.id.toString());
                     },
                   );
                 },
               );
             }
           } else {
-            return CrmLoadingCircle();
+            return const Center(child: Text("Something went wrong."));
           }
         },
       ),

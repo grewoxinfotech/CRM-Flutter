@@ -1,5 +1,5 @@
+import 'package:crm_flutter/app/care/service/lead_service.dart';
 import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
-import 'package:crm_flutter/app/data/service/lead_service.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_add_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';

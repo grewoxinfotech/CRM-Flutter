@@ -3,7 +3,6 @@ import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dar
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_headline.dart';
-import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,14 +49,14 @@ class LeadAddScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton: Obx(
         () =>
-            // (leadController.isLoading.value != false)
-            //     ? SizedBox()
-            //     :
-            CrmButton(
-                  width: Get.width - 30,
-                  title: "Add Lead",
-                  onTap: () => leadController.addLead(),
-                ),
+        // (leadController.isLoading.value != false)
+        //     ? SizedBox()
+        //     :
+        CrmButton(
+          width: Get.width - 30,
+          title: "Add Lead",
+          onTap: () => leadController.addLead(),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
@@ -67,15 +66,15 @@ class LeadAddScreen extends StatelessWidget {
       ),
       body: Obx(
         () =>
-            // (leadController.isLoading.value != false)
-            //     ? CrmLoadingCircle()
-            //     :
-          ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
-                  itemCount: textFields.length,
-                  separatorBuilder: (context, i) => const SizedBox(height: 10),
-                  itemBuilder: (context, i) => textFields[i],
-                ),
+        // (leadController.isLoading.value != false)
+        //     ? CrmLoadingCircle()
+        //     :
+        ListView.separated(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
+          itemCount: textFields.length,
+          separatorBuilder: (context, i) => const SizedBox(height: 10),
+          itemBuilder: (context, i) => textFields[i],
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/service/task_service.dart';
+import 'package:crm_flutter/app/care/service/user/user_service.dart';
 import 'package:crm_flutter/app/data/models/task/task/task_model.dart';
-import 'package:crm_flutter/app/data/service/task_service.dart';
-import 'package:crm_flutter/app/data/service/user/user_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -11,86 +11,101 @@ class TaskController extends GetxController {
   final UserService userService = Get.put(UserService());
   final TaskService taskService = TaskService();
 
-  final TextEditingController id = TextEditingController();
-  final TextEditingController relatedId = TextEditingController();
-  final TextEditingController taskName = TextEditingController();
-  final TextEditingController category = TextEditingController();
-  final TextEditingController project = TextEditingController();
-  final TextEditingController lead = TextEditingController();
-  final TextEditingController file = TextEditingController();
-  final TextEditingController startDate = TextEditingController();
-  final TextEditingController dueDate = TextEditingController();
-  final TextEditingController assignTo = TextEditingController();
-  final TextEditingController status = TextEditingController();
-  final TextEditingController priority = TextEditingController();
-  final TextEditingController description = TextEditingController();
-  final TextEditingController reminderDate = TextEditingController();
-  final TextEditingController clientId = TextEditingController();
-  final TextEditingController taskReporter = TextEditingController();
-  final TextEditingController createdBy = TextEditingController();
-  final TextEditingController updatedBy = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final taskNameController = TextEditingController();
+  final categoryController = TextEditingController();
+  final projectController = TextEditingController();
+  final leadController = TextEditingController();
+  final fileController = TextEditingController();
+  final descriptionController = TextEditingController();
 
-  Future<void> addTask() async {}
+
+  @override
+  void dispose() {
+    taskNameController.dispose();
+    super.dispose();
+  }
 
   Future<List> getTasks() async {
     final data = await taskService.getTasks("/${userService.user.value!.id}");
+    print(userService.user.value!.id);
     task.assignAll(data.map((e) => TaskModel.fromJson(e)).toList());
     return data;
   }
 
-  Future<void> editTask(String id) async {}
+  Future<void> addTask() async {
+    final model = TaskModel(
+      taskName: taskNameController.text,
+        category : categoryController.text,
+        project : projectController.text,
+        lead : leadController.text,
+        file : fileController.text,
+        description : descriptionController.text,
+    );
 
-  Future<bool> deleteTask(String id) async {
-    try {
-      bool success = await taskService.deleteTask(id);
-      if (success) {
-        task.removeWhere((task) => task.id == id);
-        Get.back();
-        CrmSnackBar.showAwesomeSnackbar(
-          title: "Success",
-          message: "Task deleted successfully",
-          contentType: ContentType.success,
-        );
-        return true;
-      } else {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: "Error",
-          message: "Failed to delete Task!",
-          contentType: ContentType.failure,
-        );
-        return false;
-      }
-    } catch (e) {
+    final response = await taskService.createTask(model.toJson());
+    final data = response.body;
+
+    if (response.statusCode == 201) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Success",
+        message: getMessage(response),
+        contentType: ContentType.success,
+      );
+      // Navigator.pop(context); // optional: wapas jao
+    } else {
       CrmSnackBar.showAwesomeSnackbar(
         title: "Error",
-        message: "Something went wrong",
+        message: getMessage(response),
         contentType: ContentType.failure,
       );
-      return false;
-    } finally {}
+    }
   }
 
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-    id.dispose();
-    relatedId.dispose();
-    taskName.dispose();
-    category.dispose();
-    project.dispose();
-    lead.dispose();
-    file.dispose();
-    startDate.dispose();
-    dueDate.dispose();
-    assignTo.dispose();
-    status.dispose();
-    priority.dispose();
-    description.dispose();
-    reminderDate.dispose();
-    clientId.dispose();
-    taskReporter.dispose();
-    createdBy.dispose();
-    updatedBy.dispose();
+  Future<void> editTask(TaskModel model) async {
+    final response = await taskService.updateTask(model.id!, model.toJson());
+
+    if (response.statusCode == 200) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Updated",
+        message: getMessage(response),
+        contentType: ContentType.success,
+      );
+      await getTasks();
+    } else {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: getMessage(response),
+        contentType: ContentType.failure,
+      );
+    }
+  }
+
+  Future<void> deleteTask(String id) async {
+    final response = await taskService.deleteTask(id);
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      task.removeWhere((t) => t.id == id);
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Deleted",
+        message: getMessage(response),
+        contentType: ContentType.success,
+      );
+    } else {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: getMessage(response),
+        contentType: ContentType.failure,
+      );
+    }
+  }
+
+  String getMessage(dynamic response) {
+    try {
+      final body = response.body;
+      if (body is String) return body;
+      if (body is Map<String, dynamic>) return body['message'] ?? 'No message';
+    } catch (_) {}
+    return "Something went wrong";
   }
 }

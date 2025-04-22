@@ -29,27 +29,25 @@ class CrmCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width ?? 600,
-      height: height,
-      padding: padding,
-      margin: margin,
-      alignment: alignment ?? Alignment.center,
-      decoration: BoxDecoration(
-        color: color ?? Get.theme.colorScheme.surface,
-        borderRadius: borderRadius ?? BorderRadius.circular(24),
-        border: border,
-        boxShadow:
-            boxShadow ??
-            [
-              BoxShadow(
-                color: Get.theme.colorScheme.shadow,
-                blurRadius: 58,
-                offset: Offset(0, 6),
-              ),
-            ],
+    return Card(
+      color: color ?? Get.theme.colorScheme.surface,
+      margin: margin ?? EdgeInsets.zero,
+      elevation: 5,
+      shadowColor: Get.theme.colorScheme.shadow,
+      shape: RoundedRectangleBorder(
+        borderRadius: borderRadius ?? BorderRadius.circular(18),
       ),
-      child: child,
+      child: SizedBox(
+        width: width ?? 600,
+        height: height,
+        child: Align(
+          alignment: alignment ?? Alignment.center,
+          child: Padding(
+            padding: padding ?? const EdgeInsets.all(10.0),
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }

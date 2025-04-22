@@ -1,7 +1,8 @@
-import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
+
+import 'package:crm_flutter/app/care/service/storage/secure_storage_service.dart';
 
 class UrlRes {
-  static const String baseURL = "http://localhost:5354/api/v1";
+  static const String baseURL = "https://crm-api.grewox.com/api/v1";
 
   static const String auth = "$baseURL/auth";
 
