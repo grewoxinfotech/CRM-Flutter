@@ -29,6 +29,8 @@ class CrmButton extends StatelessWidget {
     final button = CrmCard(
       width: width ?? 150,
       height: height ?? 48,
+      elevation: 5,
+      shadowColor: backgroundColor ?? Get.theme.colorScheme.primary.withAlpha(200),
       color: backgroundColor ?? Get.theme.colorScheme.primary,
       borderRadius: borderRadius ?? BorderRadius.circular(10),
       boxShadow: boxShadow,

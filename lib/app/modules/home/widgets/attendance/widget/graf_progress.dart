@@ -1,15 +1,15 @@
-import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf/features/graf_controller.dart';
-import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf/graf.dart';
+import 'package:crm_flutter/app/modules/home/widgets/attendance/controllers/graf_controller.dart';
+import 'package:crm_flutter/app/modules/home/widgets/attendance/views/graf.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CustomCircularProgress extends StatelessWidget {
+class GrafProgress extends StatelessWidget {
   final double percentage;
   final double width;
 
-  final ProgressController controller = Get.put(ProgressController());
+  final GrafController controller = Get.put(GrafController());
 
-  CustomCircularProgress({
+  GrafProgress({
     super.key,
     required this.percentage,
     this.width = 100,
@@ -20,7 +20,7 @@ class CustomCircularProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => CircularProgressBar(
+      ()=>  CircularProgressBar(
         progress: controller.progress.value,
         width: width,
       ),

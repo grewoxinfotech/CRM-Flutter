@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProgressController extends GetxController
-    with GetTickerProviderStateMixin {
+class GrafController extends GetxController with GetTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> animation;
   RxDouble progress = 0.0.obs;

@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 class CrmCard extends StatelessWidget {
   final double? width;
   final double? height;
+  final double? elevation;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final AlignmentGeometry? alignment;
+  final Color? shadowColor;
   final Color? color;
   final BorderRadiusGeometry? borderRadius;
   final BoxBorder? border;
@@ -17,7 +19,10 @@ class CrmCard extends StatelessWidget {
     super.key,
     this.width,
     this.height,
+    this.elevation,
     this.alignment,
+    this.shadowColor,
+
     this.padding,
     this.margin,
     this.color,
@@ -32,21 +37,17 @@ class CrmCard extends StatelessWidget {
     return Card(
       color: color ?? Get.theme.colorScheme.surface,
       margin: margin ?? EdgeInsets.zero,
-      elevation: 5,
-      shadowColor: Get.theme.colorScheme.shadow,
+      elevation: elevation ?? 5,
+      shadowColor: shadowColor ?? Get.theme.colorScheme.shadow,
       shape: RoundedRectangleBorder(
-        borderRadius: borderRadius ?? BorderRadius.circular(18),
+        borderRadius: borderRadius ?? BorderRadius.circular(19),
       ),
-      child: SizedBox(
-        width: width ?? 600,
+      child: Container(
+        width: width,
         height: height,
-        child: Align(
-          alignment: alignment ?? Alignment.center,
-          child: Padding(
-            padding: padding ?? const EdgeInsets.all(10.0),
-            child: child,
-          ),
-        ),
+        alignment: alignment,
+        padding: padding ?? EdgeInsets.zero,
+        child: child,
       ),
     );
   }

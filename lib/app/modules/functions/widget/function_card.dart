@@ -31,6 +31,7 @@ class FunctionCard extends StatelessWidget {
               width: 50,
               height: 50,
               color: color,
+        alignment: Alignment.center,
         borderRadius: BorderRadius.circular(15),
               child: CrmIc(
                 iconPath: iconPath.toString(),

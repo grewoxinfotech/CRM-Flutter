@@ -55,6 +55,8 @@ dependencies:
   file_picker:
   path_provider:
   font_awesome_flutter:
+  google_nav_bar:
+  salomon_bottom_bar:
 
 dev_dependencies:
   flutter_test:

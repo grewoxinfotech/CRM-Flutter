@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class CircularProgressPainter extends CustomPainter {
+class GrafProgressPainter extends CustomPainter {
   final double progress;
   final int totalSegments = 30;
   final double strokeWidth = 2.5;
 
-  CircularProgressPainter(this.progress);
+  GrafProgressPainter(this.progress);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -39,7 +39,7 @@ class CircularProgressPainter extends CustomPainter {
 
       RRect roundedRect = RRect.fromRectAndRadius(
         rect,
-        const Radius.circular(5),
+        const Radius.circular(10),
       );
 
       canvas.save();
@@ -72,6 +72,6 @@ class CircularProgressPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CircularProgressPainter oldDelegate) =>
+  bool shouldRepaint(GrafProgressPainter oldDelegate) =>
       oldDelegate.progress != progress;
 }

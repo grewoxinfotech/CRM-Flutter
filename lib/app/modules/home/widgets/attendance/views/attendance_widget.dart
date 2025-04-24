@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf/features/graf_design.dart';
+import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf_progress.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/time_range_selector.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
@@ -15,7 +15,6 @@ class AttendanceWidget extends StatelessWidget {
       AttendanceController(),
     ); // Controller Initialization
     return CrmCard(
-      width: 600,
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -25,7 +24,7 @@ class AttendanceWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              CustomCircularProgress(percentage: 24, width: 140),
+              GrafProgress(percentage: 24, width: 140),
               Column(
                 children: [
                   CrmButton(
@@ -63,9 +62,6 @@ class AttendanceWidget extends StatelessWidget {
           TimeRangeSelector(
             onSelected: (selected) {
               controller.selectedRange.value = selected;
-              print(
-                "Selected Time Range: $selected",
-              ); // Selected value print hoga
             },
           ),
         ],

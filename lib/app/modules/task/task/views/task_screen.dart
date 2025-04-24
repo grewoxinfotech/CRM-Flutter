@@ -48,49 +48,51 @@ class TaskScreen extends StatelessWidget {
             if (tasks.isEmpty) {
               return const Center(child: Text("No tasks available."));
             } else {
-              return ListView.separated(
-                itemCount: tasks.length,
-                padding: const EdgeInsets.only(
-                  top: 15,
-                  left: 15,
-                  right: 15,
-                  bottom: 80,
-                ),
-                separatorBuilder: (context, i) => const SizedBox(height: 10),
-                itemBuilder: (context, i) {
-                  final data = tasks[i];
-                  String formatDate(String? dateString) {
-                    try {
-                      final date = DateTime.parse(dateString ?? '');
-                      return DateFormat('dd MM yyyy').format(date);
-                    } catch (e) {
-                      return DateFormat('dd MM yyyy').format(DateTime.now());
+              return Obx(
+                () => ListView.separated(
+                  itemCount: tasks.length,
+                  padding: const EdgeInsets.only(
+                    top: 15,
+                    left: 15,
+                    right: 15,
+                    bottom: 80,
+                  ),
+                  separatorBuilder: (context, i) => const SizedBox(height: 10),
+                  itemBuilder: (context, i) {
+                    final data = tasks[i];
+                    String formatDate(String? dateString) {
+                      try {
+                        final date = DateTime.parse(dateString ?? '');
+                        return DateFormat('dd MM yyyy').format(date);
+                      } catch (e) {
+                        return DateFormat('dd MM yyyy').format(DateTime.now());
+                      }
                     }
-                  }
 
-                  return TaskCard(
-                    id: data.id ?? "N/A",
-                    relatedId: data.relatedId ?? "N/A",
-                    taskName: data.taskName ?? "N/A",
-                    category: data.category ?? "N/A",
-                    project: data.project ?? "N/A",
-                    lead: data.lead ?? "N/A",
-                    file: data.file ?? "N/A",
-                    startDate: formatDate(data.startDate.toString()),
-                    dueDate: formatDate(data.dueDate.toString()),
-                    status: data.status ?? "N/A",
-                    priority: data.priority ?? "N/A",
-                    description: data.description ?? "N/A",
-                    reminderDate: formatDate(data.reminderDate.toString()),
-                    clientId: data.clientId ?? "N/A",
-                    taskReporter: data.taskReporter ?? "N/A",
-                    createdBy: data.createdBy ?? "N/A",
-                    updatedBy: data.updatedBy ?? "N/A",
-                    onDelete: () {
-                      taskController.deleteTask(data.id.toString());
-                    },
-                  );
-                },
+                    return TaskCard(
+                      id: data.id ?? "N/A",
+                      relatedId: data.relatedId ?? "N/A",
+                      taskName: data.taskName ?? "N/A",
+                      category: data.category ?? "N/A",
+                      project: data.project ?? "N/A",
+                      lead: data.lead ?? "N/A",
+                      file: data.file ?? "N/A",
+                      startDate: formatDate(data.startDate.toString()),
+                      dueDate: formatDate(data.dueDate.toString()),
+                      status: data.status ?? "N/A",
+                      priority: data.priority ?? "N/A",
+                      description: data.description ?? "N/A",
+                      reminderDate: formatDate(data.reminderDate.toString()),
+                      clientId: data.clientId ?? "N/A",
+                      taskReporter: data.taskReporter ?? "N/A",
+                      createdBy: data.createdBy ?? "N/A",
+                      updatedBy: data.updatedBy ?? "N/A",
+                      onDelete: () {
+                        taskController.deleteTask(data.id.toString());
+                      },
+                    );
+                  },
+                ),
               );
             }
           } else {

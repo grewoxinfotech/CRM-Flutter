@@ -1,5 +1,6 @@
-import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf/features/graf_design_2.dart';
+import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf_progress_painter.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CircularProgressBar extends StatelessWidget {
   final double progress;
@@ -20,13 +21,13 @@ class CircularProgressBar extends StatelessWidget {
           width: width - 40,
           height: width - 40,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black.withOpacity(0.3)),
+            border: Border.all(color: Get.theme.colorScheme.onBackground),
             shape: BoxShape.circle,
           ),
         ),
         CustomPaint(
           size: Size(width, width),
-          painter: CircularProgressPainter(progress),
+          painter: GrafProgressPainter(progress),
         ),
       ],
     );

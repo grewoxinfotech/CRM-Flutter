@@ -44,7 +44,6 @@ class TaskController extends GetxController {
     );
 
     final response = await taskService.createTask(model.toJson());
-    final data = response.body;
 
     if (response.statusCode == 201) {
       CrmSnackBar.showAwesomeSnackbar(

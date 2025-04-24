@@ -10,36 +10,26 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NavigationController navigationController = Get.put(NavigationController());
     return Scaffold(
       drawer: CrmDrawer(),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40.0),
-              child: Obx(() {
-                if (navigationBarController.selectedIndex.value == 0) {
-                  return HomeScreen();
-                } else if (navigationBarController.selectedIndex.value == 1) {
-                  return Center(child: Text("No Update"));
-                } else if (navigationBarController.selectedIndex.value == 2) {
-                  return Center(child: Text("No Update"));
-                } else if (navigationBarController.selectedIndex.value == 3) {
-                  return Center(child: Text("No Update"));
-                } else if (navigationBarController.selectedIndex.value == 4) {
-                  return Center(child: Text("No Update"));
-                } else {
-                  return SizedBox();
-                }
-              }),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [CrmAppBar(), CrmNavigationBar()],
-            ),
-          ],
-        ),
-      ),
+      appBar: CrmAppBar(),
+      bottomNavigationBar: CrmNavigationBar(),
+      body: Obx(() {
+        if (navigationController.currentIndex.value == 0) {
+          return HomeScreen();
+        } else if (navigationController.currentIndex.value == 1) {
+          return Center(child: Text("No Update"));
+        } else if (navigationController.currentIndex.value == 2) {
+          return Center(child: Text("No Update"));
+        } else if (navigationController.currentIndex.value == 3) {
+          return Center(child: Text("No Update"));
+        } else if (navigationController.currentIndex.value == 4) {
+          return Center(child: Text("No Update"));
+        } else {
+          return SizedBox();
+        }
+      }),
     );
   }
 }
