@@ -1,5 +1,5 @@
-import 'package:crm_flutter/app/care/service/deal_service.dart';
 import 'package:crm_flutter/app/data/models/crm/deal/deal_model.dart';
+import 'package:crm_flutter/app/data/service/deal_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
