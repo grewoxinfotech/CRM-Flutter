@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 class CrmDeleteDialog extends StatelessWidget {
   final String? entityType;
-  final VoidCallback? onConfirm;
+  final GestureTapCallback? onConfirm;
   final VoidCallback? onCancel;
 
   const CrmDeleteDialog({

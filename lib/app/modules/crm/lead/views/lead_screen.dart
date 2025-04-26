@@ -1,110 +1,96 @@
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_add_screen.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_detail_screen.dart';
 import 'package:crm_flutter/app/modules/crm/lead/widgets/lead_card.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
+import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class LeadScreen extends StatelessWidget {
-  LeadScreen({super.key});
-  LeadController leadController = Get.put(LeadController());
+  final LeadController leadController = Get.find();
 
-  addButton() =>
-      CrmButton(title: "Add Lead", onTap: () => Get.to(LeadAddScreen()));
+  LeadScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: CrmBackButton(color: Get.theme.colorScheme.onPrimary),
-        centerTitle: false,
-        title: Text("Leads"),
+      appBar: AppBar(leading: CrmBackButton(), title: const Text("Leads")),
+      floatingActionButton: CrmButton(
+        title: "Add Lead",
+        onTap: () => Get.to(LeadAddScreen()),
       ),
-      floatingActionButton: addButton(),
       body: FutureBuilder(
         future: leadController.getLeads(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CrmIc(
-                      iconPath: ICRes.leads,
-                      width: 50,
-                      color: Get.theme.colorScheme.onBackground,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "No Leads",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Get.theme.colorScheme.onBackground,
-                      ),
-                    ),
-                  ],
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CrmLoadingCircle();
+          } else if (snapshot.hasError) {
+            return Center(
+              child: SizedBox(
+                width: 250,
+                child: Text(
+                  'Server Error : \n${snapshot.error}',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              );
+              ),
+            );
+          } else if (snapshot.hasData) {
+            final leads = leadController.lead;
+            if (leads.isEmpty) {
+              return const Center(child: Text("No leads available."));
             } else {
-              return ListView.separated(
-                itemCount: snapshot.data!.length,
-                separatorBuilder: (context, s) => const SizedBox(height: 10),
-                itemBuilder: (context, i) {
-                  final lead = leadController.lead[i];
-                  String formattedDate = DateFormat('dd MM yyyy').format(
-                    DateTime.parse(
-                      (lead.createdAt.toString().isNotEmpty)
-                          ? lead.createdAt.toString()
-                          : DateTime.now().toString(),
-                    ),
-                  );
-                  return LeadCard(
-                    id: lead.id.toString(),
-                    inquiryId: lead.inquiryId.toString(),
-                    leadTitle: lead.leadTitle.toString(),
-                    leadStage: lead.leadStage.toString(),
-                    pipeline: lead.pipeline.toString(),
-                    currency: lead.currency.toString(),
-                    leadValue: lead.leadValue.toString(),
-                    companyName: lead.companyName.toString(),
-                    firstName: lead.firstName.toString(),
-                    lastName: lead.lastName.toString(),
-                    phoneCode: lead.phoneCode.toString(),
-                    telephone: lead.telephone.toString(),
-                    email: lead.email.toString(),
-                    address: lead.address.toString(),
-                    leadMembers: lead.leadMembers.toString(),
-                    source: lead.source.toString(),
-                    category: lead.category.toString(),
-                    files: lead.files.toString(),
-                    status: lead.status.toString(),
-                    interestLevel: lead.interestLevel.toString(),
-                    leadScore: lead.leadScore.toString(),
-                    isConverted: lead.isConverted.toString(),
-                    clientId: lead.clientId.toString(),
-                    createdBy: lead.createdBy.toString(),
-                    updatedBy: lead.updatedBy.toString(),
-                    createdAt: formattedDate.toString(),
-                    updatedAt: lead.updatedAt.toString(),
-                    onTap:
-                        () =>
-                            (lead.id != null)
-                                ? Get.to(() => LeadDetailsScreen(id: lead.id!))
-                                : Get.snackbar('Error', 'Lead ID is missing'),
-                  );
-                },
+              return Obx(
+                () => ViewScreen(
+                  itemCount: leads.length,
+                  itemBuilder: (context, i) {
+                    final data = leads[i];
+                    return LeadCard(
+                      id: data.id.toString(),
+                      inquiryId: data.inquiryId.toString(),
+                      leadTitle: data.leadTitle.toString(),
+                      leadStage: data.leadStage.toString(),
+                      pipeline: data.pipeline.toString(),
+                      currency: data.currency.toString(),
+                      leadValue: data.leadValue.toString(),
+                      companyName: data.companyName.toString(),
+                      firstName: data.firstName.toString(),
+                      lastName: data.lastName.toString(),
+                      phoneCode: data.phoneCode.toString(),
+                      telephone: data.telephone.toString(),
+                      email: data.email.toString(),
+                      address: data.address.toString(),
+                      leadMembers: data.leadMembers.toString(),
+                      source: data.source.toString(),
+                      category: data.category.toString(),
+                      files: data.files.toString(),
+                      status: data.status.toString(),
+                      interestLevel: data.interestLevel.toString(),
+                      leadScore: data.leadScore.toString(),
+                      isConverted: data.isConverted.toString(),
+                      clientId: data.clientId.toString(),
+                      createdBy: data.createdBy.toString(),
+                      updatedBy: data.updatedBy.toString(),
+                      createdAt: formatDate(data.createdAt.toString()),
+                      updatedAt: data.updatedAt.toString(),
+                      onTap:
+                          () =>
+                              (data.id != null)
+                                  ? Get.to(() => LeadDetailScreen(id: data.id!))
+                                  : Get.snackbar('Error', 'deal ID is missing'),
+                    );
+                  },
+                ),
               );
             }
           } else {
-            return CrmLoadingCircle();
+            return const Center(child: Text("Something went wrong."));
           }
         },
       ),

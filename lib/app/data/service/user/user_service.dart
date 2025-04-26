@@ -11,7 +11,6 @@ class UserService extends GetConnect {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     getUserData();
   }

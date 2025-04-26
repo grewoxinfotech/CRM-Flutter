@@ -20,7 +20,7 @@ class FunctionsWidget extends StatelessWidget {
 
           const SizedBox(height: 10),
           Obx(
-            ()=> GridView.builder(
+            () => GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 mainAxisSpacing: 10,

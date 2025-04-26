@@ -56,7 +56,6 @@ class TaskController extends GetxController {
         message: getMessage(response),
         contentType: ContentType.success,
       );
-      // Navigator.pop(context); // optional: wapas jao
     } else {
       CrmSnackBar.showAwesomeSnackbar(
         title: "Error",
