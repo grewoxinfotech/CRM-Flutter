@@ -10,14 +10,14 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class DealsScreen extends StatelessWidget {
-  DealsScreen({super.key});
+  final DealController dealController = Get.find();
 
-  DealController dealController = Get.find();
+  DealsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.colorScheme.background,
+      backgroundColor: Get.theme.colorScheme.surface,
       floatingActionButton: CrmButton(
         title: "Add Deal",
         onTap: () => Get.to(DealAddScreen()),
@@ -41,11 +41,9 @@ class DealsScreen extends StatelessWidget {
               itemBuilder: (context, i) {
                 final deal = dealController.deal[i];
 
-                String formattedDate = DateFormat('dd MMM yyyy').format(
-                  DateTime.parse(
-                    deal.createdAt.toString() ?? DateTime.now().toString(),
-                  ),
-                );
+                String formattedDate = deal.createdAt != null 
+                    ? DateFormat('dd MMM yyyy').format(DateTime.parse(deal.createdAt.toString()))
+                    : DateFormat('dd MMM yyyy').format(DateTime.now());
                 return DealCard(
                   id: (deal.id.toString().isEmpty) ? "N/A" : deal.id.toString(),
                   color: Get.theme.colorScheme.error,

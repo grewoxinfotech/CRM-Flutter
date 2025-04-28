@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DealAddScreen extends StatelessWidget {
-  DealController dealController = Get.find();
+  final DealController dealController = Get.find();
 
   DealAddScreen({super.key});
 
