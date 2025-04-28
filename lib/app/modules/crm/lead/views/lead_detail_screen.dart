@@ -12,10 +12,10 @@ import 'package:crm_flutter/app/widgets/tab_bar/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LeadDetailsScreen extends StatelessWidget {
+class LeadDetailScreen extends StatelessWidget {
   final String id;
 
-  const LeadDetailsScreen({super.key, required this.id});
+  const LeadDetailScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {

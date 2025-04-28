@@ -82,6 +82,7 @@ class DealCard extends StatelessWidget {
         width: 500,
         height: 90,
         padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         borderRadius: BorderRadius.circular(15),
         child: Row(
           children: [

@@ -2,169 +2,106 @@ import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dar
 import 'package:crm_flutter/app/modules/crm/deal/views/deal_add_screen.dart';
 import 'package:crm_flutter/app/modules/crm/deal/views/deal_detail_screen.dart';
 import 'package:crm_flutter/app/modules/crm/deal/widget/deal_card.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
+import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
-class DealsScreen extends StatelessWidget {
+class DealScreen extends StatelessWidget {
   final DealController dealController = Get.find();
 
-  DealsScreen({super.key});
+  DealScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.surface,
+      appBar: AppBar(
+        leading: CrmBackButton(color: Get.theme.colorScheme.onPrimary),
+        title: const Text("Deals"),
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
+      ),
       floatingActionButton: CrmButton(
         title: "Add Deal",
         onTap: () => Get.to(DealAddScreen()),
       ),
-      appBar: AppBar(
-        leading: CrmBackButton(color: Get.theme.colorScheme.onPrimary),
-        title: Text("Deals"),
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-      ),
-      body: FutureBuilder(future: dealController.getDeals(), builder: (context , snapshot) {
-        if (snapshot.hasData){
-          if (snapshot.data!.isEmpty) {
-            return Center(child: Text("No data"),);
-          }
-          else {
-            return ListView.separated(
-              itemCount: snapshot.data!.length,
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              separatorBuilder: (context, s) => const SizedBox(height: 10),
-              itemBuilder: (context, i) {
-                final deal = dealController.deal[i];
-
-                String formattedDate = deal.createdAt != null 
-                    ? DateFormat('dd MMM yyyy').format(DateTime.parse(deal.createdAt.toString()))
-                    : DateFormat('dd MMM yyyy').format(DateTime.now());
-                return DealCard(
-                  id: (deal.id.toString().isEmpty) ? "N/A" : deal.id.toString(),
-                  color: Get.theme.colorScheme.error,
-                  dealTitle:
-                  (deal.dealTitle.toString().isEmpty)
-                      ? "N/A"
-                      : deal.dealTitle.toString(),
-                  currency:
-                  (deal.currency.toString().isEmpty)
-                      ? "N/A"
-                      : deal.currency.toString(),
-                  value:
-                  (deal.value.toString().isEmpty)
-                      ? "N/A"
-                      : deal.value.toString(),
-                  pipeline:
-                  (deal.pipeline.toString().isEmpty)
-                      ? "N/A"
-                      : deal.pipeline.toString(),
-                  stage:
-                  (deal.stage.toString().isEmpty)
-                      ? "N/A"
-                      : deal.stage.toString(),
-                  status:
-                  (deal.status.toString().isEmpty)
-                      ? "N/A"
-                      : deal.status.toString(),
-                  label:
-                  (deal.label.toString().isEmpty)
-                      ? "N/A"
-                      : deal.label.toString(),
-                  closedDate:
-                  (deal.closedDate.toString().isEmpty)
-                      ? "N/A"
-                      : deal.closedDate.toString(),
-                  firstName:
-                  (deal.firstName.toString().isEmpty)
-                      ? "N/A"
-                      : deal.firstName.toString(),
-                  lastName:
-                  (deal.lastName.toString().isEmpty)
-                      ? "N/A"
-                      : deal.lastName.toString(),
-                  email:
-                  (deal.email.toString().isEmpty)
-                      ? "N/A"
-                      : deal.email.toString(),
-                  phone:
-                  (deal.phone.toString().isEmpty)
-                      ? "N/A"
-                      : deal.phone.toString(),
-                  source:
-                  (deal.source.toString().isEmpty)
-                      ? "N/A"
-                      : deal.source.toString(),
-                  companyName:
-                  (deal.companyName.toString().isEmpty)
-                      ? "N/A"
-                      : deal.companyName.toString(),
-                  website:
-                  (deal.website.toString().isEmpty)
-                      ? "N/A"
-                      : deal.website.toString(),
-                  address:
-                  (deal.address.toString().isEmpty)
-                      ? "N/A"
-                      : deal.address.toString(),
-                  files:
-                  (deal.files.toString().isEmpty)
-                      ? "N/A"
-                      : deal.files.toString(),
-                  assignedTo:
-                  (deal.assignedTo.toString().isEmpty)
-                      ? "N/A"
-                      : deal.assignedTo.toString(),
-                  clientId:
-                  (deal.clientId.toString().isEmpty)
-                      ? "N/A"
-                      : deal.clientId.toString(),
-                  isWon:
-                  (deal.isWon.toString().isEmpty)
-                      ? "N/A"
-                      : deal.isWon.toString(),
-                  companyId:
-                  (deal.companyId.toString().isEmpty)
-                      ? "N/A"
-                      : deal.companyId.toString(),
-                  contactId:
-                  (deal.contactId.toString().isEmpty)
-                      ? "N/A"
-                      : deal.contactId.toString(),
-                  createdBy:
-                  (deal.createdBy.toString().isEmpty)
-                      ? "N/A"
-                      : deal.createdBy.toString(),
-                  updatedBy:
-                  (deal.updatedBy.toString().isEmpty)
-                      ? "N/A"
-                      : deal.updatedBy.toString(),
-                  createdAt: formattedDate,
-
-                  updatedAt:
-                  (deal.updatedAt.toString().isEmpty)
-                      ? "N/A"
-                      : deal.updatedAt.toString(),
-                  onTap:
-                      () =>
-                  (deal.id != null)
-                      ? Get.to(() => DealDetailScreen(id: deal.id!))
-                      : Get.snackbar('Error', 'deal ID is missing'),
-                  onDelete: () {},
-                  onEdit: () {},
-                );
-              },
+      body: FutureBuilder(
+        future: dealController.getDeals(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CrmLoadingCircle();
+          } else if (snapshot.hasError) {
+            return Center(
+              child: SizedBox(
+                width: 250,
+                child: Text(
+                  'Server Error : \n${snapshot.error}',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             );
+          } else if (snapshot.hasData) {
+            final deals = dealController.deal;
+            if (deals.isEmpty) {
+              return const Center(child: Text("No deals available."));
+            } else {
+              return Obx(
+                () => ViewScreen(
+                  itemCount: deals.length,
+                  itemBuilder: (context, i) {
+                    final data = deals[i];
+                    return DealCard(
+                      id: data.id.toString(),
+                      dealTitle: data.dealTitle.toString(),
+                      currency: data.currency.toString(),
+                      value: data.value.toString(),
+                      pipeline: data.pipeline.toString(),
+                      stage: data.stage.toString(),
+                      status: data.status.toString(),
+                      label: data.label.toString(),
+                      closedDate: data.closedDate.toString(),
+                      firstName: data.firstName.toString(),
+                      lastName: data.lastName.toString(),
+                      email: data.email.toString(),
+                      phone: data.phone.toString(),
+                      source: data.source.toString(),
+                      companyName: data.companyName.toString(),
+                      website: data.website.toString(),
+                      address: data.address.toString(),
+                      products: data.products.toString(),
+                      files: data.files.toString(),
+                      assignedTo: data.assignedTo.toString(),
+                      clientId: data.clientId.toString(),
+                      isWon: data.isWon.toString(),
+                      companyId: data.companyId.toString(),
+                      contactId: data.contactId.toString(),
+                      createdBy: data.createdBy.toString(),
+                      updatedBy: data.updatedBy.toString(),
+                      createdAt: formatDate(data.createdAt.toString()),
+                      updatedAt: data.updatedAt.toString(),
+                      color: Get.theme.colorScheme.error,
+                      onTap: () => (data.id != null)
+                          ? Get.to(() => DealDetailScreen(id: data.id!))
+                          : Get.snackbar('Error', 'deal ID is missing'),
+                      onEdit: () {},
+                      onDelete: () {},
+                    );
+                  },
+                ),
+              );
+            }
+          } else {
+            return const Center(child: Text("Something went wrong."));
           }
-        }
-        else {
-          return CrmLoadingCircle();
-        }
-      })
+        },
+      ),
     );
   }
 }

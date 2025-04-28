@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DealDetailScreen extends StatelessWidget {
-  final String id;
+  final id;
 
   const DealDetailScreen({super.key, required this.id});
 

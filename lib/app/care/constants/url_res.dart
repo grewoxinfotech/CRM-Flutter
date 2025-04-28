@@ -1,5 +1,6 @@
 
-import 'package:crm_flutter/app/care/service/storage/secure_storage_service.dart';
+
+import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
 
 class UrlRes {
   static const String baseURL = "https://crm-api.grewox.in/api/v1";

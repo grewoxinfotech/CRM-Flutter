@@ -1,5 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:crm_flutter/app/care/service/auth/auth_service.dart';
+import 'package:crm_flutter/app/data/service/auth/auth_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

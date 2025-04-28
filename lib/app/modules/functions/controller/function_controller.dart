@@ -31,7 +31,7 @@ class FunctionController extends GetxController{
         iconPath: ICRes.leads,
         color: const Color(0xff28B999),
         count: Get.put(DealController()).deal.length,
-        screenBuilder: DealsScreen(),
+        screenBuilder: DealScreen(),
       ),
       FunctionModel(
         title: 'Tasks',

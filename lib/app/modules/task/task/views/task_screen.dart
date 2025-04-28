@@ -1,29 +1,26 @@
 import 'package:crm_flutter/app/modules/task/task/controller/task_controller.dart';
 import 'package:crm_flutter/app/modules/task/task/views/task_add_screen.dart';
 import 'package:crm_flutter/app/modules/task/task/widget/task_card.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
+import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class TaskScreen extends StatelessWidget {
+  final TaskController taskController = Get.find();
+
   TaskScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final taskController = Get.put(TaskController());
-
     return Scaffold(
-      appBar: AppBar(
-        leading: CrmBackButton(color: Get.theme.colorScheme.onPrimary),
-        title: const Text("Tasks"),
-        centerTitle: false,
-      ),
+      appBar: AppBar(leading: CrmBackButton(), title: const Text("Tasks")),
       floatingActionButton: CrmButton(
         title: "Add Task",
-        onTap: () => Get.to(() => TaskAddScreen()),
+        onTap: () => Get.to(TaskAddScreen()),
       ),
       body: FutureBuilder(
         future: taskController.getTasks(),
@@ -49,26 +46,10 @@ class TaskScreen extends StatelessWidget {
               return const Center(child: Text("No tasks available."));
             } else {
               return Obx(
-                () => ListView.separated(
+                () => ViewScreen(
                   itemCount: tasks.length,
-                  padding: const EdgeInsets.only(
-                    top: 15,
-                    left: 15,
-                    right: 15,
-                    bottom: 80,
-                  ),
-                  separatorBuilder: (context, i) => const SizedBox(height: 10),
                   itemBuilder: (context, i) {
                     final data = tasks[i];
-                    String formatDate(String? dateString) {
-                      try {
-                        final date = DateTime.parse(dateString ?? '');
-                        return DateFormat('dd MM yyyy').format(date);
-                      } catch (e) {
-                        return DateFormat('dd MM yyyy').format(DateTime.now());
-                      }
-                    }
-
                     return TaskCard(
                       id: data.id ?? "N/A",
                       relatedId: data.relatedId ?? "N/A",
