@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/functions/controller/function_controller.dart';
 import 'package:crm_flutter/app/modules/functions/widget/function_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
@@ -12,19 +13,19 @@ class FunctionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(FunctionController());
     return CrmCard(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(10),
+      shadowColor: Get.theme.colorScheme.surface,
+      margin: EdgeInsets.symmetric(horizontal: AppMargin.large),
+      padding: EdgeInsets.all(AppPadding.small),
       child: Column(
         children: [
           CrmHeadline(title: "App Functionalities"),
-
-          const SizedBox(height: 10),
+          AppSpacing.verticalSmall,
           Obx(
             () => GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
+                mainAxisSpacing: AppPadding.small,
+                crossAxisSpacing: AppPadding.small,
                 childAspectRatio: 1.2,
                 mainAxisExtent: 125,
               ),

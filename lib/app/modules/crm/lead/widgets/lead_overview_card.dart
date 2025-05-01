@@ -1,13 +1,16 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
+import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class LeadOverviewCard extends StatelessWidget {
   final String? id;
+  final Color? color;
   final String? inquiryId;
   final String? leadTitle;
   final String? leadStage;
@@ -40,6 +43,7 @@ class LeadOverviewCard extends StatelessWidget {
   const LeadOverviewCard({
     super.key,
     this.id,
+    this.color,
     this.inquiryId,
     this.leadTitle,
     this.leadStage,
@@ -72,169 +76,237 @@ class LeadOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
+    Color textPrimary = Get.theme.colorScheme.onPrimary;
+    Color textSecondary = Get.theme.colorScheme.onSecondary;
+
+    Widget divider = Divider(
+      height: AppPadding.small,
+      color: Get.theme.dividerColor,
+    );
+
+    Widget items(String iconPath, String title) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          CrmIc(iconPath: iconPath, width: 12, color: color),
+          Text(
+            title.toString(),
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 12,
+              color: textSecondary,
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget tile(String title, String subtitle, Color color, icon) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: textSecondary,
+            ),
+          ),
+          Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: color,
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget tile2(String title, String subtitle) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title.toString(),
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
+          Text(
+            subtitle.toString(),
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 14,
+              color: textPrimary,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: AppMargin.large),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppSpacing.verticalMedium,
           CrmCard(
-            padding: const EdgeInsets.all(5),
+            shadowColor: Get.theme.colorScheme.surface,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.medium,
+              vertical: AppPadding.small,
+            ),
+            borderRadius: BorderRadius.circular(AppRadius.large),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue.shade50, // xxx
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        leadTitle.toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      child: CrmCard(
-                        height: 60,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        color: Get.theme.colorScheme.background,
-                        borderRadius: BorderRadius.circular(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              leadTitle.toString(),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              companyName.toString(),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(
-                  color: Colors.grey.shade300,
-                  height: 10,
-                  indent: 5,
-                  endIndent: 5,
-                ),
-
-                CrmCard(
-                  borderRadius: BorderRadius.circular(10),
-                  padding: const EdgeInsets.all(10),
-                  color: Get.theme.colorScheme.background,
-                  child: Column(
-                    children: [
-                      items(ICRes.mailSVG, email ?? "N/A"),
-                      Divider(color: Colors.grey.shade300, height: 10),
-                      items(ICRes.call, telephone ?? "N/A"),
-                      Divider(color: Colors.grey.shade300, height: 10),
-                      items(ICRes.location, "lead.city" ?? "N/A"),
-                    ],
+                Text(
+                  "$leadTitle",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: color,
                   ),
                 ),
+                Text(
+                  "$companyName",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: textSecondary,
+                  ),
+                ),
+                Text(
+                  "id : $id",
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: textSecondary,
+                  ),
+                ),
+
+                Divider(
+                  height: AppPadding.medium,
+                  color: Get.theme.dividerColor,
+                ),
+
+                Text(
+                  "$firstName $lastName",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: color,
+                  ),
+                ),
+                Text(
+                  "$createdBy",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: textSecondary,
+                  ),
+                ),
+                Text(
+                  "id : $clientId",
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: textSecondary,
+                  ),
+                ),
+
+                Divider(
+                  height: AppPadding.medium,
+                  color: Get.theme.dividerColor,
+                ),
+                items(ICRes.mailSVG, email.toString()),
+                items(ICRes.call, telephone.toString()),
+                items(ICRes.location, address.toString()),
               ],
             ),
           ),
-          const SizedBox(height: 5),
+          AppSpacing.verticalSmall,
           CrmCard(
-            padding: const EdgeInsets.all(5),
+            shadowColor: Get.theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(AppRadius.large),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.medium,
+              vertical: AppPadding.small,
+            ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                tile(
+                  "Currency",
+                  currency.toString(),
+                  Colors.green,
+                  FontAwesomeIcons.instagram,
+                ),
+                divider,
                 tile(
                   "Lead Value",
-                  leadMembers.toString(),
+                  leadValue.toString(),
                   Colors.green,
-                  Icons.ac_unit_outlined,
-                  double.infinity,
+                  FontAwesomeIcons.instagram,
                 ),
-                const SizedBox(height: 5),
+                divider,
                 tile(
                   "Created",
-                  DateFormat(
-                    'dd/MM/yyyy',
-                  ).format(DateTime.parse(createdAt.toString())),
+                  formatDate(createdAt.toString()),
                   Colors.purple,
-                  Icons.ac_unit_outlined,
-                  double.infinity,
+                  FontAwesomeIcons.whatsapp,
                 ),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // dummy Interest Level
-                    Expanded(
-                      child: tile(
-                        "Interest Level",
-                        "Hight",
-                        Colors.red,
-                        Icons.add,
-                        0,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      child: tile(
-                        "Lead Mamber",
-                        leadMembers.toString(),
-                        Colors.pink,
-                        Icons.man_2_rounded,
-                        0,
-                      ),
-                    ),
-                  ],
+                divider,
+                tile(
+                  "Interest Level",
+                  interestLevel.toString(),
+                  Colors.red,
+                  FontAwesomeIcons.facebookF,
+                ),
+                divider,
+                tile(
+                  "Deal Mamber",
+                  leadMembers.toString(),
+                  Colors.pink,
+                  FontAwesomeIcons.google,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 5),
+          AppSpacing.verticalSmall,
           CrmCard(
-            padding: const EdgeInsets.all(5),
+            shadowColor: Get.theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(AppRadius.large),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.medium,
+              vertical: AppPadding.small,
+            ),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(child: tile2("Source", source.toString())),
-                    const SizedBox(width: 5),
-                    Expanded(child: tile2("Category", category.toString())),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  children: [
-                    Expanded(child: tile2("Stage", leadStage.toString())),
-                    const SizedBox(width: 5),
-                    Expanded(child: tile2("Status", status.toString())),
-                  ],
-                ),
+                tile2("Pipeline", pipeline.toString()),
+                divider,
+                tile2("Source", source.toString()),
+                divider,
+                tile2("Category", category.toString()),
+                divider,
+                tile2("Stage", leadStage.toString()),
+                divider,
+                tile2("Status", status.toString()),
               ],
             ),
           ),
-          const SizedBox(height: 5),
+          AppSpacing.verticalSmall,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -250,13 +322,14 @@ class LeadOverviewCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 5),
+              AppSpacing.horizontalSmall,
               Expanded(
                 child: CrmButton(
                   title: "Delete",
                   backgroundColor: Get.theme.colorScheme.surface,
                   titleTextStyle: TextStyle(
                     fontSize: 20,
+                    fontWeight: FontWeight.w700,
                     color: Get.theme.colorScheme.error,
                   ),
                   onTap: onDelete,
@@ -268,89 +341,4 @@ class LeadOverviewCard extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget items(String iconPath, String title) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      CrmIc(iconPath: iconPath, width: 14, color: Colors.grey.shade700),
-      const SizedBox(width: 10),
-      Text(
-        title.toString(),
-        style: TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: 14,
-          color: Colors.grey[700],
-        ),
-      ),
-    ],
-  );
-}
-
-Widget tile(String title, String subtitle, Color color, icon, double? width) {
-  return CrmCard(
-    width: width,
-    height: 70,
-    padding: const EdgeInsets.all(10),
-    borderRadius: BorderRadius.circular(10),
-    color: Get.theme.colorScheme.background,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: color.withAlpha(150),
-              ),
-            ),
-            Icon(icon, color: color.withAlpha(150), size: 18),
-          ],
-        ),
-        Divider(height: 10, color: color.withAlpha(50)),
-        Text(
-          subtitle,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: color,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget tile2(String title, String subtitle) {
-  return CrmCard(
-    height: 70,
-    padding: const EdgeInsets.all(10),
-    borderRadius: BorderRadius.circular(10),
-    color: Get.theme.colorScheme.background,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title.toString(),
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: Get.theme.colorScheme.primary,
-          ),
-        ),
-        Divider(height: 10, color: Get.theme.colorScheme.primary.withAlpha(70)),
-        Text(
-          subtitle.toString(),
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-        ),
-      ],
-    ),
-  );
 }

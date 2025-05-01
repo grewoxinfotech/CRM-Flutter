@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 
 class LeadCard extends StatelessWidget {
   final GestureTapCallback? onTap;
+  final Color? color;
   final String? id;
   final String? inquiryId;
   final String? leadTitle;
@@ -35,7 +37,9 @@ class LeadCard extends StatelessWidget {
   final String? updatedAt;
 
   const LeadCard({
+    super.key,
     this.onTap,
+    this.color,
     this.id,
     this.inquiryId,
     this.leadTitle,
@@ -63,134 +67,107 @@ class LeadCard extends StatelessWidget {
     this.updatedBy,
     this.createdAt,
     this.updatedAt,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    Color textPrimary = Get.theme.colorScheme.onPrimary;
+    Color textSecondary = Get.theme.colorScheme.onSecondary;
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        height: 90,
-        padding: const EdgeInsets.all(10),
-        borderRadius: BorderRadius.circular(15),
-        child: Row(
+        shadowColor: Get.theme.colorScheme.surface,
+        padding: const EdgeInsets.all(AppPadding.medium),
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.large),
+        borderRadius: BorderRadius.circular(AppRadius.large),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 5,
-              height: 75,
-              decoration: BoxDecoration(
-                color: Get.theme.colorScheme.primary,
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // Top Title Row
+            Row(
+              children: [
+                // Lead Title & Company Name
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            leadTitle.toString(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            companyName.toString(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            leadValue.toString() + ".00",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            source.toString(),
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Divider(color: Get.theme.colorScheme.outline, height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        child: Row(
-                          children: [
-                            CrmIc(
-                              iconPath: ICRes.task,
-                              color: Get.theme.colorScheme.primary,
-                              width: 15,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              status.toString(),
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Get.theme.colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
+                      Text(
+                        leadTitle ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: color,
                         ),
                       ),
-                      Row(
-                        children: [
-                          CrmIc(
-                            iconPath: ICRes.calendar,
-                            color: Get.theme.colorScheme.primary,
-                            width: 15,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            createdAt.toString(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        companyName ?? '',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: textSecondary,
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                AppSpacing.verticalSmall,
+                // Value & Source
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${leadValue ?? '0'}.00',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: color,
+                      ),
+                    ),
+                    Text(
+                      source ?? '',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: textPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Divider(color: Get.theme.dividerColor, height: AppPadding.medium),
+            // Bottom Status Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _infoTile(ICRes.task, status, color),
+                _infoTile(ICRes.calendar, createdAt, color),
+              ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _infoTile(String iconPath, String? title, Color? iconColor) {
+    return Row(
+      children: [
+        CrmIc(iconPath: iconPath, width: 14, color: iconColor),
+        const SizedBox(width: AppPadding.small),
+        Text(
+          title ?? '',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: iconColor,
+          ),
+        ),
+      ],
     );
   }
 }

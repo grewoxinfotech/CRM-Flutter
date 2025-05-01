@@ -1,13 +1,8 @@
-import 'dart:convert';
-
-import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
-import 'package:crm_flutter/app/data/models/system/product_model.dart';
-
 class DealModel {
   final String? id;
   final String? dealTitle;
   final String? currency;
-  final num? value;
+  final int? value;
   final String? pipeline;
   final String? stage;
   final String? status;
@@ -23,7 +18,7 @@ class DealModel {
   final String? address;
   final List<Product>? products;
   final List<FileModel>? files;
-  final List<String>? assignedTo;
+  final String? assignedTo;
   final String? clientId;
   final bool? isWon;
   final String? companyId;
@@ -65,48 +60,116 @@ class DealModel {
   });
 
   factory DealModel.fromJson(Map<String, dynamic> json) {
-    final productJson = json['products'];
-    final fileJson = json['files'];
-    final assignedJson = json['assigned_to'];
-
     return DealModel(
-      id: json['id'],
-      dealTitle: json['dealTitle'],
-      currency: json['currency'],
-      value: json['value'],
-      pipeline: json['pipeline'],
-      stage: json['stage'],
-      status: json['status'],
-      label: json['label'],
+      id: json['id'] ?? '',
+      dealTitle: json['dealTitle'] ?? '',
+      currency: json['currency'] ?? '',
+      value: json['value'] ?? 0,
+      pipeline: json['pipeline'] ?? '',
+      stage: json['stage'] ?? '',
+      status: json['status'] ?? '',
+      label: json['label'] ?? '',
       closedDate: DateTime.parse(json['closedDate']),
-      firstName: json['firstName'],
-      lastName: json['lastName'],
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
       email: json['email'] ?? '',
-      phone: json['phone'],
-      source: json['source'],
-      companyName: json['company_name'],
-      website: json['website'],
+      phone: json['phone'] ?? '',
+      source: json['source'] ?? '',
+      companyName: json['company_name'] ?? '',
+      website: json['website'] ?? '',
       address: json['address'] ?? '',
-      products: List<Product>.from(
-        (productJson != null ? (jsonDecode(productJson)['products'] ?? []) : [])
-            .map((e) => Product.fromJson(e)),
-      ),
-      files: List<FileModel>.from(
-        (fileJson != null ? jsonDecode(fileJson) : []).map(
-          (e) => FileModel.fromJson(e),
-        ),
-      ),
-      assignedTo: List<String>.from(
-        (assignedJson != null ? jsonDecode(assignedJson)['assigned_to'] : []),
-      ),
-      clientId: json['client_id'],
-      isWon: json['is_won'],
-      companyId: json['company_id'],
-      contactId: json['contact_id'],
-      createdBy: json['created_by'],
-      updatedBy: json['updated_by'],
+      products:
+          (json['products']?['products'] as List<dynamic>? ?? [])
+              .map((e) => Product.fromJson(e))
+              .toList(),
+      files:
+          (json['files'] as List<dynamic>? ?? [])
+              .map((e) => FileModel.fromJson(e))
+              .toList(),
+      assignedTo: json['assigned_to'] ?? '',
+      clientId: json['client_id'] ?? '',
+      isWon: json['is_won'] ?? false,
+      companyId: json['company_id'] ?? '',
+      contactId: json['contact_id'] ?? '',
+      createdBy: json['created_by'] ?? '',
+      updatedBy: json['updated_by'] ?? '',
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'dealTitle': dealTitle,
+      'currency': currency,
+      'value': value,
+      'pipeline': pipeline,
+      'stage': stage,
+      'status': status,
+      'label': label,
+      'closedDate': closedDate!.toIso8601String(),
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'phone': phone,
+      'source': source,
+      'company_name': companyName,
+      'website': website,
+      'address': address,
+      'products': {'products': products!.map((p) => p.toJson()).toList()},
+      'files': files!.map((f) => f.toJson()).toList(),
+      'assigned_to': assignedTo,
+      'client_id': clientId,
+      'is_won': isWon,
+      'company_id': companyId,
+      'contact_id': contactId,
+      'created_by': createdBy,
+      'updated_by': updatedBy,
+      'createdAt': createdAt!.toIso8601String(),
+      'updatedAt': updatedAt!.toIso8601String(),
+    };
+  }
+}
+
+class Product {
+  final String? productId;
+  final String? name;
+  final int? quantity;
+  final int? price;
+
+  Product({this.productId, this.name, this.quantity, this.price});
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      productId: json['productId'] ?? '',
+      name: json['name'] ?? '',
+      quantity: json['quantity'] ?? 0,
+      price: json['price'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'productId': productId,
+      'name': name,
+      'quantity': quantity,
+      'price': price,
+    };
+  }
+}
+
+class FileModel {
+  final String? url;
+  final String? filename;
+
+  FileModel({this.url, this.filename});
+
+  factory FileModel.fromJson(Map<String, dynamic> json) {
+    return FileModel(url: json['url'] ?? '', filename: json['filename'] ?? '');
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'url': url, 'filename': filename};
   }
 }

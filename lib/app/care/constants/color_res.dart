@@ -7,7 +7,7 @@ class ColorRes {
   static const grey = Color(0xff555555);
 
   // Brand
-  static const primary = Color(0xFF3F8CFF);
+  static const primary = Color(0xff426DD4);
 
   // Backgrounds & Surfaces
   static const background = Color(0xFFF5F5F5);

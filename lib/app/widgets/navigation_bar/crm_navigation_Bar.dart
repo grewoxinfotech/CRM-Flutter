@@ -19,8 +19,8 @@ class CrmNavigationBar extends StatelessWidget {
       () => CrmCard(
         height: 56,
         elevation: 5,
-        shadowColor: Colors.black26,
-        margin: const EdgeInsets.only(left: 5, bottom: 10, right: 5),
+        shadowColor: Colors.white,
+        margin: const EdgeInsets.only(left: 10, bottom: 10, right: 10),
         borderRadius: BorderRadius.circular(19),
 
         child: SalomonBottomBar(
@@ -29,7 +29,9 @@ class CrmNavigationBar extends StatelessWidget {
 
           margin: const EdgeInsets.all(10),
 
-          itemShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          itemShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
 
           itemPadding: EdgeInsets.symmetric(horizontal: 9, vertical: 9),
 

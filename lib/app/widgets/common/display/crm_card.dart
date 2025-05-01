@@ -22,7 +22,6 @@ class CrmCard extends StatelessWidget {
     this.elevation,
     this.alignment,
     this.shadowColor,
-
     this.padding,
     this.margin,
     this.color,
@@ -37,11 +36,11 @@ class CrmCard extends StatelessWidget {
     return Card(
       color: color ?? Get.theme.colorScheme.surface,
       margin: margin ?? EdgeInsets.zero,
-      elevation: elevation ?? 5,
-      shadowColor: shadowColor ?? Get.theme.colorScheme.shadow,
       shape: RoundedRectangleBorder(
-        borderRadius: borderRadius ?? BorderRadius.circular(19),
+        borderRadius: borderRadius ?? BorderRadius.circular(24),
       ),
+      elevation: elevation ?? 5,
+      shadowColor: shadowColor,
       child: Container(
         width: width,
         height: height,

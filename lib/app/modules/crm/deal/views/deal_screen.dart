@@ -18,7 +18,7 @@ class DealScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.colorScheme.surface,
+      backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
         leading: CrmBackButton(color: Get.theme.colorScheme.onPrimary),
         title: const Text("Deals"),
@@ -82,10 +82,10 @@ class DealScreen extends StatelessWidget {
                       isWon: data.isWon.toString(),
                       companyId: data.companyId.toString(),
                       contactId: data.contactId.toString(),
-                      createdBy: data.createdBy.toString(),
-                      updatedBy: data.updatedBy.toString(),
+                      createdBy: formatDate(data.createdBy.toString()),
+                      updatedBy: formatDate(data.updatedBy.toString()),
                       createdAt: formatDate(data.createdAt.toString()),
-                      updatedAt: data.updatedAt.toString(),
+                      updatedAt: formatDate(data.updatedAt.toString()),
                       color: Get.theme.colorScheme.error,
                       onTap: () => (data.id != null)
                           ? Get.to(() => DealDetailScreen(id: data.id!))

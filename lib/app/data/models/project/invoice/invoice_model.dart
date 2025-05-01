@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:crm_flutter/app/data/models/crm/deal/deal_model.dart';
 import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
-
 
 class InvoiceModel {
   final String? id;
@@ -18,10 +18,10 @@ class InvoiceModel {
   final String? telephone;
   final String? email;
   final String? address;
-  final List<String>? leadMembers;
+  final List<String> leadMembers;
   final String? source;
   final String? category;
-  final List<FileModel>? files;
+  final List<FileModel> files;
   final String? status;
   final String? interestLevel;
   final int? leadScore;
@@ -47,10 +47,10 @@ class InvoiceModel {
     this.telephone,
     this.email,
     this.address,
-    this.leadMembers,
+    this.leadMembers = const [],
     this.source,
     this.category,
-    this.files,
+    this.files = const [],
     this.status,
     this.interestLevel,
     this.leadScore,
@@ -63,10 +63,25 @@ class InvoiceModel {
   });
 
   factory InvoiceModel.fromJson(Map<String, dynamic> json) {
-    final decodedMembers =
-        json['lead_members'] is String
-            ? jsonDecode(json['lead_members'])['lead_members'] as List
-            : [];
+    List<String> decodedMembers = [];
+    if (json['lead_members'] is String) {
+      try {
+        final decoded = jsonDecode(json['lead_members']);
+        if (decoded is Map && decoded['lead_members'] is List) {
+          decodedMembers = List<String>.from(decoded['lead_members']);
+        }
+      } catch (_) {}
+    }
+
+    List<FileModel> decodedFiles = [];
+    if (json['files'] is String) {
+      try {
+        final fileList = jsonDecode(json['files']);
+        if (fileList is List) {
+          decodedFiles = fileList.map((e) => FileModel.fromJson(e)).toList();
+        }
+      } catch (_) {}
+    }
 
     return InvoiceModel(
       id: json['id'],
@@ -83,15 +98,10 @@ class InvoiceModel {
       telephone: json['telephone'],
       email: json['email'],
       address: json['address'],
-      leadMembers: List<String>.from(decodedMembers),
+      leadMembers: decodedMembers,
       source: json['source'],
       category: json['category'],
-      files:
-          json['files'] is String
-              ? (jsonDecode(json['files']) as List)
-                  .map((e) => FileModel.fromJson(e))
-                  .toList()
-              : [],
+      files: decodedFiles,
       status: json['status'],
       interestLevel: json['interest_level'],
       leadScore: json['lead_score'],
@@ -99,8 +109,12 @@ class InvoiceModel {
       clientId: json['client_id'],
       createdBy: json['created_by'],
       updatedBy: json['updated_by'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'])
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'])
+          : null,
     );
   }
 
@@ -123,7 +137,7 @@ class InvoiceModel {
       'lead_members': jsonEncode({'lead_members': leadMembers}),
       'source': source,
       'category': category,
-      'files': jsonEncode(files!.map((e) => e.toJson()).toList()),
+      'files': jsonEncode(files.map((e) => e.toJson()).toList()),
       'status': status,
       'interest_level': interestLevel,
       'lead_score': leadScore,
@@ -131,8 +145,8 @@ class InvoiceModel {
       'client_id': clientId,
       'created_by': createdBy,
       'updated_by': updatedBy,
-      'createdAt': createdAt!.toIso8601String(),
-      'updatedAt': updatedAt!.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 }

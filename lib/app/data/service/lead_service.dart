@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
@@ -13,10 +14,7 @@ class LeadService {
 
   /// 1. Get all leads
   Future<List> getLeads() async {
-    final response = await http.get(
-      Uri.parse(url),
-      headers: await headers(),
-    );
+    final response = await http.get(Uri.parse(url), headers: await headers());
     final data = jsonDecode(response.body);
     return (response.statusCode == 200) ? data['data'] ?? [] : [];
   }

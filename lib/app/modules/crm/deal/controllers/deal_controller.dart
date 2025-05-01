@@ -30,17 +30,10 @@ class DealController extends GetxController {
   }
 
   /// 1. Get all deals with loading state management
-  Future<void> getDeals() async {
-    try {
-      isLoading(true); // Show loading
-      final data = await dealService.getDeals();
-      deal.assignAll(data.map((e) => DealModel.fromJson(e)).toList());
-      print("Deals fetched: $data");
-    } catch (e) {
-      print("Error fetching deals: $e");
-    } finally {
-      isLoading(false); // Hide loading
-    }
+  Future<List> getDeals() async {
+    final data = await dealService.getDeals();
+    deal.assignAll(data.map((e)=> DealModel.fromJson(e)).toList());
+    return data;
   }
 
   /// 2. Create a new deal

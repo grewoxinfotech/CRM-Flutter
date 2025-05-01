@@ -2,9 +2,13 @@ import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/data/models/crm/deal/deal_model.dart';
 import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/crm/deal/widget/deal_overview_card.dart';
+import 'package:crm_flutter/app/modules/project/file/widget/file_card.dart';
+import 'package:crm_flutter/app/modules/project/invoice/widget/invoice_card.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/note_tile.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/screens/view_model.dart';
+import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
+import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
+import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
 import 'package:crm_flutter/app/widgets/tab_bar/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +21,7 @@ class DealDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CrmTabBarController controller = Get.put(CrmTabBarController());
-    DealController dealController = Get.put(DealController());
+    final DealController dealController = Get.find();
     if (dealController.isLoading.value) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -36,97 +40,55 @@ class DealDetailScreen extends StatelessWidget {
     }
     List widgets = [
       DealOverviewCard(
-        id: (deal.id.toString().isEmpty) ? "N/A" : deal.id.toString(),
-        dealTitle:
-            (deal.dealTitle.toString().isEmpty)
-                ? "N/A"
-                : deal.dealTitle.toString(),
-        currency:
-            (deal.currency.toString().isEmpty)
-                ? "N/A"
-                : deal.currency.toString(),
-        value: (deal.value.toString().isEmpty) ? "N/A" : deal.value.toString(),
-        pipeline:
-            (deal.pipeline.toString().isEmpty)
-                ? "N/A"
-                : deal.pipeline.toString(),
-        stage: (deal.stage.toString().isEmpty) ? "N/A" : deal.stage.toString(),
-        status:
-            (deal.status.toString().isEmpty) ? "N/A" : deal.status.toString(),
-        label: (deal.label.toString().isEmpty) ? "N/A" : deal.label.toString(),
-        closedDate:
-            (deal.closedDate.toString().isEmpty)
-                ? "N/A"
-                : deal.closedDate.toString(),
-        firstName:
-            (deal.firstName.toString().isEmpty)
-                ? "N/A"
-                : deal.firstName.toString(),
-        lastName:
-            (deal.lastName.toString().isEmpty)
-                ? "N/A"
-                : deal.lastName.toString(),
-        email: (deal.email.toString().isEmpty) ? "N/A" : deal.email.toString(),
-        phone: (deal.phone.toString().isEmpty) ? "N/A" : deal.phone.toString(),
-        source:
-            (deal.source.toString().isEmpty) ? "N/A" : deal.source.toString(),
-        companyName:
-            (deal.companyName.toString().isEmpty)
-                ? "N/A"
-                : deal.companyName.toString(),
-        website:
-            (deal.website.toString().isEmpty) ? "N/A" : deal.website.toString(),
-        address:
-            (deal.address.toString().isEmpty) ? "N/A" : deal.address.toString(),
-        files: (deal.files.toString().isEmpty) ? "N/A" : deal.files.toString(),
-        assignedTo:
-            (deal.assignedTo.toString().isEmpty)
-                ? "N/A"
-                : deal.assignedTo.toString(),
-        clientId:
-            (deal.clientId.toString().isEmpty)
-                ? "N/A"
-                : deal.clientId.toString(),
-        isWon: (deal.isWon.toString().isEmpty) ? "N/A" : deal.isWon.toString(),
-        companyId:
-            (deal.companyId.toString().isEmpty)
-                ? "N/A"
-                : deal.companyId.toString(),
-        contactId:
-            (deal.contactId.toString().isEmpty)
-                ? "N/A"
-                : deal.contactId.toString(),
-        createdBy:
-            (deal.createdBy.toString().isEmpty)
-                ? "N/A"
-                : deal.createdBy.toString(),
-        updatedBy:
-            (deal.updatedBy.toString().isEmpty)
-                ? "N/A"
-                : deal.updatedBy.toString(),
-        createdAt:
-            (deal.createdAt.toString().isEmpty)
-                ? "N/A"
-                : deal.createdAt.toString(),
-        updatedAt:
-            (deal.updatedAt.toString().isEmpty)
-                ? "N/A"
-                : deal.updatedAt.toString(),
+        color: Colors.blue,
+        id: deal.id.toString(),
+        dealTitle: deal.dealTitle.toString(),
+        currency: deal.currency.toString(),
+        value: deal.value.toString(),
+        pipeline: deal.pipeline.toString(),
+        stage: deal.stage.toString(),
+        status: deal.status.toString(),
+        label: deal.label.toString(),
+        closedDate: deal.closedDate.toString(),
+        firstName: deal.firstName.toString(),
+        lastName: deal.lastName.toString(),
+        email: deal.email.toString(),
+        phone: deal.phone.toString(),
+        source: deal.source.toString(),
+        companyName: deal.companyName.toString(),
+        website: deal.website.toString(),
+        address: deal.address.toString(),
+        products: deal.products.toString(),
+        files: deal.files.toString(),
+        assignedTo: deal.assignedTo.toString(),
+        clientId: deal.clientId.toString(),
+        isWon: deal.isWon.toString(),
+        companyId: deal.companyId.toString(),
+        contactId: deal.contactId.toString(),
+        createdBy: deal.createdBy.toString(),
+        updatedBy: deal.updatedBy.toString(),
+        createdAt: deal.createdAt.toString(),
+        updatedAt: deal.updatedAt.toString(),
         onDelete:
             () => CrmDeleteDialog(
               entityType: deal.dealTitle.toString(),
               onConfirm: () => dealController.deleteDeal(id),
             ),
       ),
-      ViewModel(
-        itemCount: 24,
+      ViewScreen(
+        itemCount: 10,
         itemBuilder: (context, i) {
-          return NoteTile(
+          return MemberCard(title: "Hero");
+        },
+      ),
+      ViewScreen(
+        itemCount: 10,
+        itemBuilder: (context, i) {
+          return NoteCard(
             id: "notes data",
             relatedId: "notes data",
             noteTitle: "notes data",
             noteType: "notes data",
-            employees: "notes data",
             description: "notes data",
             clientId: "notes data",
             createdBy: "notes data",
@@ -136,6 +98,77 @@ class DealDetailScreen extends StatelessWidget {
             onTap: () {},
             onDelete: () {},
             onEdit: () {},
+          );
+        },
+      ),
+      ViewScreen(
+        itemCount: 10,
+        itemBuilder: (context, i) {
+          return FileCard(
+            url:
+                "https://images.pexels.com/photos/31300173/pexels-photo-31300173/free-photo-of-vibrant-blue-poison-dart-frog-on-leaf.jpeg?auto=compress&cs=tinysrgb&w=600",
+            id: "id",
+            name: "name",
+            role: "role",
+            description: "description",
+            file: "file",
+            clientId: "clientId",
+            createdBy: "createdBy",
+            updatedBy: "updatedBy",
+            createdAt: "createdAt",
+            updatedAt: "updatedAt",
+          );
+        },
+      ),
+      ViewScreen(
+        itemCount: 10,
+        itemBuilder: (context, i) {
+          return InvoiceCard(
+            id: "id",
+            inquiryId: "inquiryId",
+            leadTitle: "leadTitle",
+            leadStage: "leadStage",
+            pipeline: "pipeline",
+            currency: "currency",
+            leadValue: "leadValue",
+            companyName: "companyName",
+            firstName: "firstName",
+            lastName: "lastName",
+            phoneCode: "phoneCode",
+            telephone: "telephone",
+            email: "email",
+            address: "address",
+            leadMembers: "leadMembers",
+            source: "source",
+            category: "category",
+            files: "files",
+            status: "status",
+            interestLevel: "interestLevel",
+            leadScore: "leadScore",
+            isConverted: "isConverted",
+            clientId: "clientId",
+            createdBy: "createdBy",
+            updatedBy: "updatedBy",
+            createdAt: "createdAt",
+            updatedAt: "updatedAt",
+          );
+        },
+      ),
+      ViewScreen(
+        itemCount: 10,
+        itemBuilder: (context, i) {
+          return PaymentCard(
+            id: "id",
+            project: "project",
+            startDate: "startDate",
+            endDate: "endDate",
+            projectMembers: "projectMembers",
+            completion: "completion",
+            status: "status",
+            clientId: "clientId",
+            createdBy: "createdBy",
+            createdAt: "createdAt",
+            updatedAt: "updatedAt",
           );
         },
       ),
@@ -178,7 +211,7 @@ class DealDetailScreen extends StatelessWidget {
                   TabItem(iconPath: ICRes.attach, label: "Notes"),
                   TabItem(iconPath: ICRes.attach, label: "Files"),
                   TabItem(iconPath: ICRes.attach, label: "Invoice"),
-                  TabItem(iconPath: ICRes.attach, label: "Paymant"),
+                  TabItem(iconPath: ICRes.attach, label: "Payment"),
                 ],
               ),
             ],

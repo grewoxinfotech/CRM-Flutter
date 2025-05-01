@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf_progress.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/time_range_selector.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
@@ -15,12 +16,13 @@ class AttendanceWidget extends StatelessWidget {
       AttendanceController(),
     ); // Controller Initialization
     return CrmCard(
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      shadowColor: Get.theme.colorScheme.surface,
+      padding: EdgeInsets.all(AppPadding.small),
+      margin: const EdgeInsets.symmetric(horizontal: AppMargin.large),
       child: Column(
         children: [
           const CrmHeadline(title: "Attendance"),
-          const SizedBox(height: 30),
+          AppSpacing.verticalLarge,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -40,7 +42,7 @@ class AttendanceWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 15),
+                  AppSpacing.verticalMedium,
                   CrmButton(
                     title: "Punch Out",
                     onTap: () {},
@@ -58,7 +60,7 @@ class AttendanceWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 30),
+          AppSpacing.verticalLarge,
           TimeRangeSelector(
             onSelected: (selected) {
               controller.selectedRange.value = selected;

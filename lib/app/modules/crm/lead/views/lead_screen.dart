@@ -11,12 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeadScreen extends StatelessWidget {
-  final LeadController leadController = Get.find();
-
-  LeadScreen({super.key});
+  const LeadScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final LeadController leadController = Get.find();
     return Scaffold(
       appBar: AppBar(leading: CrmBackButton(), title: const Text("Leads")),
       floatingActionButton: CrmButton(
@@ -52,6 +51,7 @@ class LeadScreen extends StatelessWidget {
                   itemBuilder: (context, i) {
                     final data = leads[i];
                     return LeadCard(
+                      color: Colors.green,
                       id: data.id.toString(),
                       inquiryId: data.inquiryId.toString(),
                       leadTitle: data.leadTitle.toString(),
@@ -75,10 +75,10 @@ class LeadScreen extends StatelessWidget {
                       leadScore: data.leadScore.toString(),
                       isConverted: data.isConverted.toString(),
                       clientId: data.clientId.toString(),
-                      createdBy: data.createdBy.toString(),
-                      updatedBy: data.updatedBy.toString(),
+                      createdBy: formatDate(data.createdBy.toString()),
+                      updatedBy: formatDate(data.updatedBy.toString()),
                       createdAt: formatDate(data.createdAt.toString()),
-                      updatedAt: data.updatedAt.toString(),
+                      updatedAt: formatDate(data.updatedAt.toString()),
                       onTap:
                           () =>
                               (data.id != null)

@@ -1,7 +1,5 @@
 import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
 import 'package:crm_flutter/app/data/service/lead_service.dart';
-import 'package:crm_flutter/app/modules/crm/lead/views/lead_add_screen.dart';
-import 'package:crm_flutter/app/modules/crm/lead/views/lead_edit_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -33,21 +31,14 @@ class LeadController extends GetxController {
   }
 
   /// 1. Get all leads
-  Future<void> getLeads() async {
-    try {
-      final data = await leadService.getLeads();
-      lead.assignAll(data.map((e) => LeadModel.fromJson(e)).toList());
-      print("Leads fetched: $data");
-    } catch (e) {
-      print("Error fetching leads: $e");
-    }
+  Future<List> getLeads() async {
+    final data = await leadService.getLeads();
+    lead.assignAll(data.map((e) => LeadModel.fromJson(e)).toList());
+    return data;
   }
 
   /// 2. Add a new lead
-  Future<void> addLead() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate delay if necessary
-    Get.to(LeadAddScreen()); // Navigate to Add Lead screen
-  }
+  Future<void> addLead() async {}
 
   /// 3. Edit an existing lead
   Future<void> editLead(String leadId) async {
@@ -60,16 +51,12 @@ class LeadController extends GetxController {
   }
 
   /// 4. Delete a lead by ID
-  Future<bool> deleteLead(String leadId) async {
-    try {
-      bool isDelete = await leadService.deleteLead(leadId);
-      if (isDelete) {
-        await getLeads(); // Refresh the list of leads after deletion
-        return true;
-      }
-      return false;
-    } catch (e) {
-      print("Error deleting lead: $e");
+  Future<bool> deleteLead(String id) async {
+    bool isDelete = await leadService.deleteLead(id);
+    if (isDelete) {
+      await getLeads(); // Refresh the list of leads after deletion
+      return true;
+    } else {
       return false;
     }
   }

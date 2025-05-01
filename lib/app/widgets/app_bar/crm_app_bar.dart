@@ -1,7 +1,9 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
@@ -21,7 +23,7 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         // 👈 Left & Right spacing
         child: AppBar(
           toolbarHeight: kToolbarHeight,
@@ -33,26 +35,26 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
-          shadowColor: Colors.black26,
+          shadowColor: Colors.white,
           surfaceTintColor: Colors.transparent,
-          actionsPadding: const EdgeInsets.only(right: 15),
+          actionsPadding: const EdgeInsets.only(right: AppPadding.medium),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(19),
+            borderRadius: BorderRadius.circular(AppRadius.large),
           ),
           leading: Align(
             alignment: Alignment.center,
             child: CrmAppLogo(width: 45),
           ),
-          titleTextStyle: const TextStyle(
+          titleTextStyle: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: Colors.black,
+            color: Get.theme.colorScheme.onPrimary,
           ),
           actions: [
-            CrmIc(iconPath: ICRes.search, color: Colors.black),
-            const SizedBox(width: 12),
-            CrmIc(iconPath: ICRes.notifications, color: Colors.black),
-            const SizedBox(width: 12),
+            CrmIc(iconPath: ICRes.search, color: Get.theme.colorScheme.onPrimary),
+            AppSpacing.horizontalMedium,
+            CrmIc(iconPath: ICRes.notifications, color: Get.theme.colorScheme.onPrimary),
+            AppSpacing.horizontalMedium,
             const CircleAvatar(
               radius: 15,
               child: Text(

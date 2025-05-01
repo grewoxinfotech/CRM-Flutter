@@ -2,12 +2,13 @@ import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/lead/widgets/lead_overview_card.dart';
+import 'package:crm_flutter/app/modules/project/file/widget/file_card.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/file_tile.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/member_tile.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/note_tile.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/payment_tile.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/screens/view_model.dart';
+import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
+import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
+import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
 import 'package:crm_flutter/app/widgets/tab_bar/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,8 +20,8 @@ class LeadDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CrmTabBarController controller = Get.find();
-    LeadController leadController = Get.put(LeadController());
+    CrmTabBarController controller = Get.put(CrmTabBarController());
+    LeadController leadController = Get.find();
     // if (leadController.isLoading.value) {
     //   return const Center(child: CircularProgressIndicator());
     // }
@@ -39,132 +40,91 @@ class LeadDetailScreen extends StatelessWidget {
     }
     List widgets = [
       LeadOverviewCard(
-        id: lead.id.toString().isEmpty ? "N/A" : lead.id.toString(),
-        inquiryId:
-            lead.inquiryId.toString().isEmpty
-                ? "N/A"
-                : lead.inquiryId.toString(),
-        leadTitle:
-            lead.leadTitle.toString().isEmpty
-                ? "N/A"
-                : lead.leadTitle.toString(),
-        leadStage:
-            lead.leadStage.toString().isEmpty
-                ? "N/A"
-                : lead.leadStage.toString(),
-        pipeline:
-            lead.pipeline.toString().isEmpty ? "N/A" : lead.pipeline.toString(),
-        currency:
-            lead.currency.toString().isEmpty ? "N/A" : lead.currency.toString(),
-        leadValue:
-            lead.leadValue.toString().isEmpty
-                ? "N/A"
-                : lead.leadValue.toString(),
-        companyName:
-            lead.companyName.toString().isEmpty
-                ? "N/A"
-                : lead.companyName.toString(),
-        firstName:
-            lead.firstName.toString().isEmpty
-                ? "N/A"
-                : lead.firstName.toString(),
-        lastName:
-            lead.lastName.toString().isEmpty ? "N/A" : lead.lastName.toString(),
-        phoneCode:
-            lead.phoneCode.toString().isEmpty
-                ? "N/A"
-                : lead.phoneCode.toString(),
-        telephone:
-            lead.telephone.toString().isEmpty
-                ? "N/A"
-                : lead.telephone.toString(),
-        email: lead.email.toString().isEmpty ? "N/A" : lead.email.toString(),
-        address:
-            lead.address.toString().isEmpty ? "N/A" : lead.address.toString(),
-        leadMembers:
-            lead.leadMembers.toString().isEmpty
-                ? "N/A"
-                : lead.leadMembers.toString(),
-        source: lead.source.toString().isEmpty ? "N/A" : lead.source.toString(),
-        category:
-            lead.category.toString().isEmpty ? "N/A" : lead.category.toString(),
-        files: lead.files.toString().isEmpty ? "N/A" : lead.files.toString(),
-        status: lead.status.toString().isEmpty ? "N/A" : lead.status.toString(),
-        interestLevel:
-            lead.interestLevel.toString().isEmpty
-                ? "N/A"
-                : lead.interestLevel.toString(),
-        leadScore:
-            lead.leadScore.toString().isEmpty
-                ? "N/A"
-                : lead.leadScore.toString(),
-        isConverted:
-            lead.isConverted.toString().isEmpty
-                ? "N/A"
-                : lead.isConverted.toString(),
-        clientId:
-            lead.clientId.toString().isEmpty ? "N/A" : lead.clientId.toString(),
-        createdBy:
-            lead.createdBy.toString().isEmpty
-                ? "N/A"
-                : lead.createdBy.toString(),
-        updatedBy:
-            lead.updatedBy.toString().isEmpty
-                ? "N/A"
-                : lead.updatedBy.toString(),
-        createdAt:
-            lead.createdAt.toString().isEmpty
-                ? "N/A"
-                : lead.createdAt.toString(),
-        updatedAt:
-            lead.updatedAt.toString().isEmpty
-                ? "N/A"
-                : lead.updatedAt.toString(),
-        onDelete: () => CrmDeleteDialog(),
+        id: lead.id.toString(),
+        color: Colors.green,
+        inquiryId: lead.inquiryId.toString(),
+        leadTitle: lead.leadTitle.toString(),
+        leadStage: lead.leadStage.toString(),
+        pipeline: lead.pipeline.toString(),
+        currency: lead.currency.toString(),
+        leadValue: lead.leadValue.toString(),
+        companyName: lead.companyName.toString(),
+        firstName: lead.firstName.toString(),
+        lastName: lead.lastName.toString(),
+        phoneCode: lead.phoneCode.toString(),
+        telephone: lead.telephone.toString(),
+        email: lead.email.toString(),
+        address: lead.address.toString(),
+        leadMembers: lead.leadMembers.toString(),
+        source: lead.source.toString(),
+        category: lead.category.toString(),
+        files: lead.files.toString(),
+        status: lead.status.toString(),
+        interestLevel: lead.interestLevel.toString(),
+        leadScore: lead.leadScore.toString(),
+        isConverted: lead.isConverted.toString(),
+        clientId: lead.clientId.toString(),
+        createdBy: lead.createdBy.toString(),
+        updatedBy: lead.updatedBy.toString(),
+        createdAt: lead.createdAt.toString(),
+        updatedAt: lead.updatedAt.toString(),
+        onDelete: () => CrmDeleteDialog(
+            onConfirm: (){
+              leadController.deleteLead(lead.id.toString());
+              Get.back();
+            },
+          ),
         onEdit: () {},
       ),
-      ViewModel(
+      ViewScreen(
         itemCount: 10,
         itemBuilder: (context, i) {
-          return FileTile();
+          return FileCard(
+            url:
+                "https://images.pexels.com/photos/31300173/pexels-photo-31300173/free-photo-of-vibrant-blue-poison-dart-frog-on-leaf.jpeg?auto=compress&cs=tinysrgb&w=600",
+            name: "Mandok ${i + 1}",
+            id: "Bilu mandok",
+            role: "ANM",
+            onTap: () => print((i + 1).toString()),
+            onDelete: () => print("Delete file : ${i + 1}"),
+          );
         },
       ),
-      ViewModel(
+      ViewScreen(
         itemCount: 10,
         itemBuilder: (context, i) {
-          return NoteTile(
-            id: "id",
-            relatedId: "relatedId",
-            noteTitle: "noteTitle",
-            noteType: "noteType",
-            employees: "employees",
-            description: "description",
-            clientId: "clientId",
+          return MemberCard(subTitle: "Boss partner", title: "Jay Kumar",role: "HR",);
+        },
+      ),
+      ViewScreen(
+        itemCount: 10,
+        itemBuilder: (context, i) {
+          return NoteCard(
+            id: "sdsidhuspduhspfuhpfu",
+            relatedId: "smiugvhoidnyhuhg",
+            noteTitle: "Call Ms. tejas",
+            noteType: "Call",
+            description: "Bhala mori rama bhala tari rama",
+            clientId: "jsdctfbutyftrcutyusytfty",
             createdBy: "createdBy",
             updatedBy: "updatedBy",
-            createdAt: "createdAt",
+            createdAt: "02 05 2025",
             updatedAt: "updatedAt",
           );
         },
       ),
-      ViewModel(
+      ViewScreen(
         itemCount: 10,
         itemBuilder: (context, i) {
-          return MemberTile();
-        },
-      ),
-      ViewModel(
-        itemCount: 10,
-        itemBuilder: (context, i) {
-          return PaymentTile();
+          return PaymentCard();
         },
       ),
     ];
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Get.theme.colorScheme.surface,
         title: Text("Lead"),
+        leading: CrmBackButton(),
       ),
       body: Stack(
         children: [
