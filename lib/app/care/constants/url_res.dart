@@ -3,13 +3,17 @@
 import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
 
 class UrlRes {
-  static const String baseURL = "https://crm-api.grewox.in/api/v1";
+  static const String baseURL = "https://api.raiser.in/api/v1";
 
   static const String auth = "$baseURL/auth";
 
   static const String login = "$auth/login";
 
   static const String leads = "$baseURL/leads";
+  
+  static const String pipelines = "$baseURL/pipelines";
+
+  static const String stages = "$baseURL/stages";
 
   static const String deals = "$baseURL/deals";
 

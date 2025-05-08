@@ -59,51 +59,68 @@ class LeadModel {
 
   factory LeadModel.fromJson(Map<String, dynamic> json) {
     List<LeadMember> members = [];
-    if (json['lead_members'] is Map &&
-        json['lead_members']['lead_members'] is List) {
-      members = (json['lead_members']['lead_members'] as List)
-          .map((e) => LeadMember.fromJson(e))
-          .toList();
+    if (json['lead_members'] != null) {
+      if (json['lead_members'] is Map && json['lead_members']['lead_members'] is List) {
+        final memberIds = json['lead_members']['lead_members'] as List;
+        members = memberIds.map((id) => LeadMember(
+          memberId: id.toString(),
+          name: '',
+          designation: '',
+          email: '',
+          phone: '',
+        )).toList();
+      } else if (json['lead_members'] is List) {
+        final memberIds = json['lead_members'] as List;
+        members = memberIds.map((id) => LeadMember(
+          memberId: id.toString(),
+          name: '',
+          designation: '',
+          email: '',
+          phone: '',
+        )).toList();
+      }
     }
 
     List<LeadFile> leadFiles = [];
-    if (json['files'] is List) {
-      leadFiles = (json['files'] as List)
-          .map((e) => LeadFile.fromJson(e))
-          .toList();
+    if (json['files'] != null) {
+      if (json['files'] is List) {
+        leadFiles = (json['files'] as List)
+            .map((e) => LeadFile.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
     }
 
     return LeadModel(
-      id: json['id'],
-      inquiryId: json['inquiry_id'],
-      leadTitle: json['leadTitle'],
-      leadStage: json['leadStage'],
-      pipeline: json['pipeline'],
-      currency: json['currency'],
-      leadValue: json['leadValue'],
-      companyName: json['company_name'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      phoneCode: json['phoneCode'],
-      telephone: json['telephone'],
-      email: json['email'],
-      address: json['address'],
+      id: json['id']?.toString(),
+      inquiryId: json['inquiry_id']?.toString(),
+      leadTitle: json['leadTitle']?.toString(),
+      leadStage: json['leadStage']?.toString(),
+      pipeline: json['pipeline']?.toString(),
+      currency: json['currency']?.toString(),
+      leadValue: json['leadValue'] != null ? int.tryParse(json['leadValue'].toString()) : null,
+      companyName: json['company_name']?.toString(),
+      firstName: json['firstName']?.toString(),
+      lastName: json['lastName']?.toString(),
+      phoneCode: json['phoneCode']?.toString(),
+      telephone: json['telephone']?.toString(),
+      email: json['email']?.toString(),
+      address: json['address']?.toString(),
       leadMembers: members,
-      source: json['source'],
-      category: json['category'],
+      source: json['source']?.toString(),
+      category: json['category']?.toString(),
       files: leadFiles,
-      status: json['status'],
-      interestLevel: json['interest_level'],
-      leadScore: json['lead_score'],
-      isConverted: json['is_converted'],
-      clientId: json['client_id'],
-      createdBy: json['created_by'],
-      updatedBy: json['updated_by'],
+      status: json['status']?.toString(),
+      interestLevel: json['interest_level']?.toString(),
+      leadScore: json['lead_score'] != null ? int.tryParse(json['lead_score'].toString()) : null,
+      isConverted: json['is_converted']?.toString().toLowerCase() == 'true',
+      clientId: json['client_id']?.toString(),
+      createdBy: json['created_by']?.toString(),
+      updatedBy: json['updated_by']?.toString(),
       createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'])
+          ? DateTime.tryParse(json['createdAt'].toString())
           : null,
       updatedAt: json['updatedAt'] != null
-          ? DateTime.tryParse(json['updatedAt'])
+          ? DateTime.tryParse(json['updatedAt'].toString())
           : null,
     );
   }

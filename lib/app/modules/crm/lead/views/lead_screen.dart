@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/modules/crm/lead/bindings/lead_binding.dart';
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_add_screen.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_detail_screen.dart';
@@ -15,38 +16,45 @@ class LeadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LeadController leadController = Get.find();
+    final controller = Get.find<LeadController>();
+    
     return Scaffold(
       appBar: AppBar(leading: CrmBackButton(), title: const Text("Leads")),
       floatingActionButton: CrmButton(
         title: "Add Lead",
-        onTap: () => Get.to(LeadAddScreen()),
+        onTap: () async {
+          await Get.to(() => const LeadAddScreen());
+          // Refresh data when returning from add screen
+          controller.refreshData();
+        },
       ),
       body: FutureBuilder(
-        future: leadController.getLeads(),
+        future: controller.refreshData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CrmLoadingCircle();
           } else if (snapshot.hasError) {
             return Center(
-              child: SizedBox(
-                width: 250,
+              child: SizedBox(  
+                width: 250,   
                 child: Text(
                   'Server Error : \n${snapshot.error}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             );
-          } else if (snapshot.hasData) {
-            final leads = leadController.lead;
-            if (leads.isEmpty) {
-              return const Center(child: Text("No leads available."));
-            } else {
-              return Obx(
-                () => ViewScreen(
+          } else {
+            return Obx(
+              () {
+                final leads = controller.leads;
+                if (leads.isEmpty) {
+                  return const Center(child: Text("No leads available."));
+                }
+                
+                return ViewScreen(
                   itemCount: leads.length,
                   itemBuilder: (context, i) {
                     final data = leads[i];
@@ -79,18 +87,20 @@ class LeadScreen extends StatelessWidget {
                       updatedBy: formatDate(data.updatedBy.toString()),
                       createdAt: formatDate(data.createdAt.toString()),
                       updatedAt: formatDate(data.updatedAt.toString()),
-                      onTap:
-                          () =>
-                              (data.id != null)
-                                  ? Get.to(() => LeadDetailScreen(id: data.id!))
-                                  : Get.snackbar('Error', 'deal ID is missing'),
+                      onTap: () async {
+                        if (data.id != null) {
+                          await Get.to(() => LeadDetailScreen(id: data.id!));
+                          // Refresh data when returning from detail screen
+                          controller.refreshData();
+                        } else {
+                          Get.snackbar('Error', 'Lead ID is missing');
+                        }
+                      },
                     );
                   },
-                ),
-              );
-            }
-          } else {
-            return const Center(child: Text("Something went wrong."));
+                );
+              },
+            );
           }
         },
       ),

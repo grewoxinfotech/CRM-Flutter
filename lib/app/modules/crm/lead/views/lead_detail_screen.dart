@@ -26,15 +26,15 @@ class LeadDetailScreen extends StatelessWidget {
     //   return const Center(child: CircularProgressIndicator());
     // }
 
-    if (leadController.lead.isEmpty) {
+    if (leadController.leads.isEmpty) {
       return const Center(child: Text("No Lead Data Available."));
     }
 
-    final lead = leadController.lead.firstWhere(
+    final lead = leadController.leads.firstWhere(
       (lead) => lead.id == id,
       orElse: () => LeadModel(),
     );
-
+    
     if (lead.id == null) {
       return const Center(child: Text("Lead not found"));
     }
@@ -120,6 +120,9 @@ class LeadDetailScreen extends StatelessWidget {
         },
       ),
     ];
+
+
+
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(

@@ -14,9 +14,22 @@ class LeadService {
 
   /// 1. Get all leads
   Future<List> getLeads() async {
-    final response = await http.get(Uri.parse(url), headers: await headers());
-    final data = jsonDecode(response.body);
-    return (response.statusCode == 200) ? data['data'] ?? [] : [];
+    try {
+      final response = await http.get(Uri.parse(url), headers: await headers());
+      final responseData = jsonDecode(response.body);
+      
+      if (response.statusCode == 200) {
+        if (responseData['success'] == true && responseData['data'] != null) {
+          return responseData['data'];
+        } else {
+          return [];
+        }
+      } else {
+        throw Exception(responseData['message'] ?? 'Failed to fetch leads');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch leads: $e');
+    }
   }
 
   /// 2. Get lead by ID

@@ -74,6 +74,7 @@ class LeadOverviewCard extends StatelessWidget {
     this.onEdit,
   });
 
+
   @override
   Widget build(BuildContext context) {
     Color textPrimary = Get.theme.colorScheme.onPrimary;

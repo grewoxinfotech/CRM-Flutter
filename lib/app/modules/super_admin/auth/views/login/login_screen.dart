@@ -44,8 +44,8 @@ class LoginScreen extends StatelessWidget {
                             CrmTextField(
                               title: "Email Address",
                               controller: authController.emailController,
-                              validator:
-                                  (value) => emailValidation(value ?? ''),
+                              // validator:
+                              //     (value) => emailValidation(value ?? ''),
                             ),
                             const SizedBox(height: 10),
                             Obx(

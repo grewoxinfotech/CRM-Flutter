@@ -23,7 +23,7 @@ class FunctionController extends GetxController{
       title: 'Leads',
       iconPath: ICRes.leads,
       color: const Color(0xffFFBD21),
-      count: Get.put(LeadController()).lead.length,
+      count: Get.put(LeadController()).leads.length,
       screenBuilder: LeadScreen(),
     ),
       FunctionModel(
