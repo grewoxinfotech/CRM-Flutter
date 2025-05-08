@@ -8,19 +8,17 @@ class CrmTabBar extends StatelessWidget {
   CrmTabBar({Key? key, required this.items}) : super(key: key);
   final List<TabItem> items;
 
-  final CrmTabBarController controller = Get.put(CrmTabBarController());
+  final CrmTabBarController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return CrmCard(
       height: 40,
-      shadowColor: Get.theme.colorScheme.surface,
-      elevation: 5,
       padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+      margin: const EdgeInsets.symmetric(horizontal: AppMargin.small),
       borderRadius: BorderRadius.circular(AppRadius.medium),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppRadius.large - AppPadding.small),
+        borderRadius: BorderRadius.circular(AppRadius.medium - 5),
         child: ListView.separated(
           itemCount: items.length,
           scrollDirection: Axis.horizontal,
@@ -33,7 +31,6 @@ class CrmTabBar extends StatelessWidget {
               ),
           itemBuilder: (context, index) {
             controller.selectedIndex.value == index;
-            print(items.length.toString());
             return GestureDetector(
               onTap: () => controller.changeTab(index),
               child: FittedBox(
@@ -54,17 +51,17 @@ class CrmTabBar extends StatelessWidget {
                       children: [
                         CrmIc(
                           iconPath: items[index].iconPath,
-                          width: 18,
+                          width: 14,
                           color:
                               controller.selectedIndex.value == index
                                   ? Get.theme.colorScheme.surface
                                   : Get.theme.colorScheme.primary,
                         ),
-                    const SizedBox(height: 5),
+                        AppSpacing.verticalSmall,
                         Text(
                           items[index].label,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 14,
                             color:
                                 controller.selectedIndex.value == index
                                     ? Get.theme.colorScheme.surface

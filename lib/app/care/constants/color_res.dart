@@ -8,9 +8,10 @@ class ColorRes {
 
   // Brand
   static const primary = Color(0xff426DD4);
+  static const secondary = Color(0xff426DD4);
 
   // Backgrounds & Surfaces
-  static const background = Color(0xFFF5F5F5);
+  static const background = Color(0xffF5F5F5);
   static const surface = Color(0xFFFFFFFF);
 
   // Status

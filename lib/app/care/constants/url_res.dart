@@ -1,5 +1,3 @@
-
-
 import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
 
 class UrlRes {

@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/widgets/drawer/crm_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,40 +7,30 @@ class TestScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle style = TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w800,
-      color: Get.theme.colorScheme.primary,
-    );
-
-    Widget tile(int x) {
-      Size size = MediaQuery.of(context).size;
-      double w = size.width;
-      double h = size.height;
-      return Row(
-        children: [
-          Text(x.toString()),
-          const SizedBox(width: 100),
-          Text("${w * x} x ${h * x}"),
-        ],
-      );
-    }
-
-    Size size = MediaQuery.of(context).size;
-    double w = size.width;
-    double h = size.height;
-
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
-      body: SafeArea(
-        child: Center(
-          child: ListView.separated(
-            itemCount: 10,
-            separatorBuilder: (context, s) => const SizedBox(height: 10),
-            itemBuilder: (context, i) => tile(i+1),
-          ),
-        ),
-      ),
+      body: SafeArea(child: Center(child: CrmDrawer())),
     );
   }
 }
+
+/*
+crm textFormField ,
+crm leadsAndDeals ,
+crm tabBar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/

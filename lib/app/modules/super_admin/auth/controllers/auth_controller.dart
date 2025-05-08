@@ -20,8 +20,8 @@ class AuthController extends GetxController {
   void togglePasswordVisibility() => obscurePassword.toggle();
 
   void fillTestCredentials() {
-    emailController.text = "grewox1@yopmail.com";
-    passwordController.text = "MyStrongP@ssw0rd!";
+    emailController.text = "raiser2";
+    passwordController.text = "SuperAdmin@123";
   }
 
   Future<void> login(String userName, String password) async {

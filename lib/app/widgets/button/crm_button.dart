@@ -1,10 +1,11 @@
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CrmButton extends StatelessWidget {
-  final String title;
   final GestureTapCallback? onTap;
+  final String title;
   final double? width;
   final double? height;
   final TextStyle? titleTextStyle;
@@ -29,15 +30,14 @@ class CrmButton extends StatelessWidget {
     final button = CrmCard(
       width: width ?? 150,
       height: height ?? 48,
-      elevation: 5,
-      shadowColor: backgroundColor ?? Get.theme.colorScheme.primary.withAlpha(200),
       color: backgroundColor ?? Get.theme.colorScheme.primary,
-      borderRadius: borderRadius ?? BorderRadius.circular(10),
+      borderRadius: borderRadius ?? BorderRadius.circular(AppRadius.medium),
       boxShadow: boxShadow,
       child: Center(
         child: Text(
           title,
-          style: titleTextStyle ??
+          style:
+              titleTextStyle ??
               TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -51,11 +51,8 @@ class CrmButton extends StatelessWidget {
       onTap: onTap,
       child: Hero(
         tag: "button",
-        child: Material(
-          color: Colors.transparent,
-          child: button,
-        ),
-      )
+        child: Material(color: Colors.transparent, child: button),
+      ),
     );
   }
 }

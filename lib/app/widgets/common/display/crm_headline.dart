@@ -1,50 +1,52 @@
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CrmHeadline extends StatelessWidget {
   final String title;
   final EdgeInsetsGeometry? padding;
-  final bool showViewAll;
-  final String? showText;
+  final bool? showTextButton;
+  final String? buttonText;
   final GestureTapCallback? onTap;
 
   const CrmHeadline({
     super.key,
     required this.title,
     this.padding,
-    this.showViewAll = false, // Default value set
-    this.showText = "View All",
+    this.showTextButton = false, // Default value set
+    this.buttonText = "View All",
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 10),
+      padding:
+          padding ?? const EdgeInsets.symmetric(horizontal: AppPadding.small),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             title,
             style: TextStyle(
-              fontSize: 22,
-              color: Get.theme.colorScheme.onPrimary,
+              fontSize: 18,
               fontWeight: FontWeight.w700,
+              color: Get.theme.colorScheme.onPrimary,
             ),
           ),
-          if (showViewAll)
-            GestureDetector(
-              onTap: onTap,
-              child: Text(
-                showText.toString(), // Typo fixed ("Views all" -> "View all")
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w600,
+          (showTextButton == true)
+              ? GestureDetector(
+                onTap: onTap,
+                child: Text(
+                  buttonText.toString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Get.theme.colorScheme.primary,
+                  ),
                 ),
-              ),
-            ),
+              )
+              : SizedBox(),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/care/constants/font_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
@@ -18,30 +19,33 @@ class CrmDeleteDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CrmCard(
-        padding: const EdgeInsets.all(10),
-        width: 300,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Delete Confirmation",
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: FontRes.nuNunitoSans,
-                color: Get.theme.colorScheme.error,
-                fontWeight: FontWeight.w800,
-                decoration: TextDecoration.none,
+    return GestureDetector(
+      onTap: () => Get.back(),
+      child: Container(
+        alignment: Alignment.center,
+        color: Get.theme.dialogBackgroundColor,
+        child: CrmCard(
+          padding: const EdgeInsets.all(AppPadding.medium),
+          width: 300,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                child: Text(
+                  "Delete Confirmation",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: FontRes.nuNunitoSans,
+                    color: Get.theme.colorScheme.error,
+                    fontWeight: FontWeight.w700,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: Text(
+              AppSpacing.verticalSmall,
+              Text(
                 "Are you sure you want to delete this $entityType?",
-                textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: FontRes.nuNunitoSans,
@@ -50,35 +54,39 @@ class CrmDeleteDialog extends StatelessWidget {
                   decoration: TextDecoration.none,
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Get.back();
-                    onCancel;
-                  },
-                  child: Text(
-                    "Cancel",
-                    style: TextStyle(
-                      color: Get.theme.colorScheme.onSecondary,
-                      fontFamily: FontRes.nuNunitoSans,
+              AppSpacing.verticalSmall,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                      onCancel;
+                    },
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: Get.theme.colorScheme.onSecondary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: FontRes.nuNunitoSans,
+                      ),
                     ),
                   ),
-                ),
-                CrmButton(
-                  title: "Delete",
-                  backgroundColor: Get.theme.colorScheme.error,
-                  onTap: () {
-                    Get.back();
-                    onConfirm;
-                  },
-                ),
-              ],
-            ),
-          ],
+                  CrmButton(
+                    width: 100,
+                    height: 35,
+                    backgroundColor: Get.theme.colorScheme.error,
+                    title: "Delete",
+                    onTap: () {
+                      Get.back();
+                      onConfirm;
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

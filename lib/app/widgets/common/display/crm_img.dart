@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 class CrmImg extends StatelessWidget {
   final String imagePath;
@@ -19,7 +18,7 @@ class CrmImg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ?? () => print(imagePath),
+      onTap: onTap,
       child: SvgPicture.asset(
         imagePath,
         width: width,

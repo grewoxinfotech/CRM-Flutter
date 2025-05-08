@@ -3,8 +3,8 @@ import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ActivityTile extends StatelessWidget {
-  const ActivityTile({super.key});
+class ActivityCard extends StatelessWidget {
+  const ActivityCard({super.key});
 
   @override
   Widget build(BuildContext context) {

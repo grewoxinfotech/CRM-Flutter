@@ -19,7 +19,8 @@ class LeadScreen extends StatelessWidget {
     final controller = Get.find<LeadController>();
     
     return Scaffold(
-      appBar: AppBar(leading: CrmBackButton(), title: const Text("Leads")),
+      appBar: AppBar(leading: CrmBackButton(), title: Text("Leads")),
+
       floatingActionButton: CrmButton(
         title: "Add Lead",
         onTap: () async {

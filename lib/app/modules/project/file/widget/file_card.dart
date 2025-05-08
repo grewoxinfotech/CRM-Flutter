@@ -47,7 +47,6 @@ class FileCard extends StatelessWidget {
       onTap: onTap,
       child: CrmCard(
         height: cardHeight,
-        shadowColor: Get.theme.colorScheme.surface,
         margin: const EdgeInsets.symmetric(horizontal: AppMargin.large),
         borderRadius: BorderRadius.circular(AppRadius.large),
         child: Row(

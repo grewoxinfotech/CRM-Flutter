@@ -76,9 +76,8 @@ class LeadCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        shadowColor: Get.theme.colorScheme.surface,
         padding: const EdgeInsets.all(AppPadding.medium),
-        margin: const EdgeInsets.symmetric(horizontal: AppMargin.large),
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
         borderRadius: BorderRadius.circular(AppRadius.large),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

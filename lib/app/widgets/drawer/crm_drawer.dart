@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/super_admin/auth/controllers/auth_controller.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,8 @@ class CrmDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DrawerController drawerController = Get.put(DrawerController());
+    Get.lazyPut<DrawerController>(() => DrawerController());
+    DrawerController drawerController = Get.find();
     List<DrawerModel> items = [
       DrawerModel(title: "DashBoard", iconPath: ICRes.customer),
       DrawerModel(title: "Project", iconPath: ICRes.project),
@@ -21,92 +22,80 @@ class CrmDrawer extends StatelessWidget {
       DrawerModel(title: "Messenger", iconPath: ICRes.notifications),
       DrawerModel(title: "Info Portal", iconPath: ICRes.file),
     ];
+    Widget divider = Divider(
+      height: 0,
+      color: Get.theme.dividerColor,
+      endIndent: 10,
+      indent: 10,
+    );
+
     return SafeArea(
       child: CrmCard(
-        width: Get.width * 0.7,
-        padding: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
-        margin: const EdgeInsets.only(left: 10, bottom: 10),
+        width: Get.width * 0.6,
+        margin: const EdgeInsets.only(
+          left: AppPadding.small,
+          bottom: AppPadding.small,
+        ),
+        borderRadius: BorderRadius.circular(AppRadius.large),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CrmAppLogo(),
-            const SizedBox(height: 40),
-            SizedBox(
-              child: ListView.separated(
-                itemCount: items.length,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, i) {
-                  return Obx(
-                    () => GestureDetector(
-                      onTap: () => drawerController.onchange(i),
+            ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: items.length,
+              padding: EdgeInsets.all(AppPadding.small),
+              shrinkWrap: true,
+              itemBuilder: (context, i) {
+                return Obx(
+                  () => GestureDetector(
+                    onTap: () => drawerController.onchange(i),
+                    child: CrmCard(
+                      padding: const EdgeInsets.all(AppPadding.small),
+                      boxShadow: [],
+                      borderRadius: BorderRadius.circular(
+                        AppRadius.large - AppPadding.small,
+                      ),
+                      color:
+                          (drawerController.selextedIndex == i)
+                              ? Get.theme.colorScheme.primary.withAlpha(20)
+                              : null,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          CrmCard(
-                            width: Get.width * 0.6,
-                            padding: const EdgeInsets.all(15),
+                          CrmIc(
+                            iconPath: items[i].iconPath.toString(),
+                            width: 24,
                             color:
                                 (drawerController.selextedIndex == i)
-                                    ? Get.theme.colorScheme.primary.withAlpha(
-                                      20,
-                                    )
-                                    : Get.theme.colorScheme.surface,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [],
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CrmIc(
-                                  iconPath: items[i].iconPath.toString(),
-                                  color:
-                                      (drawerController.selextedIndex == i)
-                                          ? Get.theme.colorScheme.primary
-                                          : Get.theme.colorScheme.onSecondary,
-                                  width: 24,
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  items[i].title.toString(),
-                                  style: TextStyle(
-                                    fontWeight:
-                                        (drawerController.selextedIndex == i)
-                                            ? FontWeight.w700
-                                            : FontWeight.w600,
-                                    fontSize: 16,
-                                    color:
-                                        (drawerController.selextedIndex == i)
-                                            ? Get.theme.colorScheme.primary
-                                            : Get.theme.colorScheme.onSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
+                                    ? Get.theme.colorScheme.primary
+                                    : Get.theme.colorScheme.onSecondary,
                           ),
-
-                          Container(
-                            width: Get.width * 0.015,
-                            height: 50,
-                            decoration: BoxDecoration(
+                          AppSpacing.horizontalSmall,
+                          Text(
+                            items[i].title.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight:
+                                  (drawerController.selextedIndex == i)
+                                      ? FontWeight.w700
+                                      : FontWeight.w600,
                               color:
                                   (drawerController.selextedIndex == i)
                                       ? Get.theme.colorScheme.primary
-                                      : Get.theme.colorScheme.surface,
-                              borderRadius: BorderRadius.circular(10),
+                                      : Get.theme.colorScheme.onSecondary,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, i) => const SizedBox(height: 10),
-              ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, i) => AppSpacing.verticalSmall,
             ),
-            const SizedBox(height: 20),
+            AppSpacing.verticalSmall,
             Align(
               alignment: Alignment.center,
-
               child: FloatingActionButton.extended(
                 label: Text(
                   "Support",
@@ -120,25 +109,28 @@ class CrmDrawer extends StatelessWidget {
                 onPressed: () {},
               ),
             ),
-            Expanded(child: SizedBox()),
-            Align(
-              alignment: Alignment.center,
-
-              child: FloatingActionButton.extended(
-                backgroundColor: Get.theme.colorScheme.error,
-                label: Text(
-                  "Logout",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Get.theme.colorScheme.surface,
-                  ),
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.all(AppPadding.medium),
+              child: GestureDetector(
+                onTap: () => Get.put(AuthController()).logout(),
+                child: Row(
+                  children: [
+                    CrmIc(
+                      iconPath: ICRes.logout,
+                      color: Get.theme.colorScheme.onSecondary,
+                    ),
+                    AppSpacing.horizontalSmall,
+                    Text(
+                      "Logout",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Get.theme.colorScheme.onSecondary,
+                      ),
+                    ),
+                  ],
                 ),
-                icon: CrmIc(
-                  iconPath: ICRes.logout,
-                  color: Get.theme.colorScheme.surface,
-                ),
-                onPressed: () => Get.put(AuthController()).logout(),
               ),
             ),
           ],

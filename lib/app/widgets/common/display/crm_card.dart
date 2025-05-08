@@ -1,53 +1,69 @@
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CrmCard extends StatelessWidget {
   final double? width;
   final double? height;
-  final double? elevation;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final AlignmentGeometry? alignment;
-  final Color? shadowColor;
   final Color? color;
+  final Gradient? gradient;
+  final DecorationImage? image;
   final BorderRadiusGeometry? borderRadius;
-  final BoxBorder? border;
   final List<BoxShadow>? boxShadow;
+  final BoxBorder? border;
+  final BoxShape shape;
+  final BlendMode? backgroundBlendMode;
   final Widget? child;
 
   const CrmCard({
     super.key,
     this.width,
     this.height,
-    this.elevation,
     this.alignment,
-    this.shadowColor,
     this.padding,
     this.margin,
     this.color,
-    this.border,
+    this.gradient,
+    this.image,
     this.borderRadius,
     this.boxShadow,
+    this.border,
+    this.shape = BoxShape.rectangle,
+    this.backgroundBlendMode,
     this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: color ?? Get.theme.colorScheme.surface,
-      margin: margin ?? EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: borderRadius ?? BorderRadius.circular(24),
+    return Container(
+      width: width,
+      height: height,
+      padding: padding,
+      margin: margin,
+      alignment: alignment,
+      decoration: BoxDecoration(
+        color: color ?? Get.theme.colorScheme.surface,
+        borderRadius: borderRadius ?? BorderRadius.circular(AppRadius.large),
+        gradient: gradient,
+        image: image,
+        shape: shape,
+        border: border,
+        backgroundBlendMode: backgroundBlendMode,
+        boxShadow:
+            boxShadow ??
+            [
+              BoxShadow(
+                color: Get.theme.colorScheme.shadow,
+                blurRadius: 59,
+                spreadRadius: 0,
+                offset: Offset(0, 6),
+              ),
+            ],
       ),
-      elevation: elevation ?? 5,
-      shadowColor: shadowColor,
-      child: Container(
-        width: width,
-        height: height,
-        alignment: alignment,
-        padding: padding ?? EdgeInsets.zero,
-        child: child,
-      ),
+      child: child,
     );
   }
 }

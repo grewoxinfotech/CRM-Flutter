@@ -12,17 +12,22 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService extends GetConnect {
+  final String url = UrlRes.login;
+  final String i = UrlRes.contentType;
+  final String j = UrlRes.applicationJson;
+
+
   Future<void> login(String email, String password) async {
     final loginData = {"login": email, "password": password};
+
     try {
       final response = await http.post(
-        Uri.parse(UrlRes.login),
-        headers: {UrlRes.contentType: UrlRes.applicationJson},
+        Uri.parse(url),
+        headers: {i: j},
         body: jsonEncode(loginData),
       );
 
       final data = jsonDecode(response.body);
-
       if (response.statusCode == 200 && data["success"] == true) {
         final token = data['data']['token'];
         final user = UserModel.fromJson(data['data']['user']);

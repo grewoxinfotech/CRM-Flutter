@@ -13,7 +13,6 @@ class FunctionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(FunctionController());
     return CrmCard(
-      shadowColor: Get.theme.colorScheme.surface,
       margin: EdgeInsets.symmetric(horizontal: AppMargin.large),
       padding: EdgeInsets.all(AppPadding.small),
       child: Column(

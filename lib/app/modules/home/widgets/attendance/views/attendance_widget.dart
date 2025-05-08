@@ -16,7 +16,6 @@ class AttendanceWidget extends StatelessWidget {
       AttendanceController(),
     ); // Controller Initialization
     return CrmCard(
-      shadowColor: Get.theme.colorScheme.surface,
       padding: EdgeInsets.all(AppPadding.small),
       margin: const EdgeInsets.symmetric(horizontal: AppMargin.large),
       child: Column(

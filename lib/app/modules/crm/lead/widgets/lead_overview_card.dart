@@ -155,13 +155,12 @@ class LeadOverviewCard extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: AppMargin.large),
+      padding: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSpacing.verticalMedium,
           CrmCard(
-            shadowColor: Get.theme.colorScheme.surface,
             padding: const EdgeInsets.symmetric(
               horizontal: AppPadding.medium,
               vertical: AppPadding.small,
@@ -239,7 +238,6 @@ class LeadOverviewCard extends StatelessWidget {
           ),
           AppSpacing.verticalSmall,
           CrmCard(
-            shadowColor: Get.theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(AppRadius.large),
             padding: const EdgeInsets.symmetric(
               horizontal: AppPadding.medium,
@@ -287,7 +285,6 @@ class LeadOverviewCard extends StatelessWidget {
           ),
           AppSpacing.verticalSmall,
           CrmCard(
-            shadowColor: Get.theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(AppRadius.large),
             padding: const EdgeInsets.symmetric(
               horizontal: AppPadding.medium,

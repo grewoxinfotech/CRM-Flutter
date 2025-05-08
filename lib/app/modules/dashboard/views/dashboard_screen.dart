@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/modules/home/views/home_screen.dart';
 import 'package:crm_flutter/app/widgets/app_bar/crm_app_bar.dart';
+import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/drawer/crm_drawer.dart';
 import 'package:crm_flutter/app/widgets/navigation_bar/crm_navigation_Bar.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class DashboardScreen extends StatelessWidget {
         if (navigationController.currentIndex.value == 0) {
           return HomeScreen();
         } else if (navigationController.currentIndex.value == 1) {
-          return Center(child: Text("No Update"));
+          return Center(child: CrmDeleteDialog());
         } else if (navigationController.currentIndex.value == 2) {
           return Center(child: Text("No Update"));
         } else if (navigationController.currentIndex.value == 3) {

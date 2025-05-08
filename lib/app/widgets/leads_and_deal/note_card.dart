@@ -45,7 +45,6 @@ class NoteCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        shadowColor: Get.theme.colorScheme.surface,
         padding: const EdgeInsets.all(AppPadding.medium),
         margin: const EdgeInsets.symmetric(horizontal: AppMargin.large),
         child: Column(

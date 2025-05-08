@@ -21,7 +21,7 @@ class CrmIc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ?? () => print(iconPath),
+      onTap: onTap,
       child: SvgPicture.asset(
         iconPath,
         width: width,

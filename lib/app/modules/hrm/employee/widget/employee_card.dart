@@ -113,7 +113,6 @@ class EmployeeCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        shadowColor: Get.theme.colorScheme.surface,
         padding: EdgeInsets.all(AppPadding.small),
         margin: EdgeInsets.symmetric(horizontal: AppMargin.large),
         child: Column(

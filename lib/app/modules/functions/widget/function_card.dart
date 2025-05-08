@@ -29,7 +29,6 @@ class FunctionCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             CrmCard(
-              shadowColor: Colors.black,
               width: 50,
               height: 50,
               color: color,

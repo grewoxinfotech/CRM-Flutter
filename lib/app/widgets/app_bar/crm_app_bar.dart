@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 
 class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
-  final String? title;
+  final Widget? title;
   final String? hintText;
-  final Widget? action;
+  final List<Widget>? action;
 
   const CrmAppBar({
     super.key,
@@ -23,50 +23,49 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        // 👈 Left & Right spacing
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.small),
         child: AppBar(
           toolbarHeight: kToolbarHeight,
           elevation: 5.0,
-          titleSpacing: 0,
           scrolledUnderElevation: 5.0,
-          primary: true,
-          centerTitle: false,
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          shadowColor: Colors.white,
+          backgroundColor: Get.theme.colorScheme.surface,
+          foregroundColor: Get.theme.colorScheme.surface,
+          shadowColor: Get.theme.colorScheme.surface,
           surfaceTintColor: Colors.transparent,
           actionsPadding: const EdgeInsets.only(right: AppPadding.medium),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.large),
           ),
-          leading: Align(
-            alignment: Alignment.center,
-            child: CrmAppLogo(width: 45),
-          ),
-          titleTextStyle: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: Get.theme.colorScheme.onPrimary,
-          ),
-          actions: [
-            CrmIc(iconPath: ICRes.search, color: Get.theme.colorScheme.onPrimary),
-            AppSpacing.horizontalMedium,
-            CrmIc(iconPath: ICRes.notifications, color: Get.theme.colorScheme.onPrimary),
-            AppSpacing.horizontalMedium,
-            const CircleAvatar(
-              radius: 15,
-              child: Text(
-                "G",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
+          leading:
+              leading ??
+              Align(alignment: Alignment.center, child: CrmAppLogo()),
+          title: title,
+          actions:
+              action ??
+              [
+                CrmIc(
+                  iconPath: ICRes.search,
+                  color: Get.theme.colorScheme.onPrimary,
                 ),
-              ),
-            ),
-          ],
+                AppSpacing.horizontalMedium,
+                CrmIc(
+                  iconPath: ICRes.notifications,
+                  color: Get.theme.colorScheme.onPrimary,
+                ),
+                AppSpacing.horizontalMedium,
+                const CircleAvatar(
+                  radius: 15,
+                  child: Text(
+                    "G",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
         ),
       ),
     );
