@@ -1,15 +1,18 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/models/crm/deal/deal_model.dart';
 import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/crm/deal/widget/deal_overview_card.dart';
 import 'package:crm_flutter/app/modules/project/file/widget/file_card.dart';
 import 'package:crm_flutter/app/modules/project/invoice/widget/invoice_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
+import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
+import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
-import 'package:crm_flutter/app/widgets/tab_bar/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +23,7 @@ class DealDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CrmTabBarController controller = Get.put(CrmTabBarController());
+    TabBarController tabBarController = Get.put(TabBarController());
     final DealController dealController = Get.find();
     if (dealController.isLoading.value) {
       return const Center(child: CircularProgressIndicator());
@@ -77,12 +80,14 @@ class DealDetailScreen extends StatelessWidget {
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
           return MemberCard(title: "Hero");
         },
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
           return NoteCard(
             id: "notes data",
@@ -103,6 +108,7 @@ class DealDetailScreen extends StatelessWidget {
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
           return FileCard(
             url:
@@ -122,6 +128,7 @@ class DealDetailScreen extends StatelessWidget {
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
           return InvoiceCard(
             id: "id",
@@ -156,10 +163,11 @@ class DealDetailScreen extends StatelessWidget {
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
           return PaymentCard(
             id: "id",
-            project: "project",
+            project: "Project",
             startDate: "startDate",
             endDate: "endDate",
             projectMembers: "projectMembers",
@@ -174,49 +182,26 @@ class DealDetailScreen extends StatelessWidget {
       ),
     ];
     return Scaffold(
-      backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Get.theme.colorScheme.surface,
         title: Text("Deal"),
+        bottom: CrmTabBar(
+          items: [
+            TabBarModel(iconPath: ICRes.attach, label: "Overview"),
+            TabBarModel(iconPath: ICRes.attach, label: "Members"),
+            TabBarModel(iconPath: ICRes.attach, label: "Notes"),
+            TabBarModel(iconPath: ICRes.attach, label: "Files"),
+            TabBarModel(iconPath: ICRes.attach, label: "Invoice"),
+            TabBarModel(iconPath: ICRes.attach, label: "Payment"),
+          ],
+        ),
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: PageView.builder(
-                  itemCount: widgets.length,
-                  controller: controller.pageController,
-                  onPageChanged: controller.onPageChanged,
-                  itemBuilder: (context, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        controller.selectedIndex.value = i;
-                      },
-                      child: widgets[i],
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              const SizedBox(height: 5),
-              CrmTabBar(
-                items: [
-                  TabItem(iconPath: ICRes.attach, label: "Overview"),
-                  TabItem(iconPath: ICRes.attach, label: "Members"),
-                  TabItem(iconPath: ICRes.attach, label: "Notes"),
-                  TabItem(iconPath: ICRes.attach, label: "Files"),
-                  TabItem(iconPath: ICRes.attach, label: "Invoice"),
-                  TabItem(iconPath: ICRes.attach, label: "Payment"),
-                ],
-              ),
-            ],
-          ),
-        ],
+      body: PageView.builder(
+        itemCount: widgets.length,
+        controller: tabBarController.pageController,
+        onPageChanged: tabBarController.onPageChanged,
+        itemBuilder: (context, i) {
+          return widgets[i];
+        },
       ),
     );
   }

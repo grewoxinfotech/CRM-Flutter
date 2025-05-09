@@ -40,86 +40,107 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color textPrimary = Get.theme.colorScheme.onPrimary;
-    Color textSecondary = Get.theme.colorScheme.onSecondary;
+    final Color primary = Get.theme.colorScheme.onPrimary;
+    final Color secondary = Get.theme.colorScheme.onSecondary;
+    final Color borderColor = Get.theme.dividerColor;
+
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.medium),
-        margin: const EdgeInsets.symmetric(horizontal: AppMargin.large),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Title & Type
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
+                Text(
+                  noteTitle ?? 'Untitled Note',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: primary,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppPadding.small,
+                    vertical: AppPadding.small / 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: secondary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Text(
-                    "$noteTitle",
-                    overflow: TextOverflow.ellipsis,
+                    noteType ?? '',
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: textPrimary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: secondary,
                     ),
                   ),
                 ),
-                AppSpacing.horizontalSmall,
-                Text(
-                  "$noteType",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: textSecondary,
-                  ),
-                ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "id : $id",
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: textSecondary,
-                  ),
-                ),
-                Text(
-                  "$createdAt",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: textSecondary,
-                  ),
-                ),
-              ],
-            ),
-            Divider(color: Get.theme.dividerColor, height: AppPadding.medium),
+
+            // Description
             Text(
-              "$description",
-              overflow: TextOverflow.ellipsis,
+              description ?? 'No description available.',
               maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: textSecondary,
+                color: secondary,
               ),
             ),
+
+            Divider(color: borderColor, height: AppPadding.medium),
+
+            // Metadata and Actions
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CrmIc(
-                  iconPath: ICRes.edit,
-                  onTap: onEdit,
-                  color: ColorRes.success,
+                // Meta Info
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "ID: ${id ?? '-'}",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                        color: secondary,
+                      ),
+                    ),
+                    Text(
+                      "Created: ${createdAt ?? '-'}",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                        color: secondary,
+                      ),
+                    ),
+                  ],
                 ),
-                AppSpacing.horizontalMedium,
-                CrmIc(
-                  iconPath: ICRes.delete,
-                  onTap: onDelete,
-                  color: ColorRes.error,
+
+                // Action Buttons
+                Row(
+                  children: [
+                    CrmIc(
+                      iconPath: ICRes.edit,
+                      color: ColorRes.success,
+                      onTap: onEdit,
+                    ),
+                    AppSpacing.horizontalMedium,
+                    CrmIc(
+                      iconPath: ICRes.delete,
+                      color: ColorRes.error,
+                      onTap: onDelete,
+                    ),
+                  ],
                 ),
               ],
             ),

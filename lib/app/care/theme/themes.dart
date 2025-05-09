@@ -16,6 +16,7 @@ ThemeData lightTheme = ThemeData(
   shadowColor: ColorRes.shadow,
   dialogBackgroundColor: ColorRes.overlay,
 
+
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.transparent,
     surfaceTintColor: Colors.transparent,

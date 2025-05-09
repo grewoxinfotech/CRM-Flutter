@@ -79,6 +79,14 @@ class LeadCard extends StatelessWidget {
         padding: const EdgeInsets.all(AppPadding.medium),
         margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
         borderRadius: BorderRadius.circular(AppRadius.large),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            spreadRadius: 0,
+            blurRadius: 10,
+            offset: Offset(0,10)
+          )
+        ],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,

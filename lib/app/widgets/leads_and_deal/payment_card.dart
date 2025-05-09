@@ -1,7 +1,11 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 class PaymentCard extends StatelessWidget {
   final String? id;
   final String? project;
@@ -35,68 +39,98 @@ class PaymentCard extends StatelessWidget {
     this.onEdit,
     this.onDelete,
   });
-
   @override
   Widget build(BuildContext context) {
-    Color textPrimary = Get.theme.colorScheme.onPrimary;
-    Color textSecondary = Get.theme.colorScheme.onSecondary;
+    final Color textPrimary = Get.theme.colorScheme.onPrimary;
+    final Color textSecondary = Get.theme.colorScheme.onSecondary;
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        margin: EdgeInsets.symmetric(horizontal: AppMargin.large),
-        child: ListTile(
-          title: Text(
-            "$project",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: textPrimary,
+        padding: const EdgeInsets.all(AppPadding.medium),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Project Name & Status
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  project ?? "Untitled Project",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: textPrimary,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppPadding.medium,
+                    vertical: AppPadding.small,
+                  ),
+                  decoration: BoxDecoration(
+                    color: (status == "paid" ? Colors.green : Colors.orange)
+                        .withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(AppRadius.medium),
+                  ),
+                  child: Text(
+                    status?.toUpperCase() ?? "UNPAID",
+                    style: TextStyle(
+                      color: status == "paid" ? Colors.green : Colors.orange,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "id : $id",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: textSecondary,
+
+AppSpacing.verticalSmall,
+            // Date Range
+            Text(
+              "Duration: ${startDate ?? '-'} to ${endDate ?? '-'}",
+              style: TextStyle(fontSize: 12 ,fontWeight: FontWeight.w600, color: textSecondary),
+            ),
+
+            // Completion & Members
+            Row(
+              children: [
+                Text(
+                  "Completion: ${completion ?? '0%'}",
+                  style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600, color: textSecondary),
                 ),
-              ),
-              Text(
-                "$project",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: textSecondary,
+                AppSpacing.horizontalSmall,
+                Text(
+                  "Members: ${projectMembers ?? '0'}",
+                  style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600, color: textSecondary),
                 ),
-              ),
-            ],
-          ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "$project.00",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: textPrimary,
+              ],
+            ),
+
+
+            // Footer with created date and actions
+            Divider(height: AppPadding.medium, color: Get.theme.dividerColor),
+
+            // Edit / Delete buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CrmIc(
+                  iconPath: ICRes.edit,
+                  onTap: onEdit,
+                  color: ColorRes.success,
                 ),
-              ),
-              Text(
-                "$project",
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: textSecondary,
+                AppSpacing.horizontalMedium,
+                CrmIc(
+                  iconPath: ICRes.delete,
+                  onTap: onDelete,
+                  color: ColorRes.error,
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
+
 }

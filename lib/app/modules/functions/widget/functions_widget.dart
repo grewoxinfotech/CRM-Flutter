@@ -13,37 +13,35 @@ class FunctionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(FunctionController());
     return CrmCard(
-      margin: EdgeInsets.symmetric(horizontal: AppMargin.large),
+      margin: EdgeInsets.symmetric(horizontal: AppMargin.medium),
       padding: EdgeInsets.all(AppPadding.small),
       child: Column(
         children: [
           CrmHeadline(title: "App Functionalities"),
           AppSpacing.verticalSmall,
-          Obx(
-            () => GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: AppPadding.small,
-                crossAxisSpacing: AppPadding.small,
-                childAspectRatio: 1.2,
-                mainAxisExtent: 125,
-              ),
-              itemCount: controller.functions.length,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, i) {
-                return FunctionCard(
-                  iconPath: controller.functions[i].iconPath,
-                  title: controller.functions[i].title,
-                  color: controller.functions[i].color,
-                  onTap:
-                      () =>
-                          (controller.functions[i].screenBuilder != null)
-                              ? Get.to(controller.functions[i].screenBuilder)
-                              : null,
-                );
-              },
+          GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: AppPadding.small,
+              crossAxisSpacing: AppPadding.small,
+              childAspectRatio: 1.2,
+              mainAxisExtent: 125,
             ),
+            itemCount: controller.functions.length,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, i) {
+              return FunctionCard(
+                iconPath: controller.functions[i].iconPath,
+                title: controller.functions[i].title,
+                color: controller.functions[i].color,
+                onTap:
+                    () =>
+                        (controller.functions[i].screenBuilder != null)
+                            ? Get.to(controller.functions[i].screenBuilder)
+                            : null,
+              );
+            },
           ),
         ],
       ),

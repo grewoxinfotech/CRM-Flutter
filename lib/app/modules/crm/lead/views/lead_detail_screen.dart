@@ -1,15 +1,18 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/lead/widgets/lead_overview_card.dart';
 import 'package:crm_flutter/app/modules/project/file/widget/file_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
+import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
+import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
-import 'package:crm_flutter/app/widgets/tab_bar/crm_teb_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,11 +23,8 @@ class LeadDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CrmTabBarController controller = Get.put(CrmTabBarController());
-    LeadController leadController = Get.find();
-    // if (leadController.isLoading.value) {
-    //   return const Center(child: CircularProgressIndicator());
-    // }
+    final tabBarController = Get.put(TabBarController());
+    final leadController = Get.find<LeadController>();
 
     if (leadController.leads.isEmpty) {
       return const Center(child: Text("No Lead Data Available."));
@@ -34,7 +34,7 @@ class LeadDetailScreen extends StatelessWidget {
       (lead) => lead.id == id,
       orElse: () => LeadModel(),
     );
-    
+
     if (lead.id == null) {
       return const Center(child: Text("Lead not found"));
     }
@@ -68,16 +68,18 @@ class LeadDetailScreen extends StatelessWidget {
         updatedBy: lead.updatedBy.toString(),
         createdAt: lead.createdAt.toString(),
         updatedAt: lead.updatedAt.toString(),
-        onDelete: () => CrmDeleteDialog(
-            onConfirm: (){
-              leadController.deleteLead(lead.id.toString());
-              Get.back();
-            },
-          ),
+        onDelete:
+            () => CrmDeleteDialog(
+              onConfirm: () {
+                leadController.deleteLead(lead.id.toString());
+                Get.back();
+              },
+            ),
         onEdit: () {},
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
           return FileCard(
             url:
@@ -92,12 +94,18 @@ class LeadDetailScreen extends StatelessWidget {
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
-          return MemberCard(subTitle: "Boss partner", title: "Jay Kumar",role: "HR",);
+          return MemberCard(
+            subTitle: "Boss partner",
+            title: "Jay Kumar",
+            role: "HR",
+          );
         },
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
           return NoteCard(
             id: "sdsidhuspduhspfuhpfu",
@@ -115,56 +123,33 @@ class LeadDetailScreen extends StatelessWidget {
       ),
       ViewScreen(
         itemCount: 10,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
           return PaymentCard();
         },
       ),
     ];
 
-
-
     return Scaffold(
-      backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
         title: Text("Lead"),
         leading: CrmBackButton(),
+        bottom: CrmTabBar(
+          items: [
+            TabBarModel(iconPath: ICRes.attach, label: "Overview"),
+            TabBarModel(iconPath: ICRes.attach, label: "Files"),
+            TabBarModel(iconPath: ICRes.attach, label: "Members"),
+            TabBarModel(iconPath: ICRes.attach, label: "Notes"),
+          ],
+        ),
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: PageView.builder(
-                  itemCount: widgets.length,
-                  controller: controller.pageController,
-                  onPageChanged: controller.onPageChanged,
-                  itemBuilder: (context, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        controller.selectedIndex.value = i;
-                      },
-                      child: widgets[i],
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              const SizedBox(height: 5),
-              CrmTabBar(
-                items: [
-                  TabItem(iconPath: ICRes.attach, label: "Overview"),
-                  TabItem(iconPath: ICRes.attach, label: "Files"),
-                  TabItem(iconPath: ICRes.attach, label: "Members"),
-                  TabItem(iconPath: ICRes.attach, label: "Notes"),
-                ],
-              ),
-            ],
-          ),
-        ],
+      body: PageView.builder(
+        itemCount: widgets.length,
+        controller: tabBarController.pageController,
+        onPageChanged: tabBarController.onPageChanged,
+        itemBuilder: (context, i) {
+          return widgets[i];
+        },
       ),
     );
   }

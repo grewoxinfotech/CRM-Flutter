@@ -26,7 +26,6 @@ class MemberCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        margin: EdgeInsets.symmetric(horizontal: AppMargin.large),
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: Get.theme.colorScheme.background,

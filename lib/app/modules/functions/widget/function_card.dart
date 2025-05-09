@@ -23,8 +23,9 @@ class FunctionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        color: Get.theme.colorScheme.primary.withAlpha(15),
+        color: Get.theme.colorScheme.primary.withAlpha(20),
         borderRadius: BorderRadius.circular(AppRadius.large - AppPadding.small),
+        boxShadow: [],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

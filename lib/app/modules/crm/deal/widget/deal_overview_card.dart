@@ -157,11 +157,11 @@ class DealOverviewCard extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+
+      padding: const EdgeInsets.all(AppMargin.medium),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppSpacing.verticalMedium,
           CrmCard(
             padding: const EdgeInsets.symmetric(
               horizontal: AppPadding.medium,

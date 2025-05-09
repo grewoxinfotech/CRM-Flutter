@@ -6,12 +6,14 @@ class ViewScreen extends StatelessWidget {
   final NullableIndexedWidgetBuilder itemBuilder;
   final ScrollController? controller;
   final bool reverse;
+  final EdgeInsetsGeometry? padding;
 
   const ViewScreen({
     super.key,
     required this.itemCount,
     required this.itemBuilder,
     this.controller,
+    this.padding,
     this.reverse = false,
   });
 
@@ -24,7 +26,7 @@ class ViewScreen extends StatelessWidget {
       shrinkWrap: true,
       primary: true,
       controller: controller,
-      padding: const EdgeInsets.only(top: AppPadding.medium,bottom: 80),
+      padding: padding ?? const EdgeInsets.only(top: AppPadding.medium,bottom: 80),
       separatorBuilder:
           (context, s) => AppSpacing.verticalSmall,
       itemBuilder: itemBuilder,

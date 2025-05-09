@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,11 +79,14 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color textPrimary = Get.theme.colorScheme.onPrimary;
+    Color textSecondary = Get.theme.colorScheme.onSecondary;
+
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        padding: const EdgeInsets.all(5),
-        margin: EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.all(AppPadding.small),
+        margin: EdgeInsets.symmetric(horizontal: AppMargin.medium),
         child: Column(
           children: [
             AppBar(
@@ -131,15 +135,12 @@ class TaskCard extends StatelessWidget {
                   },
                   itemBuilder:
                       (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Edit'),
-                    ),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Text('Delete'),
-                    ),
-                  ],
+                        const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Delete'),
+                        ),
+                      ],
                 ),
               ],
               backgroundColor: Colors.white,
@@ -183,7 +184,10 @@ class TaskCard extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10.0,
+                vertical: 5,
+              ),
               child: RichText(
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,

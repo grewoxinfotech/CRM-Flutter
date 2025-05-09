@@ -42,12 +42,11 @@ class FileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Color textPrimary = Get.theme.colorScheme.onPrimary;
     Color textSecondary = Get.theme.colorScheme.onSecondary;
-    double cardHeight = 100;
+    double cardHeight = 120;
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
         height: cardHeight,
-        margin: const EdgeInsets.symmetric(horizontal: AppMargin.large),
         borderRadius: BorderRadius.circular(AppRadius.large),
         child: Row(
           children: [
@@ -67,7 +66,7 @@ class FileCard extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(AppPadding.small),
+                padding: EdgeInsets.all(AppPadding.medium),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

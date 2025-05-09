@@ -1,8 +1,10 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class InvoiceCard extends StatelessWidget {
   final String? id;
@@ -72,52 +74,140 @@ class InvoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color textPrimary = Get.theme.colorScheme.onPrimary;
+    Color textSecondary = Get.theme.colorScheme.onSecondary;
+
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.all(AppPadding.medium),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("id : ${id.toString()}"),
-            Text("inquiryId : ${inquiryId.toString()}"),
-            Text("leadTitle : ${leadTitle.toString()}"),
-            Text("leadStage : ${leadStage.toString()}"),
-            Text("pipeline : ${pipeline.toString()}"),
-            Text("currency : ${currency.toString()}"),
-            Text("leadValue : ${leadValue.toString()}"),
-            Text("companyName : ${companyName.toString()}"),
-            Text("firstName : ${firstName.toString()}"),
-            Text("lastName : ${lastName.toString()}"),
-            Text("phoneCode : ${phoneCode.toString()}"),
-            Text("telephone : ${telephone.toString()}"),
-            Text("email : ${email.toString()}"),
-            Text("address : ${address.toString()}"),
-            Text("leadMembers : ${leadMembers.toString()}"),
-            Text("source : ${source.toString()}"),
-            Text("category : ${category.toString()}"),
-            Text("files : ${files.toString()}"),
-            Text("status : ${status.toString()}"),
-            Text("interestLevel : ${interestLevel.toString()}"),
-            Text("leadScore : ${leadScore.toString()}"),
-            Text("isConverted : ${isConverted.toString()}"),
-            Text("clientId : ${clientId.toString()}"),
-            Text("createdBy : ${createdBy.toString()}"),
-            Text("updatedBy : ${updatedBy.toString()}"),
-            Text("createdAt : ${createdAt.toString()}"),
-            Text("updatedAt : ${updatedAt.toString()}"),
+            // Top: Invoice Title and ID
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CrmIc(
-                  iconPath: ICRes.delete,
-                  onTap: onDelete,
-                  color: ColorRes.error,
+                Text(
+                  leadTitle ?? "Invoice",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: textPrimary,
+                  ),
                 ),
+                Text(
+                  "#${id ?? '-'}",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: textSecondary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            AppSpacing.verticalSmall,
+            // Company and Client
+            Text(
+              companyName ?? "No Company",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: textPrimary,
+              ),
+            ),
+            Text(
+              "${firstName ?? ''} ${lastName ?? ''} • ${email ?? ''}",
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: textSecondary,
+              ),
+            ),
+            Text(
+              telephone != null ? "+$phoneCode $telephone" : '',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: textSecondary,
+              ),
+            ),
+
+            AppSpacing.verticalSmall,
+
+            // Amount and Status Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "${currency ?? ''} ${leadValue ?? '0.00'}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: ColorRes.success,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppPadding.medium,
+                    vertical: AppPadding.small,
+                  ),
+                  decoration: BoxDecoration(
+                    color: (status == "paid" ? Colors.green : Colors.orange)
+                        .withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(AppRadius.medium),
+                  ),
+                  child: Text(
+                    status?.toUpperCase() ?? "UNPAID",
+                    style: TextStyle(
+                      color: status == "paid" ? Colors.green : Colors.orange,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            AppSpacing.verticalSmall,
+            // Created Date and Source
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Created: ${createdAt ?? '-'}",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: textSecondary,
+                  ),
+                ),
+                Text(
+                  "Source: ${source ?? '-'}",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: textSecondary,
+                  ),
+                ),
+              ],
+            ),
+
+            Divider(height: AppPadding.medium, color: Get.theme.dividerColor),
+
+            // Edit / Delete buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
                 CrmIc(
                   iconPath: ICRes.edit,
                   onTap: onEdit,
                   color: ColorRes.success,
+                ),
+                AppSpacing.horizontalMedium,
+                CrmIc(
+                  iconPath: ICRes.delete,
+                  onTap: onDelete,
+                  color: ColorRes.error,
                 ),
               ],
             ),
