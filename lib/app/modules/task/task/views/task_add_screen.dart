@@ -1,9 +1,8 @@
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/data/models/task/task/task_model.dart';
 import 'package:crm_flutter/app/modules/task/task/controller/task_controller.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,8 +14,8 @@ class TaskAddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskController taskController = Get.put(TaskController());
-
+    Get.lazyPut<TaskController>(() => TaskController());
+    final TaskController taskController = Get.find();
     List<Widget> items = [
       CrmTextField(
         title: "Task Name",
@@ -61,10 +60,7 @@ class TaskAddScreen extends StatelessWidget {
                 value == null || value.isEmpty ? 'Enter task name' : null,
       ),
       SizedBox(),
-      CrmButton(
-        onTap: () =>taskController.addTask(),
-        title: "Save",
-      ),
+      CrmButton(onTap: () => taskController.addTask(), title: "Save"),
     ];
 
     return Scaffold(
@@ -72,11 +68,9 @@ class TaskAddScreen extends StatelessWidget {
         leading: const CrmBackButton(),
         title: const Text("Create New Task"),
       ),
-      body: ListView.separated(
+      body: ViewScreen(
         itemCount: items.length,
-        shrinkWrap: true,
         padding: const EdgeInsets.all(20),
-        separatorBuilder: (context, s) => const SizedBox(height: 20),
         itemBuilder: (context, i) {
           return items[i];
         },

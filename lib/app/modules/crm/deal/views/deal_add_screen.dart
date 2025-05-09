@@ -9,12 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DealAddScreen extends StatelessWidget {
-  final DealController dealController = Get.find();
 
   DealAddScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    Get.lazyPut<DealController>(() => DealController());
+    final DealController dealController = Get.find();
     List textFields = [
       CrmHeadline(title: "Deal Details"),
       CrmTextField(title: "Deal Title", controller: dealController.dealTitle),

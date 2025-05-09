@@ -1,20 +1,20 @@
 class PipelineModel {
-  final String id;
-  final String pipelineName;
-  final String clientId;
-  final String createdBy;
+  final String? id;
+  final String? pipelineName;
+  final String? clientId;
+  final String? createdBy;
   final String? updatedBy;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   PipelineModel({
-    required this.id,
-    required this.pipelineName,
-    required this.clientId,
-    required this.createdBy,
+     this.id,
+     this.pipelineName,
+     this.clientId,
+     this.createdBy,
     this.updatedBy,
-    required this.createdAt,
-    required this.updatedAt,
+     this.createdAt,
+     this.updatedAt,
   });
 
   factory PipelineModel.fromJson(Map<String, dynamic> json) {
@@ -36,8 +36,8 @@ class PipelineModel {
       'client_id': clientId,
       'created_by': createdBy,
       'updated_by': updatedBy,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt!.toIso8601String(),
+      'updatedAt': updatedAt!.toIso8601String(),
     };
   }
 }

@@ -10,12 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TaskScreen extends StatelessWidget {
-  final TaskController taskController = Get.find();
-
   TaskScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<TaskController>(()=>TaskController());
+    final TaskController taskController = Get.find();
     return Scaffold(
       appBar: AppBar(leading: CrmBackButton(), title: const Text("Tasks")),
       floatingActionButton: CrmButton(

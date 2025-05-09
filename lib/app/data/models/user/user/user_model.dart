@@ -5,7 +5,6 @@ class UserModel {
   final String? password;
   final String? email;
   final String? roleId;
-  final String? roleName;
   final String? profilePic;
   final String? firstName;
   final String? lastName;
@@ -18,14 +17,14 @@ class UserModel {
   final String? zipcode;
   final String? website;
   final String? gender;
-  final String? joiningDate;
-  final String? leaveDate;
+  final DateTime? joiningDate;
+  final DateTime? leaveDate;
   final String? branch;
   final String? department;
   final String? designation;
-  final String? salary;
+  final double? salary;
   final String? accountHolder;
-  final String? accountNumber;
+  final int? accountNumber;
   final String? bankName;
   final String? ifsc;
   final String? gstIn;
@@ -37,12 +36,16 @@ class UserModel {
   final String? clientId;
   final String? clientPlanId;
   final String? documents;
+  final String? conversations;
   final String? resetPasswordOTP;
-  final String? resetPasswordOTPExpiry;
+  final DateTime? resetPasswordOTPExpiry;
   final String? createdBy;
   final String? updatedBy;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final int? storageLimit;
+  final int? storageUsed;
+  final String currency;
 
   UserModel({
     this.id,
@@ -51,7 +54,6 @@ class UserModel {
     this.password,
     this.email,
     this.roleId,
-    this.roleName,
     this.profilePic,
     this.firstName,
     this.lastName,
@@ -83,60 +85,67 @@ class UserModel {
     this.clientId,
     this.clientPlanId,
     this.documents,
+    this.conversations,
     this.resetPasswordOTP,
     this.resetPasswordOTPExpiry,
     this.createdBy,
     this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
+    required this.createdAt,
+    required this.updatedAt,
+    this.storageLimit,
+    this.storageUsed,
+    required this.currency,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      employeeId: json['employeeId'],
-      username: json['username'],
-      password: json['password'],
-      email: json['email'],
-      roleId: json['role_id'],
-      roleName: json['roleName'],
-      profilePic: json['profilePic'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      phoneCode: json['phoneCode'],
-      phone: json['phone'],
-      address: json['address'],
-      state: json['state'],
-      city: json['city'],
-      country: json['country'],
-      zipcode: json['zipcode'],
-      website: json['website'],
-      gender: json['gender'],
-      joiningDate: json['joiningDate'],
-      leaveDate: json['leaveDate'],
-      branch: json['branch'],
-      department: json['department'],
-      designation: json['designation'],
-      salary: json['salary'],
-      accountHolder: json['accountholder'],
-      accountNumber: json['accountnumber'],
-      bankName: json['bankname'],
-      ifsc: json['ifsc'],
-      gstIn: json['gstIn'],
-      bankLocation: json['banklocation'],
-      cvPath: json['cv_path'],
-      links: json['links'],
-      eSignature: json['e_signature'],
-      accountType: json['accounttype'],
-      clientId: json['client_id'],
-      clientPlanId: json['client_plan_id'],
-      documents: json['documents'],
-      resetPasswordOTP: json['resetPasswordOTP'],
-      resetPasswordOTPExpiry: json['resetPasswordOTPExpiry'],
-      createdBy: json['created_by'],
-      updatedBy: json['updated_by'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      id: json['id']?.toString(),
+      employeeId: json['employeeId']?.toString(),
+      username: json['username']?.toString(),
+      password: json['password']?.toString(),
+      email: json['email']?.toString(),
+      roleId: json['role_id']?.toString(),
+      profilePic: json['profilePic']?.toString(),
+      firstName: json['firstName']?.toString(),
+      lastName: json['lastName']?.toString(),
+      phoneCode: json['phoneCode']?.toString(),
+      phone: json['phone']?.toString(),
+      address: json['address']?.toString(),
+      state: json['state']?.toString(),
+      city: json['city']?.toString(),
+      country: json['country']?.toString(),
+      zipcode: json['zipcode']?.toString(),
+      website: json['website']?.toString(),
+      gender: json['gender']?.toString(),
+      joiningDate: json['joiningDate'] != null ? DateTime.parse(json['joiningDate']) : null,
+      leaveDate: json['leaveDate'] != null ? DateTime.parse(json['leaveDate']) : null,
+      branch: json['branch']?.toString(),
+      department: json['department']?.toString(),
+      designation: json['designation']?.toString(),
+      salary: json['salary'] != null ? double.parse(json['salary'].toString()) : null,
+      accountHolder: json['accountholder']?.toString(),
+      accountNumber: json['accountnumber'] != null ? int.parse(json['accountnumber'].toString()) : null,
+      bankName: json['bankname']?.toString(),
+      ifsc: json['ifsc']?.toString(),
+      gstIn: json['gstIn']?.toString(),
+      bankLocation: json['banklocation']?.toString(),
+      cvPath: json['cv_path']?.toString(),
+      links: json['links']?.toString(),
+      eSignature: json['e_signature']?.toString(),
+      accountType: json['accounttype']?.toString(),
+      clientId: json['client_id']?.toString(),
+      clientPlanId: json['client_plan_id']?.toString(),
+      documents: json['documents']?.toString(),
+      conversations: json['conversations']?.toString(),
+      resetPasswordOTP: json['resetPasswordOTP']?.toString(),
+      resetPasswordOTPExpiry: json['resetPasswordOTPExpiry'] != null ? DateTime.parse(json['resetPasswordOTPExpiry']) : null,
+      createdBy: json['created_by']?.toString(),
+      updatedBy: json['updated_by']?.toString(),
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      storageLimit: json['storage_limit'] != null ? int.parse(json['storage_limit'].toString()) : null,
+      storageUsed: json['storage_used'] != null ? int.parse(json['storage_used'].toString()) : null,
+      currency: json['currency']?.toString() ?? 'USD',
     );
   }
 
@@ -148,7 +157,6 @@ class UserModel {
       'password': password,
       'email': email,
       'role_id': roleId,
-      'roleName': roleName,
       'profilePic': profilePic,
       'firstName': firstName,
       'lastName': lastName,
@@ -161,8 +169,8 @@ class UserModel {
       'zipcode': zipcode,
       'website': website,
       'gender': gender,
-      'joiningDate': joiningDate,
-      'leaveDate': leaveDate,
+      'joiningDate': joiningDate?.toIso8601String(),
+      'leaveDate': leaveDate?.toIso8601String(),
       'branch': branch,
       'department': department,
       'designation': designation,
@@ -180,12 +188,16 @@ class UserModel {
       'client_id': clientId,
       'client_plan_id': clientPlanId,
       'documents': documents,
+      'conversations': conversations,
       'resetPasswordOTP': resetPasswordOTP,
-      'resetPasswordOTPExpiry': resetPasswordOTPExpiry,
+      'resetPasswordOTPExpiry': resetPasswordOTPExpiry?.toIso8601String(),
       'created_by': createdBy,
       'updated_by': updatedBy,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'storage_limit': storageLimit,
+      'storage_used': storageUsed,
+      'currency': currency,
     };
   }
 }

@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/modules/crm/lead/bindings/lead_binding.dart';
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_add_screen.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_detail_screen.dart';
@@ -16,7 +15,10 @@ class LeadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  
+    Get.lazyPut<LeadController>(() => LeadController());
     final controller = Get.find<LeadController>();
+
     
     return Scaffold(
       appBar: AppBar(leading: CrmBackButton(), title: Text("Leads")),

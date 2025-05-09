@@ -15,6 +15,7 @@ import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:crm_flutter/app/data/service/roles_service.dart';
 
 class LeadDetailScreen extends StatelessWidget {
   final String id;
@@ -24,6 +25,8 @@ class LeadDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabBarController = Get.put(TabBarController());
+    Get.lazyPut<LeadController>(() => LeadController());
+
     final leadController = Get.find<LeadController>();
 
     if (leadController.leads.isEmpty) {
@@ -31,13 +34,19 @@ class LeadDetailScreen extends StatelessWidget {
     }
 
     final lead = leadController.leads.firstWhere(
-      (lead) => lead.id == id,
+          (lead) => lead.id == id,
       orElse: () => LeadModel(),
     );
 
     if (lead.id == null) {
       return const Center(child: Text("Lead not found"));
     }
+
+    // Get actual user data for lead members
+    // final leadMembers = leadController.getLeadMembers(
+    //     lead.leadMembers.map((e) => e.memberId).toList()
+    // );
+
     List widgets = [
       LeadOverviewCard(
         id: lead.id.toString(),
@@ -69,7 +78,8 @@ class LeadDetailScreen extends StatelessWidget {
         createdAt: lead.createdAt.toString(),
         updatedAt: lead.updatedAt.toString(),
         onDelete:
-            () => CrmDeleteDialog(
+            () =>
+            CrmDeleteDialog(
               onConfirm: () {
                 leadController.deleteLead(lead.id.toString());
                 Get.back();
@@ -78,31 +88,40 @@ class LeadDetailScreen extends StatelessWidget {
         onEdit: () {},
       ),
       ViewScreen(
-        itemCount: 10,
+        itemCount: lead.files.length,
         padding: const EdgeInsets.all(AppPadding.medium),
+
         itemBuilder: (context, i) {
+          final file = lead.files[i];
           return FileCard(
-            url:
-                "https://images.pexels.com/photos/31300173/pexels-photo-31300173/free-photo-of-vibrant-blue-poison-dart-frog-on-leaf.jpeg?auto=compress&cs=tinysrgb&w=600",
-            name: "Mandok ${i + 1}",
-            id: "Bilu mandok",
-            role: "ANM",
-            onTap: () => print((i + 1).toString()),
-            onDelete: () => print("Delete file : ${i + 1}"),
+            url: file.url,
+            name: file.filename,
+            id: file.filename,
+            role: "File",
+            onTap: null,
+            onDelete: null,
           );
         },
       ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return MemberCard(
-            subTitle: "Boss partner",
-            title: "Jay Kumar",
-            role: "HR",
-          );
-        },
-      ),
+      // ViewScreen(
+      //     itemCount: leadMembers.length,
+      //     itemBuilder: (context, index) {
+      //       final member = leadMembers[index];
+      //       final rolesService = Get.find<RolesService>();
+      //       final roleName = rolesService.getRoleNameById(member.roleId ?? '');
+      //       final role = [
+      //         if (roleName.isNotEmpty) roleName,
+      //         if (member.designation?.isNotEmpty == true) member.designation,
+      //         if (member.department?.isNotEmpty == true) member.department,
+      //       ].where((s) => s != null && s.isNotEmpty).join(' - ');
+      //
+      //       return MemberCard(
+      //         title: member.username ?? 'Unknown User',
+      //         subTitle: role.isNotEmpty ? role : 'No Role',
+      //         role: member.email ?? 'No Email',
+      //         onTap: null,
+      //       );
+      //     }),
       ViewScreen(
         itemCount: 10,
         padding: const EdgeInsets.all(AppPadding.medium),

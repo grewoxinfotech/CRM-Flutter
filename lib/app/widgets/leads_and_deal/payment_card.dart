@@ -39,6 +39,7 @@ class PaymentCard extends StatelessWidget {
     this.onEdit,
     this.onDelete,
   });
+
   @override
   Widget build(BuildContext context) {
     final Color textPrimary = Get.theme.colorScheme.onPrimary;
@@ -65,30 +66,35 @@ class PaymentCard extends StatelessWidget {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppPadding.medium,
-                    vertical: AppPadding.small,
+                    horizontal: AppPadding.small,
+                    vertical: AppPadding.small / 2,
                   ),
                   decoration: BoxDecoration(
                     color: (status == "paid" ? Colors.green : Colors.orange)
                         .withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppRadius.medium),
+                    borderRadius: BorderRadius.circular(AppRadius.small),
                   ),
                   child: Text(
                     status?.toUpperCase() ?? "UNPAID",
                     style: TextStyle(
+                      fontSize: 12,
                       color: status == "paid" ? Colors.green : Colors.orange,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
               ],
             ),
 
-AppSpacing.verticalSmall,
+            AppSpacing.verticalSmall,
             // Date Range
             Text(
               "Duration: ${startDate ?? '-'} to ${endDate ?? '-'}",
-              style: TextStyle(fontSize: 12 ,fontWeight: FontWeight.w600, color: textSecondary),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: textSecondary,
+              ),
             ),
 
             // Completion & Members
@@ -96,16 +102,23 @@ AppSpacing.verticalSmall,
               children: [
                 Text(
                   "Completion: ${completion ?? '0%'}",
-                  style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600, color: textSecondary),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: textSecondary,
+                  ),
                 ),
                 AppSpacing.horizontalSmall,
                 Text(
                   "Members: ${projectMembers ?? '0'}",
-                  style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600, color: textSecondary),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: textSecondary,
+                  ),
                 ),
               ],
             ),
-
 
             // Footer with created date and actions
             Divider(height: AppPadding.medium, color: Get.theme.dividerColor),
@@ -132,5 +145,4 @@ AppSpacing.verticalSmall,
       ),
     );
   }
-
 }

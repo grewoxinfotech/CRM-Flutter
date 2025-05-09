@@ -24,6 +24,7 @@ class DealDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TabBarController tabBarController = Get.put(TabBarController());
+    Get.lazyPut<DealController>(() => DealController());
     final DealController dealController = Get.find();
     if (dealController.isLoading.value) {
       return const Center(child: CircularProgressIndicator());
@@ -136,8 +137,8 @@ class DealDetailScreen extends StatelessWidget {
             leadTitle: "leadTitle",
             leadStage: "leadStage",
             pipeline: "pipeline",
-            currency: "currency",
-            leadValue: "leadValue",
+            currency: 'R.',
+            leadValue: "1000000",
             companyName: "companyName",
             firstName: "firstName",
             lastName: "lastName",

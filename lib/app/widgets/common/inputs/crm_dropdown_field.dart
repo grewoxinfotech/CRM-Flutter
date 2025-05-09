@@ -1,3 +1,6 @@
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,8 +44,7 @@ class CrmDropdownField<T> extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 color: Get.theme.colorScheme.onSecondary,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.2,
+                fontWeight: FontWeight.w700,
               ),
             ),
             if (isRequired)
@@ -51,123 +53,101 @@ class CrmDropdownField<T> extends StatelessWidget {
                 style: TextStyle(
                   color: Get.theme.colorScheme.error,
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
           ],
         ),
-        const SizedBox(height: 8),
-        SizedBox(
-          width: double.infinity,
-          child: DropdownButtonFormField<T>(
-            value: value,
-            items: items.map((DropdownMenuItem<T> item) {
-              return DropdownMenuItem<T>(
-                value: item.value,
-                child: Text(
-                  item.value.toString(),
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Get.theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            }).toList(),
-            onChanged: enabled ? onChanged : null,
-            validator: validator,
-            focusNode: focusNode,
-            style: TextStyle(
-              fontSize: 15,
-              color: Get.theme.colorScheme.onSurface,
-              fontWeight: FontWeight.w500,
-            ),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              filled: true,
-              fillColor: enabled ? Get.theme.colorScheme.surface : Get.theme.colorScheme.surface.withAlpha(128),
-              hintText: hintText,
-              hintStyle: TextStyle(
-                color: Get.theme.colorScheme.onSurface.withAlpha(128),
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-              ),
-              prefixIcon: prefixIcon != null 
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Icon(
-                      prefixIcon,
-                      size: 20,
-                      color: Get.theme.colorScheme.primary,
+        AppSpacing.verticalSmall,
+        DropdownButtonFormField<T>(
+          value: value,
+          borderRadius: BorderRadius.circular(AppRadius.large),
+          items:
+              items.map((DropdownMenuItem<T> item) {
+                return DropdownMenuItem<T>(
+                  value: item.value,
+                  child: Text(
+                    item.value.toString(),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Get.theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.w500,
                     ),
-                  )
-                : null,
-              prefixIconConstraints: const BoxConstraints(minWidth: 40),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: Get.theme.colorScheme.outline.withAlpha(128),
-                  width: 1,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: Get.theme.colorScheme.outline.withAlpha(128),
-                  width: 1,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: Get.theme.colorScheme.primary,
-                  width: 1.5,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: Get.theme.colorScheme.error,
-                  width: 1,
-                ),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: Get.theme.colorScheme.error,
-                  width: 1.5,
-                ),
-              ),
-              errorStyle: TextStyle(
-                color: Get.theme.colorScheme.error,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            isExpanded: true,
-            icon: Icon(
-              Icons.arrow_drop_down,
-              color: Get.theme.colorScheme.primary,
-              size: 24,
-            ),
-            dropdownColor: Get.theme.scaffoldBackgroundColor,
-            menuMaxHeight: 300,
-            itemHeight: 50,
-            selectedItemBuilder: (BuildContext context) {
-              return items.map<Widget>((DropdownMenuItem<T> item) {
-                return Text(
-                  item.value.toString(),
-                  style: TextStyle(
-                    color: Get.theme.colorScheme.primary,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
                   ),
                 );
-              }).toList();
-            },
+              }).toList(),
+          onChanged: enabled ? onChanged : null,
+          validator: validator,
+          focusNode: focusNode,
+          style: TextStyle(
+            fontSize: 15,
+            color: Get.theme.colorScheme.onSurface,
+            fontWeight: FontWeight.w500,
           ),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(AppPadding.small),
+            filled: true,
+            fillColor:
+                enabled
+                    ? Get.theme.colorScheme.surface
+                    : Get.theme.colorScheme.surface.withAlpha(128),
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: Get.theme.colorScheme.onSurface.withAlpha(128),
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
+            prefixIcon:
+                prefixIcon != null
+                    ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Icon(
+                        prefixIcon,
+                        size: 20,
+                        color: Get.theme.colorScheme.primary,
+                      ),
+                    )
+                    : null,
+            prefixIconConstraints: const BoxConstraints(minWidth: 40),
+            enabledBorder: tile(Get.theme.dividerColor),
+            focusedBorder: tile(Get.theme.colorScheme.primary),
+            errorBorder: tile(Get.theme.colorScheme.error),
+            focusedErrorBorder: tile(Get.theme.colorScheme.error),
+            errorStyle: TextStyle(
+              color: Get.theme.colorScheme.error,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          isExpanded: true,
+          icon: CrmIc(
+            iconPath: ICRes.down,
+            color: Get.theme.colorScheme.primary,
+          ),
+          dropdownColor: Get.theme.colorScheme.surface,
+          menuMaxHeight: 300,
+          itemHeight: 50,
+          selectedItemBuilder: (BuildContext context) {
+            return items.map<Widget>((DropdownMenuItem<T> item) {
+              return Text(
+                item.value.toString(),
+                style: TextStyle(
+                  color: Get.theme.colorScheme.primary,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              );
+            }).toList();
+          },
         ),
       ],
     );
   }
-} 
+}
+
+InputBorder? tile(Color color) {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(AppRadius.medium),
+    borderSide: BorderSide(color: color, width: 1),
+  );
+}

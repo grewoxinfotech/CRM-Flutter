@@ -17,6 +17,10 @@ class UrlRes {
 
   static const String task = "$baseURL/tasks";
 
+  static const String roles = "$baseURL/roles";
+
+  
+
   // headers from api
   static const String contentType = "Content-type";
   static const String applicationJson = "application/json";

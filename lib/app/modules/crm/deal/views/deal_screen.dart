@@ -11,12 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DealScreen extends StatelessWidget {
-  final DealController dealController = Get.find();
+
 
   DealScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<DealController>(() => DealController());
+    final DealController dealController = Get.find<DealController>();
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(

@@ -1,6 +1,6 @@
-import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:get/get.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CrmTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -50,8 +50,7 @@ class CrmTextField extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 color: Get.theme.colorScheme.onSecondary,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.2,
+                fontWeight: FontWeight.w700,
               ),
             ),
             if (isRequired)
@@ -60,12 +59,12 @@ class CrmTextField extends StatelessWidget {
                 style: TextStyle(
                   color: Get.theme.colorScheme.error,
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
           ],
         ),
-        const SizedBox(height: 8),
+        AppSpacing.verticalSmall,
         TextFormField(
           controller: controller,
           validator: validator,
@@ -83,66 +82,39 @@ class CrmTextField extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.all(AppPadding.small),
             filled: true,
-            fillColor: enabled ? Get.theme.colorScheme.surface : Get.theme.colorScheme.surface.withAlpha(128),
+            fillColor:
+                enabled
+                    ? Get.theme.colorScheme.surface
+                    : Get.theme.colorScheme.surface.withAlpha(128),
             hintText: hintText,
             hintStyle: TextStyle(
               color: Get.theme.colorScheme.onSurface.withAlpha(128),
               fontSize: 15,
               fontWeight: FontWeight.w400,
             ),
-            prefixIcon: prefixIcon != null 
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Icon(
-                    prefixIcon,
-                    size: 20,
-                    color: Get.theme.colorScheme.primary,
-                  ),
-                )
-              : null,
+            prefixIcon:
+                prefixIcon != null
+                    ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Icon(
+                        prefixIcon,
+                        size: 20,
+                        color: Get.theme.colorScheme.primary,
+                      ),
+                    )
+                    : null,
             prefixIconConstraints: const BoxConstraints(minWidth: 40),
             suffixIcon: suffixIcon,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.outline.withAlpha(128),
-                width: 1,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.outline.withAlpha(128),
-                width: 1,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.primary,
-                width: 1.5,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.error,
-                width: 1,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Get.theme.colorScheme.error,
-                width: 1.5,
-              ),
-            ),
+            enabledBorder: tile(Get.theme.dividerColor),
+            focusedBorder: tile(Get.theme.colorScheme.primary),
+            errorBorder: tile(Get.theme.colorScheme.error),
+            focusedErrorBorder: tile(Get.theme.colorScheme.error),
             errorStyle: TextStyle(
               color: Get.theme.colorScheme.error,
               fontSize: 12,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -153,8 +125,7 @@ class CrmTextField extends StatelessWidget {
 
 InputBorder? tile(Color color) {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15),
+    borderRadius: BorderRadius.circular(AppRadius.medium),
     borderSide: BorderSide(color: color, width: 1),
   );
 }
-

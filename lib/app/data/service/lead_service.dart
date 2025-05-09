@@ -14,21 +14,17 @@ class LeadService {
 
   /// 1. Get all leads
   Future<List> getLeads() async {
-    try {
-      final response = await http.get(Uri.parse(url), headers: await headers());
-      final responseData = jsonDecode(response.body);
-      
-      if (response.statusCode == 200) {
-        if (responseData['success'] == true && responseData['data'] != null) {
-          return responseData['data'];
-        } else {
-          return [];
-        }
-      } else {
-        throw Exception(responseData['message'] ?? 'Failed to fetch leads');
-      }
-    } catch (e) {
-      throw Exception('Failed to fetch leads: $e');
+    final response = await http.get(Uri.parse(url), headers: await headers());
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200 && data["success"] == true) {
+      return data["data"] ?? [];
+    } else {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: data["message"],
+        contentType: ContentType.failure,
+      );
+      return [];
     }
   }
 

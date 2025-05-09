@@ -23,21 +23,18 @@ class FunctionController extends GetxController{
       title: 'Leads',
       iconPath: ICRes.leads,
       color: const Color(0xffFFBD21),
-      count: Get.put(LeadController()).leads.length,
       screenBuilder: LeadScreen(),
     ),
       FunctionModel(
         title: 'Deals',
         iconPath: ICRes.leads,
         color: const Color(0xff28B999),
-        count: Get.put(DealController()).deal.length,
         screenBuilder: DealScreen(),
       ),
       FunctionModel(
         title: 'Tasks',
         iconPath: ICRes.task,
         color: const Color(0xff0AC947),
-        count: Get.put(TaskController()).task.length,
         screenBuilder: TaskScreen(),
       ),
       FunctionModel(

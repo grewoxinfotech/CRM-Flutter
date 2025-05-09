@@ -142,26 +142,27 @@ class InvoiceCard extends StatelessWidget {
                 Text(
                   "${currency ?? ''} ${leadValue ?? '0.00'}",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: ColorRes.success,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppPadding.medium,
-                    vertical: AppPadding.small,
+                    horizontal: AppPadding.small,
+                    vertical: AppPadding.small / 2,
                   ),
                   decoration: BoxDecoration(
                     color: (status == "paid" ? Colors.green : Colors.orange)
                         .withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppRadius.medium),
+                    borderRadius: BorderRadius.circular(AppRadius.small),
                   ),
                   child: Text(
                     status?.toUpperCase() ?? "UNPAID",
                     style: TextStyle(
+                      fontSize: 12,
                       color: status == "paid" ? Colors.green : Colors.orange,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),

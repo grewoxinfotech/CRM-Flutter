@@ -5,6 +5,7 @@ import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class FileCard extends StatelessWidget {
   final String? id;
@@ -21,7 +22,9 @@ class FileCard extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDelete;
   final GestureTapCallback? onEdit;
-  const FileCard({super.key,
+
+  const FileCard({
+    super.key,
     this.url,
     this.id,
     this.name,
@@ -38,11 +41,67 @@ class FileCard extends StatelessWidget {
     this.onEdit,
   });
 
+  String _getFileExtension(String filename) {
+    return filename.split('.').last.toLowerCase();
+  }
+
+  IconData _getFileIcon(String extension) {
+    switch (extension) {
+      case 'pdf':
+        return Icons.picture_as_pdf;
+      case 'doc':
+      case 'docx':
+        return Icons.description;
+      case 'xls':
+      case 'xlsx':
+        return Icons.table_chart;
+      case 'ppt':
+      case 'pptx':
+        return Icons.slideshow;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+        return Icons.image;
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
+
+  Color _getFileColor(String extension) {
+    switch (extension) {
+      case 'pdf':
+        return Colors.red;
+      case 'doc':
+      case 'docx':
+        return Colors.blue;
+      case 'xls':
+      case 'xlsx':
+        return Colors.green;
+      case 'ppt':
+      case 'pptx':
+        return Colors.orange;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+        return Colors.purple;
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Color textPrimary = Get.theme.colorScheme.onPrimary;
     Color textSecondary = Get.theme.colorScheme.onSecondary;
-    double cardHeight = 120;
+    double cardHeight = 100;
+
+    // Get file extension and icon
+    final extension = name != null ? _getFileExtension(name!) : '';
+    final fileIcon = _getFileIcon(extension);
+    final fileColor = _getFileColor(extension);
+
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
@@ -50,77 +109,115 @@ class FileCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.large),
         child: Row(
           children: [
+            // File Preview/Icon Container
             Container(
               height: cardHeight,
               width: cardHeight,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(url.toString()),
-                  fit: BoxFit.cover,
-                ),
+                color: fileColor.withOpacity(0.1),
                 borderRadius: BorderRadius.horizontal(
                   left: Radius.circular(AppRadius.large),
                 ),
               ),
+              child: url != null && (extension == 'jpg' || extension == 'jpeg' || extension == 'png' || extension == 'gif')
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.horizontal(
+                        left: Radius.circular(AppRadius.large),
+                      ),
+                      child: Image.network(
+                        url!,
+                        fit: BoxFit.cover,
+                        width: cardHeight,
+                        height: cardHeight,
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          fileIcon,
+                          size: 32,
+                          color: fileColor,
+                        ),
+                      ),
+                    )
+                  : Icon(
+                      fileIcon,
+                      size: 32,
+                      color: fileColor,
+                    ),
             ),
+            // File Details Container
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(AppPadding.medium),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    // File Name
                     Text(
-                      "$name",
-                      maxLines: 3,
+                      name ?? 'Unnamed File',
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: textPrimary,
                       ),
                     ),
-                    Text(
-                      "$id",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: textSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Spacer(),
+                    SizedBox(height: 8),
+                    // File Type and Size
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 1,
+                            horizontal: 8,
+                            vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              AppRadius.small,
-                            ),
-                            border: Border.all(color: textPrimary),
+                            color: fileColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(AppRadius.small),
                           ),
                           child: Text(
-                            role.toString(),
+                            extension.toUpperCase(),
                             style: TextStyle(
                               fontSize: 12,
-                              fontWeight: FontWeight.w900,
-                              color: textPrimary,
+                              fontWeight: FontWeight.w500,
+                              color: fileColor,
                             ),
                           ),
                         ),
-                        CrmIc(
-                          iconPath: ICRes.delete,
-                          color: Get.theme.colorScheme.error,
-                          onTap: onDelete,
+                        SizedBox(width: 8),
+                        Text(
+                          role ?? 'File',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: textSecondary,
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
+              ),
+            ),
+            // Action Buttons
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: AppPadding.small),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (onEdit != null)
+                    CrmIc(
+                      iconPath: ICRes.edit,
+                      color: textPrimary,
+                      onTap: onEdit,
+                    ),
+                  SizedBox(width: 8),
+                  if (onDelete != null)
+                    CrmIc(
+                      iconPath: ICRes.delete,
+                      color: Get.theme.colorScheme.error,
+                      onTap: onDelete,
+                    ),
+                ],
               ),
             ),
           ],
