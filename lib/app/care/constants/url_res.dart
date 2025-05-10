@@ -20,7 +20,9 @@ class UrlRes {
 
   static const String roles = "$baseURL/roles";
 
+  static const String labels = "$baseURL/labels";
   
+  static const String allUsers = "$baseURL/auth";
 
   // headers from api
   static const String contentType = "Content-type";

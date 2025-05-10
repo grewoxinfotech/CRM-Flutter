@@ -17,8 +17,6 @@ class LeadAddScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PipelineController pipelineController = Get.put(PipelineController());
-
-    Get.lazyPut<LeadController>(() => LeadController());
     final leadController = Get.find<LeadController>();
 
     List<Widget> items = [
@@ -47,7 +45,7 @@ class LeadAddScreen extends StatelessWidget {
             final selectedPipeline = pipelineController.pipelines
                 .firstWhereOrNull((p) => p.pipelineName == value);
             if (selectedPipeline != null) {
-              // leadController.updatePipeline(value, selectedPipeline.id);
+              leadController.updatePipeline(value, selectedPipeline.id);
             }
           },
           isRequired: true,

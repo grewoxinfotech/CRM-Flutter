@@ -1,10 +1,13 @@
 import 'dart:convert';
-
+import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
-import 'package:crm_flutter/app/data/network/crm/label/model/label_model.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/label/model/label_model.dart';
 import 'package:http/http.dart' as http;
 
 class LabelService {
+
+  final String url = UrlRes.labels;
+
   Future<List<LabelModel>> getLabels() async {
     try {
       final token = await SecureStorage.getToken();
@@ -15,7 +18,7 @@ class LabelService {
       }
 
       final response = await http.get(
-        Uri.parse('https://api.raiser.in/api/v1/labels/${userData.id}'),
+        Uri.parse('$url/${userData.id}'), 
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

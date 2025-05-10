@@ -1,14 +1,16 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:crm_flutter/app/data/network/crm/crm_system/stage/stage_model.dart';
-import 'package:crm_flutter/app/data/network/crm/label/model/label_model.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/stage/model/stage_model.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/label/model/label_model.dart';
 import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
-import 'package:crm_flutter/app/data/service/all_users_service.dart';
-import 'package:crm_flutter/app/data/network/crm/label/service/label_service.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/model/pipeline_model.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/service/pipeline_service.dart';
+import 'package:crm_flutter/app/data/network/user/all_users/service/all_users_service.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_service.dart';
 import 'package:crm_flutter/app/data/network/crm/lead/service/lead_service.dart';
 import 'package:crm_flutter/app/data/network/role/service/roles_service.dart';
-import 'package:crm_flutter/app/data/network/crm/stage/service/stage_service.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/stage/service/stage_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,14 +21,18 @@ class LeadController extends GetxController {
 
   // all service
   final LeadService leadService = LeadService();
-  // final StageService stageService = StageService();
+  final StageService stageService = StageService();
+  final PipelineService pipelineService = PipelineService();
   final LabelService labelService = LabelService();
-  final AllUserService allUserService = AllUserService();
+
+  //Temporary service to fetch all users
+  final AllUsersService allUsersService = AllUsersService();
   final RolesService rolesService = RolesService();
 
   // State Variables
   final RxList<LeadModel> leads = <LeadModel>[].obs;
   final RxList<StageModel> stages = <StageModel>[].obs;
+  final RxList<PipelineModel> pipelines = <PipelineModel>[].obs;
   final RxList<LabelModel> labels = <LabelModel>[].obs;
 
   // final RxList<AllUserModel> allUsers = <AllUserModel>[].obs;
@@ -64,7 +70,6 @@ class LeadController extends GetxController {
 
   final List<String> interestLevelOptions = ['high', 'medium', 'low'];
 
-  // Helper method to get ID from name and type
   String getLabelId(String name, String type) {
     final labelList =
         type == 'source'
@@ -105,28 +110,69 @@ class LeadController extends GetxController {
     super.onClose();
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    refreshData();
+  }
+
   Future<void> refreshData() async {
     await Future.wait([
       getLeads(),
-      // getPipelines(),
-      // getStages(),
+      getPipelines(),
+      getStages(),
       getLabels(),
       getRoles(),
+      //Temporary function to fetch all users
       getAllUsers(),
     ]);
+  }
+
+  Future<void> getPipelines() async {
+    try {
+      final data = await pipelineService.getPipelines();
+      if (data != null && data.isNotEmpty) {
+        final pipelinesList = data.map((e) => PipelineModel.fromJson(e)).toList();
+        pipelines.assignAll(pipelinesList);
+      } else {
+        pipelines.clear();
+      }
+    } catch (e) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Error',
+        message: 'Failed to fetch pipelines',
+        contentType: ContentType.failure,
+      );
+    }
+  }
+
+  Future<void> getStages() async {
+    try {
+      final stagesList = await stageService.getStages(stageType: 'lead');
+      if (stagesList.isNotEmpty) {
+        stages.assignAll(stagesList);
+      } else {
+        stages.clear();
+      }
+    } catch (e) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Error',
+        message: 'Failed to fetch stages',
+        contentType: ContentType.failure,
+      );
+    }
   }
 
   Future<void> getRoles() async {
     try {
       await rolesService.getRoles();
     } catch (e) {
-      print('Error in getRoles: $e');
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
         message: 'Failed to fetch roles',
         contentType: ContentType.failure,
       );
-    } finally {}
+    }
   }
 
   Future<void> getLabels() async {
@@ -134,84 +180,85 @@ class LeadController extends GetxController {
       final labelsList = await labelService.getLabels();
       labels.assignAll(labelsList);
     } catch (e) {
-      print('Error in getLabels: $e');
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
         message: 'Failed to fetch labels',
         contentType: ContentType.failure,
       );
-    } finally {}
+    }
   }
-  //
-  // Future<void> getStages() async {
-  //   try {
-  //     final stagesList = await stageService.getStages(stageType: 'lead');
-  //     stages.assignAll(stagesList);
-  //   } catch (e) {
-  //     print('Error in getStages: $e');
-  //   } finally {}
-  // }
-  //
-  // // Get stages for a specific pipeline
-  // List<StageModel> getStagesForPipeline(String pipelineId) {
-  //   if (pipelineId.isEmpty) return [];
-  //   final pipelineStages =
-  //       stages.where((stage) => stage.pipeline == pipelineId).toList();
-  //
-  //   // Sort stages to put default stage first
-  //   pipelineStages.sort((a, b) {
-  //     if (a.isDefault) return -1;
-  //     if (b.isDefault) return 1;
-  //     return 0;
-  //   });
-  //
-  //   return pipelineStages;
-  // }
-  //
-  // // Get default stage for a pipeline
-  // StageModel? getDefaultStageForPipeline(String pipelineId) {
-  //   if (pipelineId.isEmpty) return null;
-  //   return stages.firstWhereOrNull(
-  //     (stage) => stage.pipeline == pipelineId && stage.isDefault,
-  //   );
-  // }
+
+  // Get stages for a specific pipeline
+  List<StageModel> getStagesForPipeline(String pipelineId) {
+    if (pipelineId.isEmpty) return [];
+    return stages.where((stage) => stage.pipeline == pipelineId).toList();
+  }
+
+  // Get default stage for a pipeline
+  StageModel? getDefaultStageForPipeline(String pipelineId) {
+    if (pipelineId.isEmpty) return null;
+    return stages.firstWhereOrNull(
+      (stage) => stage.pipeline == pipelineId && stage.isDefault,
+    );
+  }
 
   // Update pipeline selection
-  // void updatePipeline(String? pipelineName, String? pipelineId) {
-  //   if (pipelineName == null || pipelineId == null) {
-  //     selectedPipeline.value = '';
-  //     selectedPipelineId.value = '';
-  //     selectedStage.value = '';
-  //     selectedStageId.value = '';
-  //     return;
-  //   }
-  //
-  //   selectedPipeline.value = pipelineName;
-  //   selectedPipelineId.value = pipelineId;
-  //
-  //   // Always set the default stage for the pipeline
-  //   final defaultStage = getDefaultStageForPipeline(pipelineId);
-  //   if (defaultStage != null) {
-  //     selectedStage.value = defaultStage.stageName;
-  //     selectedStageId.value = defaultStage.id;
-  //   } else {
-  //     // If no default stage found, get the first stage for this pipeline
-  //     final pipelineStages = getStagesForPipeline(pipelineId);
-  //     if (pipelineStages.isNotEmpty) {
-  //       final firstStage = pipelineStages.first;
-  //       selectedStage.value = firstStage.stageName;
-  //       selectedStageId.value = firstStage.id;
-  //     } else {
-  //       selectedStage.value = '';
-  //       selectedStageId.value = '';
-  //     }
-  //   }
-  // }
+  void updatePipeline(String? pipelineName, String? pipelineId) {
+    if (pipelineName == null || pipelineId == null) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Validation Error',
+        message: 'Please select a valid pipeline',
+        contentType: ContentType.warning,
+      );
+      selectedPipeline.value = '';
+      selectedPipelineId.value = '';
+      selectedStage.value = '';
+      selectedStageId.value = '';
+      return;
+    }
+
+    final pipelineExists = pipelines.any((p) => p.id == pipelineId);
+    if (!pipelineExists) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Error',
+        message: 'Selected pipeline not found',
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+
+    selectedPipeline.value = pipelineName;
+    selectedPipelineId.value = pipelineId;
+
+    final pipelineStages = getStagesForPipeline(pipelineId);
+
+    if (pipelineStages.isEmpty) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Warning',
+        message: 'No stages found for selected pipeline',
+        contentType: ContentType.warning,
+      );
+      selectedStage.value = '';
+      selectedStageId.value = '';
+      return;
+    }
+
+    final defaultStage = pipelineStages.firstWhereOrNull((stage) => stage.isDefault);
+    if (defaultStage != null) {
+      selectedStage.value = defaultStage.stageName;
+      selectedStageId.value = defaultStage.id;
+    } else {
+      final firstStage = pipelineStages.first;
+      selectedStage.value = firstStage.stageName;
+      selectedStageId.value = firstStage.id;
+    }
+
+    update();
+  }
 
   Future<List> getLeads() async {
     try {
       final data = await leadService.getLeads();
-
       if (data != null && data.isNotEmpty) {
         final leadsList = data.map((e) => LeadModel.fromJson(e)).toList();
         leads.assignAll(leadsList);
@@ -228,34 +275,32 @@ class LeadController extends GetxController {
       );
       leads.clear();
       return [];
-    } finally {}
+    }
   }
 
   Future<void> addLead() async {
     try {
-      // Collect all form data
-      final Map<String, dynamic> leadData = {
-        'leadTitle': leadTitleController.text,
-        'leadStage': selectedStage.value,
-        'pipeline': selectedPipeline.value,
-        'currency': 'USD',
-        'leadValue': int.tryParse(leadValueController.text) ?? 0,
-        'source': getLabelId(selectedSource.value, 'source'),
-        'category': getLabelId(selectedCategory.value, 'category'),
-        'status': getLabelId(selectedStatus.value, 'status'),
-        'interest_level': 'medium',
-        'client_id': 'default',
-        'created_by': 'default',
-        'firstName': firstNameController.text,
-        'lastName': lastNameController.text,
-        'email': emailController.text,
-        'phone': phoneController.text,
-        'company': companyController.text,
-        'address': addressController.text,
-      };
+      isLoading.value = true;
+     
+      if (selectedPipelineId.value.isEmpty) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Validation Error',
+          message: 'Please select a pipeline',
+          contentType: ContentType.warning,
+        );
+        return;
+      }
 
-      // Validate required fields
-      if ((leadData['leadTitle'] as String?)?.isEmpty ?? true) {
+      if (selectedStageId.value.isEmpty) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Validation Error',
+          message: 'Please select a stage',
+          contentType: ContentType.warning,
+        );
+        return;
+      }
+
+      if (leadTitleController.text.trim().isEmpty) {
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Validation Error',
           message: 'Lead title is required',
@@ -264,16 +309,7 @@ class LeadController extends GetxController {
         return;
       }
 
-      if ((leadData['pipeline'] as String?)?.isEmpty ?? true) {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: 'Validation Error',
-          message: 'Pipeline is required',
-          contentType: ContentType.warning,
-        );
-        return;
-      }
-
-      if (leadData['leadValue'] == 0) {
+      if (leadValueController.text.trim().isEmpty) {
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Validation Error',
           message: 'Lead value is required',
@@ -282,7 +318,7 @@ class LeadController extends GetxController {
         return;
       }
 
-      if ((leadData['source'] as String?)?.isEmpty ?? true) {
+      if (selectedSource.value.isEmpty) {
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Validation Error',
           message: 'Source is required',
@@ -291,10 +327,29 @@ class LeadController extends GetxController {
         return;
       }
 
+      final Map<String, dynamic> leadData = {
+        'leadTitle': leadTitleController.text.trim(),
+        'leadStage': selectedStageId.value,
+        'pipeline': selectedPipelineId.value,
+        'currency': 'USD',
+        'leadValue': int.tryParse(leadValueController.text.trim()) ?? 0,
+        'source': getLabelId(selectedSource.value, 'source'),
+        'category': getLabelId(selectedCategory.value, 'category'),
+        'status': getLabelId(selectedStatus.value, 'status'),
+        'interest_level': selectedInterestLevel.value.isEmpty ? 'medium' : selectedInterestLevel.value,
+        'client_id': 'default',
+        'created_by': 'default',
+        'firstName': firstNameController.text.trim(),
+        'lastName': lastNameController.text.trim(),
+        'email': emailController.text.trim(),
+        'phone': phoneController.text.trim(),
+        'company': companyController.text.trim(),
+        'address': addressController.text.trim(),
+      };
+
       final response = await leadService.createLead(leadData);
 
-      if (response.statusCode == 200) {
-        // Clear form
+      if (response.statusCode == 200 || response.statusCode == 201) {
         leadTitleController.clear();
         leadValueController.clear();
         firstNameController.clear();
@@ -312,7 +367,6 @@ class LeadController extends GetxController {
         selectedStageId.value = '';
         selectedStatus.value = '';
 
-        // Refresh all data
         await refreshData();
         Get.back();
         CrmSnackBar.showAwesomeSnackbar(
@@ -322,29 +376,12 @@ class LeadController extends GetxController {
         );
       } else {
         String errorMessage = 'Failed to create lead';
-        String? serverMessage;
-
         try {
           final responseData = jsonDecode(response.body);
           if (responseData is Map) {
-            serverMessage = responseData['message'] ?? responseData['error'];
+            errorMessage = responseData['message'] ?? responseData['error'] ?? errorMessage;
           }
-        } catch (e) {
-          print('Error parsing response: $e');
-        }
-
-        // Handle specific error cases
-        if (response.statusCode == 400) {
-          errorMessage = serverMessage ?? 'Invalid lead data provided';
-        } else if (response.statusCode == 401) {
-          errorMessage = 'Unauthorized. Please login again';
-        } else if (response.statusCode == 403) {
-          errorMessage = 'You do not have permission to create leads';
-        } else if (response.statusCode == 409) {
-          errorMessage = 'A lead with this email already exists';
-        } else if (response.statusCode == 500) {
-          errorMessage = 'Server error. Please try again later';
-        }
+        } catch (e) {}
 
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Error',
@@ -353,22 +390,14 @@ class LeadController extends GetxController {
         );
       }
     } catch (e) {
-      String errorMessage = 'Failed to create lead';
-
-      // if (e.toString().contains('SocketException')) {
-      //   errorMessage = 'No internet connection. Please check your network';
-      // } else if (e.toString().contains('TimeoutException')) {
-      //   errorMessage = 'Request timed out. Please try again';
-      // } else if (e.toString().contains('FormatException')) {
-      //   errorMessage = 'Invalid data format. Please check your input';
-      // }
-
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
-        message: errorMessage,
+        message: 'Failed to create lead: ${e.toString()}',
         contentType: ContentType.failure,
       );
-    } finally {}
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> editLead(String leadId) async {
@@ -424,35 +453,20 @@ class LeadController extends GetxController {
     }
   }
 
+//Temporary function to fetch all users
   Future<void> getAllUsers() async {
     try {
-      final data = await allUserService.fetchAllUsers();
+      final users = await allUsersService.getUsers();
+      print('Successfully fetched ${users.length} users');
     } catch (e) {
-      print('Error in getAllUsers: $e');
+      print('Error fetching users: $e');
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
         message: 'Failed to fetch users: ${e.toString()}',
         contentType: ContentType.failure,
       );
-    } finally {}
+    }
   }
-
-  // List<UserModel> getLeadMembers(List<String> memberIds) {
-  //   try {
-  //     if (memberIds.isEmpty) return [];
-  //
-  //     final members =
-  //     allUserService.allUsers
-  //             .where((user) => user.id != null && memberIds.contains(user.id))
-  //             .toList();
-  //
-  //     print('Found ${members.length} members for IDs: $memberIds');
-  //     return members;
-  //   } catch (e) {
-  //     print('Error in getLeadMembers: $e');
-  //     return [];
-  //   }
-  // }
 
   // get label names for display
   String getSourceName(String id) {
