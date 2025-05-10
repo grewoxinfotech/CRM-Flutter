@@ -10,89 +10,66 @@ import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:crm_flutter/app/data/network/role/service/roles_service.dart';
 
 class LeadDetailScreen extends StatelessWidget {
-  final String id;
-
-  const LeadDetailScreen({super.key, required this.id});
+  const LeadDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final tabBarController = Get.put(TabBarController());
     Get.lazyPut<LeadController>(() => LeadController());
-
     final leadController = Get.find<LeadController>();
-
-    if (leadController.leads.isEmpty) {
-      return const Center(child: Text("No Lead Data Available."));
-    }
-
-    final lead = leadController.leads.firstWhere(
-          (lead) => lead.id == id,
-      orElse: () => LeadModel(),
-    );
-
-    if (lead.id == null) {
-      return const Center(child: Text("Lead not found"));
-    }
-
-    // Get actual user data for lead members
-    // final leadMembers = leadController.getLeadMembers(
-    //     lead.leadMembers.map((e) => e.memberId).toList()
-    // );
+    final LeadModel data = Get.arguments;
 
     List widgets = [
       LeadOverviewCard(
-        id: lead.id.toString(),
+        id: data.id.toString(),
         color: Colors.green,
-        inquiryId: lead.inquiryId.toString(),
-        leadTitle: lead.leadTitle.toString(),
-        leadStage: lead.leadStage.toString(),
-        pipeline: lead.pipeline.toString(),
-        currency: lead.currency.toString(),
-        leadValue: lead.leadValue.toString(),
-        companyName: lead.companyName.toString(),
-        firstName: lead.firstName.toString(),
-        lastName: lead.lastName.toString(),
-        phoneCode: lead.phoneCode.toString(),
-        telephone: lead.telephone.toString(),
-        email: lead.email.toString(),
-        address: lead.address.toString(),
-        leadMembers: lead.leadMembers.toString(),
-        source: lead.source.toString(),
-        category: lead.category.toString(),
-        files: lead.files.toString(),
-        status: lead.status.toString(),
-        interestLevel: lead.interestLevel.toString(),
-        leadScore: lead.leadScore.toString(),
-        isConverted: lead.isConverted.toString(),
-        clientId: lead.clientId.toString(),
-        createdBy: lead.createdBy.toString(),
-        updatedBy: lead.updatedBy.toString(),
-        createdAt: lead.createdAt.toString(),
-        updatedAt: lead.updatedAt.toString(),
+        inquiryId: data.inquiryId.toString(),
+        leadTitle: data.leadTitle.toString(),
+        leadStage: data.leadStage.toString(),
+        pipeline: data.pipeline.toString(),
+        currency: data.currency.toString(),
+        leadValue: data.leadValue.toString(),
+        companyName: data.companyName.toString(),
+        firstName: data.firstName.toString(),
+        lastName: data.lastName.toString(),
+        phoneCode: data.phoneCode.toString(),
+        telephone: data.telephone.toString(),
+        email: data.email.toString(),
+        address: data.address.toString(),
+        leadMembers: data.leadMembers.length,
+        source: data.source.toString(),
+        category: data.category.toString(),
+        files: data.files.toString(),
+        status: data.status.toString(),
+        interestLevel: data.interestLevel.toString(),
+        leadScore: data.leadScore.toString(),
+        isConverted: data.isConverted.toString(),
+        clientId: data.clientId.toString(),
+        createdBy: data.createdBy.toString(),
+        updatedBy: data.updatedBy.toString(),
+        createdAt: data.createdAt.toString(),
+        updatedAt: data.updatedAt.toString(),
         onDelete:
-            () =>
-            CrmDeleteDialog(
+            () => CrmDeleteDialog(
               onConfirm: () {
-                leadController.deleteLead(lead.id.toString());
+                leadController.deleteLead(data.id.toString());
                 Get.back();
               },
             ),
         onEdit: () {},
       ),
       ViewScreen(
-        itemCount: lead.files.length,
+        itemCount: data.files.length,
         padding: const EdgeInsets.all(AppPadding.medium),
 
         itemBuilder: (context, i) {
-          final file = lead.files[i];
+          final file = data.files[i];
           return FileCard(
             url: file.url,
             name: file.filename,

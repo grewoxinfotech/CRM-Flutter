@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf_progress_painter.dart';
+import 'package:crm_flutter/app/modules/hrm/leave/attendance/widgets/attendance/widget/graf_progress_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -11,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DealScreen extends StatelessWidget {
-
-
   DealScreen({super.key});
 
   @override
@@ -89,9 +87,14 @@ class DealScreen extends StatelessWidget {
                       createdAt: formatDate(data.createdAt.toString()),
                       updatedAt: formatDate(data.updatedAt.toString()),
                       color: Get.theme.colorScheme.error,
-                      onTap: () => (data.id != null)
-                          ? Get.to(() => DealDetailScreen(id: data.id!))
-                          : Get.snackbar('Error', 'deal ID is missing'),
+                      onTap:
+                          () =>
+                              (data.id != null)
+                                  ? Get.to(
+                                    () => DealDetailScreen(),
+                                    arguments: data,
+                                  )
+                                  : Get.snackbar('Error', 'deal ID is missing'),
                       onEdit: () {},
                       onDelete: () {},
                     );

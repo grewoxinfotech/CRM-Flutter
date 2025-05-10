@@ -19,15 +19,15 @@
 //         child: Column(
 //           children: [
 //             TextField(
-//               controller: leadController.leadTitleController,
+//               controllers: leadController.leadTitleController,
 //               decoration: InputDecoration(labelText: 'Lead Title'),
 //             ),
 //             TextField(
-//               controller: leadController.interestLevelController,
+//               controllers: leadController.interestLevelController,
 //               decoration: InputDecoration(labelText: 'Interest Level'),
 //             ),
 //             TextField(
-//               controller: leadController.leadValueController,
+//               controllers: leadController.leadValueController,
 //               decoration: InputDecoration(labelText: 'Lead Value'),
 //             ),
 //             SizedBox(height: 20),

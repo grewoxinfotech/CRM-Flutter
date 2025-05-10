@@ -91,13 +91,8 @@ class LeadScreen extends StatelessWidget {
                       createdAt: formatDate(data.createdAt.toString()),
                       updatedAt: formatDate(data.updatedAt.toString()),
                       onTap: () async {
-                        if (data.id != null) {
-                          await Get.to(() => LeadDetailScreen(id: data.id!));
-                          // Refresh data when returning from detail screen
-                          controller.refreshData();
-                        } else {
+                        await Get.to(() => LeadDetailScreen() , arguments: data);
                           Get.snackbar('Error', 'Lead ID is missing');
-                        }
                       },
                     );
                   },

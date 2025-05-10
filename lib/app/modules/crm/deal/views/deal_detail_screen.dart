@@ -17,66 +17,51 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DealDetailScreen extends StatelessWidget {
-  final id;
-
-  const DealDetailScreen({super.key, required this.id});
+  const DealDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     TabBarController tabBarController = Get.put(TabBarController());
     Get.lazyPut<DealController>(() => DealController());
     final DealController dealController = Get.find();
-    if (dealController.isLoading.value) {
-      return const Center(child: CircularProgressIndicator());
-    }
 
-    if (dealController.deal.isEmpty) {
-      return const Center(child: Text("No Lead Data Available."));
-    }
+    final DealModel data = Get.arguments;
 
-    final deal = dealController.deal.firstWhere(
-      (deal) => deal.id == id,
-      orElse: () => DealModel(),
-    );
-
-    if (deal.id == null) {
-      return const Center(child: Text("Lead not found"));
-    }
     List widgets = [
       DealOverviewCard(
         color: Colors.blue,
-        id: deal.id.toString(),
-        dealTitle: deal.dealTitle.toString(),
-        currency: deal.currency.toString(),
-        value: deal.value.toString(),
-        pipeline: deal.pipeline.toString(),
-        stage: deal.stage.toString(),
-        status: deal.status.toString(),
-        label: deal.label.toString(),
-        closedDate: deal.closedDate.toString(),
-        firstName: deal.firstName.toString(),
-        lastName: deal.lastName.toString(),
-        email: deal.email.toString(),
-        phone: deal.phone.toString(),
-        source: deal.source.toString(),
-        companyName: deal.companyName.toString(),
-        website: deal.website.toString(),
-        address: deal.address.toString(),
-        products: deal.products.toString(),
-        files: deal.files.toString(),
-        assignedTo: deal.assignedTo.toString(),
-        clientId: deal.clientId.toString(),
-        isWon: deal.isWon.toString(),
-        companyId: deal.companyId.toString(),
-        contactId: deal.contactId.toString(),
-        createdBy: deal.createdBy.toString(),
-        updatedBy: deal.updatedBy.toString(),
-        createdAt: deal.createdAt.toString(),
-        updatedAt: deal.updatedAt.toString(),
+        id: data.id.toString(),
+        dealTitle: data.dealTitle.toString(),
+        currency: data.currency.toString(),
+        value: data.value.toString(),
+        pipeline: data.pipeline.toString(),
+        stage: data.stage.toString(),
+        status: data.status.toString(),
+        label: data.label.toString(),
+        closedDate: data.closedDate.toString(),
+        firstName: data.firstName.toString(),
+        lastName: data.lastName.toString(),
+        email: data.email.toString(),
+        phone: data.phone.toString(),
+        source: data.source.toString(),
+        companyName: data.companyName.toString(),
+        website: data.website.toString(),
+        address: data.address.toString(),
+        products: data.products.toString(),
+        files: data.files.toString(),
+        assignedTo: data.assignedTo.toString(),
+        clientId: data.clientId.toString(),
+        isWon: data.isWon.toString(),
+        companyId: data.companyId.toString(),
+        contactId: data.contactId.toString(),
+        createdBy: data.createdBy.toString(),
+        updatedBy: data.updatedBy.toString(),
+        createdAt: data.createdAt.toString(),
+        updatedAt: data.updatedAt.toString(),
         onDelete:
             () => CrmDeleteDialog(
-              entityType: deal.dealTitle.toString(),
-              onConfirm: () => dealController.deleteDeal(id),
+              entityType: data.dealTitle.toString(),
+              onConfirm: () => dealController.deleteDeal(data.id.toString()),
             ),
       ),
       ViewScreen(

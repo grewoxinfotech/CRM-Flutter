@@ -24,7 +24,7 @@ class LeadOverviewCard extends StatelessWidget {
   final String? telephone;
   final String? email;
   final String? address;
-  final String? leadMembers;
+  final int? leadMembers;
   final String? source;
   final String? category;
   final String? files;
@@ -274,7 +274,7 @@ class LeadOverviewCard extends StatelessWidget {
                 ),
                 divider,
                 tile(
-                  "Deal Mamber",
+                  "Lead Member",
                   leadMembers.toString(),
                   Colors.pink,
                   FontAwesomeIcons.google,

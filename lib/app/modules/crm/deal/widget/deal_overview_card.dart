@@ -7,7 +7,6 @@ import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class DealOverviewCard extends StatelessWidget {
   final String? id;
@@ -157,7 +156,6 @@ class DealOverviewCard extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-
       padding: const EdgeInsets.all(AppMargin.medium),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/data/network/system/function_model.dart';
+import 'package:crm_flutter/app/modules/account/sales/view/sales_customer/views/customer_screen.dart';
 import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/crm/deal/views/deal_screen.dart';
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
@@ -41,6 +42,7 @@ class FunctionController extends GetxController{
         title: 'Customer',
         iconPath: ICRes.customer,
         color: const Color(0xff6D5DD3),
+        screenBuilder: CustomerScreen(),
         count: 10,
       ),
       FunctionModel(
