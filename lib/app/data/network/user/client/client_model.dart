@@ -1,5 +1,6 @@
 
-import 'package:crm_flutter/app/data/models/message/message_model.dart';
+
+import 'package:crm_flutter/app/data/network/message/message_model.dart';
 
 class ClientUserModel {
   final String id;

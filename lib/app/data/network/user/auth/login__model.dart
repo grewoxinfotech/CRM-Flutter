@@ -1,5 +1,6 @@
 
-import 'package:crm_flutter/app/data/models/user/user/user_model.dart';
+
+import 'package:crm_flutter/app/data/network/super_admin/auth/model/user_model.dart';
 
 class LoginModel {
   final String? token;

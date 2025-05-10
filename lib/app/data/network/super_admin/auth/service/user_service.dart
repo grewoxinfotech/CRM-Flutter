@@ -1,5 +1,5 @@
-import 'package:crm_flutter/app/data/models/user/user/user_model.dart';
-import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
+import 'package:crm_flutter/app/data/network/super_admin/auth/model/user_model.dart';
 import 'package:get/get.dart';
 
 class UserService extends GetConnect {

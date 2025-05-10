@@ -1,14 +1,14 @@
 import 'dart:ui';
 
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/data/models/system/function_model.dart';
+import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/crm/deal/views/deal_screen.dart';
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/task/task/controller/task_controller.dart';
 import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
-import 'package:crm_flutter/test_screen.dart';
+import 'package:crm_flutter/app/test_screen.dart';
 import 'package:get/get.dart';
 
 class FunctionController extends GetxController{

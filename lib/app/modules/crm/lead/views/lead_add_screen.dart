@@ -47,7 +47,7 @@ class LeadAddScreen extends StatelessWidget {
             final selectedPipeline = pipelineController.pipelines
                 .firstWhereOrNull((p) => p.pipelineName == value);
             if (selectedPipeline != null) {
-              leadController.updatePipeline(value, selectedPipeline.id);
+              // leadController.updatePipeline(value, selectedPipeline.id);
             }
           },
           isRequired: true,

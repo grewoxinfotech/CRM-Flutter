@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/data/models/task/task/task_model.dart';
+import 'package:crm_flutter/app/data/network/task/task/model/task_model.dart';
 import 'package:crm_flutter/app/modules/task/task/controller/task_controller.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';

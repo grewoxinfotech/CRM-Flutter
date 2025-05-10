@@ -1,14 +1,15 @@
 import 'dart:convert';
+
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
+import 'package:crm_flutter/app/data/network/crm/label/model/label_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:crm_flutter/app/data/models/crm/label/label_model.dart';
-import 'package:crm_flutter/app/data/service/storage/secure_storage_service.dart';
 
 class LabelService {
   Future<List<LabelModel>> getLabels() async {
     try {
       final token = await SecureStorage.getToken();
       final userData = await SecureStorage.getUserData();
-      
+
       if (token == null || userData == null) {
         throw Exception('Authentication required');
       }
@@ -25,7 +26,7 @@ class LabelService {
         final Map<String, dynamic> responseData = json.decode(response.body);
         if (responseData['success'] == true && responseData['data'] != null) {
           final List<dynamic> labelsData = responseData['data'];
-          // print('Labels Data: $labelsData');   
+          // print('Labels Data: $labelsData');
           return labelsData.map((json) => LabelModel.fromJson(json)).toList();
         }
         throw Exception('Failed to load labels');
@@ -50,4 +51,4 @@ class LabelService {
   List<LabelModel> getStatuses(List<LabelModel> labels) {
     return labels.where((label) => label.labelType == 'status').toList();
   }
-} 
+}

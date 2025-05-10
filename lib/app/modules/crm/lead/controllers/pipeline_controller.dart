@@ -1,5 +1,5 @@
-import 'package:crm_flutter/app/data/models/crm/crm_system/pipeline/pipeline_model.dart';
-import 'package:crm_flutter/app/data/service/pipeline_service.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/pipeline_model.dart';
+import 'package:crm_flutter/app/data/network/crm/pipeline/service/pipeline_service.dart';
 import 'package:get/get.dart';
 
 class PipelineController extends GetxController {

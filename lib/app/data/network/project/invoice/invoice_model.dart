@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:crm_flutter/app/data/models/crm/deal/deal_model.dart';
-import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
+import 'package:crm_flutter/app/data/network/crm/deal/model/deal_model.dart';
+
 
 class InvoiceModel {
   final String? id;

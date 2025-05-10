@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
-import 'package:crm_flutter/app/data/models/crm/deal/deal_model.dart';
+import 'package:crm_flutter/app/data/network/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/crm/deal/widget/deal_overview_card.dart';
 import 'package:crm_flutter/app/modules/project/file/widget/file_card.dart';

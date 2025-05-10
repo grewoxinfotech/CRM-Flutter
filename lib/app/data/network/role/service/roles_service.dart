@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'package:crm_flutter/app/data/network/role/model/roles_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:crm_flutter/app/care/constants/url_res.dart';
-import 'package:crm_flutter/app/data/models/role/roles_model.dart';
 import 'package:get/get.dart';
 
 class RolesService extends GetxService {

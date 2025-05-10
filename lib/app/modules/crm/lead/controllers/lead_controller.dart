@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:crm_flutter/app/data/models/crm/label/label_model.dart';
-import 'package:crm_flutter/app/data/models/crm/lead/lead_model.dart';
-import 'package:crm_flutter/app/data/models/crm/stage/stage_model.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/stage/stage_model.dart';
+import 'package:crm_flutter/app/data/network/crm/label/model/label_model.dart';
+import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/data/service/all_users_service.dart';
-import 'package:crm_flutter/app/data/service/label_service.dart';
-import 'package:crm_flutter/app/data/service/lead_service.dart';
-import 'package:crm_flutter/app/data/service/roles_service.dart';
-import 'package:crm_flutter/app/data/service/stage_service.dart';
+import 'package:crm_flutter/app/data/network/crm/label/service/label_service.dart';
+import 'package:crm_flutter/app/data/network/crm/lead/service/lead_service.dart';
+import 'package:crm_flutter/app/data/network/role/service/roles_service.dart';
+import 'package:crm_flutter/app/data/network/crm/stage/service/stage_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,9 +17,9 @@ import 'package:get/get.dart';
 class LeadController extends GetxController {
   RxBool isLoading = false.obs;
 
-  // all services
+  // all service
   final LeadService leadService = LeadService();
-  final StageService stageService = StageService();
+  // final StageService stageService = StageService();
   final LabelService labelService = LabelService();
   final AllUserService allUserService = AllUserService();
   final RolesService rolesService = RolesService();
@@ -109,7 +109,7 @@ class LeadController extends GetxController {
     await Future.wait([
       getLeads(),
       // getPipelines(),
-      getStages(),
+      // getStages(),
       getLabels(),
       getRoles(),
       getAllUsers(),
@@ -142,71 +142,71 @@ class LeadController extends GetxController {
       );
     } finally {}
   }
-
-  Future<void> getStages() async {
-    try {
-      final stagesList = await stageService.getStages(stageType: 'lead');
-      stages.assignAll(stagesList);
-    } catch (e) {
-      print('Error in getStages: $e');
-    } finally {}
-  }
-
-  // Get stages for a specific pipeline
-  List<StageModel> getStagesForPipeline(String pipelineId) {
-    if (pipelineId.isEmpty) return [];
-    final pipelineStages =
-        stages.where((stage) => stage.pipeline == pipelineId).toList();
-
-    // Sort stages to put default stage first
-    pipelineStages.sort((a, b) {
-      if (a.isDefault) return -1;
-      if (b.isDefault) return 1;
-      return 0;
-    });
-
-    return pipelineStages;
-  }
-
-  // Get default stage for a pipeline
-  StageModel? getDefaultStageForPipeline(String pipelineId) {
-    if (pipelineId.isEmpty) return null;
-    return stages.firstWhereOrNull(
-      (stage) => stage.pipeline == pipelineId && stage.isDefault,
-    );
-  }
+  //
+  // Future<void> getStages() async {
+  //   try {
+  //     final stagesList = await stageService.getStages(stageType: 'lead');
+  //     stages.assignAll(stagesList);
+  //   } catch (e) {
+  //     print('Error in getStages: $e');
+  //   } finally {}
+  // }
+  //
+  // // Get stages for a specific pipeline
+  // List<StageModel> getStagesForPipeline(String pipelineId) {
+  //   if (pipelineId.isEmpty) return [];
+  //   final pipelineStages =
+  //       stages.where((stage) => stage.pipeline == pipelineId).toList();
+  //
+  //   // Sort stages to put default stage first
+  //   pipelineStages.sort((a, b) {
+  //     if (a.isDefault) return -1;
+  //     if (b.isDefault) return 1;
+  //     return 0;
+  //   });
+  //
+  //   return pipelineStages;
+  // }
+  //
+  // // Get default stage for a pipeline
+  // StageModel? getDefaultStageForPipeline(String pipelineId) {
+  //   if (pipelineId.isEmpty) return null;
+  //   return stages.firstWhereOrNull(
+  //     (stage) => stage.pipeline == pipelineId && stage.isDefault,
+  //   );
+  // }
 
   // Update pipeline selection
-  void updatePipeline(String? pipelineName, String? pipelineId) {
-    if (pipelineName == null || pipelineId == null) {
-      selectedPipeline.value = '';
-      selectedPipelineId.value = '';
-      selectedStage.value = '';
-      selectedStageId.value = '';
-      return;
-    }
-
-    selectedPipeline.value = pipelineName;
-    selectedPipelineId.value = pipelineId;
-
-    // Always set the default stage for the pipeline
-    final defaultStage = getDefaultStageForPipeline(pipelineId);
-    if (defaultStage != null) {
-      selectedStage.value = defaultStage.stageName;
-      selectedStageId.value = defaultStage.id;
-    } else {
-      // If no default stage found, get the first stage for this pipeline
-      final pipelineStages = getStagesForPipeline(pipelineId);
-      if (pipelineStages.isNotEmpty) {
-        final firstStage = pipelineStages.first;
-        selectedStage.value = firstStage.stageName;
-        selectedStageId.value = firstStage.id;
-      } else {
-        selectedStage.value = '';
-        selectedStageId.value = '';
-      }
-    }
-  }
+  // void updatePipeline(String? pipelineName, String? pipelineId) {
+  //   if (pipelineName == null || pipelineId == null) {
+  //     selectedPipeline.value = '';
+  //     selectedPipelineId.value = '';
+  //     selectedStage.value = '';
+  //     selectedStageId.value = '';
+  //     return;
+  //   }
+  //
+  //   selectedPipeline.value = pipelineName;
+  //   selectedPipelineId.value = pipelineId;
+  //
+  //   // Always set the default stage for the pipeline
+  //   final defaultStage = getDefaultStageForPipeline(pipelineId);
+  //   if (defaultStage != null) {
+  //     selectedStage.value = defaultStage.stageName;
+  //     selectedStageId.value = defaultStage.id;
+  //   } else {
+  //     // If no default stage found, get the first stage for this pipeline
+  //     final pipelineStages = getStagesForPipeline(pipelineId);
+  //     if (pipelineStages.isNotEmpty) {
+  //       final firstStage = pipelineStages.first;
+  //       selectedStage.value = firstStage.stageName;
+  //       selectedStageId.value = firstStage.id;
+  //     } else {
+  //       selectedStage.value = '';
+  //       selectedStageId.value = '';
+  //     }
+  //   }
+  // }
 
   Future<List> getLeads() async {
     try {

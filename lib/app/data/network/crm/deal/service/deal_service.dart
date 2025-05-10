@@ -14,9 +14,18 @@ class DealService {
 
   /// 1. Get all deals
   Future<List> getDeals() async {
-    final response = await http.get(Uri.parse(url), headers: await headers());
-    final data = jsonDecode(response.body);
-    return (response.statusCode == 200) ? data['data'] ?? [] : [];
+    try {
+      final response = await http.get(Uri.parse(url), headers: await headers());
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 && data["success"] == true) {
+        return data['data'] ?? [];
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print(e);
+      return [];
+    }
   }
 
   /// 2. Get deal by ID

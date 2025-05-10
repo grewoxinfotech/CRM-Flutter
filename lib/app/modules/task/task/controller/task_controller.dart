@@ -1,7 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:crm_flutter/app/data/models/task/task/task_model.dart';
-import 'package:crm_flutter/app/data/service/task_service.dart';
-import 'package:crm_flutter/app/data/service/user/user_service.dart';
+import 'package:crm_flutter/app/data/network/task/task/model/task_model.dart';
+import 'package:crm_flutter/app/data/network/task/task/service/task_service.dart';
+import 'package:crm_flutter/app/data/network/super_admin/auth/service/user_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
