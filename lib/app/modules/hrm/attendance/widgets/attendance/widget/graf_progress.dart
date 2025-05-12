@@ -1,5 +1,5 @@
-import 'package:crm_flutter/app/modules/hrm/leave/attendance/widgets/attendance/controllers/graf_controller.dart';
-import 'package:crm_flutter/app/modules/hrm/leave/attendance/widgets/attendance/views/graf.dart';
+import 'package:crm_flutter/app/modules/hrm/attendance/widgets/attendance/controllers/graf_controller.dart';
+import 'package:crm_flutter/app/modules/hrm/attendance/widgets/attendance/views/graf.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +22,7 @@ class GrafProgress extends StatelessWidget {
     return Obx(
       ()=>  CircularProgressBar(
         progress: controller.progress.value,
-        width: width,
+        width: width * 2,
       ),
     );
   }

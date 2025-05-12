@@ -33,8 +33,8 @@ class GrafProgressPainter extends CustomPainter {
 
       Rect rect = Rect.fromCenter(
         center: rectCenter,
-        width: strokeWidth * 2.5,
-        height: strokeWidth * 10,
+        width: strokeWidth * 2,
+        height: strokeWidth * 7,
       );
 
       RRect roundedRect = RRect.fromRectAndRadius(

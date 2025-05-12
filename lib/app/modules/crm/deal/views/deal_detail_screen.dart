@@ -9,7 +9,7 @@ import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
-import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
+import 'package:crm_flutter/app/widgets/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';

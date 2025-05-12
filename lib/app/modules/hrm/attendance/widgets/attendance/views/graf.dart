@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/modules/hrm/leave/attendance/widgets/attendance/widget/graf_progress_painter.dart';
+import 'package:crm_flutter/app/modules/hrm/attendance/widgets/attendance/widget/graf_progress_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,8 +18,8 @@ class CircularProgressBar extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          width: width - 40,
-          height: width - 40,
+          width: width - 35,
+          height: width - 35,
           decoration: BoxDecoration(
             border: Border.all(color: Get.theme.colorScheme.onBackground),
             shape: BoxShape.circle,

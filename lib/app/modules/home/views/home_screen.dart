@@ -1,7 +1,7 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/functions/controller/function_controller.dart';
 import 'package:crm_flutter/app/modules/functions/widget/functions_widget.dart';
-import 'package:crm_flutter/app/modules/hrm/leave/attendance/widgets/attendance/views/attendance_widget.dart';
+import 'package:crm_flutter/app/modules/hrm/attendance/widgets/attendance_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       // DateContainerWidget(fd: "Nov 16, 2020", ld: "Dec 16, 2020"),
-      AttendanceWidget(),
+      AttendanceCard(),
       FunctionsWidget(),
     ];
 
