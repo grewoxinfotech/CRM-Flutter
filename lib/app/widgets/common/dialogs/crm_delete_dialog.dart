@@ -61,7 +61,7 @@ class CrmDeleteDialog extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Get.back();
-                      onCancel;
+                      onCancel?.call();
                     },
                     child: Text(
                       "Cancel",
@@ -80,7 +80,7 @@ class CrmDeleteDialog extends StatelessWidget {
                     title: "Delete",
                     onTap: () {
                       Get.back();
-                      onConfirm;
+                      onConfirm?.call();
                     },
                   ),
                 ],

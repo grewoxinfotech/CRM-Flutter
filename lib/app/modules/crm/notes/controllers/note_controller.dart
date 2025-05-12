@@ -45,14 +45,14 @@ class NoteController extends GetxController {
     }
   }
 
-  Future<void> createNoteForLead(String leadId) async {
+  Future<bool> createNoteForLead(String leadId) async {
     if (noteTitleController.text.isEmpty) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
         message: 'Please enter a title',
         contentType: ContentType.warning,
       );
-      return;
+      return false;
     }
 
     if (noteDescriptionController.text.isEmpty) {
@@ -61,7 +61,7 @@ class NoteController extends GetxController {
         message: 'Please enter a description',
         contentType: ContentType.warning,
       );
-      return;
+      return false;
     }
 
     try {
@@ -73,9 +73,6 @@ class NoteController extends GetxController {
         noteTitle: noteTitleController.text,
         notetype: selectedNoteType.value,
         description: noteDescriptionController.text,
-        clientId: '27QmTY0BI4nb89DW3lXrly9', // This should be dynamic based on the current user's client ID
-        createdBy: 'raiser2', // This should be dynamic based on the current user
-        updatedBy: 'raiser2', // This should be dynamic based on the current user
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
@@ -97,12 +94,14 @@ class NoteController extends GetxController {
           contentType: ContentType.success,
         );
       }
+      return success;
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
         message: 'Failed to create note: ${e.toString()}',
         contentType: ContentType.failure,
       );
+      return false;
     } finally {
       isLoading.value = false;
     }
