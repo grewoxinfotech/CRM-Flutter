@@ -24,6 +24,10 @@ class UrlRes {
   
   static const String allUsers = "$baseURL/auth";
 
+  static const String notes = "$baseURL/notes";
+
+  static const String leadsFiles = "$baseURL/leads/files";
+
   // headers from api
   static const String contentType = "Content-type";
   static const String applicationJson = "application/json";

@@ -7,10 +7,13 @@ import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/model/pipeline_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/service/pipeline_service.dart';
 import 'package:crm_flutter/app/data/network/user/all_users/service/all_users_service.dart';
+import 'package:crm_flutter/app/data/network/user/all_users/model/all_users_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_service.dart';
 import 'package:crm_flutter/app/data/network/crm/lead/service/lead_service.dart';
 import 'package:crm_flutter/app/data/network/role/service/roles_service.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/stage/service/stage_service.dart';
+import 'package:crm_flutter/app/data/network/crm/notes/service/note_service.dart';
+import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,6 +27,7 @@ class LeadController extends GetxController {
   final StageService stageService = StageService();
   final PipelineService pipelineService = PipelineService();
   final LabelService labelService = LabelService();
+  final NoteService noteService = NoteService();
 
   //Temporary service to fetch all users
   final AllUsersService allUsersService = AllUsersService();
@@ -34,6 +38,8 @@ class LeadController extends GetxController {
   final RxList<StageModel> stages = <StageModel>[].obs;
   final RxList<PipelineModel> pipelines = <PipelineModel>[].obs;
   final RxList<LabelModel> labels = <LabelModel>[].obs;
+  final RxList<User> users = <User>[].obs;
+  final RxList<NoteModel> notes = <NoteModel>[].obs;
 
   // final RxList<AllUserModel> allUsers = <AllUserModel>[].obs;
   // final RxList<RolesModel> roless = <RolesModel>[].obs;
@@ -47,6 +53,8 @@ class LeadController extends GetxController {
   final phoneController = TextEditingController();
   final companyController = TextEditingController();
   final addressController = TextEditingController();
+  final noteTitleController = TextEditingController();
+  final noteDescriptionController = TextEditingController();
 
   // Dropdown Selections
   final selectedPipeline = ''.obs;
@@ -57,6 +65,10 @@ class LeadController extends GetxController {
   final selectedStage = ''.obs;
   final selectedStageId = ''.obs;
   final selectedStatus = ''.obs;
+
+  // Note type selection
+  final selectedNoteType = ''.obs;
+  final List<String> noteTypeOptions = ['important', 'normal', 'urgent'];
 
   // Dropdown Options - Show names in UI
   List<String> get sourceOptions =>
@@ -107,6 +119,8 @@ class LeadController extends GetxController {
     phoneController.dispose();
     companyController.dispose();
     addressController.dispose();
+    noteTitleController.dispose();
+    noteDescriptionController.dispose();
     super.onClose();
   }
 
@@ -456,7 +470,8 @@ class LeadController extends GetxController {
 //Temporary function to fetch all users
   Future<void> getAllUsers() async {
     try {
-      final users = await allUsersService.getUsers();
+      final usersList = await allUsersService.getUsers();
+      users.assignAll(usersList);
       print('Successfully fetched ${users.length} users');
     } catch (e) {
       print('Error fetching users: $e');
@@ -530,5 +545,10 @@ class LeadController extends GetxController {
               ),
         )
         .name;
+  }
+
+  // Add this method to get filtered users by member IDs
+  List<User> getLeadMembers(List<String> memberIds) {
+    return users.where((user) => memberIds.contains(user.id)).toList();
   }
 }

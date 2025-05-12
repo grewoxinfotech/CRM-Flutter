@@ -38,11 +38,37 @@ class NoteCard extends StatelessWidget {
     this.onEdit,
   });
 
+  Color _getNoteTypeColor(String? type) {
+    switch (type?.toLowerCase()) {
+      case 'important':
+        return ColorRes.warning;
+      case 'urgent':
+        return ColorRes.error;
+      case 'normal':
+      default:
+        return ColorRes.success;
+    }
+  }
+
+  Color _getNoteTypeBackgroundColor(String? type) {
+    switch (type?.toLowerCase()) {
+      case 'important':
+        return ColorRes.warning.withOpacity(0.1);
+      case 'urgent':
+        return ColorRes.error.withOpacity(0.1);
+      case 'normal':
+      default:
+        return ColorRes.success.withOpacity(0.1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Color primary = Get.theme.colorScheme.onPrimary;
     final Color secondary = Get.theme.colorScheme.onSecondary;
     final Color borderColor = Get.theme.dividerColor;
+    final noteTypeColor = _getNoteTypeColor(noteType);
+    final noteTypeBgColor = _getNoteTypeBackgroundColor(noteType);
 
     return GestureDetector(
       onTap: onTap,
@@ -55,35 +81,44 @@ class NoteCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  noteTitle ?? 'Untitled Note',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: primary,
+                Expanded(
+                  child: Text(
+                    noteTitle ?? 'Untitled Note',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: primary,
+                    ),
                   ),
                 ),
+                const SizedBox(width: AppPadding.small),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppPadding.small,
                     vertical: AppPadding.small / 2,
                   ),
                   decoration: BoxDecoration(
-                    color: secondary.withOpacity(0.1),
+                    color: noteTypeBgColor,
                     borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: noteTypeColor.withOpacity(0.3),
+                      width: 1,
+                    ),
                   ),
                   child: Text(
-                    noteType ?? '',
+                    noteType ?? 'normal',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: secondary,
+                      color: noteTypeColor,
                     ),
                   ),
                 ),
               ],
             ),
+
+            const SizedBox(height: AppPadding.small),
 
             // Description
             Text(

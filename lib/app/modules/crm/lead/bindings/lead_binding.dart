@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
+import 'package:crm_flutter/app/data/network/role/service/roles_service.dart';
 import 'package:get/get.dart';
 
 class LeadBinding extends Bindings {
@@ -7,5 +8,6 @@ class LeadBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<LeadController>(() => LeadController(), fenix: true);
     Get.lazyPut<TabBarController>(() => TabBarController(), fenix: true);
+    Get.lazyPut<RolesService>(() => RolesService(), fenix: true);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:crm_flutter/app/data/network/file/model/file_model.dart';
+
 class LeadModel {
   final String? id;
   final String? inquiryId;
@@ -16,7 +18,7 @@ class LeadModel {
   final List<LeadMember> leadMembers;
   final String? source;
   final String? category;
-  final List<LeadFile> files;
+  final List<FileModel> files;
   final String? status;
   final String? interestLevel;
   final int? leadScore;
@@ -81,11 +83,11 @@ class LeadModel {
       }
     }
 
-    List<LeadFile> leadFiles = [];
+    List<FileModel> leadFiles = [];
     if (json['files'] != null) {
       if (json['files'] is List) {
         leadFiles = (json['files'] as List)
-            .map((e) => LeadFile.fromJson(e as Map<String, dynamic>))
+            .map((e) => FileModel.fromJson(e as Map<String, dynamic>))
             .toList();
       }
     }
@@ -194,20 +196,5 @@ class LeadMember {
       'email': email,
       'phone': phone,
     };
-  }
-}
-
-class LeadFile {
-  final String url;
-  final String filename;
-
-  LeadFile({required this.url, required this.filename});
-
-  factory LeadFile.fromJson(Map<String, dynamic> json) {
-    return LeadFile(url: json['url'], filename: json['filename']);
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'url': url, 'filename': filename};
   }
 }

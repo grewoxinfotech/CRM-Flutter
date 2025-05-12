@@ -2,6 +2,8 @@ import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dar
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_add_screen.dart';
 import 'package:crm_flutter/app/modules/crm/lead/views/lead_detail_screen.dart';
 import 'package:crm_flutter/app/modules/crm/lead/widgets/lead_card.dart';
+import 'package:crm_flutter/app/modules/crm/lead/bindings/lead_binding.dart';
+import 'package:crm_flutter/app/data/network/role/service/roles_service.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
@@ -15,10 +17,10 @@ class LeadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
+
+    
     Get.lazyPut<LeadController>(() => LeadController());
     final controller = Get.find<LeadController>();
-
     
     return Scaffold(
       appBar: AppBar(leading: CrmBackButton(), title: Text("Leads")),
@@ -92,8 +94,11 @@ class LeadScreen extends StatelessWidget {
                       updatedAt: formatDate(data.updatedAt.toString()),
                       onTap: () async {
                         if (data.id != null) {
-                          await Get.to(() => LeadDetailScreen(id: data.id!));
-                          // Refresh data when returning from detail screen
+                          await Get.to(
+                            () => LeadDetailScreen(id: data.id!),
+                            binding: LeadBinding(),
+                          );
+                          // Refresh data 
                           controller.refreshData();
                         } else {
                           Get.snackbar('Error', 'Lead ID is missing');
