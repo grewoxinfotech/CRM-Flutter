@@ -14,6 +14,7 @@ class CrmTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final int? maxLines;
   final bool enabled;
+  final bool readOnly;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;
@@ -32,6 +33,7 @@ class CrmTextField extends StatelessWidget {
     this.keyboardType,
     this.maxLines = 1,
     this.enabled = true,
+    this.readOnly = false,
     this.focusNode,
     this.textInputAction,
     this.onChanged,
@@ -72,6 +74,7 @@ class CrmTextField extends StatelessWidget {
           keyboardType: keyboardType,
           maxLines: maxLines,
           enabled: enabled,
+          readOnly: readOnly,
           focusNode: focusNode,
           textInputAction: textInputAction,
           onChanged: onChanged,

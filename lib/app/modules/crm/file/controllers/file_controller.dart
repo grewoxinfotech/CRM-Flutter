@@ -12,20 +12,29 @@ class FileController extends GetxController {
 
   void setFilesFromLeadData(List<dynamic> filesData) {
     try {
-      files.clear();
-      files.addAll(filesData.map((file) {
-        if (file is Map<String, dynamic>) {
-          return FileModel(
-            url: file['url'],
-            filename: file['filename'],
-          );
-        } else if (file is FileModel) {
+      if (filesData.isEmpty) {
+        files.clear();
+        update();
+        return;
+      }
+
+      final newFiles = filesData.map((file) {
+        if (file is FileModel) {
           return file;
+        } else if (file is Map<String, dynamic>) {
+          return FileModel(
+            url: file['url'] as String,
+            filename: file['filename'] as String,
+          );
         }
         throw Exception('Invalid file data format');
-      }));
+      }).toList();
+      
+      files.value = newFiles;
+      update();
     } catch (e) {
       files.clear();
+      update();
     }
   }
 
@@ -35,10 +44,8 @@ class FileController extends GetxController {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        // Create a new list without the deleted file
-        final updatedFiles = files.where((file) => file.filename != filename).toList();
-        files.clear();
-        files.addAll(updatedFiles);
+        files.removeWhere((file) => file.filename == filename);
+        update();
         
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
@@ -69,6 +76,7 @@ class FileController extends GetxController {
       }
     } catch (e) {
       files.clear();
+      update();
     }
   }
 
@@ -81,12 +89,28 @@ class FileController extends GetxController {
         final data = jsonDecode(response.body);
         
         if (data['success'] == true) {
-          await refreshFiles(leadId);
+          // Use the files data directly from the upload response
+          final filesData = data['data']['files'] ?? [];
+          setFilesFromLeadData(filesData);
           return data['data'];
         }
+      } else {
+        final data = jsonDecode(response.body);
+        final errorMessage = data['message'] ?? 'File upload failed';
+        
+        CrmSnackBar.showAwesomeSnackbar(
+          title: "Upload Failed",
+          message: errorMessage,
+          contentType: ContentType.failure,
+        );
       }
       return null;
     } catch (e) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Failed to upload file: ${e.toString()}",
+        contentType: ContentType.failure,
+      );
       return null;
     }
   }

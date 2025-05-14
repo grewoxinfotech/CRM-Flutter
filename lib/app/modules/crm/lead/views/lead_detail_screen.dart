@@ -3,7 +3,7 @@ import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
 import 'package:crm_flutter/app/data/network/file/model/file_model.dart';
-import 'package:crm_flutter/app/modules/crm/lead/controllers/file_controller.dart';
+import 'package:crm_flutter/app/modules/crm/file/controllers/file_controller.dart';
 import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/lead/widgets/lead_overview_card.dart';
 import 'package:crm_flutter/app/modules/project/file/widget/file_card.dart';
@@ -18,7 +18,7 @@ import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dar
 import 'package:crm_flutter/app/widgets/common/inputs/crm_dropdown_field.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
+import 'package:crm_flutter/app/modules/crm/notes/views/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
 import 'dart:typed_data';
 import 'package:crm_flutter/app/widgets/dialog/note/note_dialog.dart';
@@ -32,6 +32,7 @@ import 'package:crm_flutter/app/modules/crm/notes/controllers/note_controller.da
 import 'package:crm_flutter/app/data/network/crm/notes/service/note_service.dart';
 import 'dart:io';
 import 'package:crm_flutter/app/widgets/common/dialogs/upload_status_dialog.dart';
+import 'package:crm_flutter/app/modules/crm/file/bindings/file_binding.dart';
 
 class LeadDetailScreen extends StatelessWidget {
   final String id;
@@ -44,9 +45,10 @@ class LeadDetailScreen extends StatelessWidget {
     final leadController = Get.find<LeadController>();
     final rolesService = Get.find<RolesService>();
     Get.lazyPut<NoteService>(() => NoteService());
+    Get.lazyPut<FileController>(() => FileController());
     final noteController = Get.put(NoteController());
 
-    final fileController = Get.put(FileController());
+    final fileController = Get.find<FileController>();
 
     if (leadController.leads.isEmpty) {
       return const Center(child: Text("No Lead Data Available."));
@@ -65,7 +67,9 @@ class LeadDetailScreen extends StatelessWidget {
     noteController.getNotesForLead(id);
 
     // Initialize file controller and set files from lead data
-    fileController.setFilesFromLeadData(lead.files);
+    if (lead.files != null && lead.files.isNotEmpty) {
+      fileController.setFilesFromLeadData(lead.files);
+    }
 
     List widgets = [
       LeadOverviewCard(
@@ -108,34 +112,40 @@ class LeadDetailScreen extends StatelessWidget {
       ),
       Stack(
         children: [
-          Obx(() => ViewScreen(
-            itemCount: fileController.files.length,
-            padding: const EdgeInsets.all(AppPadding.medium),
-            itemBuilder: (context, i) {
-              final file = fileController.files[i];
-              return FileCard(
-                url: file.url,
-                name: file.filename,
-                id: "${lead.id}_${file.filename}",
-                role: "File",
-                onTap: null,
-                onDelete: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => CrmDeleteDialog(
-                      entityType: "file",
-                      onConfirm: () async {
-                        final success = await fileController.deleteFile(lead.id.toString(), file.filename);
-                        if (success) {
-                          await leadController.refreshData();
-                        }
-                      },
-                    ),
-                  );
-                },
-              );
-            },
-          )),
+          Obx(
+            () => ViewScreen(
+              itemCount: fileController.files.length,
+              padding: const EdgeInsets.all(AppPadding.medium),
+              itemBuilder: (context, i) {
+                final file = fileController.files[i];
+                return FileCard(
+                  url: file.url,
+                  name: file.filename,
+                  id: "${lead.id}_${file.filename}",
+                  role: "File",
+                  onTap: null,
+                  onDelete: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => CrmDeleteDialog(
+                            entityType: "file",
+                            onConfirm: () async {
+                              final success = await fileController.deleteFile(
+                                lead.id.toString(),
+                                file.filename,
+                              );
+                              if (success) {
+                                await leadController.refreshData();
+                              }
+                            },
+                          ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
           Positioned(
             right: AppPadding.medium,
             bottom: AppPadding.medium,
@@ -311,7 +321,11 @@ class LeadDetailScreen extends StatelessWidget {
         }
 
         final fileController = Get.find<FileController>();
-        final responseData = await fileController.uploadFile(leadId, fileBytes, file.name);
+        final responseData = await fileController.uploadFile(
+          leadId,
+          fileBytes,
+          file.name,
+        );
 
         Navigator.pop(context);
 
@@ -319,7 +333,10 @@ class LeadDetailScreen extends StatelessWidget {
           await fileController.refreshFiles(leadId);
           UploadStatusDialog.showSuccess(context);
         } else {
-          UploadStatusDialog.showError(context, 'File upload failed. Please try again.');
+          UploadStatusDialog.showError(
+            context,
+            'File upload failed. Please try again.',
+          );
         }
       }
     } catch (e) {

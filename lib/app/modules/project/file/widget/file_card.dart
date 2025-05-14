@@ -45,6 +45,41 @@ class FileCard extends StatelessWidget {
     return filename.split('.').last.toLowerCase();
   }
 
+  bool _isImageFile(String extension) {
+    return ['jpg', 'jpeg', 'png', 'gif'].contains(extension.toLowerCase());
+  }
+
+  void _showImagePreview(BuildContext context) {
+    if (url == null) return;
+    
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Stack(
+          children: [
+            InteractiveViewer(
+              child: Image.network(
+                url!,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => Center(
+                  child: Text('Failed to load image'),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: IconButton(
+                icon: Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   IconData _getFileIcon(String extension) {
     switch (extension) {
       case 'pdf':
@@ -101,9 +136,10 @@ class FileCard extends StatelessWidget {
     final extension = name != null ? _getFileExtension(name!) : '';
     final fileIcon = _getFileIcon(extension);
     final fileColor = _getFileColor(extension);
+    final isImage = _isImageFile(extension);
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: isImage ? () => _showImagePreview(context) : null,
       child: CrmCard(
         height: cardHeight,
         borderRadius: BorderRadius.circular(AppRadius.large),
@@ -120,7 +156,7 @@ class FileCard extends StatelessWidget {
                   left: Radius.circular(AppRadius.large),
                 ),
               ),
-              child: url != null && (extension == 'jpg' || extension == 'jpeg' || extension == 'png' || extension == 'gif')
+              child: url != null && isImage
                   ? ClipRRect(
                       borderRadius: BorderRadius.horizontal(
                         left: Radius.circular(AppRadius.large),

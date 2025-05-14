@@ -11,7 +11,7 @@ import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
+import 'package:crm_flutter/app/modules/crm/notes/views/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
