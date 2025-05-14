@@ -87,13 +87,13 @@ class ProjectCard extends StatelessWidget {
               children: [
                 CrmIc(
                   iconPath: ICRes.edit,
-                  color: ColorRes.success,
+                  color: success,
                   onTap: onEdit,
                   width: 50,
                 ),
                 CrmIc(
                   iconPath: ICRes.delete,
-                  color: ColorRes.error,
+                  color: error,
                   onTap: onDelete,
                   width: 50,
                 ),

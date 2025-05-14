@@ -55,13 +55,20 @@ class LeadDetailScreen extends StatelessWidget {
         updatedBy: data.updatedBy.toString(),
         createdAt: data.createdAt.toString(),
         updatedAt: data.updatedAt.toString(),
-        onDelete:
-            () => CrmDeleteDialog(
-              onConfirm: () {
-                leadController.deleteLead(data.id.toString());
-                Get.back();
-              },
-            ),
+        onDelete: () {
+          showDialog(
+            context: context,
+            builder:
+                (_) => CrmDeleteDialog(
+                  entityType: "lead",
+                  onConfirm: () async {
+                    await leadController.deleteLead(data.id.toString());
+                    Get.back(result: true);
+                  },
+                ),
+          );
+        },
+
         onEdit: () {},
       ),
       ViewScreen(

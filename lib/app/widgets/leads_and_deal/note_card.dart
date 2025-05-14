@@ -131,13 +131,13 @@ class NoteCard extends StatelessWidget {
                   children: [
                     CrmIc(
                       iconPath: ICRes.edit,
-                      color: ColorRes.success,
+                      color: success,
                       onTap: onEdit,
                     ),
                     AppSpacing.horizontalMedium,
                     CrmIc(
                       iconPath: ICRes.delete,
-                      color: ColorRes.error,
+                      color: error,
                       onTap: onDelete,
                     ),
                   ],

@@ -3,12 +3,11 @@ import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/stage/stage_model.dart';
 import 'package:crm_flutter/app/data/network/crm/label/model/label_model.dart';
-import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
-import 'package:crm_flutter/app/data/service/all_users_service.dart';
 import 'package:crm_flutter/app/data/network/crm/label/service/label_service.dart';
+import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/data/network/crm/lead/service/lead_service.dart';
 import 'package:crm_flutter/app/data/network/role/service/roles_service.dart';
-import 'package:crm_flutter/app/data/network/crm/stage/service/stage_service.dart';
+import 'package:crm_flutter/app/data/service/all_users_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,16 +15,17 @@ import 'package:get/get.dart';
 /// Controller for managing leads in the CRM system
 class LeadController extends GetxController {
   RxBool isLoading = false.obs;
+  List<LeadModel> leads = [];
 
   // all service
   final LeadService leadService = LeadService();
+
   // final StageService stageService = StageService();
   final LabelService labelService = LabelService();
   final AllUserService allUserService = AllUserService();
   final RolesService rolesService = RolesService();
 
   // State Variables
-  final RxList<LeadModel> leads = <LeadModel>[].obs;
   final RxList<StageModel> stages = <StageModel>[].obs;
   final RxList<LabelModel> labels = <LabelModel>[].obs;
 
@@ -142,6 +142,7 @@ class LeadController extends GetxController {
       );
     } finally {}
   }
+
   //
   // Future<void> getStages() async {
   //   try {
@@ -207,19 +208,12 @@ class LeadController extends GetxController {
   //     }
   //   }
   // }
-
-  Future<List> getLeads() async {
+  Future<List<LeadModel>> getLeads() async {
     try {
       final data = await leadService.getLeads();
-
-      if (data != null && data.isNotEmpty) {
-        final leadsList = data.map((e) => LeadModel.fromJson(e)).toList();
-        leads.assignAll(leadsList);
-        return data;
-      } else {
-        leads.clear();
-        return [];
-      }
+      final leadsList = data.map((e) => LeadModel.fromJson(e)).toList();
+      leads.assignAll(leadsList);
+      return leads;
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
@@ -228,7 +222,7 @@ class LeadController extends GetxController {
       );
       leads.clear();
       return [];
-    } finally {}
+    }
   }
 
   Future<void> addLead() async {

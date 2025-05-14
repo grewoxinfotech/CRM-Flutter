@@ -173,7 +173,7 @@ class EmployeeCard extends StatelessWidget {
                 CrmIc(
                   iconPath: ICRes.delete,
                   width: 50,
-                  color: ColorRes.error,
+                  color: error,
                   onTap: onDelete,
                 ),
               ],

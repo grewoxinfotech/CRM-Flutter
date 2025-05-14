@@ -1,6 +1,10 @@
+import 'package:crm_flutter/app/modules/crm/deal/views/deal_screen.dart';
+import 'package:crm_flutter/app/modules/crm/lead/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/home/views/home_screen.dart';
+import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/app_bar/crm_app_bar.dart';
 import 'package:crm_flutter/app/widgets/bar/navigation_bar/crm_navigation_Bar.dart';
+import 'package:crm_flutter/app/widgets/bar/navigation_bar/navidation_controller.dart';
 import 'package:crm_flutter/app/widgets/drawer/crm_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,27 +14,28 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigationController = Get.put(NavigationController());
+    final controller = Get.put(NavigationController());
+    List<Widget> screens = [
+      HomeScreen(),
+      LeadScreen(),
+      DealScreen(),
+      TaskScreen(),
+    ];
     return Scaffold(
       extendBody: true,
       drawer: CrmDrawer(),
       appBar: CrmAppBar(),
-      bottomNavigationBar: CrmNavigationBar(),
-      body: Obx(() {
-        if (navigationController.currentIndex.value == 0) {
-          return HomeScreen();
-        } else if (navigationController.currentIndex.value == 1) {
-          return Center(child: Text("No Update"));
-        } else if (navigationController.currentIndex.value == 2) {
-          return Center(child: Text("No Update"));
-        } else if (navigationController.currentIndex.value == 3) {
-          return Center(child: Text("No Update"));
-        } else if (navigationController.currentIndex.value == 4) {
-          return Center(child: Text("No Update"));
-        } else {
-          return SizedBox();
-        }
-      }),
+      bottomNavigationBar: Obx(
+        () => CrmNavigationBar(
+          currentIndex: controller.currentIndex.value,
+          onTap: (i) => controller.changeIndex(i),
+        ),
+      ),
+      body: PageView(
+        controller: controller.pageController,
+        onPageChanged: controller.currentIndex,
+        children: screens,
+      ),
     );
   }
 }

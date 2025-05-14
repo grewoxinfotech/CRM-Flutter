@@ -84,7 +84,7 @@ class _CrmCalendarState extends State<CrmCalendar> {
         bgColor = Colors.red.shade100;
         icon = Icons.cancel;
         break;
-      case 'leave':
+      case 'model':
         bgColor = Colors.orange.shade100;
         icon = Icons.beach_access;
         break;

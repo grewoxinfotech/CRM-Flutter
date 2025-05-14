@@ -144,7 +144,7 @@ class InvoiceCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: ColorRes.success,
+                    color: success,
                   ),
                 ),
                 Container(
@@ -202,13 +202,13 @@ class InvoiceCard extends StatelessWidget {
                 CrmIc(
                   iconPath: ICRes.edit,
                   onTap: onEdit,
-                  color: ColorRes.success,
+                  color: success,
                 ),
                 AppSpacing.horizontalMedium,
                 CrmIc(
                   iconPath: ICRes.delete,
                   onTap: onDelete,
-                  color: ColorRes.error,
+                  color: error,
                 ),
               ],
             ),

@@ -7,6 +7,8 @@ class ViewScreen extends StatelessWidget {
   final ScrollController? controller;
   final bool reverse;
   final EdgeInsetsGeometry? padding;
+  final ScrollPhysics? physics;
+
 
   const ViewScreen({
     super.key,
@@ -14,6 +16,7 @@ class ViewScreen extends StatelessWidget {
     required this.itemBuilder,
     this.controller,
     this.padding,
+    this.physics,
     this.reverse = false,
   });
 
@@ -21,6 +24,7 @@ class ViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       scrollDirection: Axis.vertical,
+      physics: physics,
       reverse: reverse,
       itemCount: itemCount,
       shrinkWrap: true,

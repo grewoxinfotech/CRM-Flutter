@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/super_admin/auth/service/user_service.dart';
 import 'package:crm_flutter/app/modules/hrm/attendance/controllers/attendance_controller.dart';
 import 'package:crm_flutter/app/modules/hrm/attendance/views/attendance_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/attendance/widgets/attendance/widget/graf_progress.dart';
@@ -9,13 +10,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AttendanceCard extends StatelessWidget {
-  const AttendanceCard({super.key});
+
+  final double? percentage;
+  final GestureTapCallback? onPunchIn ;
+  final GestureTapCallback? onPunchOut ;
+
+
+
+
+
+
+
+  const AttendanceCard({super.key,
+    required this.percentage,
+    required this.onPunchIn,
+    required this.onPunchOut,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final AttendanceController attendanceController = Get.put(
-      AttendanceController(),
-    ); // Controller Initialization
+    final AttendanceController controller = Get.put(AttendanceController());
+    final UserService userService = Get.put(UserService());
+    final user = userService.user.value;
     return GestureDetector(
       onTap: () => Get.to(AttendanceScreen()),
       child: CrmCard(
@@ -31,7 +47,7 @@ class AttendanceCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(AppPadding.medium),
                   child: GrafProgress(
-                    percentage: 24,
+                    percentage: percentage!,
                     width: AppPadding.medium * 4,
                   ),
                 ),
@@ -42,7 +58,7 @@ class AttendanceCard extends StatelessWidget {
                     // punch in button
                     CrmButton(
                       title: "Punch In",
-                      onTap: () {},
+                      onTap: onPunchIn,
                       width: 110,
                       height: 40,
                       boxShadow: [
@@ -58,7 +74,7 @@ class AttendanceCard extends StatelessWidget {
                     // punch out button
                     CrmButton(
                       title: "Punch Out",
-                      onTap: () {},
+                      onTap: onPunchOut,
                       width: 110,
                       height: 40,
                       boxShadow: [

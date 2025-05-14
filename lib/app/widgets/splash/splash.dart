@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(SplashController()); // Inject Controller
     return Scaffold(
-      backgroundColor: ColorRes.white,
+      backgroundColor: surface,
       body: Center(child: CrmAppLogo(width: 120)),
     );
   }
@@ -27,7 +27,7 @@ class SplashController extends GetxController {
   }
 
   void splash() async {
-    await Future.delayed(const Duration(seconds:  1));
+    await Future.delayed(const Duration(seconds: 1));
     bool isLogin = await SecureStorage.getLoggedIn();
     bool rememberMe = await SecureStorage.getRememberMe();
     String? token = await SecureStorage.getToken();

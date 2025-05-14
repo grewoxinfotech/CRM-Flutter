@@ -29,7 +29,7 @@ class CrmNoInternet extends StatelessWidget {
               Icon(
                 Icons.wifi_off_rounded,
                 size: network.hasInternet.value ? 0 : 18,
-                color: ColorRes.white,
+                color: white,
               ),
               AppSpacing.horizontalSmall,
               Text(
@@ -37,7 +37,7 @@ class CrmNoInternet extends StatelessWidget {
                 style: TextStyle(
                   fontSize: network.hasInternet.value ? 0 : 14,
                   fontWeight: FontWeight.w700,
-                  color: ColorRes.white,
+                  color: white,
                 ),
               ),
             ],

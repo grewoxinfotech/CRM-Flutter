@@ -130,13 +130,13 @@ class PaymentCard extends StatelessWidget {
                 CrmIc(
                   iconPath: ICRes.edit,
                   onTap: onEdit,
-                  color: ColorRes.success,
+                  color: success,
                 ),
                 AppSpacing.horizontalMedium,
                 CrmIc(
                   iconPath: ICRes.delete,
                   onTap: onDelete,
-                  color: ColorRes.error,
+                  color: error,
                 ),
               ],
             ),

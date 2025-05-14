@@ -31,16 +31,14 @@ class CrmDeleteDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                child: Text(
-                  "Delete Confirmation",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: FontRes.nuNunitoSans,
-                    color: Get.theme.colorScheme.error,
-                    fontWeight: FontWeight.w700,
-                    decoration: TextDecoration.none,
-                  ),
+              Text(
+                "Delete Confirmation",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: FontRes.nuNunitoSans,
+                  color: Get.theme.colorScheme.error,
+                  fontWeight: FontWeight.w700,
+                  decoration: TextDecoration.none,
                 ),
               ),
               AppSpacing.verticalSmall,
@@ -61,7 +59,7 @@ class CrmDeleteDialog extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Get.back();
-                      onCancel;
+                      if (onCancel != null) onCancel!();
                     },
                     child: Text(
                       "Cancel",
@@ -80,7 +78,7 @@ class CrmDeleteDialog extends StatelessWidget {
                     title: "Delete",
                     onTap: () {
                       Get.back();
-                      onConfirm;
+                      if (onConfirm != null) onConfirm!();
                     },
                   ),
                 ],

@@ -60,7 +60,7 @@ class DealAddScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         leading: CrmBackButton(),
-        title: Text("Create New Deal", style: TextStyle(color: ColorRes.white)),
+        title: Text("Create New Deal", style: TextStyle(color: white)),
         backgroundColor: Get.theme.colorScheme.primary,
       ),
       body: Obx(
