@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:http/http.dart' as http;
+import 'package:crm_flutter/app/care/constants/url_res.dart';
 
 class ActivityService {
   final String url = UrlRes.activities;

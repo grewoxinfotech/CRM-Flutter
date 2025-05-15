@@ -28,6 +28,8 @@ class UrlRes {
 
   static const String leadsFiles = "$baseURL/leads/files";
 
+  static const String activities = "$baseURL/activities";
+
   // headers from api
   static const String contentType = "Content-type";
   static const String applicationJson = "application/json";
