@@ -1,7 +1,4 @@
-import 'package:crm_flutter/app/modules/crm/deal/views/deal_screen.dart';
-import 'package:crm_flutter/app/modules/crm/lead/views/lead_screen.dart';
-import 'package:crm_flutter/app/modules/home/views/home_screen.dart';
-import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
+import 'package:crm_flutter/app/modules/dashboard/screens/home/views/home_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/app_bar/crm_app_bar.dart';
 import 'package:crm_flutter/app/widgets/bar/navigation_bar/crm_navigation_Bar.dart';
 import 'package:crm_flutter/app/widgets/bar/navigation_bar/navidation_controller.dart';
@@ -14,21 +11,22 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
-    List<Widget> screens = [
+    final NavigationController controller = Get.put(NavigationController());
+    final List<Widget> screens = [
       HomeScreen(),
-      LeadScreen(),
-      DealScreen(),
-      TaskScreen(),
+      Center(child: Text("No Update")),
+      Center(child: Text("No Update")),
+      Center(child: Text("No Update")),
+      Center(child: Text("No Update")),
     ];
     return Scaffold(
-      extendBody: true,
-      drawer: CrmDrawer(),
       appBar: CrmAppBar(),
+      drawer: CrmDrawer(),
+      extendBody: true,
       bottomNavigationBar: Obx(
         () => CrmNavigationBar(
           currentIndex: controller.currentIndex.value,
-          onTap: (i) => controller.changeIndex(i),
+          onTap: (e) => controller.changeIndex(e),
         ),
       ),
       body: PageView(

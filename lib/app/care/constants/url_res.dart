@@ -8,13 +8,13 @@ class UrlRes {
 
   static const String login = "$auth/login";
 
-  static const String leads = "$baseURL/leads";
+  static const String leads = "$baseURL/lead";
   
   static const String pipelines = "$baseURL/pipelines";
 
   static const String stages = "$baseURL/stages";
 
-  static const String deals = "$baseURL/deals";
+  static const String deals = "$baseURL/deal";
 
   static const String task = "$baseURL/tasks";
 

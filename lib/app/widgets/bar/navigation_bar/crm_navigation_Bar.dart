@@ -19,10 +19,11 @@ class CrmNavigationBar extends StatelessWidget {
     );
     final iconSize = 18.0;
     final items = [
-      {'icon': FontAwesomeIcons.instagram, 'title': '1'},
-      {'icon': FontAwesomeIcons.instagram, 'title': '2'},
-      {'icon': FontAwesomeIcons.instagram, 'title': '3'},
-      {'icon': FontAwesomeIcons.instagram, 'title': '4'},
+      {'icon': FontAwesomeIcons.home, 'title': 'Home'},
+      {'icon': FontAwesomeIcons.leaf, 'title': 'Leads'},
+      {'icon': FontAwesomeIcons.instagram, 'title': 'Tasks'},
+      {'icon': FontAwesomeIcons.instagram, 'title': 'Chats'},
+      {'icon': FontAwesomeIcons.instagram, 'title': 'Profile'},
     ];
 
     return Card(

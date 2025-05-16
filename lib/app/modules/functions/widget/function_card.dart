@@ -1,18 +1,18 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FunctionCard extends StatelessWidget {
   final GestureTapCallback? onTap;
   final String? title;
-  final String? iconPath;
+  final IconData? icon;
   final Color? color;
 
   const FunctionCard({
     super.key,
-    this.iconPath,
+    this.icon,
     this.color,
     this.title,
     this.onTap,
@@ -23,37 +23,32 @@ class FunctionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        color: Get.theme.colorScheme.primary.withAlpha(20),
-        borderRadius: BorderRadius.circular(AppRadius.large - AppPadding.small),
-        boxShadow: [],
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            CrmCard(
-              width: 50,
-              height: 50,
-              color: color,
-              alignment: Alignment.center,
-              borderRadius: BorderRadius.circular(AppRadius.medium),
-              child: CrmIc(
-                iconPath: iconPath.toString(),
-                color: Get.theme.colorScheme.surface,
-                width: 24,
-              ),
-            ),
-            Column(
-              children: [
-                Text(
+        child: CrmCard(
+          padding: EdgeInsets.all(AppPadding.medium),
+          gradient: LinearGradient(
+            colors: [color!.withAlpha(160), color!.withAlpha(255)],
+            end: Alignment.bottomRight,
+            begin: Alignment.topLeft,
+          ),
+          boxShadow: [],
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(icon ?? FontAwesomeIcons.at, color: white, size: 18),
+              AppSpacing.horizontalSmall,
+              Expanded(
+                child: Text(
                   title.toString(),
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: FontWeight.w700,
                     fontSize: 14,
-                    color: Get.theme.colorScheme.onPrimary,
+                    fontWeight: FontWeight.w800,
+                    color: white,
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

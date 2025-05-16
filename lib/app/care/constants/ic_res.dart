@@ -14,8 +14,8 @@ class ICRes {
   static const employee = "${EmployeePath}ic_employee.svg";
   static const employeeAdd = "${EmployeePath}ic_employee_add.svg";
 
-  // functions icons
-  static const FunctionsPath = "${IconPath}functions/";
+  // function icons
+  static const FunctionsPath = "${IconPath}function/";
   static const clients = "${FunctionsPath}ic_clients.svg";
   static const contract = "${FunctionsPath}ic_contract.svg";
   static const customer = "${FunctionsPath}ic_custemer.svg";
