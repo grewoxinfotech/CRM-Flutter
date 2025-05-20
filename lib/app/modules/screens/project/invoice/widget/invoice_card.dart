@@ -200,13 +200,13 @@ class InvoiceCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 CrmIc(
-                  iconPath: ICRes.edit,
+                  iconPath: Ic.edit,
                   onTap: onEdit,
                   color: success,
                 ),
                 AppSpacing.horizontalMedium,
                 CrmIc(
-                  iconPath: ICRes.delete,
+                  iconPath: Ic.delete,
                   onTap: onDelete,
                   color: error,
                 ),

@@ -17,10 +17,10 @@ class CrmModel {
   static List<CrmModel> getCrmWidgets() {
     return [
       CrmModel(color: Color(0xff632100), title: "Leads", widget: LeadScreen()),
-      CrmModel(color: Color(0xff1890FF), title: "Deals", widget: DealScreen()),
-      CrmModel(color: Color(0xff52C41A), title: "Task", widget: TaskScreen()),
+      CrmModel(color: Color(0xff234567), title: "Deals", widget: DealScreen()),
+      CrmModel(color: Color(0xff098765), title: "Task", widget: TaskScreen()),
       CrmModel(
-        color: Color(0xff7C3AED),
+        color: Color(0xff284398),
         title: "Contact",
         widget: TestScreen(),
       ),

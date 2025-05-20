@@ -13,7 +13,7 @@ class CrmAppLogo extends StatelessWidget {
       tag: "appLogo",
       child: GestureDetector(
         onTap: onTap,
-        child: Image.asset(ICRes.appLogoPNG, width: width ?? 40),
+        child: Image.asset(Ic.appLogoPNG, width: width ?? 40),
       ),
     );
   }

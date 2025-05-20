@@ -5,7 +5,7 @@ class CrmChart extends StatelessWidget {
   final List<PieChartSectionData>? sections;
   final double? size;
 
-  const CrmChart({super.key, required this.sections,this.size});
+  const CrmChart({super.key, required this.sections, this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +17,7 @@ class CrmChart extends StatelessWidget {
           borderData: FlBorderData(show: false),
           centerSpaceRadius: 0,
           sectionsSpace: 2,
+          startDegreeOffset: 20,
           sections: sections,
         ),
       ),

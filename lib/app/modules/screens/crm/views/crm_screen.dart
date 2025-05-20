@@ -33,8 +33,8 @@ class CrmScreen extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               itemBuilder:
                   (context, i) => FunctionCard(
-                    title: items[i].title,
                     onTap: () => Get.to(items[i].widget),
+                    title: items[i].title,
                     color: items[i].color,
                     icon: items[i].iconData,
                   ),

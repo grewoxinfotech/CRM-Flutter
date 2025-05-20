@@ -1,10 +1,8 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class LeadCard extends StatelessWidget {
   final GestureTapCallback? onTap;
@@ -72,7 +70,6 @@ class LeadCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     Color _getStageColor(String stage) {
       switch (stage.toLowerCase()) {
         case 'won':
@@ -139,92 +136,97 @@ class LeadCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: CrmCard(
-        padding: EdgeInsets.all(AppPadding.medium),
-        alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Digital Marketing Campaign",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: success,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Grewox Infotech",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: textSecondary,
-                            ),
+      child: Card(
+        margin: EdgeInsets.zero,
+        elevation: 0,
+        color: surface,
+        shadowColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.large),
+          side: BorderSide(color: divider),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppPadding.medium),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Digital Marketing Campaign",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: textPrimary,
                           ),
-                        ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Grewox Infotech",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                children: [
+                  _infoChip(Icons.public, "LinkedIn"),
+                  AppSpacing.horizontalSmall,
+                  _statusChip("won", _getStageColor("won")),
+                  AppSpacing.horizontalSmall,
+                  _statusChip("high", _getInterestColor("high")),
+                ],
+              ),
+
+              // Bottom Row: Value + Date
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '₹ 1200.00',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color: success,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      CrmIc(
+                        iconPath: Ic.calendar,
+                        width: 14,
+                        color: textSecondary,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "05 May 2025",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: textSecondary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            AppSpacing.verticalSmall,
-            Row(
-              children: [
-                _infoChip(Icons.public, "LinkedIn"),
-                const SizedBox(width: 8),
-
-                // stage
-                _statusChip("won", _getStageColor("won")),
-                const SizedBox(width: 8),
-                // interest level
-                _statusChip("high", _getInterestColor("high")),
-              ],
-            ),
-
-            AppSpacing.verticalSmall,
-            // Bottom Row: Value + Date
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '₹ 1200.00',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                    color: success,
-                  ),
-                ),
-                Row(
-                  children: [
-                    CrmIc(
-                      iconPath: ICRes.calendar,
-                      width: 14,
-                      color: textSecondary,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      "05 May 2025",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: textSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

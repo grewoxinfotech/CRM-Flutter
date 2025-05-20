@@ -1,118 +1,136 @@
-class ICRes {
-  // main file path
-  static const IconPath = "assets/icons/";
+class Ic {
+  // icons path
+  static String iconPath = "assets/icons";
 
-  // app logo icon in png
-  static const appLogoPNG = "${IconPath}app_logo.png";
+  // PNG icons path
+  static String appLogoPNG = "$iconPath/app_logo.png";
+  static String appLogoPNG512 = "$iconPath/icon-512x512.png";
 
-  // comments icons
-  static const CommentsPath = "${IconPath}comments/";
-  static const commentAdd = "${CommentsPath}ic_comment.svg";
+  // comment path
+  static String commentPath = "$iconPath/comment";
+  static String chats = "$commentPath/chats.svg";
+  static String comment = "$commentPath/comment.svg";
+  static String commentText = "$commentPath/comment_text.svg";
+  static String mail = "$commentPath/mail.svg";
 
-  // employee icons
-  static const EmployeePath = "${IconPath}employee/";
-  static const employee = "${EmployeePath}ic_employee.svg";
-  static const employeeAdd = "${EmployeePath}ic_employee_add.svg";
+  // employee path
+  static String employeePath = "$iconPath/employee";
+  static String employeeAdd = "$employeePath/employee_add.svg";
+  static String employees = "$employeePath/employees.svg";
 
-  // function icons
-  static const FunctionsPath = "${IconPath}function/";
-  static const clients = "${FunctionsPath}ic_clients.svg";
-  static const contract = "${FunctionsPath}ic_contract.svg";
-  static const customer = "${FunctionsPath}ic_custemer.svg";
-  static const document = "${FunctionsPath}ic_document.svg";
-  static const employees = "${FunctionsPath}ic_employee.svg";
-  static const leads = "${FunctionsPath}ic_leads.svg";
-  static const project = "${FunctionsPath}ic_project.svg";
-  static const task = "${FunctionsPath}ic_task.svg";
+  // function path
+  static String functionPath = "$iconPath/function";
 
-  // members icons
-  static const MambersPath = "${IconPath}member/";
-  static const member = "${MambersPath}ic_member.svg";
-  static const memberAdd = "${MambersPath}ic_member_add.svg";
+  // member path
+  static String memberPath = "$iconPath/member";
+  static String memberAdd = "$memberPath/member_add.svg";
+  static String memberProfile = "$memberPath/member_profile.svg";
+  static String members = "$memberPath/members.svg";
 
-  // all app level icons
-  static const NativeIconPath = "${IconPath}native_icons/";
+  // native icons path
+  static String nativeIconPath = "$iconPath/native_icons";
 
-  // actions icons
-  static const ActionPath = "${NativeIconPath}actions/";
-  static const add = "${ActionPath}ic_add.svg";
-  static const close = "${ActionPath}ic_close.svg";
-  static const delete = "${ActionPath}ic_delete.svg";
-  static const done = "${ActionPath}ic_done.svg";
-  static const download = "${ActionPath}ic_download.svg";
-  static const edit = "${ActionPath}ic_edit.svg";
-  static const filter = "${ActionPath}ic_filter.svg";
-  static const more = "${ActionPath}ic_more.svg";
-  static const pin = "${ActionPath}ic_pin.svg";
-  static const search = "${ActionPath}ic_search.svg";
-  static const send = "${ActionPath}ic_send.svg";
-  static const share = "${ActionPath}ic_share.svg";
-  static const taskBox = "${ActionPath}ic_task.svg";
-  static const upload = "${ActionPath}ic_upload.svg";
+  // actions path
+  static String actionsPath = "$nativeIconPath/actions";
+  static String add = "$actionsPath/add.svg";
+  static String board = "$actionsPath/board.svg";
+  static String checkboxSelected = "$actionsPath/checkbox_selected.svg";
+  static String checkboxUnselected = "$actionsPath/checkbox_unselected.svg";
+  static String close = "$actionsPath/close.svg";
+  static String delete = "$actionsPath/delete.svg";
+  static String done = "$actionsPath/done.svg";
+  static String download = "$actionsPath/download.svg";
+  static String edit = "$actionsPath/edit.svg";
+  static String filter = "$actionsPath/filter.svg";
+  static String list = "$actionsPath/list.svg";
+  static String more = "$actionsPath/more.svg";
+  static String pin = "$actionsPath/pin.svg";
+  static String radiobuttonSelected = "$actionsPath/radiobutton_selected.svg";
+  static String radiobuttonUnselected =
+      "$actionsPath/radiobutton_unselected.svg";
+  static String search = "$actionsPath/search.svg";
+  static String send = "$actionsPath/send.svg";
+  static String share = "$actionsPath/share.svg";
+  static String task = "$actionsPath/task.svg";
+  static String taskFilled = "$actionsPath/task_filled.svg";
+  static String timeline = "$actionsPath/timeline.svg";
+  static String upload = "$actionsPath/upload.svg";
+  static String vacations = "$actionsPath/vacations.svg";
 
-  // auth icons
-  static const AuthPath = "${NativeIconPath}auth/";
-  static const logout = "${AuthPath}ic_logout.svg";
-  static const viewPassword = "${AuthPath}ic_viewpassword.svg";
+  // auth path
+  static String authPath = "$nativeIconPath/auth";
+  static String lock = "$authPath/lock.svg";
+  static String logout = "$authPath/logout.svg";
+  static String viewPassword = "$authPath/view_password.svg";
 
-  // business icons
-  static const BusinessPath = "${NativeIconPath}business/";
-  static const company = "${BusinessPath}ic_company.svg";
-  static const meeting = "${BusinessPath}ic_meeting.svg";
+  // business path
+  static String businessPath = "$nativeIconPath/business";
+  static String company = "$businessPath/company.svg";
+  static String meeting = "$businessPath/meeting.svg";
 
-  // date_time icons
-  static const Date_timePath = "${NativeIconPath}date_time/";
-  static const calendar = "${Date_timePath}ic_calendar.svg";
-  static const clock_filled = "${Date_timePath}ic_clock_filled.svg";
+  // date_time path
+  static String dateTimePath = "$nativeIconPath/date_time";
+  static String calendar = "$dateTimePath/calendar.svg";
+  static String calendarFilled = "$dateTimePath/calendar_filled.svg";
+  static String clock = "$dateTimePath/clock.svg";
+  static String clockFilled = "$dateTimePath/clock_filled.svg";
 
-  // file icons
-  static const FilePath = "${NativeIconPath}file/";
-  static const attach = "${FilePath}ic_attach.svg";
-  static const file = "${FilePath}ic_file.svg";
-  static const link = "${FilePath}ic_link.svg";
+  // file path
+  static String filePath = "$nativeIconPath/file";
+  static String attach = "$filePath/attach.svg";
+  static String file = "$filePath/file.svg";
+  static String link = "$filePath/link.svg";
 
-  // media icons
-  static const MediaPath = "${NativeIconPath}media/";
-  static const image = "${MediaPath}ic_image.svg";
+  // media path
+  static String mediaPath = "$nativeIconPath/media";
+  static String image = "$mediaPath/image.svg";
 
-  // navigation icons
-  static const NavigationPath = "${NativeIconPath}navigation/";
+  // navigation path
+  static String navigationPath = "$nativeIconPath/navigation";
 
-  // arrows navigation icons
-  static const Arrow = "${NavigationPath}arrow/";
-  static const arrowDown = "${Arrow}ic_arrow_down.svg";
-  static const arrowLeft = "${Arrow}ic_arrow_left.svg";
-  static const arrowRight = "${Arrow}ic_arrow_right.svg";
-  static const arrowUp = "${Arrow}ic_arrow_up.svg";
+  // arrow Path
+  static String arrowPath = "$navigationPath/arrow";
 
-  static const down = "${NavigationPath}ic_down.svg";
-  static const left = "${NavigationPath}ic_left.svg";
-  static const right = "${NavigationPath}ic_right.svg";
-  static const up = "${NavigationPath}ic_up.svg";
+  static String arrowDown = "$arrowPath/arrow_down.svg";
+  static String arrowLeft = "$arrowPath/arrow_left.svg";
+  static String arrowRight = "$arrowPath/arrow_right.svg";
+  static String arrowUp = "$arrowPath/arrow_up.svg";
 
-  // notification icons
-  static const NotifivationsPath = "${NativeIconPath}notification/";
-  static const notifications = "${NotifivationsPath}ic_notifications.svg";
+  static String dashboard = "$navigationPath/dashboard.svg";
+  static String location = "$navigationPath/location.svg";
+  static String up = "$navigationPath/up.svg";
+  static String down = "$navigationPath/down.svg";
+  static String left = "$navigationPath/left.svg";
+  static String right = "$navigationPath/right.svg";
 
-  // productivity icons
-  static const ProducticityPath = "${NativeIconPath}productivity/";
+  // notification path
+  static String notificationPath = "$nativeIconPath/notification";
+  static String notifications = "$notificationPath/notifications.svg";
 
-  // social icons
-  static const SocialPath = "${NativeIconPath}social/";
+  // productivity path
+  static String productivityPath = "$nativeIconPath/productivity";
 
-  // system icons
-  static const SystemPath = "${NativeIconPath}system/";
-  static const hint = "${SystemPath}ic_hint.svg";
-  static const question = "${SystemPath}ic_question.svg";
-  static const settings = "${SystemPath}ic_settings.svg";
+  // social path
+  static String socialPath = "$nativeIconPath/social";
+  static String paymentBilling = "$socialPath/payment_billing.svg";
+  static String payments = "$socialPath/payments.svg";
+  static String safety = "$socialPath/safety.svg";
 
-  // ui icons
-  static const UiPath = "${NativeIconPath}ui/";
-  static const dashboard = "${UiPath}ic_dashbord.png";
-  static const birthday = "${UiPath}ic_birthday.svg";
-  static const call = "${UiPath}ic_call.svg";
-  static const emoji = "${UiPath}ic_emoji.svg";
-  static const location = "${UiPath}ic_location.svg";
-   static const mailSVG = "${UiPath}ic_mail.svg";
-  static const mention = "${UiPath}ic_mention.svg";
+  // system path
+  static String systemPath = "$nativeIconPath/system";
+  static String hint = "$systemPath/hint.svg";
+  static String hintFilled = "$systemPath/hint_filled.svg";
+  static String question = "$systemPath/question.svg";
+  static String settings = "$systemPath/settings.svg";
+
+  // ui path
+  static String uiPath = "$nativeIconPath/ui";
+  static String account = "$uiPath/account.svg";
+  static String birthday = "$uiPath/birthday.svg";
+  static String call = "$uiPath/call.svg";
+  static String callHistory = "$uiPath/call_history.svg";
+  static String connectedApps = "$uiPath/connected_apps.svg";
+  static String dashboardStar = "$uiPath/dashboard_star.svg";
+  static String emoji = "$uiPath/emoji.svg";
+  static String mention = "$uiPath/mention.svg";
 }

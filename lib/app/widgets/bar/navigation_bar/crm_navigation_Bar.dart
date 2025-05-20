@@ -19,11 +19,11 @@ class CrmNavigationBar extends StatelessWidget {
     );
     final iconSize = 18.0;
     final items = [
-      {'icon': FontAwesomeIcons.home, 'title': 'Home'},
+      {'icon': Icons.dashboard_rounded, 'title': 'Home'},
       {'icon': FontAwesomeIcons.leaf, 'title': 'Leads'},
-      {'icon': FontAwesomeIcons.instagram, 'title': 'Tasks'},
-      {'icon': FontAwesomeIcons.instagram, 'title': 'Chats'},
-      {'icon': FontAwesomeIcons.instagram, 'title': 'Profile'},
+      {'icon': FontAwesomeIcons.tasksAlt, 'title': 'Tasks'},
+      {'icon': FontAwesomeIcons.solidComments, 'title': 'Chats'},
+      {'icon': FontAwesomeIcons.solidUserCircle, 'title': 'Profile'},
     ];
 
     return Card(
@@ -49,9 +49,7 @@ class CrmNavigationBar extends StatelessWidget {
           currentIndex: currentIndex,
           onTap: onTap,
           items:
-              items
-                  .map(
-                    (item) => SalomonBottomBarItem(
+              items.map((item) => SalomonBottomBarItem(
                       icon: Icon(item['icon'] as IconData, size: iconSize),
                       title: Text(item['title'] as String, style: style),
                     ),

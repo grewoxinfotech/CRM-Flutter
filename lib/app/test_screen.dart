@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/widgets/drawer/crm_drawer.dart';
+import 'package:crm_flutter/app/widgets/drawer/views/crm_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

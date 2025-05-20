@@ -37,6 +37,7 @@ class AuthService extends GetConnect {
 
         Get.offAll(DashboardScreen());
 
+
         CrmSnackBar.showAwesomeSnackbar(
           title: "Welcome!",
           message: "Login successful!",

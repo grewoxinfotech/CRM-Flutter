@@ -86,13 +86,13 @@ class ProjectCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CrmIc(
-                  iconPath: ICRes.edit,
+                  iconPath: Ic.edit,
                   color: success,
                   onTap: onEdit,
                   width: 50,
                 ),
                 CrmIc(
-                  iconPath: ICRes.delete,
+                  iconPath: Ic.delete,
                   color: error,
                   onTap: onDelete,
                   width: 50,

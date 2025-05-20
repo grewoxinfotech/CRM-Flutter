@@ -206,14 +206,14 @@ class FileCard extends StatelessWidget {
                 children: [
                   if (onEdit != null)
                     CrmIc(
-                      iconPath: ICRes.edit,
+                      iconPath: Ic.edit,
                       color: textPrimary,
                       onTap: onEdit,
                     ),
                   SizedBox(width: 8),
                   if (onDelete != null)
                     CrmIc(
-                      iconPath: ICRes.delete,
+                      iconPath: Ic.delete,
                       color: Get.theme.colorScheme.error,
                       onTap: onDelete,
                     ),

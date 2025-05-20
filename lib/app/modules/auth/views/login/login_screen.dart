@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                                   width: 50,
                                   alignment: Alignment.center,
                                   child: CrmIc(
-                                    iconPath: ICRes.viewPassword,
+                                    iconPath: Ic.viewPassword,
                                     onTap:
                                         authController.togglePasswordVisibility,
                                     height: 24,

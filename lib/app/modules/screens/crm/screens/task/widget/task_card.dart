@@ -86,8 +86,8 @@ class TaskCard extends StatelessWidget {
       onTap: onTap,
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.small),
-        margin: EdgeInsets.symmetric(horizontal: AppMargin.medium),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppBar(
               leading: Container(

@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
@@ -23,32 +22,26 @@ class FunctionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
-        child: CrmCard(
-          padding: EdgeInsets.all(AppPadding.medium),
-          gradient: LinearGradient(
-            colors: [color!.withAlpha(160), color!.withAlpha(255)],
-            end: Alignment.bottomRight,
-            begin: Alignment.topLeft,
-          ),
-          boxShadow: [],
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(icon ?? FontAwesomeIcons.at, color: white, size: 18),
-              AppSpacing.horizontalSmall,
-              Expanded(
-                child: Text(
-                  title.toString(),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: white,
-                  ),
+        padding: EdgeInsets.all(AppPadding.medium),
+        color: color!.withAlpha(50),
+        boxShadow: [],
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(icon ?? FontAwesomeIcons.at, color: color, size: 18),
+            AppSpacing.horizontalSmall,
+            Expanded(
+              child: Text(
+                title.toString(),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: color,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

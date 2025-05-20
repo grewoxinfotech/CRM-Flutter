@@ -83,8 +83,6 @@ class DealCard extends StatelessWidget {
       onTap: onTap,
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.medium),
-        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
-        borderRadius: BorderRadius.circular(AppRadius.large),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,8 +147,8 @@ class DealCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _infoTile(ICRes.task, status, color),
-                _infoTile(ICRes.calendar, createdAt, color),
+                _infoTile(Ic.task, status, color),
+                _infoTile(Ic.calendar, createdAt, color),
               ],
             ),
           ],

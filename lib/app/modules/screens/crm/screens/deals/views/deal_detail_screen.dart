@@ -178,12 +178,12 @@ class DealDetailScreen extends StatelessWidget {
         title: Text("Deal"),
         bottom: CrmTabBar(
           items: [
-            TabBarModel(iconPath: ICRes.attach, label: "Overview"),
-            TabBarModel(iconPath: ICRes.attach, label: "Members"),
-            TabBarModel(iconPath: ICRes.attach, label: "Notes"),
-            TabBarModel(iconPath: ICRes.attach, label: "Files"),
-            TabBarModel(iconPath: ICRes.attach, label: "Invoice"),
-            TabBarModel(iconPath: ICRes.attach, label: "Payment"),
+            TabBarModel(iconPath: Ic.attach, label: "Overview"),
+            TabBarModel(iconPath: Ic.attach, label: "Members"),
+            TabBarModel(iconPath: Ic.attach, label: "Notes"),
+            TabBarModel(iconPath: Ic.attach, label: "Files"),
+            TabBarModel(iconPath: Ic.attach, label: "Invoice"),
+            TabBarModel(iconPath: Ic.attach, label: "Payment"),
           ],
         ),
       ),

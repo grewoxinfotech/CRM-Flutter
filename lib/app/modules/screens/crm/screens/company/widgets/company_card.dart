@@ -107,9 +107,9 @@ class CompanyCard extends StatelessWidget {
         trailing: FittedBox(
           child: Row(
             children: [
-              CrmIc(iconPath: ICRes.edit, color: success, onTap: onEdit),
+              CrmIc(iconPath: Ic.edit, color: success, onTap: onEdit),
               AppSpacing.horizontalSmall,
-              CrmIc(iconPath: ICRes.delete, color: error, onTap: onDelete),
+              CrmIc(iconPath: Ic.delete, color: error, onTap: onDelete),
             ],
           ),
         ),

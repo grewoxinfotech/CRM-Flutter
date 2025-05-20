@@ -121,7 +121,7 @@ class CrmDropdownField<T> extends StatelessWidget {
           ),
           isExpanded: true,
           icon: CrmIc(
-            iconPath: ICRes.down,
+            iconPath: Ic.down,
             color: Get.theme.colorScheme.primary,
           ),
           dropdownColor: Get.theme.colorScheme.surface,

@@ -20,7 +20,7 @@ class DateContainerWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CrmIc(iconPath: ICRes.calendar, color: Colors.black),
+          CrmIc(iconPath: Ic.calendar, color: Colors.black),
           RichText(
             text: TextSpan(
               style: TextStyle(
@@ -35,7 +35,7 @@ class DateContainerWidget extends StatelessWidget {
               ],
             ),
           ),
-          CrmIc(iconPath: ICRes.calendar, color: Colors.white),
+          CrmIc(iconPath: Ic.calendar, color: Colors.white),
         ],
       ),
     );

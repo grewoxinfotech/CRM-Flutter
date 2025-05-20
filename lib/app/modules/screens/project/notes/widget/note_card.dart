@@ -60,8 +60,8 @@ class NoteCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CrmIc(iconPath: ICRes.edit,color: success,onTap: onEdit,width: 50,),
-                CrmIc(iconPath: ICRes.delete,color: error,onTap: onDelete,width: 50,),
+                CrmIc(iconPath: Ic.edit,color: success,onTap: onEdit,width: 50,),
+                CrmIc(iconPath: Ic.delete,color: error,onTap: onDelete,width: 50,),
               ],
             )
           ],

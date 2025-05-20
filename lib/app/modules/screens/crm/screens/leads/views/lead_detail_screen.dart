@@ -138,10 +138,10 @@ class LeadDetailScreen extends StatelessWidget {
         leading: CrmBackButton(),
         bottom: CrmTabBar(
           items: [
-            TabBarModel(iconPath: ICRes.attach, label: "Overview"),
-            TabBarModel(iconPath: ICRes.attach, label: "Files"),
-            TabBarModel(iconPath: ICRes.attach, label: "Members"),
-            TabBarModel(iconPath: ICRes.attach, label: "Notes"),
+            TabBarModel(iconPath: Ic.attach, label: "Overview"),
+            TabBarModel(iconPath: Ic.attach, label: "Files"),
+            TabBarModel(iconPath: Ic.attach, label: "Members"),
+            TabBarModel(iconPath: Ic.attach, label: "Notes"),
           ],
         ),
       ),

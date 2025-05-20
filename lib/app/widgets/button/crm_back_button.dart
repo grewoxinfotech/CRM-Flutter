@@ -15,7 +15,7 @@ class CrmBackButton extends StatelessWidget {
     return Align(
       alignment: Alignment.center,
       child: CrmIc(
-        iconPath: ICRes.left,
+        iconPath: Ic.left,
         color: color ?? Theme.of(context).colorScheme.onPrimary,
         width: width,
         onTap: onTap ?? Get.back,

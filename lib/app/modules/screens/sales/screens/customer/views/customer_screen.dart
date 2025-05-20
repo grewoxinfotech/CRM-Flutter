@@ -16,7 +16,7 @@ class CustomerScreen extends StatelessWidget {
         leading: CrmBackButton(),
         title: Text("Customers"),
         actionsPadding: EdgeInsets.only(right: AppPadding.medium),
-        actions: [CrmIc(iconPath: ICRes.search)],
+        actions: [CrmIc(iconPath: Ic.search)],
       ),
       body: ViewScreen(
         itemCount: 10,

@@ -45,12 +45,12 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
               action ??
               [
                 CrmIc(
-                  iconPath: ICRes.search,
+                  iconPath: Ic.search,
                   color: Get.theme.colorScheme.onPrimary,
                 ),
                 AppSpacing.horizontalMedium,
                 CrmIc(
-                  iconPath: ICRes.notifications,
+                  iconPath: Ic.notifications,
                   color: Get.theme.colorScheme.onPrimary,
                 ),
                 AppSpacing.horizontalMedium,

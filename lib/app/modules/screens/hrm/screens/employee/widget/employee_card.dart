@@ -171,7 +171,7 @@ class EmployeeCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CrmIc(
-                  iconPath: ICRes.delete,
+                  iconPath: Ic.delete,
                   width: 50,
                   color: error,
                   onTap: onDelete,
