@@ -33,6 +33,10 @@ import 'package:crm_flutter/app/data/network/crm/notes/service/note_service.dart
 import 'dart:io';
 import 'package:crm_flutter/app/widgets/common/dialogs/upload_status_dialog.dart';
 import 'package:crm_flutter/app/modules/crm/file/bindings/file_binding.dart';
+import 'package:crm_flutter/app/modules/crm/lead/views/lead_edit_screen.dart';
+import 'package:crm_flutter/app/modules/crm/activity/controller/activity_controller.dart';
+import 'package:crm_flutter/app/data/network/activity/model/activity_model.dart';
+import 'package:crm_flutter/app/modules/crm/activity/views/activity_card.dart';
 
 class LeadDetailScreen extends StatelessWidget {
   final String id;
@@ -47,193 +51,7 @@ class LeadDetailScreen extends StatelessWidget {
     Get.lazyPut<NoteService>(() => NoteService());
     Get.lazyPut<FileController>(() => FileController());
     final noteController = Get.put(NoteController());
-
     final fileController = Get.find<FileController>();
-
-    if (leadController.leads.isEmpty) {
-      return const Center(child: Text("No Lead Data Available."));
-    }
-
-    final lead = leadController.leads.firstWhere(
-      (lead) => lead.id == id,
-      orElse: () => LeadModel(),
-    );
-
-    if (lead.id == null) {
-      return const Center(child: Text("Lead not found"));
-    }
-
-    // Load notes when the screen is built
-    noteController.getNotesForLead(id);
-
-    // Initialize file controller and set files from lead data
-    if (lead.files != null && lead.files.isNotEmpty) {
-      fileController.setFilesFromLeadData(lead.files);
-    }
-
-    List widgets = [
-      LeadOverviewCard(
-        id: lead.id.toString(),
-        color: Colors.green,
-        inquiryId: lead.inquiryId.toString(),
-        leadTitle: lead.leadTitle.toString(),
-        leadStage: lead.leadStage.toString(),
-        pipeline: lead.pipeline.toString(),
-        currency: lead.currency.toString(),
-        leadValue: lead.leadValue.toString(),
-        companyName: lead.companyName.toString(),
-        firstName: lead.firstName.toString(),
-        lastName: lead.lastName.toString(),
-        phoneCode: lead.phoneCode.toString(),
-        telephone: lead.telephone.toString(),
-        email: lead.email.toString(),
-        address: lead.address.toString(),
-        leadMembers: lead.leadMembers.toString(),
-        source: lead.source.toString(),
-        category: lead.category.toString(),
-        files: lead.files.toString(),
-        status: lead.status.toString(),
-        interestLevel: lead.interestLevel.toString(),
-        leadScore: lead.leadScore.toString(),
-        isConverted: lead.isConverted.toString(),
-        clientId: lead.clientId.toString(),
-        createdBy: lead.createdBy.toString(),
-        updatedBy: lead.updatedBy.toString(),
-        createdAt: lead.createdAt.toString(),
-        updatedAt: lead.updatedAt.toString(),
-        onDelete:
-            () => CrmDeleteDialog(
-              onConfirm: () {
-                leadController.deleteLead(lead.id.toString());
-                Get.back();
-              },
-            ),
-        onEdit: () {},
-      ),
-      Stack(
-        children: [
-          Obx(
-            () => ViewScreen(
-              itemCount: fileController.files.length,
-              padding: const EdgeInsets.all(AppPadding.medium),
-              itemBuilder: (context, i) {
-                final file = fileController.files[i];
-                return FileCard(
-                  url: file.url,
-                  name: file.filename,
-                  id: "${lead.id}_${file.filename}",
-                  role: "File",
-                  onTap: null,
-                  onDelete: () {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => CrmDeleteDialog(
-                            entityType: "file",
-                            onConfirm: () async {
-                              final success = await fileController.deleteFile(
-                                lead.id.toString(),
-                                file.filename,
-                              );
-                              if (success) {
-                                await leadController.refreshData();
-                              }
-                            },
-                          ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          Positioned(
-            right: AppPadding.medium,
-            bottom: AppPadding.medium,
-            child: FloatingActionButton(
-              onPressed: () {
-                if (lead.id != null) {
-                  _uploadFile(context, lead.id!);
-                }
-              },
-              child: const Icon(Icons.upload_file, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-
-      ViewScreen(
-        itemCount: lead.leadMembers.length,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, index) {
-          final member = lead.leadMembers[index];
-          final user =
-              leadController.getLeadMembers([member.memberId]).firstOrNull;
-          if (user == null) return const SizedBox.shrink();
-
-          final roleName = rolesService.getRoleNameById(user.roleId);
-          final role = [
-            if (roleName.isNotEmpty) roleName,
-            if (user.designation?.isNotEmpty == true) user.designation,
-            if (user.department?.isNotEmpty == true) user.department,
-          ].where((s) => s != null && s.isNotEmpty).join(' - ');
-
-          return MemberCard(
-            title: user.username,
-            subTitle: role.isNotEmpty ? role : 'No Role',
-            role: user.email,
-            onTap: null,
-          );
-        },
-      ),
-      Stack(
-        children: [
-          Obx(
-            () => ViewScreen(
-              itemCount: noteController.notes.length,
-              padding: const EdgeInsets.all(AppPadding.medium),
-              itemBuilder: (context, i) {
-                final note = noteController.notes[i];
-                return NoteCard(
-                  id: note.id,
-                  relatedId: note.relatedId,
-                  noteTitle: note.noteTitle,
-                  noteType: note.notetype,
-                  description: note.description,
-                  clientId: note.clientId,
-                  createdBy: note.createdBy,
-                  updatedBy: note.updatedBy,
-                  createdAt: formatDate(note.createdAt.toString()),
-                  updatedAt: formatDate(note.updatedAt.toString()),
-                  onDelete: () => noteController.deleteNote(note.id, id),
-                  onEdit:
-                      () => _showNoteDialog(
-                        context,
-                        noteController,
-                        id,
-                        note: note,
-                      ),
-                );
-              },
-            ),
-          ),
-          Positioned(
-            right: AppPadding.medium,
-            bottom: AppPadding.medium,
-            child: FloatingActionButton(
-              onPressed: () => _showAddNoteDialog(context, noteController, id),
-              child: const Icon(Icons.add, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return PaymentCard();
-        },
-      ),
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -245,17 +63,308 @@ class LeadDetailScreen extends StatelessWidget {
             TabBarModel(iconPath: ICRes.attach, label: "Files"),
             TabBarModel(iconPath: ICRes.attach, label: "Members"),
             TabBarModel(iconPath: ICRes.attach, label: "Notes"),
+            TabBarModel(iconPath: ICRes.attach, label: "Activities"),
           ],
         ),
       ),
-      body: PageView.builder(
-        itemCount: widgets.length,
-        controller: tabBarController.pageController,
-        onPageChanged: tabBarController.onPageChanged,
-        itemBuilder: (context, i) {
-          return widgets[i];
-        },
-      ),
+      body: Obx(() {
+        if (leadController.leads.isEmpty) {
+          leadController.refreshData();
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final lead = leadController.leads.firstWhereOrNull(
+          (lead) => lead.id == id,
+        );
+
+        if (lead == null) {
+          leadController.getLeadById(id);
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        noteController.getNotes(id);
+
+        if (lead.files.isNotEmpty) {
+          fileController.setFilesFromLeadData(lead.files);
+        }
+
+        final sourceName = leadController.getSourceName(lead.source ?? '');
+        final categoryName = leadController.getCategoryName(
+          lead.category ?? '',
+        );
+        final statusName = leadController.getStatusName(lead.status ?? '');
+
+        List<Widget> widgets = [
+          _buildOverviewTab(
+            lead,
+            leadController,
+            sourceName,
+            categoryName,
+            statusName,
+          ),
+          _buildFilesTab(fileController, lead.id.toString(), context),
+          _buildMembersTab(lead, leadController, rolesService),
+          _buildNotesTab(noteController, id, context),
+          _buildActivitiesTab(lead, leadController, context),
+        ];
+
+        return PageView.builder(
+          itemCount: widgets.length,
+          controller: tabBarController.pageController,
+          onPageChanged: tabBarController.onPageChanged,
+          itemBuilder: (context, i) => widgets[i],
+        );
+      }),
+    );
+  }
+
+  Widget _buildOverviewTab(
+    LeadModel lead,
+    LeadController leadController,
+    String sourceName,
+    String categoryName,
+    String statusName,
+  ) {
+    return LeadOverviewCard(
+      id: lead.id.toString(),
+      color: Colors.green,
+      inquiryId: lead.inquiryId.toString(),
+      leadTitle: lead.leadTitle.toString(),
+      leadStage: leadController.getStageName(lead.leadStage ?? ''),
+      pipeline: leadController.getPipelineName(lead.pipeline ?? ''),
+      currency: lead.currency.toString(),
+      leadValue: lead.leadValue.toString(),
+      companyName: lead.companyName.toString(),
+      firstName: lead.firstName.toString(),
+      lastName: lead.lastName.toString(),
+      phoneCode: lead.phoneCode.toString(),
+      telephone: lead.telephone.toString(),
+      email: lead.email.toString(),
+      address: lead.address.toString(),
+      leadMembers: lead.leadMembers.toString(),
+      source: sourceName,
+      category: categoryName,
+      files: lead.files.toString(),
+      status: statusName,
+      interestLevel: lead.interestLevel.toString(),
+      leadScore: lead.leadScore.toString(),
+      isConverted: lead.isConverted.toString(),
+      clientId: lead.clientId.toString(),
+      createdBy: lead.createdBy.toString(),
+      updatedBy: lead.updatedBy.toString(),
+      createdAt: lead.createdAt.toString(),
+      updatedAt: lead.updatedAt.toString(),
+      onDelete:
+          () => CrmDeleteDialog(
+            onConfirm: () {
+              leadController.deleteLead(lead.id.toString());
+              Get.back();
+            },
+          ),
+      onEdit: () => _handleEdit(lead, leadController),
+    );
+  }
+
+  Widget _buildFilesTab(
+    FileController fileController,
+    String leadId,
+    BuildContext context,
+  ) {
+    return Stack(
+      children: [
+        Obx(
+          () => ViewScreen(
+            itemCount: fileController.files.length,
+            padding: const EdgeInsets.all(AppPadding.medium),
+            itemBuilder: (context, i) {
+              final file = fileController.files[i];
+              return FileCard(
+                url: file.url,
+                name: file.filename,
+                id: "${leadId}_${file.filename}",
+                role: "File",
+                onTap: null,
+                onDelete:
+                    () => _showDeleteFileDialog(
+                      context,
+                      fileController,
+                      leadId,
+                      file.filename,
+                    ),
+              );
+            },
+          ),
+        ),
+        Positioned(
+          right: AppPadding.medium,
+          bottom: AppPadding.medium,
+          child: FloatingActionButton(
+            onPressed: () => _uploadFile(context, leadId),
+            child: const Icon(Icons.upload_file, color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMembersTab(
+    LeadModel lead,
+    LeadController leadController,
+    RolesService rolesService,
+  ) {
+    return ViewScreen(
+      itemCount: lead.leadMembers.length,
+      padding: const EdgeInsets.all(AppPadding.medium),
+      itemBuilder: (context, index) {
+        final member = lead.leadMembers[index];
+        final user =
+            leadController.getLeadMembers([member.memberId]).firstOrNull;
+        if (user == null) return const SizedBox.shrink();
+
+        final roleName = rolesService.getRoleNameById(user.roleId);
+        final role = [
+          if (roleName.isNotEmpty) roleName,
+          if (user.designation?.isNotEmpty == true) user.designation,
+          if (user.department?.isNotEmpty == true) user.department,
+        ].where((s) => s != null && s.isNotEmpty).join(' - ');
+
+        return MemberCard(
+          title: user.username,
+          subTitle: role.isNotEmpty ? role : 'No Role',
+          role: user.email,
+          onTap: null,
+        );
+      },
+    );
+  }
+
+  Widget _buildNotesTab(
+    NoteController noteController,
+    String leadId,
+    BuildContext context,
+  ) {
+    return Stack(
+      children: [
+        Obx(
+          () => ViewScreen(
+            itemCount: noteController.notes.length,
+            padding: const EdgeInsets.all(AppPadding.medium),
+            itemBuilder: (context, i) {
+              final note = noteController.notes[i];
+              return NoteCard(
+                id: note.id,
+                relatedId: note.relatedId,
+                noteTitle: note.noteTitle,
+                noteType: note.notetype,
+                description: note.description,
+                clientId: note.clientId,
+                createdBy: note.createdBy,
+                updatedBy: note.updatedBy,
+                createdAt: formatDate(note.createdAt.toString()),
+                updatedAt: formatDate(note.updatedAt.toString()),
+                onDelete: () => noteController.deleteNote(note.id, leadId),
+                onEdit:
+                    () => _showNoteDialog(
+                      context,
+                      noteController,
+                      leadId,
+                      note: note,
+                    ),
+              );
+            },
+          ),
+        ),
+        Positioned(
+          right: AppPadding.medium,
+          bottom: AppPadding.medium,
+          child: FloatingActionButton(
+            onPressed: () => _showNoteDialog(context, noteController, leadId),
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActivitiesTab(
+    LeadModel lead,
+    LeadController leadController,
+    BuildContext context,
+  ) {
+    final activityController = leadController.activityController;
+    activityController.getActivities(lead.id.toString());
+
+    return Stack(
+      children: [
+        Obx(() {
+          if (activityController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return ViewScreen(
+            itemCount: activityController.activities.length,
+            padding: const EdgeInsets.all(AppPadding.medium),
+            itemBuilder: (context, index) {
+              final activity = activityController.activities[index];
+              return ActivityCard(
+                activity: activity,
+                onDelete:
+                    () => _showDeleteActivityDialog(
+                      context,
+                      activityController,
+                      activity.id ?? '',
+                      lead.id.toString(),
+                    ),
+              );
+            },
+          );
+        }),
+      ],
+    );
+  }
+
+  Future<void> _handleEdit(
+    LeadModel lead,
+    LeadController leadController,
+  ) async {
+    leadController.leadTitleController.text = lead.leadTitle ?? '';
+    leadController.leadValueController.text = lead.leadValue?.toString() ?? '';
+    leadController.firstNameController.text = lead.firstName ?? '';
+    leadController.lastNameController.text = lead.lastName ?? '';
+    leadController.emailController.text = lead.email ?? '';
+    leadController.phoneController.text = lead.telephone ?? '';
+    leadController.companyController.text = lead.companyName ?? '';
+    leadController.addressController.text = lead.address ?? '';
+
+    leadController.selectedSource.value = lead.source ?? '';
+    leadController.selectedCategory.value = lead.category ?? '';
+    leadController.selectedStatus.value = lead.status ?? '';
+    leadController.selectedInterestLevel.value = lead.interestLevel ?? '';
+
+    await Get.to(() => LeadEditScreen(leadId: lead.id.toString()));
+    await leadController.getLeadById(id);
+    await leadController.refreshData();
+  }
+
+  void _showDeleteFileDialog(
+    BuildContext context,
+    FileController fileController,
+    String leadId,
+    String filename,
+  ) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => CrmDeleteDialog(
+            entityType: "file",
+            onConfirm: () async {
+              final success = await fileController.deleteFile(leadId, filename);
+              if (success) {
+                final leadController = Get.find<LeadController>();
+                await leadController.refreshData();
+              }
+            },
+          ),
     );
   }
 
@@ -272,26 +381,9 @@ class LeadDetailScreen extends StatelessWidget {
             leadId: leadId,
             controller: controller,
             note: note,
-            onSuccess: () => controller.getNotesForLead(leadId),
+            onSuccess: () => controller.getNotes(leadId),
           ),
     );
-  }
-
-  void _showAddNoteDialog(
-    BuildContext context,
-    NoteController controller,
-    String leadId,
-  ) {
-    _showNoteDialog(context, controller, leadId);
-  }
-
-  void _showEditNoteDialog(
-    BuildContext context,
-    NoteController controller,
-    String leadId,
-    NoteModel note,
-  ) {
-    _showNoteDialog(context, controller, leadId, note: note);
   }
 
   Future<void> _uploadFile(BuildContext context, String leadId) async {
@@ -345,5 +437,23 @@ class LeadDetailScreen extends StatelessWidget {
       }
       UploadStatusDialog.showError(context, 'Error uploading file: $e');
     }
+  }
+
+  void _showDeleteActivityDialog(
+    BuildContext context,
+    ActivityController controller,
+    String activityId,
+    String leadId,
+  ) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => CrmDeleteDialog(
+            entityType: "activity",
+            onConfirm: () async {
+              await controller.getActivities(leadId);
+            },
+          ),
+    );
   }
 }

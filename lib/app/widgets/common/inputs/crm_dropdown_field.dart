@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 
 class CrmDropdownField<T> extends StatelessWidget {
   final String title;
-  final dynamic value; // Can be T? or List<T>
+  final dynamic value; 
   final List<DropdownMenuItem<T>> items;
-  final Function(dynamic) onChanged; // Can accept T? or List<T>
+  final Function(dynamic) onChanged; 
   final bool isRequired;
   final String? hintText;
   final IconData? prefixIcon;

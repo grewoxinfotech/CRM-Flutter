@@ -1,4 +1,3 @@
-
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 
 class UrlRes {
@@ -28,7 +27,15 @@ class UrlRes {
 
   static const String leadsFiles = "$baseURL/leads/files";
 
+  static const String dealsFiles = "$baseURL/deals/files";
+
   static const String activities = "$baseURL/activities";
+
+  static const String salesInvoices = "$baseURL/sales-invoices";
+
+  static const String products = "$baseURL/products";
+
+    static const String customers = "$baseURL/customers";
 
   // headers from api
   static const String contentType = "Content-type";

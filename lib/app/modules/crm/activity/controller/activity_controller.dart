@@ -39,13 +39,13 @@ class ActivityController extends GetxController {
     }
   }
 
-  // Helper method to refresh current activities
   Future<void> refreshActivities() async {
     if (currentRelatedId.value.isNotEmpty) {
       await getActivities(currentRelatedId.value);
     }
   }
 
+  
   @override
   void onInit() {
     super.onInit();

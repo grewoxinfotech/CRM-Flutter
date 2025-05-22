@@ -5,60 +5,153 @@ import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dar
 import 'package:crm_flutter/app/modules/crm/deal/widget/deal_overview_card.dart';
 import 'package:crm_flutter/app/modules/project/file/widget/file_card.dart';
 import 'package:crm_flutter/app/modules/project/invoice/widget/invoice_card.dart';
+import 'package:crm_flutter/app/data/network/sales_invoice/model/sales_invoice_model.dart';
+import 'package:crm_flutter/app/data/network/sales_invoice/service/sales_invoice_service.dart';
+import 'package:crm_flutter/app/modules/crm/sales_invoice/pages/sales_invoice_edit_page.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
+import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
 import 'package:crm_flutter/app/modules/crm/notes/views/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
+import 'package:crm_flutter/app/data/network/role/service/roles_service.dart';
+import 'package:crm_flutter/app/data/network/crm/notes/service/note_service.dart';
+import 'package:crm_flutter/app/modules/crm/notes/controllers/note_controller.dart';
+import 'package:crm_flutter/app/modules/crm/file/controllers/file_controller.dart';
+import 'package:crm_flutter/app/widgets/dialog/note/note_dialog.dart';
+import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
+import 'package:crm_flutter/app/widgets/common/dialogs/upload_status_dialog.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:crm_flutter/app/modules/crm/deal/views/deal_edit_screen.dart';
+import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
+import 'package:crm_flutter/app/modules/crm/deal/bindings.dart';
+import 'package:crm_flutter/app/modules/crm/activity/views/activity_card.dart';
+import 'package:crm_flutter/app/modules/crm/activity/controller/activity_controller.dart';
+import 'package:crm_flutter/app/data/network/activity/model/activity_model.dart';
+import 'package:crm_flutter/app/data/network/sales_invoice/controller/sales_invoice_controller.dart';
+import 'package:crm_flutter/app/widgets/dialog/invoice/invoice_edit_dialog.dart';
+import 'package:crm_flutter/app/modules/crm/sales_invoice/pages/sales_invoice_create_page.dart';
 
 class DealDetailScreen extends StatelessWidget {
-  final id;
+  final String id;
 
   const DealDetailScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
-    TabBarController tabBarController = Get.put(TabBarController());
-    Get.lazyPut<DealController>(() => DealController());
-    final DealController dealController = Get.find();
-    if (dealController.isLoading.value) {
+    DealBinding().dependencies();
+
+    final tabBarController = Get.find<TabBarController>();
+    final dealController = Get.find<DealController>();
+    final rolesService = Get.find<RolesService>();
+    Get.lazyPut<NoteService>(() => NoteService());
+    Get.lazyPut<FileController>(() => FileController());
+    Get.lazyPut<SalesInvoiceController>(() => SalesInvoiceController());
+    final noteController = Get.find<NoteController>();
+    final fileController = Get.find<FileController>();
+    final salesInvoiceController = Get.find<SalesInvoiceController>();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Deal"),
+        leading: CrmBackButton(),
+        bottom: CrmTabBar(
+          items: [
+            TabBarModel(iconPath: ICRes.attach, label: "Overview"),
+            TabBarModel(iconPath: ICRes.attach, label: "Files"),
+            TabBarModel(iconPath: ICRes.attach, label: "Members"),
+            TabBarModel(iconPath: ICRes.attach, label: "Notes"),
+            TabBarModel(iconPath: ICRes.attach, label: "Invoices"),
+            TabBarModel(iconPath: ICRes.attach, label: "Activities"),
+          ],
+        ),
+      ),
+      body: Obx(() {
+        if (dealController.deal.isEmpty) {
+          dealController.refreshData();
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (dealController.deal.isEmpty) {
-      return const Center(child: Text("No Lead Data Available."));
-    }
+        final deal = dealController.deal.firstWhereOrNull(
+          (deal) => deal.id == id,
+        );
 
-    final deal = dealController.deal.firstWhere(
-      (deal) => deal.id == id,
-      orElse: () => DealModel(),
+        if (deal == null) {
+          dealController.getDealById(id);
+          return const Center(child: CircularProgressIndicator());
+        }
+        noteController.getNotes(id);
+
+        if (deal.files != null && deal.files!.isNotEmpty) {
+          // Convert the raw file data to the format FileController expects
+          final filesList =
+              deal.files!
+                  .map((file) => {'url': file.url, 'filename': file.filename})
+                  .toList();
+          fileController.setFilesFromData(filesList);
+        }
+
+        final sourceName = dealController.getSourceName(deal.source ?? '');
+        final statusName = dealController.getStatusName(deal.status ?? '');
+        final pipelineName = dealController.getPipelineName(
+          deal.pipeline ?? '',
+        );
+
+        List<Widget> widgets = [
+          _buildOverviewTab(
+            deal,
+            dealController,
+            sourceName,
+            statusName,
+            pipelineName,
+          ),
+          _buildFilesTab(fileController, deal.id.toString(), context),
+          _buildMembersTab(deal, dealController, rolesService),
+          _buildNotesTab(noteController, id, context),
+          _buildInvoicesTab(deal.id.toString(), context),
+          _buildActivitiesTab(deal, dealController, context),
+        ];
+
+        return PageView.builder(
+          itemCount: widgets.length,
+          controller: tabBarController.pageController,
+          onPageChanged: tabBarController.onPageChanged,
+          itemBuilder: (context, i) => widgets[i],
+        );
+      }),
     );
+  }
 
-    if (deal.id == null) {
-      return const Center(child: Text("Lead not found"));
-    }
-    List widgets = [
-      DealOverviewCard(
+  Widget _buildOverviewTab(
+    DealModel deal,
+    DealController dealController,
+    String sourceName,
+    String statusName,
+    String pipelineName,
+  ) {
+    return DealOverviewCard(
         color: Colors.blue,
         id: deal.id.toString(),
         dealTitle: deal.dealTitle.toString(),
         currency: deal.currency.toString(),
         value: deal.value.toString(),
-        pipeline: deal.pipeline.toString(),
-        stage: deal.stage.toString(),
-        status: deal.status.toString(),
+      pipeline: pipelineName,
+      stage: dealController.getStageName(deal.stage ?? ''),
+      status: statusName,
         label: deal.label.toString(),
         closedDate: deal.closedDate.toString(),
         firstName: deal.firstName.toString(),
         lastName: deal.lastName.toString(),
         email: deal.email.toString(),
         phone: deal.phone.toString(),
-        source: deal.source.toString(),
+      source: sourceName,
         companyName: deal.companyName.toString(),
         website: deal.website.toString(),
         address: deal.address.toString(),
@@ -76,132 +169,383 @@ class DealDetailScreen extends StatelessWidget {
         onDelete:
             () => CrmDeleteDialog(
               entityType: deal.dealTitle.toString(),
-              onConfirm: () => dealController.deleteDeal(id),
-            ),
-      ),
-      ViewScreen(
-        itemCount: 10,
+            onConfirm: () {
+              dealController.deleteDeal(deal.id.toString());
+              Get.back();
+            },
+          ),
+      onEdit: () => _handleEdit(deal, dealController),
+    );
+  }
+
+  Widget _buildFilesTab(
+    FileController fileController,
+    String dealId,
+    BuildContext context,
+  ) {
+    // Initial file load
+    fileController.refreshFiles(dealId, isDeal: true);
+
+    return Stack(
+      children: [
+        Obx(
+          () => ViewScreen(
+            itemCount: fileController.files.length,
         padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
-          return MemberCard(title: "Hero");
-        },
-      ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return NoteCard(
-            id: "notes data",
-            relatedId: "notes data",
-            noteTitle: "notes data",
-            noteType: "notes data",
-            description: "notes data",
-            clientId: "notes data",
-            createdBy: "notes data",
-            updatedBy: "notes data",
-            createdAt: "notes data",
-            updatedAt: "notes data",
-            onTap: () {},
-            onDelete: () {},
-            onEdit: () {},
+              final file = fileController.files[i];
+              return FileCard(
+                url: file.url,
+                name: file.filename,
+                id: "deal_${dealId}_${file.filename}_$i", // Make ID unique with index
+                role: "File",
+                onTap: null,
+                onDelete:
+                    () => _showDeleteFileDialog(
+                      context,
+                      fileController,
+                      dealId,
+                      file.filename ?? '',
+                    ),
           );
         },
       ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return FileCard(
-            url:
-                "https://images.pexels.com/photos/31300173/pexels-photo-31300173/free-photo-of-vibrant-blue-poison-dart-frog-on-leaf.jpeg?auto=compress&cs=tinysrgb&w=600",
-            id: "id",
-            name: "name",
-            role: "role",
-            description: "description",
-            file: "file",
-            clientId: "clientId",
-            createdBy: "createdBy",
-            updatedBy: "updatedBy",
-            createdAt: "createdAt",
-            updatedAt: "updatedAt",
-          );
-        },
-      ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return InvoiceCard(
-            id: "id",
-            inquiryId: "inquiryId",
-            leadTitle: "leadTitle",
-            leadStage: "leadStage",
-            pipeline: "pipeline",
-            currency: 'R.',
-            leadValue: "1000000",
-            companyName: "companyName",
-            firstName: "firstName",
-            lastName: "lastName",
-            phoneCode: "phoneCode",
-            telephone: "telephone",
-            email: "email",
-            address: "address",
-            leadMembers: "leadMembers",
-            source: "source",
-            category: "category",
-            files: "files",
-            status: "status",
-            interestLevel: "interestLevel",
-            leadScore: "leadScore",
-            isConverted: "isConverted",
-            clientId: "clientId",
-            createdBy: "createdBy",
-            updatedBy: "updatedBy",
-            createdAt: "createdAt",
-            updatedAt: "updatedAt",
-          );
-        },
-      ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return PaymentCard(
-            id: "id",
-            project: "Project",
-            startDate: "startDate",
-            endDate: "endDate",
-            projectMembers: "projectMembers",
-            completion: "completion",
-            status: "status",
-            clientId: "clientId",
-            createdBy: "createdBy",
-            createdAt: "createdAt",
-            updatedAt: "updatedAt",
-          );
-        },
-      ),
-    ];
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Deal"),
-        bottom: CrmTabBar(
-          items: [
-            TabBarModel(iconPath: ICRes.attach, label: "Overview"),
-            TabBarModel(iconPath: ICRes.attach, label: "Members"),
-            TabBarModel(iconPath: ICRes.attach, label: "Notes"),
-            TabBarModel(iconPath: ICRes.attach, label: "Files"),
-            TabBarModel(iconPath: ICRes.attach, label: "Invoice"),
-            TabBarModel(iconPath: ICRes.attach, label: "Payment"),
-          ],
         ),
-      ),
-      body: PageView.builder(
-        itemCount: widgets.length,
-        controller: tabBarController.pageController,
-        onPageChanged: tabBarController.onPageChanged,
+        Positioned(
+          right: AppPadding.medium,
+          bottom: AppPadding.medium,
+          child: FloatingActionButton(
+            onPressed: () => _uploadFile(context, dealId),
+            child: const Icon(Icons.upload_file, color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMembersTab(
+    DealModel deal,
+    DealController dealController,
+    RolesService rolesService,
+  ) {
+    final memberIds = deal.dealMembers.map((m) => m.memberId).toList();
+    final members = dealController.getDealMembers(memberIds);
+
+    return ViewScreen(
+      itemCount: members.length,
+      padding: const EdgeInsets.all(AppPadding.medium),
+      itemBuilder: (context, index) {
+        final user = members[index];
+        if (user == null) return const SizedBox.shrink();
+
+        final roleName = rolesService.getRoleNameById(user.roleId);
+        final role = [
+          if (roleName.isNotEmpty) roleName,
+          if (user.designation?.isNotEmpty == true) user.designation,
+          if (user.department?.isNotEmpty == true) user.department,
+        ].where((s) => s != null && s.isNotEmpty).join(' - ');
+
+        return MemberCard(
+          title: user.username,
+          subTitle: role.isNotEmpty ? role : 'No Role',
+          role: user.email,
+          onTap: null,
+        );
+      },
+    );
+  }
+
+  Widget _buildNotesTab(
+    NoteController noteController,
+    String dealId,
+    BuildContext context,
+  ) {
+    return Stack(
+      children: [
+        Obx(
+          () => ViewScreen(
+            itemCount: noteController.notes.length,
+        padding: const EdgeInsets.all(AppPadding.medium),
         itemBuilder: (context, i) {
-          return widgets[i];
+              final note = noteController.notes[i];
+              return NoteCard(
+                id: note.id,
+                relatedId: note.relatedId,
+                noteTitle: note.noteTitle,
+                noteType: note.notetype,
+                description: note.description,
+                clientId: note.clientId,
+                createdBy: note.createdBy,
+                updatedBy: note.updatedBy,
+                createdAt: formatDate(note.createdAt.toString()),
+                updatedAt: formatDate(note.updatedAt.toString()),
+                onDelete: () => noteController.deleteNote(note.id, dealId),
+                onEdit:
+                    () => _showNoteDialog(
+                      context,
+                      noteController,
+                      dealId,
+                      note: note,
+                    ),
+          );
+        },
+      ),
+        ),
+        Positioned(
+          right: AppPadding.medium,
+          bottom: AppPadding.medium,
+          child: FloatingActionButton(
+            onPressed: () => _showNoteDialog(context, noteController, dealId),
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInvoicesTab(String dealId, BuildContext context) {
+    final salesInvoiceController = Get.find<SalesInvoiceController>();
+    print('Building invoices tab for deal: $dealId');
+
+    // Initialize controller if needed
+    if (salesInvoiceController.currentDealId.value != dealId) {
+      salesInvoiceController.getSalesInvoicesByDealId(dealId);
+    }
+
+    return Stack(
+      children: [
+        Obx(() {
+          if (salesInvoiceController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final invoices = salesInvoiceController.salesInvoices;
+          print('Displaying ${invoices.length} invoices');
+
+          return ViewScreen(
+            itemCount: invoices.length,
+            padding: const EdgeInsets.all(AppPadding.medium),
+            itemBuilder: (context, index) {
+              final invoice = invoices[index];
+              print('Building invoice card: ${invoice.id}');
+
+              return InvoiceCard(
+                id: invoice.id,
+                leadTitle: invoice.salesInvoiceNumber,
+                firstName: salesInvoiceController.getCustomerName(
+                  invoice.customer,
+                ),
+                leadValue: invoice.total.toString(),
+                currency: invoice.currency,
+                status: invoice.paymentStatus,
+                createdAt: invoice.issueDate.toString(),
+                dueDate: invoice.dueDate.toString(),
+                pendingAmount: invoice.pendingAmount?.toString(),
+                onDelete: () => _showDeleteInvoiceDialog(
+                  context,
+                  salesInvoiceController,
+                  invoice.id,
+                  dealId,
+                ),
+                onEdit: () => Get.to(() => SalesInvoiceEditPage(
+                  invoice: invoice,
+                  dealId: dealId,
+                )),
+                onTap: () => Get.to(() => SalesInvoiceEditPage(
+                  invoice: invoice,
+                  dealId: dealId,
+                )),
+              );
+            },
+          );
+        }),
+        Positioned(
+          right: AppPadding.medium,
+          bottom: AppPadding.medium,
+          child: FloatingActionButton(
+            onPressed: () => Get.to(() => SalesInvoiceCreatePage(dealId: dealId)),
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActivitiesTab(
+    DealModel deal,
+    DealController dealController,
+    BuildContext context,
+  ) {
+    final activityController = dealController.activityController;
+    activityController.getActivities(deal.id.toString());
+
+    return Stack(
+      children: [
+        Obx(() {
+          if (activityController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return ViewScreen(
+            itemCount: activityController.activities.length,
+            padding: const EdgeInsets.all(AppPadding.medium),
+            itemBuilder: (context, index) {
+              final activity = activityController.activities[index];
+              return ActivityCard(
+                activity: activity,
+               
+              );
+            },
+          );
+        }),
+      ],
+    );
+  }
+
+  Future<void> _handleEdit(
+    DealModel deal,
+    DealController dealController,
+  ) async {
+    dealController.dealTitle.text = deal.dealTitle ?? '';
+    dealController.dealValue.text = deal.value?.toString() ?? '';
+    dealController.firstName.text = deal.firstName ?? '';
+    dealController.lastName.text = deal.lastName ?? '';
+    dealController.email.text = deal.email ?? '';
+    dealController.phoneNumber.text = deal.phone ?? '';
+    dealController.companyName.text = deal.companyName ?? '';
+    dealController.address.text = deal.address ?? '';
+
+    dealController.selectedPipeline.value = deal.pipeline ?? '';
+    dealController.selectedSource.value = deal.source ?? '';
+    dealController.selectedStatus.value = deal.status ?? '';
+    dealController.selectedStage.value = deal.stage ?? '';
+
+    await Get.to(() => DealEditScreen(dealId: deal.id.toString()));
+    await dealController.getDealById(id);
+    await dealController.refreshData();
+  }
+
+  void _showDeleteFileDialog(
+    BuildContext context,
+    FileController fileController,
+    String dealId,
+    String filename,
+  ) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => CrmDeleteDialog(
+            entityType: "file",
+            onConfirm: () async {
+              final success = await fileController.deleteFile(
+                dealId,
+                filename,
+                isDeal: true,
+              );
+              if (success) {
+                await fileController.refreshFiles(dealId, isDeal: true);
+                final dealController = Get.find<DealController>();
+                await dealController.refreshData();
+              }
+            },
+          ),
+    );
+  }
+
+  void _showNoteDialog(
+    BuildContext context,
+    NoteController controller,
+    String dealId, {
+    NoteModel? note,
+  }) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => NoteDialog(
+            leadId: dealId,
+            controller: controller,
+            note: note,
+            onSuccess: () => controller.getNotes(dealId),
+          ),
+    );
+  }
+
+  Future<void> _uploadFile(BuildContext context, String dealId) async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.any,
+        allowMultiple: false,
+        withData: true,
+        withReadStream: true,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final file = result.files.first;
+        UploadStatusDialog.showUploading(context);
+
+        Uint8List? fileBytes;
+        if (file.bytes == null) {
+          if (file.path != null) {
+            fileBytes = await File(file.path!).readAsBytes();
+          } else {
+            Navigator.pop(context);
+            UploadStatusDialog.showError(context, 'Could not read file data');
+            return;
+          }
+        } else {
+          fileBytes = file.bytes!;
+        }
+
+        final fileController = Get.find<FileController>();
+        final responseData = await fileController.uploadFile(
+          dealId,
+          fileBytes,
+          file.name,
+          isDeal: true,
+        );
+
+        Navigator.pop(context);
+
+        if (responseData != null) {
+          await fileController.refreshFiles(dealId, isDeal: true);
+          UploadStatusDialog.showSuccess(context);
+
+          // Refresh deal data to get updated files
+          final dealController = Get.find<DealController>();
+          await dealController.refreshData();
+        } else {
+          UploadStatusDialog.showError(
+            context,
+            'File upload failed. Please try again.',
+          );
+        }
+      }
+    } catch (e) {
+      print('Error uploading file: $e');
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+      UploadStatusDialog.showError(context, 'Error uploading file: $e');
+    }
+  }
+
+  void _showDeleteInvoiceDialog(
+    BuildContext context,
+    SalesInvoiceController controller,
+    String invoiceId,
+    String dealId,
+  ) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => CrmDeleteDialog(
+            entityType: "invoice",
+            onConfirm: () async {
+              final success = await controller.deleteSalesInvoice(invoiceId);
+              if (success) {
+                await controller.getSalesInvoicesByDealId(dealId);
+              }
+              Get.back();
         },
       ),
     );

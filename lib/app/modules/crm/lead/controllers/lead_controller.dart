@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/stage/model/stage_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/model/label_model.dart';
@@ -15,8 +15,11 @@ import 'package:crm_flutter/app/data/network/crm/crm_system/stage/service/stage_
 import 'package:crm_flutter/app/data/network/crm/notes/service/note_service.dart';
 import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/stage/controller/stage_controller.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/controller/pipeline_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:crm_flutter/app/modules/crm/activity/controller/activity_controller.dart';
 
 /// Controller for managing leads in the CRM system
 class LeadController extends GetxController {
@@ -28,6 +31,11 @@ class LeadController extends GetxController {
   final PipelineService pipelineService = PipelineService();
   final LabelService labelService = LabelService();
   final NoteService noteService = NoteService();
+
+  // Controllers
+  late final StageController stageController;
+  late final PipelineController pipelineController;
+  late final ActivityController activityController;
 
   //Temporary service to fetch all users
   final AllUsersService allUsersService = AllUsersService();
@@ -41,9 +49,6 @@ class LeadController extends GetxController {
   final RxList<User> users = <User>[].obs;
   final RxList<NoteModel> notes = <NoteModel>[].obs;
 
-  // final RxList<AllUserModel> allUsers = <AllUserModel>[].obs;
-  // final RxList<RolesModel> roless = <RolesModel>[].obs;
-
   // Form Controllers
   final leadTitleController = TextEditingController();
   final leadValueController = TextEditingController();
@@ -55,6 +60,7 @@ class LeadController extends GetxController {
   final addressController = TextEditingController();
   final noteTitleController = TextEditingController();
   final noteDescriptionController = TextEditingController();
+
 
   // Dropdown Selections
   final selectedPipeline = ''.obs;
@@ -68,45 +74,26 @@ class LeadController extends GetxController {
 
   // Note type selection
   final selectedNoteType = ''.obs;
-  final List<String> noteTypeOptions = ['important', 'normal', 'urgent'];
 
   // Dropdown Options - Show names in UI
-  List<String> get sourceOptions =>
-      labelService.getSources(labels).map((e) => e.name).toList();
-
-  List<String> get categoryOptions =>
-      labelService.getCategories(labels).map((e) => e.name).toList();
-
-  List<String> get statusOptions =>
-      labelService.getStatuses(labels).map((e) => e.name).toList();
+  List<String> get sourceOptions => labelService.getSources(labels).map((e) => e.id ?? '').toList();
+  List<String> get categoryOptions => labelService.getCategories(labels).map((e) => e.id ?? '').toList();
+  List<String> get statusOptions => labelService.getStatuses(labels).map((e) => e.id ?? '').toList();
 
   final List<String> interestLevelOptions = ['high', 'medium', 'low'];
 
-  String getLabelId(String name, String type) {
-    final labelList =
-        type == 'source'
+  String getLabelId(String idOrName, String type) {
+    final labelList = type == 'source' 
             ? labelService.getSources(labels)
             : type == 'category'
             ? labelService.getCategories(labels)
             : labelService.getStatuses(labels);
 
-    return labelList
-        .firstWhere(
-          (e) => e.name == name,
-          orElse:
-              () => LabelModel(
-                id: '',
-                relatedId: '',
-                labelType: type,
-                name: '',
-                color: '',
-                clientId: '',
-                createdBy: '',
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now(),
-              ),
-        )
-        .id;
+    final labelById = labelList.firstWhereOrNull((e) => e.id == idOrName);
+    if (labelById != null) return labelById.id ?? '';
+    
+    final labelByName = labelList.firstWhereOrNull((e) => e.name == idOrName);
+    return labelByName?.id ?? '';
   }
 
   @override
@@ -127,27 +114,42 @@ class LeadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Initialize controllers
+    stageController = Get.put(StageController());
+    pipelineController = Get.put(PipelineController());
+    activityController = Get.put(ActivityController());
+    // Load labels first
+   
     refreshData();
   }
 
   Future<void> refreshData() async {
+    try {
+      isLoading.value = true;
+      await getLabels();
     await Future.wait([
       getLeads(),
       getPipelines(),
       getStages(),
-      getLabels(),
       getRoles(),
-      //Temporary function to fetch all users
       getAllUsers(),
     ]);
+    } catch (e) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Error',
+        message: 'Failed to refresh data: ${e.toString()}',
+        contentType: ContentType.failure,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> getPipelines() async {
     try {
       final data = await pipelineService.getPipelines();
       if (data != null && data.isNotEmpty) {
-        final pipelinesList = data.map((e) => PipelineModel.fromJson(e)).toList();
-        pipelines.assignAll(pipelinesList);
+        pipelines.assignAll(data.map((e) => PipelineModel.fromJson(e)).toList());
       } else {
         pipelines.clear();
       }
@@ -162,9 +164,16 @@ class LeadController extends GetxController {
 
   Future<void> getStages() async {
     try {
-      final stagesList = await stageService.getStages(stageType: 'lead');
-      if (stagesList.isNotEmpty) {
-        stages.assignAll(stagesList);
+      final response = await stageService.getStages(stageType: 'lead');
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success'] == true && data['data'] != null) {
+          stages.assignAll((data['data'] as List)
+              .map((stage) => StageModel.fromJson(stage))
+              .toList());
+        } else {
+          stages.clear();
+        }
       } else {
         stages.clear();
       }
@@ -174,6 +183,7 @@ class LeadController extends GetxController {
         message: 'Failed to fetch stages',
         contentType: ContentType.failure,
       );
+      stages.clear();
     }
   }
 
@@ -196,19 +206,17 @@ class LeadController extends GetxController {
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
-        message: 'Failed to fetch labels',
+        message: 'Failed to fetch labels: ${e.toString()}',
         contentType: ContentType.failure,
       );
     }
   }
 
-  // Get stages for a specific pipeline
   List<StageModel> getStagesForPipeline(String pipelineId) {
     if (pipelineId.isEmpty) return [];
     return stages.where((stage) => stage.pipeline == pipelineId).toList();
   }
 
-  // Get default stage for a pipeline
   StageModel? getDefaultStageForPipeline(String pipelineId) {
     if (pipelineId.isEmpty) return null;
     return stages.firstWhereOrNull(
@@ -224,15 +232,11 @@ class LeadController extends GetxController {
         message: 'Please select a valid pipeline',
         contentType: ContentType.warning,
       );
-      selectedPipeline.value = '';
-      selectedPipelineId.value = '';
-      selectedStage.value = '';
-      selectedStageId.value = '';
+      _clearPipelineValues();
       return;
     }
 
-    final pipelineExists = pipelines.any((p) => p.id == pipelineId);
-    if (!pipelineExists) {
+    if (!pipelines.any((p) => p.id == pipelineId)) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
         message: 'Selected pipeline not found',
@@ -245,7 +249,6 @@ class LeadController extends GetxController {
     selectedPipelineId.value = pipelineId;
 
     final pipelineStages = getStagesForPipeline(pipelineId);
-
     if (pipelineStages.isEmpty) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Warning',
@@ -257,30 +260,28 @@ class LeadController extends GetxController {
       return;
     }
 
-    final defaultStage = pipelineStages.firstWhereOrNull((stage) => stage.isDefault);
-    if (defaultStage != null) {
+    final defaultStage = pipelineStages.firstWhereOrNull((stage) => stage.isDefault) ?? pipelineStages.first;
       selectedStage.value = defaultStage.stageName;
       selectedStageId.value = defaultStage.id;
-    } else {
-      final firstStage = pipelineStages.first;
-      selectedStage.value = firstStage.stageName;
-      selectedStageId.value = firstStage.id;
-    }
-
     update();
+  }
+
+  void _clearPipelineValues() {
+    selectedPipeline.value = '';
+    selectedPipelineId.value = '';
+    selectedStage.value = '';
+    selectedStageId.value = '';
   }
 
   Future<List> getLeads() async {
     try {
       final data = await leadService.getLeads();
       if (data != null && data.isNotEmpty) {
-        final leadsList = data.map((e) => LeadModel.fromJson(e)).toList();
-        leads.assignAll(leadsList);
+        leads.assignAll(data.map((e) => LeadModel.fromJson(e)).toList());
         return data;
-      } else {
-        leads.clear();
-        return [];
       }
+      leads.clear();
+      return [];
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
@@ -347,9 +348,9 @@ class LeadController extends GetxController {
         'pipeline': selectedPipelineId.value,
         'currency': 'USD',
         'leadValue': int.tryParse(leadValueController.text.trim()) ?? 0,
-        'source': getLabelId(selectedSource.value, 'source'),
-        'category': getLabelId(selectedCategory.value, 'category'),
-        'status': getLabelId(selectedStatus.value, 'status'),
+        'source': selectedSource.value,
+        'category': selectedCategory.value,
+        'status': selectedStatus.value,
         'interest_level': selectedInterestLevel.value.isEmpty ? 'medium' : selectedInterestLevel.value,
         'client_id': 'default',
         'created_by': 'default',
@@ -416,32 +417,87 @@ class LeadController extends GetxController {
 
   Future<void> editLead(String leadId) async {
     try {
+      isLoading.value = true;
+      await Future.wait([getPipelines(), getLabels(), getStages()]);
+      
       final leadData = await leadService.getLeadById(leadId);
       if (leadData != null) {
-        leadTitleController.text = leadData['title'] ?? '';
-        selectedPipeline.value = leadData['pipeline'] ?? '';
-        selectedPipelineId.value = leadData['pipeline'] ?? '';
-        leadValueController.text = leadData['value'] ?? '';
-        selectedSource.value = leadData['source'] ?? '';
-        selectedCategory.value = leadData['category'] ?? '';
-        selectedInterestLevel.value = leadData['interestLevel'] ?? '';
-        selectedStage.value = leadData['stage'] ?? '';
-        selectedStageId.value = leadData['stage'] ?? '';
-        selectedStatus.value = leadData['status'] ?? '';
-        firstNameController.text = leadData['firstName'] ?? '';
-        lastNameController.text = leadData['lastName'] ?? '';
-        emailController.text = leadData['email'] ?? '';
-        phoneController.text = leadData['phone'] ?? '';
-        companyController.text = leadData['company'] ?? '';
-        addressController.text = leadData['address'] ?? '';
+        _clearFormValues();
+        _setFormValues(leadData);
+        update();
       }
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
-        message: 'Failed to fetch lead details',
+        message: 'Failed to load lead details: ${e.toString()}',
         contentType: ContentType.failure,
       );
+    } finally {
+      isLoading.value = false;
     }
+  }
+
+  void _setFormValues(Map<String, dynamic> leadData) {
+    leadTitleController.text = leadData['leadTitle'] ?? '';
+    leadValueController.text = leadData['leadValue']?.toString() ?? '';
+    firstNameController.text = leadData['firstName'] ?? '';
+    lastNameController.text = leadData['lastName'] ?? '';
+    emailController.text = leadData['email'] ?? '';
+    phoneController.text = leadData['phone'] ?? '';
+    companyController.text = leadData['company'] ?? '';
+    addressController.text = leadData['address'] ?? '';
+    
+    final pipelineId = leadData['pipeline'] ?? '';
+    final pipeline = pipelines.firstWhereOrNull((p) => p.id == pipelineId);
+    if (pipeline != null) {
+      selectedPipeline.value = pipeline.pipelineName ?? '';
+      selectedPipelineId.value = pipeline.id ?? '';
+    }
+    
+    if (sourceOptions.contains(leadData['source'])) {
+      selectedSource.value = leadData['source'] ?? '';
+    }
+    
+    if (categoryOptions.contains(leadData['category'])) {
+      selectedCategory.value = leadData['category'] ?? '';
+    }
+    
+    if (statusOptions.contains(leadData['status'])) {
+      selectedStatus.value = leadData['status'] ?? '';
+    }
+    
+    final interestLevel = leadData['interest_level'] ?? '';
+    selectedInterestLevel.value = interestLevelOptions.contains(interestLevel) 
+        ? interestLevel 
+        : 'medium';
+    
+    final stageId = leadData['leadStage'] ?? '';
+    if (stages.isNotEmpty) {
+      final stage = stages.firstWhereOrNull((s) => s.id == stageId);
+      if (stage != null) {
+        selectedStage.value = stage.stageName ?? '';
+        selectedStageId.value = stage.id ?? '';
+      }
+    }
+  }
+
+  void _clearFormValues() {
+    leadTitleController.clear();
+    leadValueController.clear();
+    firstNameController.clear();
+    lastNameController.clear();
+    emailController.clear();
+    phoneController.clear();
+    companyController.clear();
+    addressController.clear();
+    selectedPipeline.value = '';
+    selectedPipelineId.value = '';
+    selectedSource.value = '';
+    selectedCategory.value = '';
+    selectedInterestLevel.value = '';
+    selectedStage.value = '';
+    selectedStageId.value = '';
+    selectedStatus.value = '';
   }
 
   Future<bool> deleteLead(String id) async {
@@ -467,14 +523,11 @@ class LeadController extends GetxController {
     }
   }
 
-//Temporary function to fetch all users
   Future<void> getAllUsers() async {
     try {
       final usersList = await allUsersService.getUsers();
       users.assignAll(usersList);
-      print('Successfully fetched ${users.length} users');
     } catch (e) {
-      print('Error fetching users: $e');
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
         message: 'Failed to fetch users: ${e.toString()}',
@@ -483,72 +536,167 @@ class LeadController extends GetxController {
     }
   }
 
-  // get label names for display
   String getSourceName(String id) {
-    return labelService
-        .getSources(labels)
-        .firstWhere(
-          (e) => e.id == id,
-          orElse:
-              () => LabelModel(
-                id: '',
-                relatedId: '',
-                labelType: 'source',
-                name: '',
-                color: '',
-                clientId: '',
-                createdBy: '',
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now(),
-              ),
-        )
-        .name;
+    if (id.isEmpty) return 'Unknown Source';
+    return labelService.getSources(labels)
+        .firstWhereOrNull((e) => e.id == id)
+        ?.name ?? 'Unknown Source';
   }
 
   String getCategoryName(String id) {
-    return labelService
-        .getCategories(labels)
-        .firstWhere(
-          (e) => e.id == id,
-          orElse:
-              () => LabelModel(
-                id: '',
-                relatedId: '',
-                labelType: 'category',
-                name: '',
-                color: '',
-                clientId: '',
-                createdBy: '',
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now(),
-              ),
-        )
-        .name;
+    if (id.isEmpty) return 'Unknown Category';
+    return labelService.getCategories(labels)
+        .firstWhereOrNull((e) => e.id == id)
+        ?.name ?? 'Unknown Category';
   }
 
   String getStatusName(String id) {
-    return labelService
-        .getStatuses(labels)
-        .firstWhere(
-          (e) => e.id == id,
-          orElse:
-              () => LabelModel(
-                id: '',
-                relatedId: '',
-                labelType: 'status',
-                name: '',
-                color: '',
-                clientId: '',
-                createdBy: '',
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now(),
-              ),
-        )
-        .name;
+    if (id.isEmpty) return 'Unknown Status';
+    return labelService.getStatuses(labels)
+        .firstWhereOrNull((e) => e.id == id)
+        ?.name ?? 'Unknown Status';
   }
 
-  // Add this method to get filtered users by member IDs
   List<User> getLeadMembers(List<String> memberIds) {
     return users.where((user) => memberIds.contains(user.id)).toList();
+  }
+
+  String getStageName(String stageIdOrName) {
+    return stageController.getStageName(stageIdOrName);
+  }
+
+  String getPipelineName(String pipelineIdOrName) {
+    return pipelineController.getPipelineName(pipelineIdOrName);
+  }
+
+  Future<void> updateLead(String leadId) async {
+    try {
+      isLoading.value = true;
+
+      if (!_validateLeadData()) return;
+
+      final Map<String, dynamic> leadData = _getLeadData();
+      final response = await leadService.updateLead(leadId, leadData);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await _handleSuccessfulUpdate(leadId);
+      } else {
+        _handleUpdateError(response);
+      }
+    } catch (e) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Error',
+        message: 'Failed to update lead: ${e.toString()}',
+        contentType: ContentType.failure,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  bool _validateLeadData() {
+    if (leadTitleController.text.trim().isEmpty) {
+      _showValidationError('Lead title is required');
+      return false;
+    }
+
+    if (leadValueController.text.trim().isEmpty) {
+      _showValidationError('Lead value is required');
+      return false;
+    }
+
+    if (selectedSource.value.isEmpty) {
+      _showValidationError('Source is required');
+      return false;
+    }
+
+    return true;
+  }
+
+  void _showValidationError(String message) {
+    CrmSnackBar.showAwesomeSnackbar(
+      title: 'Validation Error',
+      message: message,
+      contentType: ContentType.warning,
+    );
+  }
+
+  Map<String, dynamic> _getLeadData() {
+    return {
+      'leadTitle': leadTitleController.text.trim(),
+      'leadStage': selectedStageId.value,
+      'pipeline': selectedPipelineId.value,
+      'currency': 'USD',
+      'leadValue': int.tryParse(leadValueController.text.trim()) ?? 0,
+      'source': selectedSource.value,
+      'category': selectedCategory.value,
+      'status': selectedStatus.value,
+      'interest_level': selectedInterestLevel.value.isEmpty ? 'medium' : selectedInterestLevel.value,
+      'client_id': 'default',
+      'created_by': 'default',
+      'firstName': firstNameController.text.trim(),
+      'lastName': lastNameController.text.trim(),
+      'email': emailController.text.trim(),
+      'phone': phoneController.text.trim(),
+      'company': companyController.text.trim(),
+      'address': addressController.text.trim(),
+    };
+  }
+
+  Future<void> _handleSuccessfulUpdate(String leadId) async {
+    final updatedLeadData = await leadService.getLeadById(leadId);
+    if (updatedLeadData != null) {
+      final index = leads.indexWhere((lead) => lead.id == leadId);
+      if (index != -1) {
+        leads[index] = LeadModel.fromJson(updatedLeadData);
+        leads.refresh();
+        update();
+      }
+    }
+    
+    _clearFormValues();
+    
+    CrmSnackBar.showAwesomeSnackbar(
+      title: 'Success',
+      message: 'Lead updated successfully',
+      contentType: ContentType.success,
+    );
+
+    Get.back();
+    refreshData();
+  }
+
+  void _handleUpdateError(http.Response response) {
+    String errorMessage = 'Failed to update lead';
+    try {
+      final responseData = jsonDecode(response.body);
+      if (responseData is Map) {
+        errorMessage = responseData['message'] ?? responseData['error'] ?? errorMessage;
+      }
+    } catch (e) {}
+
+    CrmSnackBar.showAwesomeSnackbar(
+      title: 'Error',
+      message: errorMessage,
+      contentType: ContentType.failure,
+    );
+  }
+
+  Future<void> getLeadById(String leadId) async {
+    try {
+      final leadData = await leadService.getLeadById(leadId);
+      if (leadData != null) {
+        final index = leads.indexWhere((lead) => lead.id == leadId);
+        if (index != -1) {
+          leads[index] = LeadModel.fromJson(leadData);
+          leads.refresh();
+          update();
+        } else {
+          await getLeads();
+        }
+      }
+    } catch (e) {
+      await getLeads();
+    }
   }
 }

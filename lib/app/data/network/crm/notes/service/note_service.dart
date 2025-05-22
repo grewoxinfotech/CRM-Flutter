@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
-import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:http/http.dart' as http;
@@ -14,11 +13,11 @@ class NoteService {
     return await UrlRes.getHeaders();
   }
 
-  /// Get notes for a specific lead
-  Future<List<NoteModel>> getNotesByLeadId(String leadId) async {
+  /// Get notes for a specific lead or deal
+  Future<List<NoteModel>> getNotes(String id) async {
     try {
       final response = await http.get(
-        Uri.parse("$url/$leadId"),
+        Uri.parse("$url/$id"),
         headers: await headers(),
       );
       
@@ -44,17 +43,15 @@ class NoteService {
     }
   }
 
-  Future<bool> createNote(String leadId, NoteModel note) async {
+  Future<bool> createNote(String id, NoteModel note) async {
     try {
-      
       final response = await http.post(
-        Uri.parse("$url/$leadId"),
+        Uri.parse("$url/$id"),
         headers: await headers(),
         body: jsonEncode(note.toJson()),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = jsonDecode(response.body);
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
           message: "Note created successfully",

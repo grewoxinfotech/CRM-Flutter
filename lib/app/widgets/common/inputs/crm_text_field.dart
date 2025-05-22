@@ -114,6 +114,7 @@ class CrmTextField extends StatelessWidget {
             focusedBorder: tile(Get.theme.colorScheme.primary),
             errorBorder: tile(Get.theme.colorScheme.error),
             focusedErrorBorder: tile(Get.theme.colorScheme.error),
+            disabledBorder: tile(Get.theme.dividerColor),
             errorStyle: TextStyle(
               color: Get.theme.colorScheme.error,
               fontSize: 12,

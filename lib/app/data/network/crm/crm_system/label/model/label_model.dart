@@ -7,8 +7,8 @@ class LabelModel {
   final String clientId;
   final String createdBy;
   final String? updatedBy;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String createdAt;
+  final String updatedAt;
 
   LabelModel({
     required this.id,
@@ -27,14 +27,14 @@ class LabelModel {
     return LabelModel(
       id: json['id'] ?? '',
       relatedId: json['related_id'] ?? '',
-      labelType: json['lableType'] ?? '',
+      labelType: json['label_type'] ?? json['lableType'] ?? '',
       name: json['name'] ?? '',
       color: json['color'] ?? '',
       clientId: json['client_id'] ?? '',
       createdBy: json['created_by'] ?? '',
       updatedBy: json['updated_by'],
-      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
-      updatedAt: DateTime.parse(json['updatedAt'] ?? DateTime.now().toIso8601String()),
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
     );
   }
 
@@ -42,14 +42,14 @@ class LabelModel {
     return {
       'id': id,
       'related_id': relatedId,
-      'lableType': labelType,
+      'label_type': labelType,
       'name': name,
       'color': color,
       'client_id': clientId,
       'created_by': createdBy,
       'updated_by': updatedBy,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 } 

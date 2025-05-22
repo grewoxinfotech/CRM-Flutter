@@ -75,9 +75,9 @@ class NoteDialog extends StatelessWidget {
               : (note == null ? "Create Note" : "Update Note"),
           onTap: controller.isLoading.value ? null : () async {
             if (note == null) {
-              await controller.createNoteForLead(leadId);
+              await controller.createNote(leadId);
             } else {
-              await controller.updateNoteForLead(leadId, note!.id);
+              await controller.updateNote(leadId, note!.id);
             }
             Get.back();
             onSuccess?.call();

@@ -12,6 +12,7 @@ class SecureStorage {
   static const String _keyRememberMe = 'rememberMe';
   static const String _keyLoggedIn = 'isLogin';
   static const String _keyUserData = 'user';
+  static const String _keyClientId = 'clientId';
 
   // Token
   static Future<void> saveToken(String token) async {
@@ -28,10 +29,14 @@ class SecureStorage {
 
   // user data
   static Future<void> saveUserData(UserModel data) async {
-    return await _storage.write(
+    await _storage.write(
       key: _keyUserData,
       value: jsonEncode(data.toJson()),
     );
+    // Also save client ID separately for easy access
+    if (data.clientId != null) {
+      await _storage.write(key: _keyClientId, value: data.clientId);
+    }
   }
 
   static Future<UserModel?> getUserData() async {
@@ -42,9 +47,17 @@ class SecureStorage {
     return UserModel.fromJson(jsonMap);
   }
 
-
   static Future<void> deleteUserData() async {
     await _storage.delete(key: _keyUserData);
+    await _storage.delete(key: _keyClientId);
+  }
+
+ 
+  static Future<String?> getClientId() async {
+    final clientId = await _storage.read(key: _keyClientId);
+    if (clientId != null) return clientId;
+    final userData = await getUserData();
+    return userData?.clientId;
   }
 
   // Username
@@ -55,7 +68,6 @@ class SecureStorage {
   static Future<String?> getUsername() async {
     return _storage.read(key: _keyUsername);
   }
-
 
   static Future<void> deleteUsername() async {
     await _storage.delete(key: _keyUsername);

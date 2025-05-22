@@ -27,6 +27,7 @@ class DealModel {
   final String? updatedBy;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final List<DealMember> dealMembers;
 
   DealModel({
     this.id,
@@ -57,9 +58,19 @@ class DealModel {
     this.updatedBy,
     this.createdAt,
     this.updatedAt,
+    this.dealMembers = const [],
   });
 
   factory DealModel.fromJson(Map<String, dynamic> json) {
+    List<DealMember> parseDealMembers() {
+      if (json['deal_members'] != null && json['deal_members']['deal_members'] != null) {
+        return (json['deal_members']['deal_members'] as List<dynamic>)
+            .map((memberId) => DealMember(memberId: memberId))
+            .toList();
+      }
+      return [];
+    }
+
     return DealModel(
       id: json['id'] ?? '',
       dealTitle: json['dealTitle'] ?? '',
@@ -69,7 +80,7 @@ class DealModel {
       stage: json['stage'] ?? '',
       status: json['status'] ?? '',
       label: json['label'] ?? '',
-      closedDate: DateTime.parse(json['closedDate']),
+      closedDate: json['closedDate'] != null ? DateTime.parse(json['closedDate']) : null,
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
       email: json['email'] ?? '',
@@ -78,12 +89,10 @@ class DealModel {
       companyName: json['company_name'] ?? '',
       website: json['website'] ?? '',
       address: json['address'] ?? '',
-      products:
-          (json['products']?['products'] as List<dynamic>? ?? [])
+      products: (json['products']?['products'] as List<dynamic>? ?? [])
               .map((e) => Product.fromJson(e))
               .toList(),
-      files:
-          (json['files'] as List<dynamic>? ?? [])
+      files: (json['files'] as List<dynamic>? ?? [])
               .map((e) => FileModel.fromJson(e))
               .toList(),
       assignedTo: json['assigned_to'] ?? '',
@@ -93,8 +102,9 @@ class DealModel {
       contactId: json['contact_id'] ?? '',
       createdBy: json['created_by'] ?? '',
       updatedBy: json['updated_by'] ?? '',
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      dealMembers: parseDealMembers(),
     );
   }
 
@@ -108,7 +118,7 @@ class DealModel {
       'stage': stage,
       'status': status,
       'label': label,
-      'closedDate': closedDate!.toIso8601String(),
+      'closedDate': closedDate?.toIso8601String(),
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
@@ -117,8 +127,8 @@ class DealModel {
       'company_name': companyName,
       'website': website,
       'address': address,
-      'products': {'products': products!.map((p) => p.toJson()).toList()},
-      'files': files!.map((f) => f.toJson()).toList(),
+      'products': {'products': products?.map((p) => p.toJson()).toList()},
+      'files': files?.map((f) => f.toJson()).toList(),
       'assigned_to': assignedTo,
       'client_id': clientId,
       'is_won': isWon,
@@ -126,8 +136,37 @@ class DealModel {
       'contact_id': contactId,
       'created_by': createdBy,
       'updated_by': updatedBy,
-      'createdAt': createdAt!.toIso8601String(),
-      'updatedAt': updatedAt!.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      'dealMembers': dealMembers.map((m) => m.toJson()).toList(),
+    };
+  }
+}
+
+class DealMember {
+  final String memberId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  DealMember({
+    required this.memberId,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory DealMember.fromJson(Map<String, dynamic> json) {
+    return DealMember(
+      memberId: json['memberId'] ?? '',
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'memberId': memberId,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 }

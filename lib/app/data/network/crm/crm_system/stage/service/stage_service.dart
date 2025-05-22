@@ -13,103 +13,65 @@ class StageService extends GetxService {
 
   final String url = UrlRes.stages;
 
-  Future<List<StageModel>> getStages({String? stageType, String? clientId}) async {
-    try {
-      // Get the auth token
-      final token = await SecureStorage.getToken();
+  static Future<Map<String, String>> headers() async {
+    return await UrlRes.getHeaders();
+  }
 
-      final userdata = await SecureStorage.getUserData();
-
-      if (token == null) {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: 'Error',
-          message: 'Authentication token not found',
-          contentType: ContentType.failure,
-        );
-        return [];
-      }
-
+  /// Get all stages
+  Future<http.Response> getStages({String? stageType, String? clientId}) async {
       final queryParams = <String, String>{};
-      if (stageType != null) queryParams['stageType'] = "lead";
-      if (clientId != null) queryParams['client_id'] = "${userdata?.id.toString()}";
+    if (stageType != null) queryParams['stageType'] = stageType;
+    if (clientId != null) queryParams['client_id'] = clientId;
 
       final uri = Uri.parse(url).replace(queryParameters: queryParams);
 
-      final response = await http.get(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-          'Origin': 'https://crm.raiser.in',
-          'Referer': 'https://crm.raiser.in/',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data['success'] == true && data['data'] != null) {
-          final stagesList = (data['data'] as List)
-              .where((stage) => stage['stageType'] == stageType) // Filter by stage type
-              .map((stage) => StageModel.fromJson(stage))
-              .toList();
-
-          return stagesList;
-        } else {
-          CrmSnackBar.showAwesomeSnackbar(
-            title: 'Error',
-            message: data['message'] ?? 'Failed to fetch stages',
-            contentType: ContentType.failure,
-          );
-          return [];
-        }
-      } else if (response.statusCode == 401) {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: 'Authentication Error',
-          message: 'Please login again',
-          contentType: ContentType.failure,
-        );
-        return [];
-      } else {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: 'Error',
-          message: 'Failed to fetch stages: ${response.statusCode}',
-          contentType: ContentType.failure,
-        );
-        return [];
-      }
-    } catch (e) {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: 'Error',
-        message: 'Failed to fetch stages: ${e.toString()}',
-        contentType: ContentType.failure,
-      );
-      return [];
-    }
+    return await http.get(
+      uri,
+      headers: await headers(),
+    );
   }
 
-  Future<List<StageModel>> getStagesByPipeline(String pipelineId) async {
-    try {
-      final stages = await getStages(stageType: 'lead');
-      final filteredStages = stages.where((stage) => stage.pipeline == pipelineId).toList();
-
-      return filteredStages;
-    } catch (e) {
-      return [];
-    }
+  /// Get stages by pipeline ID
+  Future<http.Response> getStagesByPipeline(String pipelineId) async {
+    final uri = Uri.parse('$url/pipeline/$pipelineId');
+    return await http.get(
+      uri,
+      headers: await headers(),
+    );
   }
 
-  Future<StageModel?> getDefaultStageForPipeline(String pipelineId) async {
-    try {
-      final stages = await getStagesByPipeline(pipelineId);
-      final defaultStage = stages.firstWhereOrNull((stage) => stage.isDefault);
+  /// Get default stage for pipeline
+  Future<http.Response> getDefaultStageForPipeline(String pipelineId) async {
+    final uri = Uri.parse('$url/pipeline/$pipelineId/default');
+    return await http.get(
+      uri,
+      headers: await headers(),
+    );
+  }
 
+  /// Create new stage
+  Future<http.Response> createStage(Map<String, dynamic> data) async {
+    return await http.post(
+      Uri.parse(url),
+      headers: await headers(),
+      body: jsonEncode(data),
+    );
+  }
 
+  /// Update stage
+  Future<http.Response> updateStage(String stageId, Map<String, dynamic> data) async {
+    return await http.put(
+      Uri.parse('$url/$stageId'),
+      headers: await headers(),
+      body: jsonEncode(data),
+    );
+  }
 
-      return defaultStage;
-    } catch (e) {
-      print('Error getting default stage: $e');
-      return null;
-    }
+  /// Delete stage
+  Future<http.Response> deleteStage(String stageId) async {
+    return await http.delete(
+      Uri.parse('$url/$stageId'),
+      headers: await headers(),
+    );
   }
 }

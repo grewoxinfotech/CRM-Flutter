@@ -10,6 +10,35 @@ class FileController extends GetxController {
   final RxList<FileModel> files = <FileModel>[].obs;
   final FileService fileService = FileService();
 
+  void setFilesFromData(List<dynamic> filesData) {
+    try {
+      if (filesData.isEmpty) {
+        files.clear();
+        update();
+        return;
+      }
+
+      final newFiles = filesData.map((file) {
+        if (file is FileModel) {
+          return file;
+        } else if (file is Map<String, dynamic>) {
+          return FileModel(
+            url: file['url'] as String,
+            filename: file['filename'] as String,
+          );
+        }
+        throw Exception('Invalid file data format');
+      }).toList();
+      
+      files.value = newFiles;
+      update();
+    } catch (e) {
+      print('Error setting files: $e');
+      files.clear();
+      update();
+    }
+  }
+
   void setFilesFromLeadData(List<dynamic> filesData) {
     try {
       if (filesData.isEmpty) {
@@ -38,9 +67,37 @@ class FileController extends GetxController {
     }
   }
 
-  Future<bool> deleteFile(String leadId, String filename) async {
+  void setFilesFromDealData(List<dynamic> filesData) {
     try {
-      final response = await fileService.deleteFile(leadId, filename);
+      if (filesData.isEmpty) {
+        files.clear();
+        update();
+        return;
+      }
+
+      final newFiles = filesData.map((file) {
+        if (file is FileModel) {
+          return file;
+        } else if (file is Map<String, dynamic>) {
+          return FileModel(
+            url: file['url'] as String,
+            filename: file['filename'] as String,
+          );
+        }
+        throw Exception('Invalid file data format');
+      }).toList();
+      
+      files.value = newFiles;
+      update();
+    } catch (e) {
+      files.clear();
+      update();
+    }
+  }
+
+  Future<bool> deleteFile(String id, String filename, {bool isDeal = false}) async {
+    try {
+      final response = await fileService.deleteFile(id, filename, isDeal: isDeal);
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 204) {
@@ -65,33 +122,37 @@ class FileController extends GetxController {
     }
   }
 
-  Future<void> refreshFiles(String leadId) async {
+  Future<void> refreshFiles(String id, {bool isDeal = false}) async {
     try {
-      final response = await fileService.getLeadFiles(leadId);
+      final response = await fileService.getFiles(id, isDeal: isDeal);
       final data = jsonDecode(response.body);
       
       if (response.statusCode == 200 && data['success'] == true) {
-        final filesData = data['data']['files'] ?? [];
-        setFilesFromLeadData(filesData);
+        if (data['data'] != null) {
+          final filesData = data['data']['files'] ?? [];
+          setFilesFromData(filesData);
+        }
       }
     } catch (e) {
+      print('Error refreshing files: $e');
       files.clear();
       update();
     }
   }
 
-  Future<Map<String, dynamic>?> uploadFile(String leadId, List<int> fileBytes, String fileName) async {
+  Future<Map<String, dynamic>?> uploadFile(String id, List<int> fileBytes, String fileName, {bool isDeal = false}) async {
     try {
-      final streamedResponse = await fileService.uploadFile(leadId, fileBytes, fileName);
+      final streamedResponse = await fileService.uploadFile(id, fileBytes, fileName, isDeal: isDeal);
       final response = await http.Response.fromStream(streamedResponse);
       
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
         
         if (data['success'] == true) {
-          // Use the files data directly from the upload response
-          final filesData = data['data']['files'] ?? [];
-          setFilesFromLeadData(filesData);
+          if (data['data'] != null) {
+            final filesData = data['data']['files'] ?? [];
+            setFilesFromData(filesData);
+          }
           return data['data'];
         }
       } else {
@@ -106,6 +167,7 @@ class FileController extends GetxController {
       }
       return null;
     } catch (e) {
+      print('Error uploading file: $e');
       CrmSnackBar.showAwesomeSnackbar(
         title: "Error",
         message: "Failed to upload file: ${e.toString()}",

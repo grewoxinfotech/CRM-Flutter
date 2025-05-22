@@ -29,10 +29,10 @@ class NoteController extends GetxController {
     super.onClose();
   }
 
-  Future<void> getNotesForLead(String leadId) async {
+  Future<void> getNotes(String id) async {
     try {
       isLoading.value = true;
-      final notesList = await noteService.getNotesByLeadId(leadId);
+      final notesList = await noteService.getNotes(id);
       notes.assignAll(notesList);
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
@@ -45,7 +45,7 @@ class NoteController extends GetxController {
     }
   }
 
-  Future<bool> createNoteForLead(String leadId) async {
+  Future<bool> createNote(String id) async {
     if (noteTitleController.text.isEmpty) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
@@ -69,7 +69,7 @@ class NoteController extends GetxController {
       
       final note = NoteModel(
         id: '',
-        relatedId: leadId,
+        relatedId: id,
         noteTitle: noteTitleController.text,
         notetype: selectedNoteType.value,
         description: noteDescriptionController.text,
@@ -77,8 +77,7 @@ class NoteController extends GetxController {
         updatedAt: DateTime.now(),
       );
 
-      print('Attempting to create note...'); // Debug print
-      final success = await noteService.createNote(leadId, note);
+      final success = await noteService.createNote(id, note);
       
       if (success) {
         // Clear the form
@@ -87,7 +86,7 @@ class NoteController extends GetxController {
         selectedNoteType.value = 'normal';
         
         // Refresh the notes list
-        await getNotesForLead(leadId);
+        await getNotes(id);
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Success',
           message: 'Note created successfully',
@@ -107,7 +106,7 @@ class NoteController extends GetxController {
     }
   }
 
-  Future<void> updateNoteForLead(String leadId, String noteId) async {
+  Future<void> updateNote(String id, String noteId) async {
     if (noteTitleController.text.isEmpty) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
@@ -131,7 +130,7 @@ class NoteController extends GetxController {
       
       final note = NoteModel(
         id: noteId,
-        relatedId: leadId,
+        relatedId: id,
         noteTitle: noteTitleController.text,
         notetype: selectedNoteType.value,
         description: noteDescriptionController.text,
@@ -142,7 +141,6 @@ class NoteController extends GetxController {
         updatedAt: DateTime.now(),
       );
 
-      print('Attempting to update note...'); // Debug print
       final success = await noteService.updateNote(noteId, note);
       
       if (success) {
@@ -152,7 +150,7 @@ class NoteController extends GetxController {
         selectedNoteType.value = 'normal';
         
         // Refresh the notes list
-        await getNotesForLead(leadId);
+        await getNotes(id);
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Success',
           message: 'Note updated successfully',
@@ -170,12 +168,12 @@ class NoteController extends GetxController {
     }
   }
 
-  Future<bool> deleteNote(String noteId, String leadId) async {
+  Future<bool> deleteNote(String noteId, String id) async {
     try {
       isLoading.value = true;
       final success = await noteService.deleteNote(noteId);
       if (success) {
-        await getNotesForLead(leadId);
+        await getNotes(id);
       }
       return success;
     } catch (e) {
