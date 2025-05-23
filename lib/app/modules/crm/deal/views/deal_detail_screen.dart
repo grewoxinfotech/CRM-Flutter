@@ -38,11 +38,33 @@ import 'package:crm_flutter/app/data/network/activity/model/activity_model.dart'
 import 'package:crm_flutter/app/data/network/sales_invoice/controller/sales_invoice_controller.dart';
 import 'package:crm_flutter/app/widgets/dialog/invoice/invoice_edit_dialog.dart';
 import 'package:crm_flutter/app/modules/crm/sales_invoice/pages/sales_invoice_create_page.dart';
+import 'package:crm_flutter/app/widgets/button/crm_icon_button.dart';
+import 'package:crm_flutter/app/widgets/leads_and_deal/follow_up_card.dart';
+
+enum FollowUpType { task, meeting, call }
+
+class FollowUpController extends GetxController {
+  final Rx<FollowUpType> activeType = Rx<FollowUpType>(FollowUpType.task);
+
+  void setActiveType(FollowUpType type) {
+    activeType.value = type;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    activeType.value = FollowUpType.task;
+  }
+}
 
 class DealDetailScreen extends StatelessWidget {
   final String id;
 
-  const DealDetailScreen({super.key, required this.id});
+  DealDetailScreen({super.key, required this.id}) {
+    if (!Get.isRegistered<FollowUpController>()) {
+      Get.put(FollowUpController());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +91,7 @@ class DealDetailScreen extends StatelessWidget {
             TabBarModel(iconPath: ICRes.attach, label: "Members"),
             TabBarModel(iconPath: ICRes.attach, label: "Notes"),
             TabBarModel(iconPath: ICRes.attach, label: "Invoices"),
+            TabBarModel(iconPath: ICRes.attach, label: "Follow-Ups"),
             TabBarModel(iconPath: ICRes.attach, label: "Activities"),
           ],
         ),
@@ -116,6 +139,7 @@ class DealDetailScreen extends StatelessWidget {
           _buildMembersTab(deal, dealController, rolesService),
           _buildNotesTab(noteController, id, context),
           _buildInvoicesTab(deal.id.toString(), context),
+          _buildFollowUpsTab(deal.id.toString(), context),
           _buildActivitiesTab(deal, dealController, context),
         ];
 
@@ -371,6 +395,99 @@ class DealDetailScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildFollowUpsTab(String dealId, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(AppPadding.medium),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  child: Text(
+                    'Create New Follow-up',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const FollowUpButtons(),
+                const SizedBox(height: 6),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Follow-up Tasks',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: 1, // Replace with actual task list length
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                // Example task data - replace with actual data from your API
+                return FollowUpCard(
+                  id: "50ZJkIYriiIho6Qkt5BQjtB",
+                  subject: "hello",
+                  dueDate: "2025-05-23",
+                  priority: "highest",
+                  taskReporter: "27QmTY0BI4nb89DW3lXrly9",
+                  status: "in_progress",
+                  reminder: {
+                    "reminder_date": "2025-05-22",
+                    "reminder_time": "04:04:00"
+                  },
+                  repeat: {
+                    "repeat_type": "weekly",
+                    "repeat_start_date": "2025-05-23",
+                    "repeat_start_time": "00:05:00",
+                  },
+                  createdBy: "raiser2",
+                  createdAt: "2025-05-23T05:47:32.000Z",
+                  onEdit: () {
+                    // TODO: Implement edit
+                  },
+                  onDelete: () {
+                    // TODO: Implement delete
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildActivitiesTab(
     DealModel deal,
     DealController dealController,
@@ -547,6 +664,73 @@ class DealDetailScreen extends StatelessWidget {
               }
               Get.back();
         },
+      ),
+    );
+  }
+}
+
+class FollowUpButtons extends StatefulWidget {
+  const FollowUpButtons({Key? key}) : super(key: key);
+
+  @override
+  State<FollowUpButtons> createState() => _FollowUpButtonsState();
+}
+
+class _FollowUpButtonsState extends State<FollowUpButtons> {
+  int activeIndex = 0; // 0 for Task, 1 for Meeting, 2 for Call
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: CrmIconButton(
+              icon: Icons.task_outlined,
+              label: 'Task',
+              color: Colors.blue[600],
+              defaultActive: activeIndex == 0,
+              onPressed: () {
+                setState(() {
+                  activeIndex = 0;
+                });
+                // TODO: Implement task creation
+              },
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: CrmIconButton(
+              icon: Icons.groups_outlined,
+              label: 'Meeting',
+              color: Colors.green[600],
+              defaultActive: activeIndex == 1,
+              onPressed: () {
+                setState(() {
+                  activeIndex = 1;
+                });
+                // TODO: Implement meeting creation
+              },
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: CrmIconButton(
+              icon: Icons.phone_outlined,
+              label: 'Call',
+              color: Colors.orange[600],
+              defaultActive: activeIndex == 2,
+              onPressed: () {
+                setState(() {
+                  activeIndex = 2;
+                });
+                // TODO: Implement call creation
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
