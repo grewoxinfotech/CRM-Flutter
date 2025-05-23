@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
-import 'package:crm_flutter/app/data/network/auth/controllers/auth_controller.dart';
+import 'package:crm_flutter/app/modules/auth/controllers/auth_controller.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/drawer/views/deawer_controller.dart';

@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/utils/validation.dart';
-import 'package:crm_flutter/app/data/network/auth/controllers/auth_controller.dart';
+import 'package:crm_flutter/app/modules/auth/controllers/auth_controller.dart';
 import 'package:crm_flutter/app/modules/auth/views/auth_background/auth_background.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';

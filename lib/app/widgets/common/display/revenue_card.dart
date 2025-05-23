@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,7 @@ class RevenueCard extends StatelessWidget {
 
     return CrmCard(
       margin: EdgeInsets.symmetric(horizontal: AppMargin.medium),
-      color: x().withAlpha(50),
-      boxShadow: [],
+      border: Border.all(color: divider),
       padding: EdgeInsets.all(AppPadding.medium),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,7 +27,7 @@ class RevenueCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color: x(),
+              color: primary,
             ),
           ),
           Text(

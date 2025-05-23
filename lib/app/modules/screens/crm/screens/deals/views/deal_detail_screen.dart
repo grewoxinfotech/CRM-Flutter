@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/data/network/all/crm/deal/model/deal_model.dart';
-import 'package:crm_flutter/app/data/network/all/crm/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/deals/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/widget/deal_overview_card.dart';
 import 'package:crm_flutter/app/modules/screens/project/file/widget/file_card.dart';
 import 'package:crm_flutter/app/modules/screens/project/invoice/widget/invoice_card.dart';

@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/data/network/all/crm/task/controller/task_controller.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/task/controller/task_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

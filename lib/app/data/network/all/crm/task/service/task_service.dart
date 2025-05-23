@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:http/http.dart' as http;
 
 class TaskService {
-  final String url = UrlRes.task;
+  final String url = UrlRes.tasks;
 
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
@@ -16,7 +17,11 @@ class TaskService {
       headers: await headers(),
     );
     final data = jsonDecode(response.body);
-    return (response.statusCode == 200) ? data['data'] ?? [] : [];
+    if (response.statusCode == 200 && data["data"] != null) {
+      return data["data"] ?? [];
+    } else {
+      return [];
+    }
   }
 
   /// 2. Get single task by ID
@@ -52,9 +57,6 @@ class TaskService {
 
   /// 5. Delete Task by ID
   Future<http.Response> deleteTask(String id) async {
-    return await http.delete(
-      Uri.parse("$url/$id"),
-      headers: await headers(),
-    );
+    return await http.delete(Uri.parse("$url/$id"), headers: await headers());
   }
 }

@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -11,7 +12,8 @@ class CrmDropdownField<T> extends StatelessWidget {
   final ValueChanged<T?> onChanged;
   final bool isRequired;
   final String? hintText;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final String? Function(T?)? validator;
   final bool enabled;
   final FocusNode? focusNode;
@@ -19,13 +21,14 @@ class CrmDropdownField<T> extends StatelessWidget {
 
   const CrmDropdownField({
     super.key,
-    required this.title,
+    this.title = "",
     required this.value,
     required this.items,
     required this.onChanged,
     this.isRequired = false,
     this.hintText,
     this.prefixIcon,
+    this.suffixIcon,
     this.validator,
     this.enabled = true,
     this.focusNode,
@@ -37,28 +40,34 @@ class CrmDropdownField<T> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14,
-                color: Get.theme.colorScheme.onSecondary,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            if (isRequired)
-              Text(
-                ' *',
-                style: TextStyle(
-                  color: Get.theme.colorScheme.error,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+        (title == "")
+            ? SizedBox()
+            : Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Get.theme.colorScheme.onSecondary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    if (isRequired)
+                      Text(
+                        ' *',
+                        style: TextStyle(
+                          color: Get.theme.colorScheme.error,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                  ],
                 ),
-              ),
-          ],
-        ),
-        AppSpacing.verticalSmall,
+                AppSpacing.verticalSmall,
+              ],
+            ),
         DropdownButtonFormField<T>(
           value: value,
           borderRadius: BorderRadius.circular(AppRadius.large),
@@ -93,19 +102,15 @@ class CrmDropdownField<T> extends StatelessWidget {
                     : Get.theme.colorScheme.surface.withAlpha(128),
             hintText: hintText,
             hintStyle: TextStyle(
-              color: Get.theme.colorScheme.onSurface.withAlpha(128),
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
+              color: white.withAlpha(200),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
             ),
             prefixIcon:
                 prefixIcon != null
                     ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Icon(
-                        prefixIcon,
-                        size: 20,
-                        color: Get.theme.colorScheme.primary,
-                      ),
+                      child: prefixIcon,
                     )
                     : null,
             prefixIconConstraints: const BoxConstraints(minWidth: 40),
@@ -120,10 +125,7 @@ class CrmDropdownField<T> extends StatelessWidget {
             ),
           ),
           isExpanded: true,
-          icon: CrmIc(
-            iconPath: Ic.down,
-            color: Get.theme.colorScheme.primary,
-          ),
+          icon: suffixIcon,
           dropdownColor: Get.theme.colorScheme.surface,
           menuMaxHeight: 300,
           itemHeight: 50,

@@ -1,5 +1,5 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/data/network/all/crm/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/deals/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_headline.dart';

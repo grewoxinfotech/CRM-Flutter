@@ -1,76 +1,47 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/all/crm/lead/model/lead_model.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_detail_screen.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
+import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LeadCard extends StatelessWidget {
   final GestureTapCallback? onTap;
+  final LeadModel lead;
   final Color? color;
-  final String? id;
-  final String? inquiryId;
-  final String? leadTitle;
-  final String? leadStage;
-  final String? pipeline;
-  final String? currency;
-  final String? leadValue;
-  final String? companyName;
-  final String? firstName;
-  final String? lastName;
-  final String? phoneCode;
-  final String? telephone;
-  final String? email;
-  final String? address;
-  final String? leadMembers;
-  final String? source;
-  final String? category;
-  final String? files;
-  final String? status;
-  final String? interestLevel;
-  final String? leadScore;
-  final String? isConverted;
-  final String? clientId;
-  final String? createdBy;
-  final String? updatedBy;
-  final String? createdAt;
-  final String? updatedAt;
 
-  const LeadCard({
-    super.key,
-    this.onTap,
-    this.color,
-    this.id,
-    this.inquiryId,
-    this.leadTitle,
-    this.leadStage,
-    this.pipeline,
-    this.currency,
-    this.leadValue,
-    this.companyName,
-    this.firstName,
-    this.lastName,
-    this.phoneCode,
-    this.telephone,
-    this.email,
-    this.address,
-    this.leadMembers,
-    this.source,
-    this.category,
-    this.files,
-    this.status,
-    this.interestLevel,
-    this.leadScore,
-    this.isConverted,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
-  });
+  const LeadCard({super.key, required this.lead,this.onTap, this.color});
 
   @override
   Widget build(BuildContext context) {
-    Color _getStageColor(String stage) {
+    final String id = lead.id.toString();
+    final String inquiryId = lead.inquiryId.toString();
+    final String leadTitle = lead.leadTitle.toString();
+    final String leadStage = lead.leadStage.toString();
+    final String pipeline = lead.pipeline.toString();
+    final String currency = lead.currency.toString();
+    final String leadValue = lead.leadValue.toString();
+    final String companyId = lead.companyId.toString();
+    final String contactId = lead.contactId.toString();
+    final String leadMembers = lead.leadMembers.toString();
+    final String source = lead.source.toString();
+    final String category = lead.category.toString();
+    final String files = lead.files.toString();
+    final String status = lead.status.toString();
+    final String interestLevel = lead.interestLevel.toString();
+    final String leadScore = lead.leadScore.toString();
+    final String isConverted = lead.isConverted.toString();
+    final String clientId = formatDate(lead.clientId.toString());
+    final String createdBy = formatDate(lead.createdBy.toString());
+    final String updatedBy = formatDate(lead.updatedBy.toString());
+    final String createdAt = formatDate(lead.createdAt.toString());
+    final String updatedAt = formatDate(lead.updatedAt.toString());
+
+    Color stageColor(String stage) {
       switch (stage.toLowerCase()) {
         case 'won':
           return success;
@@ -83,7 +54,7 @@ class LeadCard extends StatelessWidget {
       }
     }
 
-    Color _getInterestColor(String level) {
+    Color interestColor(String level) {
       switch (level.toLowerCase()) {
         case 'high':
           return error;
@@ -136,15 +107,10 @@ class LeadCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Card(
+      child: CrmCard(
         margin: EdgeInsets.zero,
-        elevation: 0,
         color: surface,
-        shadowColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.large),
-          side: BorderSide(color: divider),
-        ),
+        border: Border.all(color: divider),
         child: Padding(
           padding: const EdgeInsets.all(AppPadding.medium),
           child: Column(
@@ -157,7 +123,7 @@ class LeadCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Digital Marketing Campaign",
+                          leadTitle,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 16,
@@ -168,7 +134,7 @@ class LeadCard extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "Grewox Infotech",
+                              companyId,
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -185,11 +151,11 @@ class LeadCard extends StatelessWidget {
 
               Row(
                 children: [
-                  _infoChip(Icons.public, "LinkedIn"),
+                  _infoChip(Icons.public, files),
                   AppSpacing.horizontalSmall,
-                  _statusChip("won", _getStageColor("won")),
+                  _statusChip(status, stageColor(status)),
                   AppSpacing.horizontalSmall,
-                  _statusChip("high", _getInterestColor("high")),
+                  _statusChip(interestLevel, interestColor(interestLevel)),
                 ],
               ),
 
@@ -198,7 +164,7 @@ class LeadCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '₹ 1200.00',
+                    leadValue,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
@@ -214,7 +180,7 @@ class LeadCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        "05 May 2025",
+                        createdAt,
                         style: TextStyle(
                           fontSize: 12,
                           color: textSecondary,

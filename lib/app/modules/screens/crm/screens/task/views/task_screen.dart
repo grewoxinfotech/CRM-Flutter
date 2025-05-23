@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/data/network/all/crm/task/controller/task_controller.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/task/controller/task_controller.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/task/views/task_add_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/task/widget/task_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
@@ -54,9 +54,9 @@ class TaskScreen extends StatelessWidget {
                       id: data.id ?? "N/A",
                       relatedId: data.relatedId ?? "N/A",
                       taskName: data.taskName ?? "N/A",
-                      category: data.category ?? "N/A",
-                      project: data.project ?? "N/A",
-                      lead: data.lead ?? "N/A",
+                      // category: data.category ?? "N/A",
+                      // project: data.project ?? "N/A",
+                      // lead: data.lead ?? "N/A",
                       file: data.file ?? "N/A",
                       startDate: formatDate(data.startDate.toString()),
                       dueDate: formatDate(data.dueDate.toString()),

@@ -1,152 +1,111 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
-import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/controllers/leave_controller.dart';
+import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/model/leave_model.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_manamgemant/controllers/leave_controller.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_manamgemant/views/leave_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
+import 'package:crm_flutter/app/widgets/common/status/crm_status_card.dart';
+import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class LeaveCard extends StatelessWidget {
-  final String employeeName;
-  final String leaveType;
-  final String startDate;
-  final String endDate;
-  final String status;
-  final String reason;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
+  final LeaveModel leave;
+  final GestureTapCallback? onTap;
+  final GestureTapCallback? onEdit;
 
-  const LeaveCard({
-    Key? key,
-    required this.employeeName,
-    required this.leaveType,
-    required this.startDate,
-    required this.endDate,
-    required this.status,
-    required this.reason,
-    required this.onEdit,
-    required this.onDelete,
-  }) : super(key: key);
+  const LeaveCard({Key? key, required this.leave, this.onTap, this.onEdit})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final LeaveController controller = Get.put(LeaveController());
-
-    Color? onPrimary = Get.theme.colorScheme.onPrimary;
-    Color? onSecondary = Get.theme.colorScheme.onSecondary;
-    Color? primary = Get.theme.colorScheme.primary;
-
-    Widget tile(String title, String subTitle) {
-      return RichText(
-        text: TextSpan(
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: onPrimary,
-          ),
-          children: [
-            TextSpan(text: "$title : "),
-            TextSpan(
-              text: subTitle,
-              style: TextStyle(
-                color: onSecondary,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      );
+    final String id = leave.id.toString();
+    final String employeeId = leave.employeeId.toString();
+    final String startDate = formatDate(leave.startDate.toString());
+    final String endDate = formatDate(leave.endDate.toString());
+    final String leaveType = leave.leaveType.toString();
+    final String reason = leave.reason.toString();
+    final String status = leave.status.toString();
+    final String remarks = leave.remarks.toString();
+    final String clientId = leave.clientId.toString();
+    final String createdBy = leave.createdBy.toString();
+    final String updatedBy = leave.updatedBy.toString();
+    final String createdAt = leave.createdAt.toString();
+    final String updatedAt = leave.updatedAt.toString();
+    Color leaveTypeColor(String leaveType) {
+      return LeaveColorModel.getLeaves()
+          .firstWhere(
+            (e) => e.leaveType.toLowerCase() == leaveType.toLowerCase(),
+            orElse: () => LeaveColorModel(leaveType: '', color: Colors.grey),
+          )
+          .color;
     }
 
+    Color statusColor(String status) {
+      if (status == "pending") {
+        return warning;
+      } else if (status == "approved") {
+        return success;
+      } else if (status == "rejected") {
+        return error;
+      } else {
+        return Colors.grey;
+      }
+    }
 
-    final List<LeaveColorModel> leaveColors = LeaveColorModel.getLeaves();
-
-    return CrmCard(
-      padding: const EdgeInsets.all(AppPadding.medium),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Top row: Employee name and leave type
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                employeeName,
+    return GestureDetector(
+      onTap: onTap,
+      child: CrmCard(
+        boxShadow: [],
+        border: Border.all(color: divider),
+        padding: const EdgeInsets.all(AppPadding.medium),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: onPrimary,
+                  fontSize: 14,
+                  color: textPrimary,
+                  fontWeight: FontWeight.w800,
                 ),
-              ),
-              CrmCard(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppPadding.small,
-                  vertical: AppPadding.small / 2,
-                ),
-                boxShadow: [],
-                color: controller.getStatusColor(status).withAlpha(30),
-                borderRadius: BorderRadius.circular(AppRadius.medium),
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    color: controller.getStatusColor(status),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.verticalSmall,
-
-          tile("Start Day", startDate),
-          tile("End Day", endDate),
-          (reason.isNotEmpty) ? tile("Reason", reason) : SizedBox(),
-
-          AppSpacing.verticalMedium,
-
-          // Status and Actions
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CrmCard(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppPadding.small,
-                  vertical: AppPadding.small / 2,
-                ),
-                boxShadow: [],
-                color: controller.getLeaveTypeColor(leaveType).withAlpha(30),
-                borderRadius: BorderRadius.circular(AppRadius.medium),
-                child: Text(
-                  leaveType,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: controller.getLeaveTypeColor(leaveType),
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-
-              Row(
                 children: [
-                  CrmIc(
-                    iconPath: Ic.edit,
-                    color: success,
-                    onTap: onEdit,
-                  ),
-                  AppSpacing.horizontalMedium,
-                  CrmIc(
-                    iconPath: Ic.delete,
-                    color: error,
-                    onTap: onDelete,
+                  TextSpan(text: startDate),
+                  TextSpan(
+                    text:
+                        (endDate.toString().isEmpty || startDate == endDate)
+                            ? ""
+                            : " - $endDate",
                   ),
                 ],
               ),
-            ],
-          ),
-        ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Half Day Application",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: textSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            AppSpacing.verticalSmall,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CrmStatusCard(title: status, color: statusColor(status)),
+                AppSpacing.horizontalSmall,
+                CrmStatusCard(
+                  title: leaveType,
+                  color: leaveTypeColor(leaveType),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

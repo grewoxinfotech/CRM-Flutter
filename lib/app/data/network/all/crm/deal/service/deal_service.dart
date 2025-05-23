@@ -2,29 +2,30 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
+import 'package:crm_flutter/app/data/network/all/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:http/http.dart' as http;
 
 class DealService {
-  final String url = UrlRes.deals;
+  static final String url = UrlRes.deal;
 
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
   }
 
-  /// 1. Get all deal
-  Future<List> getDeals() async {
-    try {
-      final response = await http.get(Uri.parse(url), headers: await headers());
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200 && data["success"] == true) {
-        return data['data'] ?? [];
-      } else {
-        return [];
-      }
-    } catch (e) {
-      print(e);
-      return [];
+  /// 1. Get all deals
+  static Future<List<DealModel>> getDeals() async {
+    final response = await http.get(Uri.parse(url), headers: await headers());
+    final jsonData = jsonDecode(response.body);
+    final List<dynamic> data = jsonData['data'];
+
+    if (response.statusCode == 200 && jsonData['success'] == true) {
+      print("Deal Service (data) : ${jsonData['data']}");
+      return data.map((e) => DealModel.fromJson(e)).toList();
+    } else {
+      print("Deal Service (error) : ${jsonData['message']}");
+      print("Deal Service (status code) : ${response.statusCode}");
+      throw Exception('Failed to load Deal data: ${response.statusCode}');
     }
   }
 

@@ -39,6 +39,7 @@ class Ic {
   static String close = "$actionsPath/close.svg";
   static String delete = "$actionsPath/delete.svg";
   static String done = "$actionsPath/done.svg";
+  static String doneFilled = "$actionsPath/done_filled.svg";
   static String download = "$actionsPath/download.svg";
   static String edit = "$actionsPath/edit.svg";
   static String filter = "$actionsPath/filter.svg";

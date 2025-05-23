@@ -1,6 +1,5 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
-import 'package:crm_flutter/app/data/network/all/crm/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/data/network/all/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/leads/widgets/lead_overview_card.dart';
 import 'package:crm_flutter/app/modules/screens/project/file/widget/file_card.dart';
@@ -9,83 +8,37 @@ import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controlle
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
-import 'package:crm_flutter/app/widgets/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeadDetailScreen extends StatelessWidget {
-  const LeadDetailScreen({super.key});
+  final LeadModel lead;
+  const LeadDetailScreen({Key? key, required this.lead}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final tabBarController = Get.put(TabBarController());
-    final leadController = Get.put(LeadController());
-    final LeadModel data = Get.arguments;
 
     List<Widget> widgets = [
-      LeadOverviewCard(
-        id: data.id.toString(),
-        color: Colors.green,
-        inquiryId: data.inquiryId.toString(),
-        leadTitle: data.leadTitle.toString(),
-        leadStage: data.leadStage.toString(),
-        pipeline: data.pipeline.toString(),
-        currency: data.currency.toString(),
-        leadValue: data.leadValue.toString(),
-        companyName: data.companyName.toString(),
-        firstName: data.firstName.toString(),
-        lastName: data.lastName.toString(),
-        phoneCode: data.phoneCode.toString(),
-        telephone: data.telephone.toString(),
-        email: data.email.toString(),
-        address: data.address.toString(),
-        leadMembers: data.leadMembers.length,
-        source: data.source.toString(),
-        category: data.category.toString(),
-        files: data.files.toString(),
-        status: data.status.toString(),
-        interestLevel: data.interestLevel.toString(),
-        leadScore: data.leadScore.toString(),
-        isConverted: data.isConverted.toString(),
-        clientId: data.clientId.toString(),
-        createdBy: data.createdBy.toString(),
-        updatedBy: data.updatedBy.toString(),
-        createdAt: data.createdAt.toString(),
-        updatedAt: data.updatedAt.toString(),
-        onDelete: () {
-          showDialog(
-            context: context,
-            builder:
-                (_) => CrmDeleteDialog(
-                  entityType: "lead",
-                  onConfirm: () async {
-                    await leadController.deleteLead(data.id.toString());
-                    Get.back(result: true);
-                  },
-                ),
-          );
-        },
-
-        onEdit: () {},
-      ),
-      ViewScreen(
-        itemCount: data.files.length,
-        padding: const EdgeInsets.all(AppPadding.medium),
-
-        itemBuilder: (context, i) {
-          final file = data.files[i];
-          return FileCard(
-            url: file.url,
-            name: file.filename,
-            id: file.filename,
-            role: "File",
-            onTap: null,
-            onDelete: null,
-          );
-        },
-      ),
+      LeadOverviewCard(lead: lead),
+      // ViewScreen(
+      //   itemCount: lead.files!.length,
+      //   padding: const EdgeInsets.all(AppPadding.medium),
+      //
+      //   itemBuilder: (context, i) {
+      //     final file = lead.files![i];
+      //     return FileCard(
+      //       url: file.url,
+      //       name: file.filename,
+      //       id: file.filename,
+      //       role: "File",
+      //       onTap: null,
+      //       onDelete: null,
+      //     );
+      //   },
+      // ),
       // ViewScreen(
       //     itemCount: leadMembers.length,
       //     itemBuilder: (context, index) {

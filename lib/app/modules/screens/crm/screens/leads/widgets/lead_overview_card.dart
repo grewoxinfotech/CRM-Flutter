@@ -1,5 +1,7 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/all/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -9,76 +11,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class LeadOverviewCard extends StatelessWidget {
-  final String? id;
-  final Color? color;
-  final String? inquiryId;
-  final String? leadTitle;
-  final String? leadStage;
-  final String? pipeline;
-  final String? currency;
-  final String? leadValue;
-  final String? companyName;
-  final String? firstName;
-  final String? lastName;
-  final String? phoneCode;
-  final String? telephone;
-  final String? email;
-  final String? address;
-  final int? leadMembers;
-  final String? source;
-  final String? category;
-  final String? files;
-  final String? status;
-  final String? interestLevel;
-  final String? leadScore;
-  final String? isConverted;
-  final String? clientId;
-  final String? createdBy;
-  final String? updatedBy;
-  final String? createdAt;
-  final String? updatedAt;
+  final LeadModel lead;
   final GestureTapCallback? onDelete;
   final GestureTapCallback? onEdit;
 
   const LeadOverviewCard({
     super.key,
-    this.id,
-    this.color,
-    this.inquiryId,
-    this.leadTitle,
-    this.leadStage,
-    this.pipeline,
-    this.currency,
-    this.leadValue,
-    this.companyName,
-    this.firstName,
-    this.lastName,
-    this.phoneCode,
-    this.telephone,
-    this.email,
-    this.address,
-    this.leadMembers,
-    this.source,
-    this.category,
-    this.files,
-    this.status,
-    this.interestLevel,
-    this.leadScore,
-    this.isConverted,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
+    required this.lead,
     this.onDelete,
     this.onEdit,
   });
 
-
   @override
   Widget build(BuildContext context) {
-    Color textPrimary = Get.theme.colorScheme.onPrimary;
-    Color textSecondary = Get.theme.colorScheme.onSecondary;
+    Color color = Colors.red;
 
     Widget divider = Divider(
       height: AppPadding.small,
@@ -169,7 +115,7 @@ class LeadOverviewCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "$leadTitle",
+                  '${lead.leadTitle}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -179,7 +125,7 @@ class LeadOverviewCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "$companyName",
+                  "${lead.companyId}",
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -187,7 +133,7 @@ class LeadOverviewCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "id : $id",
+                  "id : ${lead.id}",
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -201,7 +147,7 @@ class LeadOverviewCard extends StatelessWidget {
                 ),
 
                 Text(
-                  "$firstName $lastName",
+                  "${lead.clientId}",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -209,7 +155,7 @@ class LeadOverviewCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "$createdBy",
+                  "${lead.clientId}",
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -217,7 +163,7 @@ class LeadOverviewCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "id : $clientId",
+                  "id : ${lead.clientId}",
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -229,9 +175,9 @@ class LeadOverviewCard extends StatelessWidget {
                   height: AppPadding.medium,
                   color: Get.theme.dividerColor,
                 ),
-                items(Ic.mail, email.toString()),
-                items(Ic.call, telephone.toString()),
-                items(Ic.location, address.toString()),
+                items(Ic.mail, "${lead.clientId}"),
+                items(Ic.call, "${{lead.clientId}}"),
+                items(Ic.location, "${lead.clientId}"),
               ],
             ),
           ),
@@ -247,35 +193,35 @@ class LeadOverviewCard extends StatelessWidget {
               children: [
                 tile(
                   "Currency",
-                  currency.toString(),
+                  "${lead.currency}",
                   Colors.green,
                   FontAwesomeIcons.instagram,
                 ),
                 divider,
                 tile(
                   "Lead Value",
-                  leadValue.toString(),
+                  "${lead.leadValue}",
                   Colors.green,
                   FontAwesomeIcons.instagram,
                 ),
                 divider,
                 tile(
                   "Created",
-                  formatDate(createdAt.toString()),
+                  formatDate(lead.createdAt.toString()),
                   Colors.purple,
                   FontAwesomeIcons.whatsapp,
                 ),
                 divider,
                 tile(
                   "Interest Level",
-                  interestLevel.toString(),
+                  lead.interestLevel.toString(),
                   Colors.red,
                   FontAwesomeIcons.facebookF,
                 ),
                 divider,
                 tile(
                   "Lead Member",
-                  leadMembers.toString(),
+                  lead.leadMembers.toString(),
                   Colors.pink,
                   FontAwesomeIcons.google,
                 ),
@@ -291,15 +237,15 @@ class LeadOverviewCard extends StatelessWidget {
             ),
             child: Column(
               children: [
-                tile2("Pipeline", pipeline.toString()),
+                tile2("Pipeline", lead.pipeline.toString()),
                 divider,
-                tile2("Source", source.toString()),
+                tile2("Source", lead.source.toString()),
                 divider,
-                tile2("Category", category.toString()),
+                tile2("Category", lead.category.toString()),
                 divider,
-                tile2("Stage", leadStage.toString()),
+                tile2("Stage", lead.leadStage.toString()),
                 divider,
-                tile2("Status", status.toString()),
+                tile2("Status", lead.status.toString()),
               ],
             ),
           ),

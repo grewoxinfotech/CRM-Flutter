@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,7 @@ class CrmTextField extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final bool obscureText;
   final Widget? suffixIcon;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
   final bool isRequired;
   final TextInputType? keyboardType;
   final int? maxLines;
@@ -22,7 +23,7 @@ class CrmTextField extends StatelessWidget {
   const CrmTextField({
     super.key,
     this.controller,
-    required this.title,
+    this.title = "",
     this.validator,
     this.hintText,
     this.obscureText = false,
@@ -43,28 +44,34 @@ class CrmTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              title!,
-              style: TextStyle(
-                fontSize: 14,
-                color: Get.theme.colorScheme.onSecondary,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            if (isRequired)
-              Text(
-                ' *',
-                style: TextStyle(
-                  color: Get.theme.colorScheme.error,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+        (title == "")
+            ? SizedBox()
+            : Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      title!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Get.theme.colorScheme.onSecondary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    if (isRequired)
+                      Text(
+                        ' *',
+                        style: TextStyle(
+                          color: Get.theme.colorScheme.error,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                  ],
                 ),
-              ),
-          ],
-        ),
-        AppSpacing.verticalSmall,
+                AppSpacing.verticalSmall,
+              ],
+            ),
         TextFormField(
           controller: controller,
           validator: validator,
@@ -90,23 +97,29 @@ class CrmTextField extends StatelessWidget {
                     : Get.theme.colorScheme.surface.withAlpha(128),
             hintText: hintText,
             hintStyle: TextStyle(
-              color: Get.theme.colorScheme.onSurface.withAlpha(128),
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
+              color: textSecondary.withAlpha(200),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
             ),
             prefixIcon:
                 prefixIcon != null
                     ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Icon(
-                        prefixIcon,
-                        size: 20,
-                        color: Get.theme.colorScheme.primary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppPadding.small,
                       ),
+                      child: prefixIcon,
                     )
                     : null,
             prefixIconConstraints: const BoxConstraints(minWidth: 40),
-            suffixIcon: suffixIcon,
+            suffixIcon:
+                suffixIcon != null
+                    ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppPadding.medium,
+                      ),
+                      child: suffixIcon,
+                    )
+                    : null,
             enabledBorder: tile(Get.theme.dividerColor),
             focusedBorder: tile(Get.theme.colorScheme.primary),
             errorBorder: tile(Get.theme.colorScheme.error),

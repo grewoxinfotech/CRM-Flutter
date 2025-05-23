@@ -1,17 +1,27 @@
-import 'package:crm_flutter/app/data/network/all/hrm/attendance/model/attendance_model.dart';
+import 'dart:convert';
+
+import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class AttendanceService extends GetConnect {
-  final String baseUrl = "https://api.raiser.in/api/v1/attendance";
+  final String url = UrlRes.attendance;
 
-  Future<List<AttendanceModel>> getAllAttendances() async {
-    final response = await get(baseUrl);
+  static Future<Map<String, String>> headers() async {
+    return await UrlRes.getHeaders();
+  }
 
-    if (response.statusCode == 200) {
-      final List data = response.body;
-      return data.map((e) => AttendanceModel.fromJson(e)).toList();
+  Future<List> getAllAttendances() async {
+    final response = await http.get(Uri.parse(url), headers: await headers());
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && data["data"] != null) {
+      print("Attendance Service (data) : ${data['data']}");
+      return data['data'] ?? [];
     } else {
-      throw Exception('Failed to load attendance');
+      print("Attendance Service (error) : ${data['message']}");
+      print("Attendance Service (status code) : ${response.statusCode}");
+      return [];
     }
   }
 

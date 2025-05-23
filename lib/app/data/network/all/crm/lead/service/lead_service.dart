@@ -2,29 +2,30 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
+import 'package:crm_flutter/app/data/network/all/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:http/http.dart' as http;
 
 class LeadService {
-  final String url = UrlRes.leads;
+  static final String url = UrlRes.lead;
 
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
   }
 
   /// 1. Get all lead
-  Future<List> getLeads() async {
+  static Future<List<LeadModel>> getLeads() async {
     final response = await http.get(Uri.parse(url), headers: await headers());
-    final data = jsonDecode(response.body);
-    if (response.statusCode == 200 && data["success"] == true) {
-      return data["data"] ?? [];
+    final jsonData = jsonDecode(response.body);
+    final List<dynamic> data = jsonData['data'];
+
+    if (response.statusCode == 200 && jsonData['success'] == true) {
+      print("Lead Service (data) : ${jsonData['data']}");
+      return data.map((e) => LeadModel.fromJson(e)).toList();
     } else {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: "Error",
-        message: data["message"],
-        contentType: ContentType.failure,
-      );
-      return [];
+      print("Lead Service (error) : ${jsonData['message']}");
+      print("Lead Service (status code) : ${response.statusCode}");
+      throw Exception('Failed to load lead data: ${response.statusCode}');
     }
   }
 

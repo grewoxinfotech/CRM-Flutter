@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/modules/screens/crm/screens/company/views/company_screen.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/contect/views/contact_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/task/views/task_screen.dart';
@@ -22,7 +23,7 @@ class CrmModel {
       CrmModel(
         color: Color(0xff284398),
         title: "Contact",
-        widget: TestScreen(),
+        widget: ContactScreen(),
       ),
       CrmModel(
         color: Color(0xffEB2F96),

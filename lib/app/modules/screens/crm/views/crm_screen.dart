@@ -47,12 +47,6 @@ class CrmScreen extends StatelessWidget {
               ),
             ),
             AppSpacing.verticalSmall,
-            ViewScreen(
-              itemCount: 5,
-              itemBuilder: (context, i) => LeadCard(),
-              padding: EdgeInsets.symmetric(horizontal: AppPadding.medium),
-              physics: NeverScrollableScrollPhysics(),
-            ),
           ],
         ),
       ),

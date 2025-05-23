@@ -12,6 +12,8 @@ class CrmButton extends StatelessWidget {
   final Color? backgroundColor;
   final List<BoxShadow>? boxShadow;
   final BorderRadiusGeometry? borderRadius;
+  final Gradient? gradient;
+
 
   const CrmButton({
     super.key,
@@ -19,6 +21,7 @@ class CrmButton extends StatelessWidget {
     required this.onTap,
     this.width,
     this.height,
+    this.gradient,
     this.titleTextStyle,
     this.backgroundColor,
     this.borderRadius,
@@ -33,6 +36,7 @@ class CrmButton extends StatelessWidget {
       color: backgroundColor ?? Get.theme.colorScheme.primary,
       borderRadius: borderRadius ?? BorderRadius.circular(AppRadius.medium),
       boxShadow: boxShadow,
+      gradient: gradient,
       child: Center(
         child: Text(
           title,

@@ -1,4 +1,4 @@
-import 'package:crm_flutter/app/data/network/all/crm/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/deals/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_add_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_detail_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/widget/deal_card.dart';
