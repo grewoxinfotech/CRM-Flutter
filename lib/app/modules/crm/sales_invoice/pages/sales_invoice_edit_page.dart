@@ -36,7 +36,7 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
   late String _selectedCustomerId;
   late List<SalesCustomer> _customers = [];
   bool _isLoadingCustomers = false;
-
+  
   late TextEditingController _gstinController;
   late List<TextEditingController> _quantityControllers;
   late List<TextEditingController> _unitPriceControllers;
@@ -438,7 +438,7 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
                               'Quantity adjusted to available stock: ${product.stockQuantity}',
                           contentType: ContentType.help,
                         );
-                      }
+  }
                     });
                   }
                 },
@@ -639,7 +639,7 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
           Text(
           'GST Amount: $_currencyIcon${_calculateItemGst(index).toStringAsFixed(2)}',
           style: const TextStyle(fontSize: 12),
-        ),
+          ),
       ],
     );
   }
@@ -687,7 +687,7 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
                             _gstinController.clear();
                           }
                         });
-                      },
+                        },
                     ),
                   ],
                 ),

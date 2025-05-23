@@ -40,6 +40,8 @@ import 'package:crm_flutter/app/widgets/dialog/invoice/invoice_edit_dialog.dart'
 import 'package:crm_flutter/app/modules/crm/sales_invoice/pages/sales_invoice_create_page.dart';
 import 'package:crm_flutter/app/widgets/button/crm_icon_button.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/follow_up_card.dart';
+import 'package:crm_flutter/app/data/network/crm/follow_Ups/follow_ups_task/controller/followup_task_controller.dart';
+import 'package:crm_flutter/app/modules/crm/follow_Ups/follow_ups_task/views/followup_add_screen.dart';
 
 enum FollowUpType { task, meeting, call }
 
@@ -348,12 +350,12 @@ class DealDetailScreen extends StatelessWidget {
 
           return ViewScreen(
             itemCount: invoices.length,
-            padding: const EdgeInsets.all(AppPadding.medium),
+        padding: const EdgeInsets.all(AppPadding.medium),
             itemBuilder: (context, index) {
               final invoice = invoices[index];
               print('Building invoice card: ${invoice.id}');
 
-              return InvoiceCard(
+          return InvoiceCard(
                 id: invoice.id,
                 leadTitle: invoice.salesInvoiceNumber,
                 firstName: salesInvoiceController.getCustomerName(
@@ -366,11 +368,11 @@ class DealDetailScreen extends StatelessWidget {
                 dueDate: invoice.dueDate.toString(),
                 pendingAmount: invoice.pendingAmount?.toString(),
                 onDelete: () => _showDeleteInvoiceDialog(
-                  context,
-                  salesInvoiceController,
-                  invoice.id,
-                  dealId,
-                ),
+                      context,
+                      salesInvoiceController,
+                      invoice.id,
+                      dealId,
+                    ),
                 onEdit: () => Get.to(() => SalesInvoiceEditPage(
                   invoice: invoice,
                   dealId: dealId,
@@ -396,6 +398,11 @@ class DealDetailScreen extends StatelessWidget {
   }
 
   Widget _buildFollowUpsTab(String dealId, BuildContext context) {
+    final followUpTaskController = Get.find<FollowUpTaskController>();
+    
+    // Fetch tasks for this deal
+    followUpTaskController.fetchAllTasks(dealId);
+
     return Padding(
       padding: const EdgeInsets.all(AppPadding.medium),
       child: Column(
@@ -449,39 +456,64 @@ class DealDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: 1, // Replace with actual task list length
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                // Example task data - replace with actual data from your API
-                return FollowUpCard(
-                  id: "50ZJkIYriiIho6Qkt5BQjtB",
-                  subject: "hello",
-                  dueDate: "2025-05-23",
-                  priority: "highest",
-                  taskReporter: "27QmTY0BI4nb89DW3lXrly9",
-                  status: "in_progress",
-                  reminder: {
-                    "reminder_date": "2025-05-22",
-                    "reminder_time": "04:04:00"
-                  },
-                  repeat: {
-                    "repeat_type": "weekly",
-                    "repeat_start_date": "2025-05-23",
-                    "repeat_start_time": "00:05:00",
-                  },
-                  createdBy: "raiser2",
-                  createdAt: "2025-05-23T05:47:32.000Z",
-                  onEdit: () {
-                    // TODO: Implement edit
-                  },
-                  onDelete: () {
-                    // TODO: Implement delete
-                  },
+            child: Obx(() {
+              if (followUpTaskController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (followUpTaskController.error.value.isNotEmpty) {
+                return Center(
+                  child: Text(
+                    followUpTaskController.error.value,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                 );
-              },
-            ),
+              }
+
+              final tasks = followUpTaskController.tasks
+                  .where((task) => task.relatedId == dealId)
+                  .toList();
+
+              if (tasks.isEmpty) {
+                return Center(
+                  child: Text(
+                    'No follow-up tasks found',
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                );
+              }
+
+              return ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: tasks.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final task = tasks[index];
+                  return FollowUpCard(
+                    id: task.id,
+                    subject: task.subject,
+                    dueDate: task.dueDate,
+                    priority: task.priority,
+                    taskReporter: task.taskReporter,
+                    status: task.status,
+                    reminder: task.reminder?.toJson(),
+                    repeat: task.repeat?.toJson(),
+                    createdBy: task.createdBy,
+                    createdAt: task.createdAt,
+                    onEdit: () => Get.to(() => FollowUpAddScreen(
+                      dealId: dealId,
+                      section: 'deal',
+                    )),
+                    onDelete: () => _showDeleteFollowUpDialog(
+                      context,
+                      followUpTaskController,
+                      task.id!,
+                      dealId,
+                    ),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
@@ -667,6 +699,27 @@ class DealDetailScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _showDeleteFollowUpDialog(
+    BuildContext context,
+    FollowUpTaskController controller,
+    String taskId,
+    String dealId,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => CrmDeleteDialog(
+        entityType: "follow-up task",
+        onConfirm: () async {
+          final success = await controller.deleteTask(taskId, dealId);
+          if (success) {
+            await controller.fetchAllTasks(dealId);
+          }
+          Get.back();
+        },
+      ),
+    );
+  }
 }
 
 class FollowUpButtons extends StatefulWidget {
@@ -677,7 +730,7 @@ class FollowUpButtons extends StatefulWidget {
 }
 
 class _FollowUpButtonsState extends State<FollowUpButtons> {
-  int activeIndex = 0; // 0 for Task, 1 for Meeting, 2 for Call
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -696,7 +749,13 @@ class _FollowUpButtonsState extends State<FollowUpButtons> {
                 setState(() {
                   activeIndex = 0;
                 });
-                // TODO: Implement task creation
+                final dealId = Get.parameters['id'];
+                if (dealId != null) {
+                  Get.to(() => FollowUpAddScreen(
+                    dealId: dealId,
+                    section: 'deal',
+                  ));
+                }
               },
             ),
           ),

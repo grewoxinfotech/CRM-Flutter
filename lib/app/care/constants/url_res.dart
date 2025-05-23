@@ -37,6 +37,8 @@ class UrlRes {
 
     static const String customers = "$baseURL/customers";
 
+  static const String followupTasks = "$baseURL/followup-tasks";
+
   // headers from api
   static const String contentType = "Content-type";
   static const String applicationJson = "application/json";
