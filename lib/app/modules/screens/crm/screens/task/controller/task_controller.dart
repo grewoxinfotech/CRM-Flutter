@@ -31,11 +31,7 @@ class TaskController extends GetxController {
     super.dispose();
   }
 
-  Future<List> getTasks() async {
-    final data = await taskService.getTasks("/${userService.user.value!.id}");
-    task.assignAll(data.map((e) => TaskModel.fromJson(e)).toList());
-    return data;
-  }
+  Future<List<TaskModel>> getTasks() async => await taskService.getTasks("/${userService.user.value!.id}");
 
   // Future<void> addTask() async {
   //   // final model = TaskModel(

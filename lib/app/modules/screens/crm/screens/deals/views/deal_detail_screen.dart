@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/deal/model/deal_model.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/deals/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/widget/deal_overview_card.dart';
 import 'package:crm_flutter/app/modules/screens/project/file/widget/file_card.dart';
 import 'package:crm_flutter/app/modules/screens/project/invoice/widget/invoice_card.dart';
@@ -8,11 +8,9 @@ import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
-import 'package:crm_flutter/app/widgets/dialogs/crm_delete_dialog.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
-import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,54 +20,11 @@ class DealDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TabBarController tabBarController = Get.put(TabBarController());
-    final DealController dealController = Get.put(DealController());
-
-    final DealModel data = Get.arguments;
+    final DealModel deal = Get.arguments;
 
     List widgets = [
-      DealOverviewCard(
-        color: Colors.blue,
-        id: data.id.toString(),
-        dealTitle: data.dealTitle.toString(),
-        currency: data.currency.toString(),
-        value: data.value.toString(),
-        pipeline: data.pipeline.toString(),
-        stage: data.stage.toString(),
-        status: data.status.toString(),
-        label: data.label.toString(),
-        closedDate: data.closedDate.toString(),
-        firstName: data.firstName.toString(),
-        lastName: data.lastName.toString(),
-        email: data.email.toString(),
-        phone: data.phone.toString(),
-        source: data.source.toString(),
-        companyName: data.companyName.toString(),
-        website: data.website.toString(),
-        address: data.address.toString(),
-        products: data.products.toString(),
-        files: data.files.toString(),
-        assignedTo: data.assignedTo.toString(),
-        clientId: data.clientId.toString(),
-        isWon: data.isWon.toString(),
-        companyId: data.companyId.toString(),
-        contactId: data.contactId.toString(),
-        createdBy: data.createdBy.toString(),
-        updatedBy: data.updatedBy.toString(),
-        createdAt: data.createdAt.toString(),
-        updatedAt: data.updatedAt.toString(),
-        onDelete:
-            () => showDialog(
-              context: context,
-              builder:
-                  (_) => CrmDeleteDialog(
-                    entityType: data.dealTitle.toString(),
-                    onConfirm: () async {
-                      await dealController.deleteDeal(data.id.toString());
-                      Get.back(result: true);
-                    },
-                  ),
-            ),
-      ),
+      DealOverviewCard(deal: deal),
+
       ViewScreen(
         itemCount: 10,
         padding: const EdgeInsets.all(AppPadding.medium),

@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/model/leave_model.dart';
 import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/service/leave_service.dart';
-import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_manamgemant/widgets/leave_request_card.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/widgets/leave_request_Dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,8 +30,7 @@ class LeaveController extends GetxController {
     }
   }
 
-  Future<List<LeaveModel>> getLeaves() async =>
-      await LeaveService.getLeaves();
+  Future<List<LeaveModel>> getLeaves() async => await LeaveService.getLeaves();
 
   void addLeave() {
     showDialog(
@@ -41,7 +40,7 @@ class LeaveController extends GetxController {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            child: LeaveRequestCardDialog(),
+            child: LeaveRequestDialog(),
           ),
     );
   }

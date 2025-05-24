@@ -1,5 +1,7 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/all/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -9,78 +11,47 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class DealOverviewCard extends StatelessWidget {
-  final String? id;
-  final Color? color;
-  final String? dealTitle;
-  final String? currency;
-  final String? value;
-  final String? pipeline;
-  final String? stage;
-  final String? status;
-  final String? label;
-  final String? closedDate;
-  final String? firstName;
-  final String? lastName;
-  final String? email;
-  final String? phone;
-  final String? source;
-  final String? companyName;
-  final String? website;
-  final String? address;
-  final String? products;
-  final String? files;
-  final String? assignedTo;
-  final String? clientId;
-  final String? isWon;
-  final String? companyId;
-  final String? contactId;
-  final String? createdBy;
-  final String? updatedBy;
-  final String? createdAt;
-  final String? updatedAt;
-  final GestureTapCallback? onDelete;
+  final DealModel deal;
   final GestureTapCallback? onEdit;
+  final GestureTapCallback? onDelete;
 
   const DealOverviewCard({
     super.key,
-    this.id,
-    this.color,
-    this.dealTitle,
-    this.currency,
-    this.value,
-    this.pipeline,
-    this.stage,
-    this.status,
-    this.label, // ??
-    this.closedDate, // ?
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.phone,
-    this.source,
-    this.companyName,
-    this.website,
-    this.address,
-    this.files,
-    this.assignedTo,
-    this.clientId,
-    this.isWon,
-    this.companyId,
-    this.contactId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
-    this.products,
-    this.onDelete,
+    required this.deal,
     this.onEdit,
+    this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
-    Color textPrimary = Get.theme.colorScheme.onPrimary;
-    Color textSecondary = Get.theme.colorScheme.onSecondary;
-
+    Color color = primary;
+    final String id = deal.id.toString();
+    final String dealTitle = deal.dealTitle.toString();
+    final String currency = deal.currency.toString();
+    final String value = deal.value.toString();
+    final String pipeline = deal.pipeline.toString();
+    final String stage = deal.stage.toString();
+    final String status = deal.status.toString();
+    final String label = deal.label.toString();
+    final String closedDate = formatDate(deal.closedDate.toString());
+    final String firstName = deal.firstName.toString();
+    final String lastName = deal.lastName.toString();
+    final String email = deal.email.toString();
+    final String phone = deal.phone.toString();
+    final String source = deal.source.toString();
+    final String companyName = deal.companyName.toString();
+    final String website = deal.website.toString();
+    final String address = deal.address.toString();
+    final String products = deal.products!.length.toString();
+    final String files = deal.files!.length.toString();
+    final String assignedTo = deal.assignedTo.toString();
+    final String clientId = deal.clientId.toString();
+    final String companyId = deal.companyId.toString();
+    final String contactId = deal.contactId.toString();
+    final String createdBy = deal.createdBy.toString();
+    final String updatedBy = deal.updatedBy.toString();
+    final String createdAt = formatDate(deal.createdAt.toString());
+    final String updatedAt = formatDate(deal.updatedAt.toString());
     Widget divider = Divider(
       height: AppPadding.small,
       color: Get.theme.dividerColor,

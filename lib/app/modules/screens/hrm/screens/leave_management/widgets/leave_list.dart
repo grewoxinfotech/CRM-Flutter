@@ -1,7 +1,7 @@
 import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/model/leave_model.dart';
 import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/service/leave_service.dart';
-import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_manamgemant/views/leave_screen.dart';
-import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_manamgemant/widgets/leave_card.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/views/leave_screen.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/widgets/leave_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';

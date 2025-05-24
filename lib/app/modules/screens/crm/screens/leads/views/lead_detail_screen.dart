@@ -2,7 +2,6 @@ import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/leads/widgets/lead_overview_card.dart';
-import 'package:crm_flutter/app/modules/screens/project/file/widget/file_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
@@ -14,11 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeadDetailScreen extends StatelessWidget {
-  final LeadModel lead;
-  const LeadDetailScreen({Key? key, required this.lead}) : super(key: key);
+  const LeadDetailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final lead = Get.arguments as LeadModel;
     final tabBarController = Get.put(TabBarController());
 
     List<Widget> widgets = [

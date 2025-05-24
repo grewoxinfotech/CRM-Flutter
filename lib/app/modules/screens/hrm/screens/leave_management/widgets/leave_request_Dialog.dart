@@ -11,14 +11,14 @@ import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LeaveRequestCardDialog extends StatelessWidget {
+class LeaveRequestDialog extends StatelessWidget {
   final TextEditingController? leaveType;
   final TextEditingController? starDate;
   final TextEditingController? endDate;
   final TextEditingController? reason;
   final bool? halfDay;
 
-  LeaveRequestCardDialog({
+  LeaveRequestDialog({
     super.key,
     this.leaveType,
     this.starDate,

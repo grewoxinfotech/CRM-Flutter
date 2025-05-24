@@ -1,46 +1,46 @@
 class ContactModel {
-  final String id;
-  final String contactOwner;
-  final String firstName;
-  final String lastName;
-  final String companyName;
-  final String email;
-  final String phoneCode;
-  final String phone;
-  final String contactSource;
-  final String description;
-  final String address;
-  final String city;
-  final String state;
-  final String country;
+  final String? id;
+  final String? contactOwner;
+  final String? firstName;
+  final String? lastName;
+  final String? companyName;
+  final String? email;
+  final String? phoneCode;
+  final String? phone;
+  final String? contactSource;
+  final String? description;
+  final String? address;
+  final String? city;
+  final String? state;
+  final String? country;
   final String? relatedId;
-  final String clientId;
-  final String createdBy;
+  final String? clientId;
+  final String? createdBy;
   final String? updatedBy;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   ContactModel({
-    required this.id,
-    required this.contactOwner,
-    required this.firstName,
-    required this.lastName,
-    required this.companyName,
-    required this.email,
-    required this.phoneCode,
-    required this.phone,
-    required this.contactSource,
-    required this.description,
-    required this.address,
-    required this.city,
-    required this.state,
-    required this.country,
+    this.id,
+    this.contactOwner,
+    this.firstName,
+    this.lastName,
+    this.companyName,
+    this.email,
+    this.phoneCode,
+    this.phone,
+    this.contactSource,
+    this.description,
+    this.address,
+    this.city,
+    this.state,
+    this.country,
     this.relatedId,
-    required this.clientId,
-    required this.createdBy,
+    this.clientId,
+    this.createdBy,
     this.updatedBy,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
@@ -88,8 +88,8 @@ class ContactModel {
       'client_id': clientId,
       'created_by': createdBy,
       'updated_by': updatedBy,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt!.toIso8601String(),
+      'updatedAt': updatedAt!.toIso8601String(),
     };
   }
 }

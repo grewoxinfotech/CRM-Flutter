@@ -5,8 +5,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/data/network/all/user_managemant/user_model.dart';
-import 'package:crm_flutter/app/modules/auth/views/login/login_screen.dart';
-import 'package:crm_flutter/app/modules/dashboard/views/dashboard_screen.dart';
+import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -35,8 +34,7 @@ class AuthService extends GetConnect {
         await SecureStorage.saveRememberMe(true);
         await SecureStorage.saveLoggedIn(true);
 
-        Get.offAll(DashboardScreen());
-
+        Get.offAllNamed(AppRoutes.dashboard);
 
         CrmSnackBar.showAwesomeSnackbar(
           title: "Welcome!",
@@ -61,6 +59,6 @@ class AuthService extends GetConnect {
 
   Future<void> logout() async {
     await SecureStorage.clearAll();
-    Get.offAll(LoginScreen());
+    Get.offAllNamed(AppRoutes.login);
   }
 }

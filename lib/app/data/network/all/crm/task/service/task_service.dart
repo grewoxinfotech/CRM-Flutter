@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crm_flutter/app/care/constants/url_res.dart';
+import 'package:crm_flutter/app/data/network/all/crm/task/model/task_model.dart';
 import 'package:http/http.dart' as http;
 
 class TaskService {
@@ -11,16 +12,20 @@ class TaskService {
   }
 
   /// 1. Get all tasks by ID
-  Future<List> getTasks(String id) async {
+  Future<List<TaskModel>> getTasks(String id) async {
     final response = await http.get(
       Uri.parse("$url/$id"),
       headers: await headers(),
     );
-    final data = jsonDecode(response.body);
-    if (response.statusCode == 200 && data["data"] != null) {
-      return data["data"] ?? [];
+    final jsonData = jsonDecode(response.body);
+    final List<dynamic> data = jsonData['data'];
+    if (response.statusCode == 200 && jsonData["success"] == true) {
+      print("Task Service (data) : ${jsonData['data']}");
+      return data.map((e) => TaskModel.fromJson(e)).toList();
     } else {
-      return [];
+      print("Task Service (error) : ${jsonData['message']}");
+      print("Task Service (status code) : ${response.statusCode}");
+      throw Exception('Failed to load Task data: ${response.statusCode}');
     }
   }
 

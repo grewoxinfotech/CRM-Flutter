@@ -2,8 +2,8 @@ import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/screens/hrm/screens/attendance/controllers/attendance_controller.dart';
-import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_manamgemant/controllers/leave_controller.dart';
-import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_manamgemant/views/leave_list.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/controllers/leave_controller.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/widgets/leave_list.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
@@ -125,7 +125,7 @@ class AttendanceScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
-            color: Get.theme.colorScheme.surface,
+            color: white,
           ),
         ),
       ),

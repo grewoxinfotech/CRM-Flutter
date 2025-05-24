@@ -1,55 +1,16 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/all/crm/task/model/task_model.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
+import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TaskCard extends StatelessWidget {
-  final String? id;
-  final String? relatedId;
-  final String? taskName;
-  final String? category;
-  final String? project;
-  final String? lead;
-  final String? file;
-  final String? startDate;
-  final String? dueDate;
-  final String? assignTo;
-  final String? status;
-  final String? priority;
-  final String? description;
-  final String? reminderDate;
-  final String? clientId;
-  final String? taskReporter;
-  final String? createdBy;
-  final String? updatedBy;
-  final GestureTapCallback? onTap;
+  final TaskModel task;
   final GestureTapCallback? onEdit;
   final GestureTapCallback? onDelete;
 
-  const TaskCard({
-    super.key,
-    this.id,
-    this.relatedId,
-    this.taskName,
-    this.category,
-    this.project,
-    this.lead,
-    this.file,
-    this.startDate,
-    this.dueDate,
-    this.assignTo,
-    this.status,
-    this.priority,
-    this.description,
-    this.reminderDate,
-    this.clientId,
-    this.taskReporter,
-    this.createdBy,
-    this.updatedBy,
-    this.onTap,
-    this.onEdit,
-    this.onDelete,
-  });
+  const TaskCard({super.key, required this.task, this.onEdit, this.onDelete});
 
   Color getPriorityColor(String p) {
     switch (p.toLowerCase()) {
@@ -79,11 +40,24 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color textPrimary = Get.theme.colorScheme.onPrimary;
-    Color textSecondary = Get.theme.colorScheme.onSecondary;
+    final String id = task.id.toString();
+    final String relatedId = task.relatedId.toString();
+    final String taskName = task.taskName.toString();
+    final String file = task.file.toString();
+    final String startDate = formatDate(task.startDate.toString());
+    final String dueDate = formatDate(task.dueDate.toString());
+    final String status = task.status.toString();
+    final String priority = task.priority.toString();
+    final String description = task.description.toString();
+    final String reminderDate = formatDate(task.reminderDate.toString());
+    final String clientId = task.clientId.toString();
+    final String taskReporter = task.taskReporter.toString();
+    final String createdBy = task.createdBy.toString();
+    final String updatedBy = task.updatedBy.toString();
+    final String createdAt = formatDate(task.createdAt.toString());
+    final String updatedAt = formatDate(task.updatedAt.toString());
 
     return GestureDetector(
-      onTap: onTap,
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.small),
         child: Column(

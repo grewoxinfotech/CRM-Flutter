@@ -1,7 +1,6 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
-import 'package:crm_flutter/app/modules/auth/views/login/login_screen.dart';
-import 'package:crm_flutter/app/modules/dashboard/views/dashboard_screen.dart';
+import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,9 +32,9 @@ class SplashController extends GetxController {
     String? token = await SecureStorage.getToken();
 
     if (isLogin == true && rememberMe && token != null && token.isNotEmpty) {
-      Get.offAll(() => DashboardScreen());
+      Get.offAllNamed(AppRoutes.dashboard);
     } else {
-      Get.offAll(() => LoginScreen());
+      Get.offAllNamed(AppRoutes.login);
     }
   }
 }

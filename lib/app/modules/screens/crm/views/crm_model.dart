@@ -4,20 +4,32 @@ import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_scr
 import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/task/views/task_screen.dart';
 import 'package:crm_flutter/app/modules/screens/sales/screens/customer/views/customer_screen.dart';
-import 'package:crm_flutter/app/test_screen.dart';
+import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class CrmModel {
   String? title;
   Widget? widget;
+  String? appRoutes;
   Color? color;
   IconData? iconData;
 
-  CrmModel({required this.title, this.color, this.widget, this.iconData});
+  CrmModel({
+    required this.title,
+    this.color,
+    this.widget,
+    this.appRoutes,
+    this.iconData,
+  });
 
   static List<CrmModel> getCrmWidgets() {
     return [
-      CrmModel(color: Color(0xff632100), title: "Leads", widget: LeadScreen()),
+      CrmModel(
+        color: Color(0xff632100),
+        title: "Leads",
+        widget: LeadScreen(),
+        appRoutes: AppRoutes.lead,
+      ),
       CrmModel(color: Color(0xff234567), title: "Deals", widget: DealScreen()),
       CrmModel(color: Color(0xff098765), title: "Task", widget: TaskScreen()),
       CrmModel(

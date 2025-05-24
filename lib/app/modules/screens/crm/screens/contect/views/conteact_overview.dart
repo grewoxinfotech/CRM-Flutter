@@ -3,11 +3,11 @@ import 'package:crm_flutter/app/data/network/all/crm/contact/model/contact_model
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ContactOverviewScreen extends StatelessWidget {
-  final ContactModel contact;
 
-  const ContactOverviewScreen({super.key, required this.contact});
+  const ContactOverviewScreen({super.key});
 
   Widget _buildInfoTile(String label, String? value, {IconData? icon}) {
     return ListTile(
@@ -19,6 +19,7 @@ class ContactOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final contact = Get.arguments as ContactModel;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Contact Overview"),
@@ -37,7 +38,7 @@ class ContactOverviewScreen extends StatelessWidget {
                   radius: 40,
                   backgroundColor: Colors.indigo,
                   child: Text(
-                    contact.firstName.substring(0, 1).toUpperCase(),
+                    contact.firstName!.substring(0, 1).toUpperCase(),
                     style: const TextStyle(fontSize: 24, color: Colors.white),
                   ),
                 ),

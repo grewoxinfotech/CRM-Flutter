@@ -2,7 +2,7 @@ import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/lead/model/lead_model.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_detail_screen.dart';
+import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
@@ -10,11 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeadCard extends StatelessWidget {
-  final GestureTapCallback? onTap;
   final LeadModel lead;
   final Color? color;
 
-  const LeadCard({super.key, required this.lead,this.onTap, this.color});
+  const LeadCard({super.key, required this.lead, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +105,7 @@ class LeadCard extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => Get.toNamed(AppRoutes.leadDetail, arguments: lead ),
       child: CrmCard(
         margin: EdgeInsets.zero,
         color: surface,
