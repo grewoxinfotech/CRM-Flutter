@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/task/model/task_model.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/task/controller/task_controller.dart';
@@ -28,19 +29,17 @@ class TaskList extends StatelessWidget {
             child: SizedBox(
               width: 250,
               child: Text(
-                'Server Error : \n${snapshot.error}',
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
+                snapshot.error.toString(),
+                style: TextStyle(color: error, fontWeight: FontWeight.bold),
               ),
             ),
           );
         } else if (snapshot.hasData) {
           final tasks = snapshot.data!;
           if (tasks.isEmpty) {
-            return const Center(child: Text("No Leaves Found"));
+            return const Center(child: Text("No Task Found"));
           } else {
+            print("ahahahahahahahahahahahahaahhahahahahahahaahaha  : $tasks");
             return ViewScreen(
               padding:
                   padding ??

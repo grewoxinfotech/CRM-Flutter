@@ -2,16 +2,11 @@ import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dar
 import 'package:crm_flutter/app/data/network/all/user_managemant/user_model.dart';
 import 'package:get/get.dart';
 
-class UserService extends GetConnect {
-  Rx<UserModel?> user = Rx<UserModel?>(null);
+class UserService extends GetxService {
+  final Rx<UserModel?> user = Rx<UserModel?>(null);
 
-  Future<void> getUserData() async {
+  Future<UserService> init() async {
     user.value = await SecureStorage.getUserData();
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    getUserData();
+    return this;
   }
 }

@@ -40,20 +40,20 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String id = task.id.toString();
-    final String relatedId = task.relatedId.toString();
-    final String taskName = task.taskName.toString();
-    final String file = task.file.toString();
+    final String id = task.id;
+    final String relatedId = task.relatedId;
+    final String taskName = task.taskName;
+    final String file = task.file;
     final String startDate = formatDate(task.startDate.toString());
     final String dueDate = formatDate(task.dueDate.toString());
-    final String status = task.status.toString();
-    final String priority = task.priority.toString();
-    final String description = task.description.toString();
+    final String status = task.status;
+    final String priority = task.priority;
+    final String description = task.description;
     final String reminderDate = formatDate(task.reminderDate.toString());
-    final String clientId = task.clientId.toString();
-    final String taskReporter = task.taskReporter.toString();
-    final String createdBy = task.createdBy.toString();
-    final String updatedBy = task.updatedBy.toString();
+    final String clientId = task.clientId;
+    final String taskReporter = task.taskReporter;
+    final String createdBy = formatDate(task.createdBy.toString());
+    final String updatedBy = formatDate(task.updatedBy.toString());
     final String createdAt = formatDate(task.createdAt.toString());
     final String updatedAt = formatDate(task.updatedAt.toString());
 
@@ -128,13 +128,13 @@ class TaskCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: getStatusColor(status!).withAlpha(50),
+                    color: getStatusColor(status).withAlpha(50),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Text(
-                    status!,
+                    status,
                     style: TextStyle(
-                      color: getStatusColor(status!),
+                      color: getStatusColor(status),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -143,13 +143,13 @@ class TaskCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: getPriorityColor(priority!).withAlpha(50),
+                    color: getPriorityColor(priority).withAlpha(50),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Text(
-                    priority!,
+                    priority,
                     style: TextStyle(
-                      color: getPriorityColor(priority!),
+                      color: getPriorityColor(priority),
                       fontWeight: FontWeight.w600,
                     ),
                   ),

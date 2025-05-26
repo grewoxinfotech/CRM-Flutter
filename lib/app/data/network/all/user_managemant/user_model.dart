@@ -92,9 +92,9 @@ class UserModel {
     this.updatedBy,
     required this.createdAt,
     required this.updatedAt,
+    required this.currency,
     this.storageLimit,
     this.storageUsed,
-    required this.currency,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -117,14 +117,14 @@ class UserModel {
       zipcode: json['zipcode']?.toString(),
       website: json['website']?.toString(),
       gender: json['gender']?.toString(),
-      joiningDate: json['joiningDate'] != null ? DateTime.parse(json['joiningDate']) : null,
-      leaveDate: json['leaveDate'] != null ? DateTime.parse(json['leaveDate']) : null,
+      joiningDate: json['joiningDate'] != null ? DateTime.tryParse(json['joiningDate']) : null,
+      leaveDate: json['leaveDate'] != null ? DateTime.tryParse(json['leaveDate']) : null,
       branch: json['branch']?.toString(),
       department: json['department']?.toString(),
       designation: json['designation']?.toString(),
-      salary: json['salary'] != null ? double.parse(json['salary'].toString()) : null,
+      salary: json['salary'] != null ? double.tryParse(json['salary'].toString()) : null,
       accountHolder: json['accountholder']?.toString(),
-      accountNumber: json['accountnumber'] != null ? int.parse(json['accountnumber'].toString()) : null,
+      accountNumber: json['accountnumber'] != null ? int.tryParse(json['accountnumber'].toString()) : null,
       bankName: json['bankname']?.toString(),
       ifsc: json['ifsc']?.toString(),
       gstIn: json['gstIn']?.toString(),
@@ -138,13 +138,19 @@ class UserModel {
       documents: json['documents']?.toString(),
       conversations: json['conversations']?.toString(),
       resetPasswordOTP: json['resetPasswordOTP']?.toString(),
-      resetPasswordOTPExpiry: json['resetPasswordOTPExpiry'] != null ? DateTime.parse(json['resetPasswordOTPExpiry']) : null,
+      resetPasswordOTPExpiry: json['resetPasswordOTPExpiry'] != null
+          ? DateTime.tryParse(json['resetPasswordOTPExpiry'])
+          : null,
       createdBy: json['created_by']?.toString(),
       updatedBy: json['updated_by']?.toString(),
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      storageLimit: json['storage_limit'] != null ? int.parse(json['storage_limit'].toString()) : null,
-      storageUsed: json['storage_used'] != null ? int.parse(json['storage_used'].toString()) : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(), // default fallback
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'])
+          : DateTime.now(),
+      storageLimit: json['storage_limit'] != null ? int.tryParse(json['storage_limit'].toString()) : null,
+      storageUsed: json['storage_used'] != null ? int.tryParse(json['storage_used'].toString()) : null,
       currency: json['currency']?.toString() ?? 'USD',
     );
   }

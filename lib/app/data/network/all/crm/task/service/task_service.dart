@@ -12,15 +12,15 @@ class TaskService {
   }
 
   /// 1. Get all tasks by ID
-  Future<List<TaskModel>> getTasks(String id) async {
+  Future<List<TaskModel>> getTasks() async {
     final response = await http.get(
-      Uri.parse("$url/$id"),
+      Uri.parse("$url/27QmTY0BI4nb89DW3lXrly9"),
       headers: await headers(),
     );
     final jsonData = jsonDecode(response.body);
     final List<dynamic> data = jsonData['data'];
     if (response.statusCode == 200 && jsonData["success"] == true) {
-      print("Task Service (data) : ${jsonData['data']}");
+      print(".......................................................Task Service (data) : ${data}");
       return data.map((e) => TaskModel.fromJson(e)).toList();
     } else {
       print("Task Service (error) : ${jsonData['message']}");

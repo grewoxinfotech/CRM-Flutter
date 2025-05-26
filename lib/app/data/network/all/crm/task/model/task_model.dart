@@ -5,7 +5,7 @@ class TaskModel {
   final String file;
   final DateTime startDate;
   final DateTime dueDate;
-  final List<String> assignedUsers;
+  final AssignTo assignTo;
   final String status;
   final String priority;
   final String description;
@@ -13,7 +13,7 @@ class TaskModel {
   final String clientId;
   final String taskReporter;
   final String createdBy;
-  final String? updatedBy;
+  final String updatedBy;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -24,7 +24,7 @@ class TaskModel {
     required this.file,
     required this.startDate,
     required this.dueDate,
-    required this.assignedUsers,
+    required this.assignTo,
     required this.status,
     required this.priority,
     required this.description,
@@ -32,7 +32,7 @@ class TaskModel {
     required this.clientId,
     required this.taskReporter,
     required this.createdBy,
-    this.updatedBy,
+    required this.updatedBy,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -45,7 +45,7 @@ class TaskModel {
       file: json['file'] ?? '',
       startDate: DateTime.parse(json['startDate']),
       dueDate: DateTime.parse(json['dueDate']),
-      assignedUsers: List<String>.from(json['assignTo']['assignedusers'] ?? []),
+      assignTo: AssignTo.fromJson(json['assignTo']),
       status: json['status'] ?? '',
       priority: json['priority'] ?? '',
       description: json['description'] ?? '',
@@ -53,7 +53,7 @@ class TaskModel {
       clientId: json['client_id'] ?? '',
       taskReporter: json['task_reporter'] ?? '',
       createdBy: json['created_by'] ?? '',
-      updatedBy: json['updated_by'],
+      updatedBy: json['updated_by'] ?? '',
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
@@ -67,9 +67,7 @@ class TaskModel {
       'file': file,
       'startDate': startDate.toIso8601String(),
       'dueDate': dueDate.toIso8601String(),
-      'assignTo': {
-        'assignedusers': assignedUsers,
-      },
+      'assignTo': assignTo.toJson(),
       'status': status,
       'priority': priority,
       'description': description,
@@ -80,6 +78,24 @@ class TaskModel {
       'updated_by': updatedBy,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+    };
+  }
+}
+
+class AssignTo {
+  final List<String> assignedUsers;
+
+  AssignTo({required this.assignedUsers});
+
+  factory AssignTo.fromJson(Map<String, dynamic> json) {
+    return AssignTo(
+      assignedUsers: List<String>.from(json['assignedusers'] ?? []),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'assignedusers': assignedUsers,
     };
   }
 }

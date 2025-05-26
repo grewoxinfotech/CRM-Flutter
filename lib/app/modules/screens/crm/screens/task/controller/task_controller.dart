@@ -1,14 +1,10 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/data/network/all/crm/task/model/task_model.dart';
 import 'package:crm_flutter/app/data/network/all/crm/task/service/task_service.dart';
-import 'package:crm_flutter/app/data/network/all/user_managemant/user_service.dart';
-import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class TaskController extends GetxController {
   final RxList<TaskModel> task = <TaskModel>[].obs;
-  final UserService userService = Get.put(UserService());
   final TaskService taskService = TaskService();
 
   final formKey = GlobalKey<FormState>();
@@ -20,18 +16,9 @@ class TaskController extends GetxController {
   final descriptionController = TextEditingController();
 
 
-  @override
-  void dispose() {
-    taskNameController.dispose();
-    categoryController.dispose();
-    projectController.dispose();
-    leadController.dispose();
-    fileController.dispose();
-    descriptionController.dispose();
-    super.dispose();
+  Future<List<TaskModel>> getTasks() async {
+    return await taskService.getTasks();
   }
-
-  Future<List<TaskModel>> getTasks() async => await taskService.getTasks("/${userService.user.value!.id}");
 
   // Future<void> addTask() async {
   //   // final model = TaskModel(
@@ -79,31 +66,43 @@ class TaskController extends GetxController {
   //   }
   // }
 
-  Future<void> deleteTask(String id) async {
-    final response = await taskService.deleteTask(id);
+  // Future<void> deleteTask(String id) async {
+  //   final response = await taskService.deleteTask(id);
+  //
+  //   if (response.statusCode == 200 || response.statusCode == 204) {
+  //     task.removeWhere((t) => t.id == id);
+  //     CrmSnackBar.showAwesomeSnackbar(
+  //       title: "Deleted",
+  //       message: getMessage(response),
+  //       contentType: ContentType.success,
+  //     );
+  //   } else {
+  //     CrmSnackBar.showAwesomeSnackbar(
+  //       title: "Error",
+  //       message: getMessage(response),
+  //       contentType: ContentType.failure,
+  //     );
+  //   }
+  // }
+  //
+  // String getMessage(dynamic response) {
+  //   try {
+  //     final body = response.body;
+  //     if (body is String) return body;
+  //     if (body is Map<String, dynamic>) return body['message'] ?? 'No message';
+  //   } catch (_) {}
+  //   return "Something went wrong";
+  // }
 
-    if (response.statusCode == 200 || response.statusCode == 204) {
-      task.removeWhere((t) => t.id == id);
-      CrmSnackBar.showAwesomeSnackbar(
-        title: "Deleted",
-        message: getMessage(response),
-        contentType: ContentType.success,
-      );
-    } else {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: "Error",
-        message: getMessage(response),
-        contentType: ContentType.failure,
-      );
-    }
+  @override
+  void dispose() {
+    taskNameController.dispose();
+    categoryController.dispose();
+    projectController.dispose();
+    leadController.dispose();
+    fileController.dispose();
+    descriptionController.dispose();
+    super.dispose();
   }
 
-  String getMessage(dynamic response) {
-    try {
-      final body = response.body;
-      if (body is String) return body;
-      if (body is Map<String, dynamic>) return body['message'] ?? 'No message';
-    } catch (_) {}
-    return "Something went wrong";
-  }
 }

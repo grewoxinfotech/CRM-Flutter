@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -11,24 +10,27 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService extends GetConnect {
-  final String url = UrlRes.login;
-  final String i = UrlRes.contentType;
-  final String j = UrlRes.applicationJson;
+  final String loginUrl = UrlRes.login;
+  final String contentTypeKey = UrlRes.contentType;
+  final String contentTypeValue = UrlRes.applicationJson;
 
+  /// Logs in the user with email and password.
   Future<void> login(String email, String password) async {
     final loginData = {"login": email, "password": password};
 
     try {
       final response = await http.post(
-        Uri.parse(url),
-        headers: {i: j},
+        Uri.parse(loginUrl),
+        headers: {contentTypeKey: contentTypeValue},
         body: jsonEncode(loginData),
       );
 
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200 && data["success"] == true) {
-        final token = data['data']['token'];
-        final user = UserModel.fromJson(data['data']['user']);
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && responseData["success"] == true) {
+        final token = responseData['data']['token'];
+        final user = UserModel.fromJson(responseData['data']['user']);
+
         await SecureStorage.saveToken(token);
         await SecureStorage.saveUserData(user);
         await SecureStorage.saveRememberMe(true);
@@ -44,7 +46,7 @@ class AuthService extends GetConnect {
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Login Failed",
-          message: data["message"] ?? "Unknown error",
+          message: responseData["message"] ?? "Unknown error occurred",
           contentType: ContentType.warning,
         );
       }
@@ -57,6 +59,7 @@ class AuthService extends GetConnect {
     }
   }
 
+  /// Logs out the current user and clears storage.
   Future<void> logout() async {
     await SecureStorage.clearAll();
     Get.offAllNamed(AppRoutes.login);

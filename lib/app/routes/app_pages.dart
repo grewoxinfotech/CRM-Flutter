@@ -7,7 +7,7 @@ import 'package:crm_flutter/app/modules/screens/crm/screens/company/binding/comp
 import 'package:crm_flutter/app/modules/screens/crm/screens/company/views/company_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/contect/binding/contact_binding.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/contect/views/contact_screen.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/contect/views/conteact_overview.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/contect/widgets/conteact_overview.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/binding/deal_binding.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_add_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_detail_screen.dart';

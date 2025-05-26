@@ -18,13 +18,16 @@ class ContactCard extends StatelessWidget {
       onTap: () => Get.toNamed(AppRoutes.contactOverView, arguments: contact),
       child: CrmCard(
         child: ListTile(
-          leading: CircleAvatar(
-            child: Text(
-              contact.firstName!.substring(0, 1).toUpperCase(),
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+          leading: Hero(
+            tag: "contactLogo",
+            child: CircleAvatar(
+              child: Text(
+                contact.firstName!.substring(0, 1).toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

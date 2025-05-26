@@ -15,6 +15,7 @@ class CrmTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final int? maxLines;
   final bool enabled;
+  final EdgeInsetsGeometry? contentPadding;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;
@@ -26,6 +27,7 @@ class CrmTextField extends StatelessWidget {
     this.title = "",
     this.validator,
     this.hintText,
+    this.contentPadding,
     this.obscureText = false,
     this.suffixIcon,
     this.prefixIcon,
@@ -89,7 +91,7 @@ class CrmTextField extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.all(AppPadding.small),
+            contentPadding: contentPadding ?? const EdgeInsets.all(AppPadding.small),
             filled: true,
             fillColor:
                 enabled
