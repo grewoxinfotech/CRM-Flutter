@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -196,22 +195,6 @@ class InvoiceCard extends StatelessWidget {
             Divider(height: AppPadding.medium, color: Get.theme.dividerColor),
 
             // Edit / Delete buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CrmIc(
-                  iconPath: Ic.edit,
-                  onTap: onEdit,
-                  color: success,
-                ),
-                AppSpacing.horizontalMedium,
-                CrmIc(
-                  iconPath: Ic.delete,
-                  onTap: onDelete,
-                  color: error,
-                ),
-              ],
-            ),
           ],
         ),
       ),

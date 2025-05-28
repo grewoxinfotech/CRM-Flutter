@@ -5,7 +5,7 @@ import 'package:crm_flutter/app/modules/screens/job/views/job_screen.dart';
 import 'package:crm_flutter/app/modules/screens/purchase/views/purchase_screen.dart';
 import 'package:crm_flutter/app/modules/screens/sales/views/sales_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class DrawerModel {
   String? title;
@@ -14,56 +14,56 @@ class DrawerModel {
 
   DrawerModel({this.title, this.iconData, this.widget});
 
-  static List<DrawerModel> getDrowerItems() {
+  static List<DrawerModel> getDrawerItems() {
     return [
       DrawerModel(
         title: "DashBoard",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.home,
         widget: DashboardScreen(),
       ),
       DrawerModel(
         title: "Crm",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.users,
         widget: CrmScreen(),
       ),
       DrawerModel(
         title: "Sales",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.shoppingCart,
         widget: SalesScreen(),
       ),
       DrawerModel(
         title: "Purchase",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.shoppingBag,
         widget: PurchaseScreen(),
       ),
       DrawerModel(
         title: "User Management",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.users,
         widget: CrmScreen(),
       ),
       DrawerModel(
         title: "Communication",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.messageSquare,
         widget: CrmScreen(),
       ),
       DrawerModel(
         title: "Hrm",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.users,
         widget: HrmScreen(),
       ),
       DrawerModel(
         title: "Job",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.briefcase,
         widget: JobScreen(),
       ),
       DrawerModel(
         title: "Setting",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.settings,
         widget: CrmScreen(),
       ),
       DrawerModel(
         title: "Support",
-        iconData: FontAwesomeIcons.at,
+        iconData: LucideIcons.helpCircle,
         widget: CrmScreen(),
       ),
     ];

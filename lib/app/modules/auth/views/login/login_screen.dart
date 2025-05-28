@@ -1,4 +1,3 @@
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/utils/validation.dart';
 import 'package:crm_flutter/app/modules/auth/controllers/auth_controller.dart';
 import 'package:crm_flutter/app/modules/auth/views/auth_background/auth_background.dart';
@@ -9,6 +8,7 @@ import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dar
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -59,11 +59,9 @@ class LoginScreen extends StatelessWidget {
                                   width: 50,
                                   alignment: Alignment.center,
                                   child: CrmIc(
-                                    iconPath: Ic.viewPassword,
+                                    icon: LucideIcons.view,
                                     onTap:
                                         authController.togglePasswordVisibility,
-                                    height: 24,
-                                    width: 24,
                                     color:
                                         authController.obscurePassword.value
                                             ? Get.theme.colorScheme.outline

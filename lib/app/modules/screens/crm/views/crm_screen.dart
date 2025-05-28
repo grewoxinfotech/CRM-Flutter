@@ -1,15 +1,7 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/functions/widget/function_card.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/company/widgets/company_list.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/contect/widgets/contact_list.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/custom_form/widgets/custom_form_list.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/deals/widget/deal_list.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/leads/widgets/lead_list.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/task/widget/task_list.dart';
 import 'package:crm_flutter/app/modules/screens/crm/views/crm_model.dart';
-import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_headline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,15 +11,6 @@ class CrmScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<CrmModel> items = CrmModel.getCrmWidgets();
-   List<Widget> widgets = [
-
-     LeadList(itemCount: 1),
-     DealList(itemCount: 1),
-     TaskList(itemCount: 1),
-     CustomFormList(itemCount: 1),
-     ContactList(itemCount: 1),
-     CompanyList(itemCount: 1,)
-   ];
     return Scaffold(
       appBar: AppBar(leading: CrmBackButton(), title: Text("Crm")),
       body: SingleChildScrollView(
@@ -53,7 +36,6 @@ class CrmScreen extends StatelessWidget {
                     icon: items[i].iconData,
                   ),
             ),
-            ViewScreen(itemCount: widgets.length, physics: NeverScrollableScrollPhysics(),itemBuilder: (context , i) => widgets[i])
           ],
         ),
       ),

@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/leads/controllers/pipeline_controller.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
@@ -10,6 +9,7 @@ import 'package:crm_flutter/app/widgets/common/inputs/crm_dropdown_field.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class LeaveRequestDialog extends StatelessWidget {
   final TextEditingController? leaveType;
@@ -54,7 +54,7 @@ class LeaveRequestDialog extends StatelessWidget {
           isRequired: true,
           hintText: "Leave Type",
           suffixIcon: CrmIc(
-            iconPath: Ic.down,
+            icon: LucideIcons.download,
             color: Get.theme.colorScheme.primary,
           ),
         ),
@@ -85,8 +85,8 @@ class LeaveRequestDialog extends StatelessWidget {
                 isRequired: true,
                 hintText: "Start",
                 suffixIcon: CrmIc(
-                  iconPath: Ic.calendar,
-                  width: 16,
+                  icon: LucideIcons.calendar,
+                  size: 16,
                   color: Get.theme.colorScheme.primary,
                 ),
               ),
@@ -117,8 +117,8 @@ class LeaveRequestDialog extends StatelessWidget {
                 isRequired: true,
                 hintText: "End",
                 suffixIcon: CrmIc(
-                  iconPath: Ic.calendar,
-                  width: 16,
+                  icon: LucideIcons.calendar,
+                  size: 16,
                   color: Get.theme.colorScheme.primary,
                 ),
               ),
@@ -130,12 +130,6 @@ class LeaveRequestDialog extends StatelessWidget {
       SizedBox(),
       Row(
         children: [
-          CrmIc(
-            iconPath:
-                (halfDay == true) ? Ic.checkboxSelected : Ic.checkboxUnselected,
-            width: 16,
-            onTap: () {},
-          ),
           AppSpacing.horizontalSmall,
           Text(
             "Half Day",

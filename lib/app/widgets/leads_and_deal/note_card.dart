@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -127,21 +126,6 @@ class NoteCard extends StatelessWidget {
                 ),
 
                 // Action Buttons
-                Row(
-                  children: [
-                    CrmIc(
-                      iconPath: Ic.edit,
-                      color: success,
-                      onTap: onEdit,
-                    ),
-                    AppSpacing.horizontalMedium,
-                    CrmIc(
-                      iconPath: Ic.delete,
-                      color: error,
-                      onTap: onDelete,
-                    ),
-                  ],
-                ),
               ],
             ),
           ],

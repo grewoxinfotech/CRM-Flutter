@@ -1,8 +1,8 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -46,36 +46,37 @@ class CrmTabBar extends StatelessWidget implements PreferredSizeWidget {
                 onTap: () => tabBarController.changeTab(index),
                 child: Obx(
                   () => AnimatedContainer(
-                    duration: const Duration(milliseconds: 100),
+                    duration: const Duration(milliseconds: 200),
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppPadding.small,
+                      vertical: AppPadding.small / 2,
                     ),
                     decoration: BoxDecoration(
                       color:
                           tabBarController.selectedIndex.value == index
-                              ? Get.theme.colorScheme.primary
-                              : Colors.transparent,
+                              ? primary.withAlpha(30)
+                              : transparent,
                       borderRadius: BorderRadius.circular(AppRadius.medium - 5),
                     ),
                     child: Row(
                       children: [
-                        CrmIc(
-                          iconPath: items[index].iconPath,
-                          width: 12,
+                        Icon(
+                          items[index].iconPath,
+                          size: 14,
                           color:
                               tabBarController.selectedIndex.value == index
-                                  ? Get.theme.colorScheme.surface
-                                  : Get.theme.colorScheme.primary,
+                                  ? primary
+                                  : textSecondary,
                         ),
                         AppSpacing.horizontalSmall,
                         Text(
                           items[index].label,
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 12,
                             color:
                                 tabBarController.selectedIndex.value == index
-                                    ? Get.theme.colorScheme.surface
-                                    : Get.theme.colorScheme.primary,
+                                    ? primary
+                                    : textSecondary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -92,5 +93,5 @@ class CrmTabBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight / 2);
+  Size get preferredSize => const Size.fromHeight(25);
 }

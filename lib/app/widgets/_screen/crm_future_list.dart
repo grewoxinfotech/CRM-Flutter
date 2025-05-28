@@ -38,9 +38,11 @@ class CrmFutureList<T> extends StatelessWidget {
             return Center(child: Text(emptyText));
           } else {
             return ViewScreen(
-              padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
+              padding: padding,
               itemCount:
-              (itemCount != null && itemCount! < data.length) ? itemCount! : data.length,
+                  (itemCount != null && itemCount! < data.length)
+                      ? itemCount!
+                      : data.length,
               physics: physics ?? const NeverScrollableScrollPhysics(),
               itemBuilder: (context, i) => itemBuilder(context, data[i]),
             );

@@ -1,11 +1,7 @@
-import 'package:crm_flutter/app/modules/screens/crm/screens/company/views/company_screen.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/contect/views/contact_screen.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_screen.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/task/views/task_screen.dart';
-import 'package:crm_flutter/app/modules/screens/sales/screens/customer/views/customer_screen.dart';
 import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class CrmModel {
   String? title;
@@ -25,52 +21,53 @@ class CrmModel {
   static List<CrmModel> getCrmWidgets() {
     return [
       CrmModel(
-        color: Color(0xff632100),
         title: "Leads",
-        widget: LeadScreen(),
+        color: Color(0xff632100),
+        iconData: LucideIcons.target,
         appRoutes: AppRoutes.lead,
       ),
       CrmModel(
-        color: Color(0xff234567),
         title: "Deals",
-        widget: DealScreen(),
+        color: Color(0xff234567),
+        iconData: LucideIcons.heartHandshake,
         appRoutes: AppRoutes.deal,
       ),
       CrmModel(
-        color: Color(0xff098765),
         title: "Task",
-        widget: TaskScreen(),
+        color: Color(0xff098765),
+        iconData: LucideIcons.clipboardCheck,
         appRoutes: AppRoutes.task,
       ),
       CrmModel(
-        color: Color(0xff284398),
         title: "Contact",
-        widget: ContactScreen(),
+        color: Color(0xff284398),
+        iconData: LucideIcons.users2,
         appRoutes: AppRoutes.contact,
       ),
       CrmModel(
-        color: Color(0xffEB2F96),
         title: "Company",
-        widget: CompanyScreen(),
+        color: Color(0xffEB2F96),
+        iconData: LucideIcons.building2,
         appRoutes: AppRoutes.company,
       ),
       CrmModel(
-        color: Color(0xff253684),
         title: "Custom Form",
-        widget: CustomerScreen(),
+        color: Color(0xff253684),
+        iconData: LucideIcons.fileText,
         appRoutes: AppRoutes.customForm,
       ),
-      // CrmModel(
-      //   color: Color(0xff114515),
-      //   title: "Task Calender",
-      //   widget: LeadScreen(),
-      // ),
-      // CrmModel(
-      //   color: Color(0xff546145),
-      //   title: "CRM System",
-      //   widget: LeadScreen(),
-      //     appRoutes: AppRoutes,
-      // ),
+      CrmModel(
+        title: "Task Calender",
+        widget: LeadScreen(),
+        color: Color(0xff114515),
+        iconData: LucideIcons.calendarClock,
+      ),
+      CrmModel(
+        title: "CRM System",
+        widget: LeadScreen(),
+        color: Color(0xff546145),
+        iconData: LucideIcons.settings2,
+      ),
     ];
   }
 }

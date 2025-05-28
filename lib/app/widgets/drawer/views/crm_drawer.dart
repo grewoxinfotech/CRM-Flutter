@@ -7,8 +7,8 @@ import 'package:crm_flutter/app/widgets/drawer/views/deawer_controller.dart';
 import 'package:crm_flutter/app/widgets/drawer/views/drawer_model.dart';
 import 'package:crm_flutter/app/widgets/drawer/widgets/drawer_card.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class CrmDrawer extends StatelessWidget {
   const CrmDrawer({super.key});
@@ -16,7 +16,7 @@ class CrmDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CrmDrawerController drawerController = Get.put(CrmDrawerController());
-    List<DrawerModel> items = DrawerModel.getDrowerItems();
+    List<DrawerModel> items = DrawerModel.getDrawerItems();
 
     return SafeArea(
       child: CrmCard(
@@ -51,13 +51,13 @@ class CrmDrawer extends StatelessWidget {
             Spacer(),
             DrawerCard(
               onTap: () {},
-              iconData: FontAwesomeIcons.solidUserCircle,
+              iconData: LucideIcons.user,
               title: "Profile",
               color: textSecondary,
             ),
             DrawerCard(
               onTap: () => AuthController().logout(),
-              iconData: FontAwesomeIcons.signOutAlt,
+              iconData: LucideIcons.logOut,
               title: "Logout",
               color: textSecondary,
             ),

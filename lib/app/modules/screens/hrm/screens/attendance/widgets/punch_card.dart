@@ -20,7 +20,9 @@ class PunchCard extends StatelessWidget {
         () => CrmCard(
           height: 60,
           margin: EdgeInsets.symmetric(horizontal: AppMargin.medium),
-          padding: EdgeInsets.all(AppPadding.medium),
+          padding: EdgeInsets.all(
+            AppPadding.small,
+          ).copyWith(left: AppMargin.medium),
           color: white,
           border: Border.all(color: divider),
           child: Row(
@@ -29,37 +31,42 @@ class PunchCard extends StatelessWidget {
               Text(
                 "Punch :",
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
                   color: primary,
                 ),
               ),
-              GestureDetector(
-                onTap: attendanceController.togglePunch,
-                child: Row(
-                  children: [
-                    Text(
-                      "Last ${attendanceController.punchTime}",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color:
-                            (attendanceController.isPunchedIn.value == true)
-                                ? Colors.green.shade900
-                                : Colors.red.shade900,
-                      ),
-                    ),
-                    AppSpacing.horizontalSmall,
-                    CrmButton(
-                      width: 60,
-                      title:
-                          (attendanceController.isPunchedIn.value == true)
-                              ? "Out"
-                              : "In",
-                      onTap: attendanceController.togglePunch,
-                    ),
-                  ],
+              Text(
+                "Last ${attendanceController.punchTime}",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                  color:
+                      (attendanceController.isPunchedIn.value == true)
+                          ? Colors.green.shade900
+                          : Colors.red.shade900,
                 ),
+              ),
+              CrmButton(
+                width: 100,
+                boxShadow: [
+                  BoxShadow(
+                    color: primary.withAlpha(100),
+                    blurRadius: 5,
+                    spreadRadius: 0,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+                titleTextStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: white,
+                ),
+                title:
+                    (attendanceController.isPunchedIn.value == true)
+                        ? "Out"
+                        : "In",
+                onTap: attendanceController.togglePunch,
               ),
             ],
           ),

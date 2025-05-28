@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/dashboard/screens/chats/widgets/chat_message_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
@@ -7,6 +6,7 @@ import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -59,7 +59,7 @@ class ChatScreen extends StatelessWidget {
               keyboardType: TextInputType.multiline,
               contentPadding: EdgeInsets.all(AppPadding.medium),
               hintText: "Messaging",
-              suffixIcon: CrmIc(iconPath: Ic.send, width: 20),
+              suffixIcon: CrmIc(icon: LucideIcons.send),
             ),
           ),
           AppSpacing.verticalMedium,

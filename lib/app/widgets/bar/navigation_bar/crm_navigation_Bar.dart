@@ -1,62 +1,81 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class CrmNavigationBar extends StatelessWidget {
   final Function(int)? onTap;
   final int currentIndex;
 
-  const CrmNavigationBar({this.onTap, this.currentIndex = 0});
+  const CrmNavigationBar({super.key, this.onTap, this.currentIndex = 0});
 
   @override
   Widget build(BuildContext context) {
-    final style = TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w800,
-      color: Get.theme.colorScheme.primary,
-    );
-    final iconSize = 18.0;
     final items = [
-      {'icon': LucideIcons.layoutDashboard, 'title': 'Home'},
+      {'icon': LucideIcons.home, 'title': 'Home'},
       {'icon': LucideIcons.target, 'title': 'Leads'},
       {'icon': LucideIcons.clipboardCheck, 'title': 'Tasks'},
-      {'icon': LucideIcons.messageCircle, 'title': 'Chats'},
+      {'icon': LucideIcons.messageSquare, 'title': 'Chats'},
       {'icon': LucideIcons.userCircle, 'title': 'Profile'},
     ];
 
     return Card(
-      elevation: 5,
-      shadowColor: Get.theme.colorScheme.surface,
-      color: Get.theme.colorScheme.surface,
-      margin: const EdgeInsets.symmetric(
-        horizontal: AppMargin.small,
-      ).copyWith(bottom: AppMargin.small),
+      elevation: 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.large),
       ),
+      color: surface,
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppMargin.small,
+      ).copyWith(bottom: AppMargin.small),
       child: SizedBox(
         height: kToolbarHeight,
-        child: SalomonBottomBar(
-          duration: const Duration(milliseconds: 400),
-          unselectedItemColor: Get.theme.colorScheme.onPrimary,
-          margin: const EdgeInsets.all(AppPadding.small),
-          itemShape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.large),
-          ),
-          itemPadding: const EdgeInsets.all(AppPadding.small),
-          currentIndex: currentIndex,
-          onTap: onTap,
-          items:
-              items
-                  .map(
-                    (item) => SalomonBottomBarItem(
-                      icon: Icon(item['icon'] as IconData, size: iconSize),
-                      title: Text(item['title'] as String, style: style),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(items.length, (index) {
+            final isSelected = index == currentIndex;
+            final iconColor =
+                isSelected
+                    ? Get.theme.colorScheme.primary
+                    : Get.theme.colorScheme.onPrimary;
+
+            return GestureDetector(
+              onTap: () => onTap?.call(index),
+              child: AnimatedContainer(
+                height: 40,
+                width: 50,
+                duration: const Duration(milliseconds: 200),
+                decoration: BoxDecoration(
+                  color:
+                      isSelected
+                          ? Get.theme.colorScheme.primary.withOpacity(0.1)
+                          : Colors.transparent,
+                  borderRadius: BorderRadius.circular(AppRadius.medium),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      items[index]['icon'] as IconData,
+                      color: iconColor,
+                      size: 20,
                     ),
-                  )
-                  .toList(),
+                    // const SizedBox(height: 4),
+                    // AnimatedDefaultTextStyle(
+                    //   duration: const Duration(milliseconds: 300),
+                    //   style: TextStyle(
+                    //     fontSize: 12,
+                    //     fontWeight: FontWeight.w600,
+                    //     color: iconColor,
+                    //   ),
+                    //   child: Text(items[index]['title'] as String),
+                    // ),
+                  ],
+                ),
+              ),
+            );
+          }),
         ),
       ),
     );

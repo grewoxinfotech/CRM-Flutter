@@ -1,18 +1,13 @@
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/widget/deal_overview.dart';
-import 'package:crm_flutter/app/modules/screens/project/file/widget/file_card.dart';
-import 'package:crm_flutter/app/modules/screens/project/invoice/widget/invoice_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/controller/tab_bar_controller.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/member_card.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/note_card.dart';
-import 'package:crm_flutter/app/widgets/leads_and_deal/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class DealDetailScreen extends StatelessWidget {
   const DealDetailScreen({super.key});
@@ -22,133 +17,39 @@ class DealDetailScreen extends StatelessWidget {
     final TabBarController tabBarController = Get.put(TabBarController());
     final DealModel deal = Get.arguments;
 
-    List widgets = [
+    List<Widget> widgets = [
       DealOverviewCard(deal: deal),
-
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return MemberCard(title: "Hero");
-        },
-      ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return NoteCard(
-            id: "notes data",
-            relatedId: "notes data",
-            noteTitle: "notes data",
-            noteType: "notes data",
-            description: "notes data",
-            clientId: "notes data",
-            createdBy: "notes data",
-            updatedBy: "notes data",
-            createdAt: "notes data",
-            updatedAt: "notes data",
-            onTap: () {},
-            onDelete: () {},
-            onEdit: () {},
-          );
-        },
-      ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return FileCard(
-            url:
-                "https://images.pexels.com/photos/31300173/pexels-photo-31300173/free-photo-of-vibrant-blue-poison-dart-frog-on-leaf.jpeg?auto=compress&cs=tinysrgb&w=600",
-            id: "id",
-            name: "name",
-            role: "role",
-            description: "description",
-            file: "file",
-            clientId: "clientId",
-            createdBy: "createdBy",
-            updatedBy: "updatedBy",
-            createdAt: "createdAt",
-            updatedAt: "updatedAt",
-          );
-        },
-      ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return InvoiceCard(
-            id: "id",
-            inquiryId: "inquiryId",
-            leadTitle: "leadTitle",
-            leadStage: "leadStage",
-            pipeline: "pipeline",
-            currency: 'R.',
-            leadValue: "1000000",
-            companyName: "companyName",
-            firstName: "firstName",
-            lastName: "lastName",
-            phoneCode: "phoneCode",
-            telephone: "telephone",
-            email: "email",
-            address: "address",
-            leadMembers: "leadMembers",
-            source: "source",
-            category: "category",
-            files: "files",
-            status: "status",
-            interestLevel: "interestLevel",
-            leadScore: "leadScore",
-            isConverted: "isConverted",
-            clientId: "clientId",
-            createdBy: "createdBy",
-            updatedBy: "updatedBy",
-            createdAt: "createdAt",
-            updatedAt: "updatedAt",
-          );
-        },
-      ),
-      ViewScreen(
-        itemCount: 10,
-        padding: const EdgeInsets.all(AppPadding.medium),
-        itemBuilder: (context, i) {
-          return PaymentCard(
-            id: "id",
-            project: "Project",
-            startDate: "startDate",
-            endDate: "endDate",
-            projectMembers: "projectMembers",
-            completion: "completion",
-            status: "status",
-            clientId: "clientId",
-            createdBy: "createdBy",
-            createdAt: "createdAt",
-            updatedAt: "updatedAt",
-          );
-        },
-      ),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
     ];
     return Scaffold(
       appBar: AppBar(
         title: Text("Deal"),
         bottom: CrmTabBar(
           items: [
-            TabBarModel(iconPath: Ic.attach, label: "Overview"),
-            TabBarModel(iconPath: Ic.attach, label: "Members"),
-            TabBarModel(iconPath: Ic.attach, label: "Notes"),
-            TabBarModel(iconPath: Ic.attach, label: "Files"),
-            TabBarModel(iconPath: Ic.attach, label: "Invoice"),
-            TabBarModel(iconPath: Ic.attach, label: "Payment"),
+            TabBarModel(
+              iconPath: LucideIcons.layoutDashboard,
+              label: "Overview",
+            ),
+            TabBarModel(iconPath: LucideIcons.users2, label: "Members"),
+            TabBarModel(iconPath: LucideIcons.creditCard, label: "Invoice"),
+            TabBarModel(iconPath: LucideIcons.fileText, label: "Payment"),
+            TabBarModel(iconPath: LucideIcons.stickyNote, label: "Notes"),
+            TabBarModel(iconPath: LucideIcons.fileStack, label: "Files"),
+            TabBarModel(iconPath: LucideIcons.history, label: "Activity"),
+            TabBarModel(iconPath: LucideIcons.bellRing, label: "Follow-up"),
           ],
         ),
       ),
-      body: PageView.builder(
-        itemCount: widgets.length,
+      body: PageView(
         controller: tabBarController.pageController,
         onPageChanged: tabBarController.onPageChanged,
-        itemBuilder: (context, i) {
-          return widgets[i];
-        },
+        children: widgets,
       ),
     );
   }

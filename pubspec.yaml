@@ -54,7 +54,6 @@ dependencies:
   flutter_localization:
   file_picker:
   path_provider:
-  font_awesome_flutter:
   google_nav_bar:
   salomon_bottom_bar:
   table_calendar:

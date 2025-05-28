@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 class CrmIc extends StatelessWidget {
-  final String iconPath;
   final GestureTapCallback? onTap;
-  final double? width;
-  final double? height;
+  final IconData? icon;
+  final double? size;
   final Color? color;
 
   const CrmIc({
     super.key,
-    required this.iconPath,
+    required this.icon,
     this.onTap,
-    this.width = 24,
-    this.height,
+    this.size = 24,
     this.color,
   });
 
@@ -22,13 +18,8 @@ class CrmIc extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: SvgPicture.asset(
-        iconPath,
-        width: width,
-        height: height,
-        color: color ?? Get.theme.colorScheme.onPrimary,
-        alignment: Alignment.center,
-      ),
+      child: Icon(icon, size: size, color: color ?? Colors.black,
+      weight: 10,),
     );
   }
 }

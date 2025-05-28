@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/routes/app_routes.dart';
@@ -9,6 +8,7 @@ import 'package:crm_flutter/app/widgets/common/status/crm_status_card.dart';
 import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class DealCard extends StatelessWidget {
   final DealModel deal;
@@ -110,8 +110,8 @@ class DealCard extends StatelessWidget {
                 Row(
                   children: [
                     CrmIc(
-                      iconPath: Ic.calendar,
-                      width: 14,
+                      icon: LucideIcons.calendar,
+                      size: 14,
                       color: textSecondary,
                     ),
                     const SizedBox(width: 4),

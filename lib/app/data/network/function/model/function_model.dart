@@ -1,6 +1,6 @@
 import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class FunctionModel {
   final IconData? icon;
@@ -19,25 +19,25 @@ class FunctionModel {
     return [
       FunctionModel(
         title: "Lead",
-        icon: FontAwesomeIcons.at,
+        icon: LucideIcons.target,
         color: Color(0xff632100),
         appRoutes: AppRoutes.lead,
       ),
       FunctionModel(
         title: "Deals",
-        icon: FontAwesomeIcons.at,
+        icon: LucideIcons.heartHandshake,
         color: Color(0xff234567),
         appRoutes: AppRoutes.deal,
       ),
       FunctionModel(
         title: "Task",
-        icon: FontAwesomeIcons.at,
+        icon: LucideIcons.checkSquare,
         color: Color(0xff098765),
         appRoutes: AppRoutes.task,
       ),
       FunctionModel(
         title: "Contact",
-        icon: FontAwesomeIcons.at,
+        icon:  LucideIcons.users2,
         color: Color(0xff284398),
         appRoutes: AppRoutes.contact,
       ),

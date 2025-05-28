@@ -26,17 +26,15 @@ class ViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      controller: controller,
       scrollDirection: scrollDirection,
       physics: physics,
       reverse: reverse,
-      itemCount: itemCount,
       shrinkWrap: true,
       primary: true,
-      controller: controller,
-      padding:
-          padding ?? const EdgeInsets.only(top: AppPadding.medium, bottom: 80),
-      separatorBuilder:
-          (context, s) => separatorWidget ?? AppSpacing.verticalSmall,
+      separatorBuilder: (context, s) => separatorWidget ?? AppSpacing.verticalSmall,
+      padding: padding ?? const EdgeInsets.all(AppMargin.medium).copyWith(bottom: 300),
+      itemCount: itemCount,
       itemBuilder: itemBuilder,
     );
   }

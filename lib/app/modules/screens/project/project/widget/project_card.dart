@@ -1,7 +1,4 @@
-import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -82,23 +79,6 @@ class ProjectCard extends StatelessWidget {
             Text("createdBy : $createdBy"),
             Text("createdAt : $createdAt"),
             Text("updatedAt : $updatedAt"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CrmIc(
-                  iconPath: Ic.edit,
-                  color: success,
-                  onTap: onEdit,
-                  width: 50,
-                ),
-                CrmIc(
-                  iconPath: Ic.delete,
-                  color: error,
-                  onTap: onDelete,
-                  width: 50,
-                ),
-              ],
-            ),
           ],
         ),
       ),

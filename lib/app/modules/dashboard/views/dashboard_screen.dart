@@ -1,9 +1,5 @@
 import 'package:crm_flutter/app/modules/dashboard/controllers/exit_controller.dart';
-import 'package:crm_flutter/app/modules/dashboard/screens/chats/widgets/chat_list.dart';
 import 'package:crm_flutter/app/modules/dashboard/screens/home/views/home_screen.dart';
-import 'package:crm_flutter/app/modules/dashboard/screens/profile/views/profile_screen.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/company/widgets/company_list.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/custom_form/widgets/custom_form_list.dart';
 import 'package:crm_flutter/app/widgets/bar/app_bar/crm_app_bar.dart';
 import 'package:crm_flutter/app/widgets/bar/navigation_bar/crm_navigation_Bar.dart';
 import 'package:crm_flutter/app/widgets/bar/navigation_bar/navidation_controller.dart';
@@ -22,14 +18,13 @@ class DashboardScreen extends StatelessWidget {
 
     final List<Widget> screens = [
       HomeScreen(),
-      CompanyList(),
-      CustomFormList(),
-      ChatList(),
-      UserProfileScreen(),
+      Center(child: Text("No Update")),
+      Center(child: Text("No Update")),
+      Center(child: Text("No Update")),
+      Center(child: Text("No Update")),
     ];
     return WillPopScope(
       onWillPop: () async {
-
         final shouldExit = await exitController.handleBackPress();
         if (shouldExit) {
           SystemNavigator.pop(); // Close the app
@@ -49,7 +44,7 @@ class DashboardScreen extends StatelessWidget {
         ),
         body: PageView(
           controller: controller.pageController,
-          onPageChanged: controller.currentIndex,
+          onPageChanged: controller.currentIndex.call,
           children: screens,
         ),
       ),

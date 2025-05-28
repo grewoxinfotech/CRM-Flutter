@@ -2,17 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NavigationController extends GetxController {
-  RxInt currentIndex = 0.obs;
-  late PageController pageController;
+  final PageController pageController = PageController();
+  final RxInt currentIndex = 0.obs;
 
-  @override
-  void onInit() {
-    pageController = PageController();
-    super.onInit();
+  void onPageChanged(int index) {
+    currentIndex.value = index;
   }
 
   void changeIndex(int index) {
     currentIndex.value = index;
-    pageController.jumpToPage(index);
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
   }
 }

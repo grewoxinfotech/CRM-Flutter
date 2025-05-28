@@ -4,13 +4,21 @@ import 'package:get/get.dart';
 
 /// Controller for managing lead in the CRM system
 class LeadController extends GetxController {
-  LeadService leadService = LeadService();
-  List<LeadModel> leads = [];
+  var leads = <LeadModel>[].obs;
+  var isLoading = false.obs;
 
-  Future<List<LeadModel>> getLeads() async {
-    final data = await LeadService.getLeads();
-    return data;
+  @override
+  void onInit() {
+    super.onInit();
+    fetchLeads();
   }
+
+  void fetchLeads() async {
+    isLoading.value = true;
+    leads.value = await LeadService.getLeads();
+    isLoading.value = false;
+  }
+
 }
 
 //   RxBool isLoading = false.obs;

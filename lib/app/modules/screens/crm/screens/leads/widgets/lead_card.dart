@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/routes/app_routes.dart';
@@ -80,18 +79,13 @@ class LeadCard extends StatelessWidget {
               runSpacing: 4,
               children: [
                 CrmStatusCard(title: lead.source),
-                CrmStatusCard(
-                  title: lead.status,
-                  color: stageColor(lead.status ?? ''),
-                ),
-                CrmStatusCard(
-                  title: lead.interestLevel,
-                  color: interestColor(lead.interestLevel ?? ''),
+                CrmStatusCard(title: lead.status,color: stageColor(lead.status ?? ''),),
+                CrmStatusCard(title: lead.interestLevel,color: interestColor(lead.interestLevel ?? ''),
                 ),
               ],
             ),
 
-            Divider(color: divider),
+            AppSpacing.verticalSmall,
 
             /// Lead Value and Created Date
             Row(
@@ -108,8 +102,8 @@ class LeadCard extends StatelessWidget {
                 Row(
                   children: [
                     CrmIc(
-                      iconPath: Ic.calendar,
-                      width: 14,
+                      icon: LucideIcons.calendar,
+                      size: 14,
                       color: textSecondary,
                     ),
                     const SizedBox(width: 4),

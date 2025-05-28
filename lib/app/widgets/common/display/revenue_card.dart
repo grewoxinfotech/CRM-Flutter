@@ -25,8 +25,8 @@ class RevenueCard extends StatelessWidget {
           Text(
             "Total Revenue : ",
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
               color: primary,
             ),
           ),

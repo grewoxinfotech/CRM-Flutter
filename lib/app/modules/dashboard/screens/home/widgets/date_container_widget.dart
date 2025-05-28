@@ -1,9 +1,9 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class DateContainerWidget extends StatelessWidget {
   final String fd;
@@ -20,7 +20,7 @@ class DateContainerWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CrmIc(iconPath: Ic.calendar, color: Colors.black),
+          CrmIc(icon: LucideIcons.calendar, color: Colors.black),
           RichText(
             text: TextSpan(
               style: TextStyle(
@@ -35,7 +35,7 @@ class DateContainerWidget extends StatelessWidget {
               ],
             ),
           ),
-          CrmIc(iconPath: Ic.calendar, color: Colors.white),
+          CrmIc(icon: LucideIcons.calendar, color: Colors.white),
         ],
       ),
     );

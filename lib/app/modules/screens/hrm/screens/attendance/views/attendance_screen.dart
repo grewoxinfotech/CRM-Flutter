@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/screens/hrm/screens/attendance/controllers/attendance_controller.dart';
 import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/controllers/leave_controller.dart';
@@ -12,6 +11,7 @@ import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/crm_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class AttendanceScreen extends StatelessWidget {
@@ -38,15 +38,15 @@ class AttendanceScreen extends StatelessWidget {
             day.day,
           )];
       Color bgColor = Colors.transparent;
-      String? icon;
+      IconData? icon;
       if (status == 'present') {
         bgColor = success.withAlpha(100);
       } else if (status == 'absent') {
         bgColor = error.withAlpha(100);
-        icon = Ic.close;
+        icon = LucideIcons.clock;
       } else if (status == 'model') {
         bgColor = warning.withAlpha(100);
-        icon = Ic.dashboardStar;
+        icon = LucideIcons.home;
       } else {}
       if (isToday) bgColor = Get.theme.colorScheme.onPrimary.withAlpha(50);
       if (isSelected) bgColor = Get.theme.colorScheme.primary.withAlpha(50);
@@ -56,7 +56,7 @@ class AttendanceScreen extends StatelessWidget {
           radius: AppPadding.medium,
           child:
               (icon != null)
-                  ? CrmIc(iconPath: icon, width: AppPadding.medium)
+                  ? CrmIc(icon: icon,size: AppPadding.medium)
                   : Text(
                     '${day.day}',
                     style: TextStyle(
@@ -82,7 +82,7 @@ class AttendanceScreen extends StatelessWidget {
             onTap: () => print("Export File"),
           ),
           PopupMenuButton<String>(
-            icon: CrmIc(iconPath: Ic.hint),
+            icon: CrmIc(icon: LucideIcons.info),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.large),
               side: BorderSide(color: divider),

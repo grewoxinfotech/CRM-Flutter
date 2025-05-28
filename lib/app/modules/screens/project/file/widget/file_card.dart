@@ -1,11 +1,11 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class FileCard extends StatelessWidget {
   final String? id;
@@ -206,14 +206,14 @@ class FileCard extends StatelessWidget {
                 children: [
                   if (onEdit != null)
                     CrmIc(
-                      iconPath: Ic.edit,
+                      icon: LucideIcons.edit,
                       color: textPrimary,
                       onTap: onEdit,
                     ),
                   SizedBox(width: 8),
                   if (onDelete != null)
                     CrmIc(
-                      iconPath: Ic.delete,
+                      icon: LucideIcons.trash2,
                       color: Get.theme.colorScheme.error,
                       onTap: onDelete,
                     ),
