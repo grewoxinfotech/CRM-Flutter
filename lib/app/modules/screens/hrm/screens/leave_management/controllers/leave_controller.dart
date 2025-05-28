@@ -5,6 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeaveController extends GetxController {
+
+  var leaveStats = LeaveStatsModel(total: 0, approved: 0, pending: 0, rejected: 0).obs;
+  var upcomingLeaves = <LeaveModel>[].obs;
+
+  @override
+  void onInit() {
+    fetchLeaveOverview();
+    super.onInit();
+  }
+
+  void fetchLeaveOverview() async {
+    // Call your service to fetch data and update:
+    // leaveStats.value = fetchedStats;
+    // upcomingLeaves.value = fetchedList;
+  }
+
   final List<LeaveColorModel> leaveColors = LeaveColorModel.getLeaves();
   final LeaveService leaveService = LeaveService();
 

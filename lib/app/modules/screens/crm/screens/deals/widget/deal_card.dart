@@ -5,6 +5,7 @@ import 'package:crm_flutter/app/data/network/all/crm/deal/model/deal_model.dart'
 import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
+import 'package:crm_flutter/app/widgets/common/status/crm_status_card.dart';
 import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,127 +17,119 @@ class DealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color color = primary;
-    final String id = deal.id.toString();
-    final String dealTitle = deal.dealTitle.toString();
-    final String currency = deal.currency.toString();
-    final String value = deal.value.toString();
-    final String pipeline = deal.pipeline.toString();
-    final String stage = deal.stage.toString();
-    final String status = deal.status.toString();
-    final String label = deal.label.toString();
-    final String closedDate = formatDate(deal.closedDate.toString());
-    final String firstName = deal.firstName.toString();
-    final String lastName = deal.lastName.toString();
-    final String email = deal.email.toString();
-    final String phone = deal.phone.toString();
-    final String source = deal.source.toString();
-    final String companyName = deal.companyName.toString();
-    final String website = deal.website.toString();
-    final String address = deal.address.toString();
-    final String products = deal.products!.length.toString();
-    final String files = deal.files!.length.toString();
-    final String assignedTo = deal.assignedTo.toString();
-    final String clientId = deal.clientId.toString();
-    final String companyId = deal.companyId.toString();
-    final String contactId = deal.contactId.toString();
-    final String createdBy = deal.createdBy.toString();
-    final String updatedBy = deal.updatedBy.toString();
-    final String createdAt = formatDate(deal.createdAt.toString());
-    final String updatedAt = formatDate(deal.updatedAt.toString());
+    Color stageColor(String status) {
+      switch (status.toLowerCase()) {
+        case 'won':
+          return success;
+        case 'lost':
+          return error;
+        case 'in progress':
+          return warning;
+        default:
+          return Colors.grey;
+      }
+    }
+
+    Color interestColor(String level) {
+      switch (level.toLowerCase()) {
+        case 'high':
+          return error;
+        case 'medium':
+          return warning;
+        case 'low':
+          return success;
+        default:
+          return Colors.grey;
+      }
+    }
 
     return GestureDetector(
       onTap: () => Get.toNamed(AppRoutes.dealDetail, arguments: deal),
       child: CrmCard(
+        border: Border.all(color: divider),
         padding: const EdgeInsets.all(AppPadding.medium),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Title Row
+            /// Title & Company
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Lead Title & Company Name
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        dealTitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        deal.dealTitle ?? '',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: color,
+                          color: textPrimary,
                         ),
-                      ),
-                      Text(
-                        companyName,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: textSecondary,
-                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
-                AppSpacing.verticalSmall,
-                // Value & Source
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Icon(Icons.chevron_right, color: divider),
+              ],
+            ),
+            AppSpacing.verticalSmall,
+
+            /// Chips (Pipeline, Stage, Interest)
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                CrmStatusCard(title: deal.pipeline),
+                CrmStatusCard(
+                  title: deal.stage,
+                  color: stageColor(deal.stage ?? ''),
+                ),
+                CrmStatusCard(
+                  title: deal.source,
+                  color: interestColor(deal.source ?? ''),
+                ),
+              ],
+            ),
+            AppSpacing.verticalSmall,
+
+            /// Value & Date
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${deal.currency ?? ''} ${deal.value ?? ''}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: success,
+                  ),
+                ),
+                Row(
                   children: [
+                    CrmIc(
+                      iconPath: Ic.calendar,
+                      width: 14,
+                      color: textSecondary,
+                    ),
+                    const SizedBox(width: 4),
                     Text(
-                      '$value.00',
+                      formatDate(deal.createdAt.toString()),
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: color,
-                      ),
-                    ),
-                    Text(
-                      source,
-                      style: TextStyle(
-                        fontSize: 10,
                         fontWeight: FontWeight.w600,
-                        color: textPrimary,
+                        color: textSecondary,
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            Divider(color: Get.theme.dividerColor, height: AppPadding.medium),
-            // Bottom Status Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _infoTile(Ic.task, status, color),
-                _infoTile(Ic.calendar, createdAt, color),
-              ],
-            ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _infoTile(String iconPath, String? title, Color? iconColor) {
-    return Row(
-      children: [
-        CrmIc(iconPath: iconPath, width: 14, color: iconColor),
-        const SizedBox(width: AppPadding.small),
-        Text(
-          title ?? '',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: iconColor,
-          ),
-        ),
-      ],
     );
   }
 }

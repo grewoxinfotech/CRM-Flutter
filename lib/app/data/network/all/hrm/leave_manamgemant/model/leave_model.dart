@@ -69,3 +69,26 @@ class LeaveModel {
     };
   }
 }
+
+class LeaveStatsModel {
+  final int total;
+  final int approved;
+  final int pending;
+  final int rejected;
+
+  LeaveStatsModel({
+    required this.total,
+    required this.approved,
+    required this.pending,
+    required this.rejected,
+  });
+
+  factory LeaveStatsModel.fromJson(Map<String, dynamic> json) {
+    return LeaveStatsModel(
+      total: json['total'],
+      approved: json['approved'],
+      pending: json['pending'],
+      rejected: json['rejected'],
+    );
+  }
+}

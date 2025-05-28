@@ -1,8 +1,13 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
-import 'package:crm_flutter/app/modules/screens/crm/screens/company/widgets/company_card.dart';
-import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/company/widgets/company_list.dart';
+import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
+import 'package:crm_flutter/app/widgets/button/crm_button.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CompanyScreen extends StatelessWidget {
   const CompanyScreen({super.key});
@@ -10,52 +15,17 @@ class CompanyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading: CrmBackButton(), title: Text("Company")),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ViewScreen(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 5,
-              padding: EdgeInsets.symmetric(
-                horizontal: AppPadding.medium,
-                vertical: AppPadding.small,
-              ),
-              itemBuilder:
-                  (context, i) => CompanyCard(
-                    id: "id",
-                    accountOwner: "accountOwner",
-                    companyName: "companyName",
-                    companySource: "companySource",
-                    email: "email",
-                    companyNumber: "companyNumber",
-                    companyType: "companyType",
-                    companyCategory: "companyCategory",
-                    companyRevenue: "companyRevenue",
-                    phoneCode: "phoneCode",
-                    phoneNumber: "phoneNumber",
-                    website: "website",
-                    billingAddress: "billingAddress",
-                    billingCity: "billingCity",
-                    billingState: "billingState",
-                    billingPinCode: "billingPinCode",
-                    billingCountry: "billingCountry",
-                    shippingAddress: "shippingAddress",
-                    shippingCity: "shippingCity",
-                    shippingState: "shippingState",
-                    shippingPinCode: "shippingPinCode",
-                    shippingCountry: "shippingCountry",
-                    description: "description",
-                    clientId: "clientId",
-                    createdBy: "createdBy",
-                    updatedBy: "updatedBy",
-                    createdAt: "createdAt",
-                    updatedAt: "updatedAt",
-                  ),
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        leading: CrmBackButton(),
+        title: const Text("Company"),
+        actionsPadding: EdgeInsets.only(right: AppPadding.medium),
+        actions: [CrmIc(iconPath: Ic.filter, color: primary)],
       ),
+      floatingActionButton: CrmButton(
+        onTap: () => Get.to(AppRoutes.company),
+        title: "Add Company",
+      ),
+      body: CompanyList(),
     );
   }
 }

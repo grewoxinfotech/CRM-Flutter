@@ -4,14 +4,14 @@ import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class PipelineService extends GetConnect{
-  final String url = UrlRes.pipelines;
+class StageService extends GetxService {
+  final String url = UrlRes.stages;
 
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
   }
 
-  Future<List> getPipelines() async {
+  Future<List> getStages() async {
     final response = await http.get(
       Uri.parse('$url?client_id=true'),
       headers: await headers(),

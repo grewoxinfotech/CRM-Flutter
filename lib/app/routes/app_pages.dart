@@ -8,6 +8,8 @@ import 'package:crm_flutter/app/modules/screens/crm/screens/company/views/compan
 import 'package:crm_flutter/app/modules/screens/crm/screens/contect/binding/contact_binding.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/contect/views/contact_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/contect/widgets/conteact_overview.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/custom_form/bindings/custom_form_binding.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/custom_form/views/custom_form_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/binding/deal_binding.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_add_screen.dart';
 import 'package:crm_flutter/app/modules/screens/crm/screens/deals/views/deal_detail_screen.dart';
@@ -54,6 +56,13 @@ class AppPages {
       name: AppRoutes.company,
       page: () => CompanyScreen(),
       binding: CompanyBinding(),
+    ),
+
+    // customForm
+    GetPage(
+      name: AppRoutes.company,
+      page: () => CustomFormScreen(),
+      binding: CustomFormBinding(),
     ),
 
     // contact

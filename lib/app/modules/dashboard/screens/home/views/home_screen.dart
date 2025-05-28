@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
           horizontal: AppMargin.medium + AppPadding.medium,
         ),
       ),
-      LeadList(itemCount: 4),
+      LeadList(itemCount: 3),
     ];
 
     return ViewScreen(

@@ -58,6 +58,7 @@ dependencies:
   google_nav_bar:
   salomon_bottom_bar:
   table_calendar:
+  lucide_icons:
 
 dev_dependencies:
   flutter_test:

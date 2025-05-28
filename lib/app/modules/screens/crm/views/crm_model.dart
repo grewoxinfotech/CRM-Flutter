@@ -30,33 +30,47 @@ class CrmModel {
         widget: LeadScreen(),
         appRoutes: AppRoutes.lead,
       ),
-      CrmModel(color: Color(0xff234567), title: "Deals", widget: DealScreen()),
-      CrmModel(color: Color(0xff098765), title: "Task", widget: TaskScreen()),
+      CrmModel(
+        color: Color(0xff234567),
+        title: "Deals",
+        widget: DealScreen(),
+        appRoutes: AppRoutes.deal,
+      ),
+      CrmModel(
+        color: Color(0xff098765),
+        title: "Task",
+        widget: TaskScreen(),
+        appRoutes: AppRoutes.task,
+      ),
       CrmModel(
         color: Color(0xff284398),
         title: "Contact",
         widget: ContactScreen(),
+        appRoutes: AppRoutes.contact,
       ),
       CrmModel(
         color: Color(0xffEB2F96),
         title: "Company",
         widget: CompanyScreen(),
+        appRoutes: AppRoutes.company,
       ),
       CrmModel(
         color: Color(0xff253684),
         title: "Custom Form",
         widget: CustomerScreen(),
+        appRoutes: AppRoutes.customForm,
       ),
-      CrmModel(
-        color: Color(0xff114515),
-        title: "Task Calender",
-        widget: LeadScreen(),
-      ),
-      CrmModel(
-        color: Color(0xff546145),
-        title: "CRM System",
-        widget: LeadScreen(),
-      ),
+      // CrmModel(
+      //   color: Color(0xff114515),
+      //   title: "Task Calender",
+      //   widget: LeadScreen(),
+      // ),
+      // CrmModel(
+      //   color: Color(0xff546145),
+      //   title: "CRM System",
+      //   widget: LeadScreen(),
+      //     appRoutes: AppRoutes,
+      // ),
     ];
   }
 }

@@ -1,7 +1,9 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/contact/model/contact_model.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -73,7 +75,7 @@ class ContactOverviewScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "$phone",
+                        "+91 $phone",
                         style: TextStyle(
                           fontSize: 12,
                           color: textSecondary,
@@ -84,9 +86,11 @@ class ContactOverviewScreen extends StatelessWidget {
                   ),
                   Divider(),
 
-                  _tile(title: "city", subTitle: city),
-                  _tile(title: "state", subTitle: state),
-                  _tile(title: "country", subTitle: country),
+                  _tile(
+                    icon: CrmIc(iconPath: Ic.location, width: 14),
+                    title: "Location",
+                    subTitle: "$city, $state, $country",
+                  ),
                 ],
               ),
             ),
@@ -100,8 +104,14 @@ class ContactOverviewScreen extends StatelessWidget {
 class _tile extends StatelessWidget {
   final String? title;
   final String? subTitle;
+  final Widget? icon;
 
-  const _tile({super.key, required this.title, required this.subTitle});
+  const _tile({
+    super.key,
+    this.title = '',
+    required this.subTitle,
+    this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -109,13 +119,18 @@ class _tile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
       children: [
-        Text(
-          "$title",
-          style: TextStyle(
-            fontSize: 12,
-            color: textPrimary,
-            fontWeight: FontWeight.w700,
-          ),
+        Row(
+          children: [
+            if (icon != null) ...[icon!, const SizedBox(width: 4)],
+            if (title != "") Text(
+              "$title",
+              style: TextStyle(
+                fontSize: 12,
+                color: textPrimary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
         Text(
           "$subTitle",

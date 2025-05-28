@@ -1,118 +1,189 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/all/crm/company/model/company_model.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/company/widgets/company_overview.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class CompanyCard extends StatelessWidget {
-  final String? id;
-  final String? accountOwner;
-  final String? companyName;
-  final String? companySource;
-  final String? email;
-  final String? companyNumber;
-  final String? companyType;
-  final String? companyCategory;
-  final String? companyRevenue;
-  final String? phoneCode;
-  final String? phoneNumber;
-  final String? website;
-  final String? billingAddress;
-  final String? billingCity;
-  final String? billingState;
-  final String? billingPinCode;
-  final String? billingCountry;
-  final String? shippingAddress;
-  final String? shippingCity;
-  final String? shippingState;
-  final String? shippingPinCode;
-  final String? shippingCountry;
-  final String? description;
-  final String? clientId;
-  final String? createdBy;
-  final String? updatedBy;
-  final String? createdAt;
-  final String? updatedAt;
-  final GestureTapCallback? onTap;
-  final GestureTapCallback? onEdit;
-  final GestureTapCallback? onDelete;
+  final CompanyModel company;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
-  CompanyCard({
+  const CompanyCard({
     super.key,
-    this.id,
-    this.accountOwner,
-    this.companyName,
-    this.companySource,
-    this.email,
-    this.companyNumber,
-    this.companyType,
-    this.companyCategory,
-    this.companyRevenue,
-    this.phoneCode,
-    this.phoneNumber,
-    this.website,
-    this.billingAddress,
-    this.billingCity,
-    this.billingState,
-    this.billingPinCode,
-    this.billingCountry,
-    this.shippingAddress,
-    this.shippingCity,
-    this.shippingState,
-    this.shippingPinCode,
-    this.shippingCountry,
-    this.description,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
-    this.onTap,
+    required this.company,
     this.onEdit,
     this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
-    return CrmCard(
-      child: ListTile(
-        leading: CircleAvatar(
-          child: Text(
-            "H",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: white,
+    return GestureDetector(
+      onTap: () => Get.to(CompanyOverview(), arguments: company),
+      child: CrmCard(
+        padding: const EdgeInsets.all(AppPadding.medium),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header: Company name
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    company.companyName ?? 'No Company Name',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: textPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            AppSpacing.verticalSmall,
+
+            // Company type & category
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                _tag(LucideIcons.building2, company.companyType),
+                _tag(LucideIcons.tags, company.companyCategory),
+              ],
+            ),
+            AppSpacing.verticalSmall,
+
+            // Contact info
+            _infoRow(LucideIcons.mail, company.email),
+            _infoRow(
+              LucideIcons.phone,
+              '${company.phoneCode ?? ''} ${company.phoneNumber ?? ''}',
+            ),
+            _infoRow(LucideIcons.globe, company.website),
+            AppSpacing.verticalSmall,
+
+            // Address section
+            Row(
+              children: [
+                Expanded(
+                  child: _locationBox(
+                    'Billing',
+                    company.billingCity,
+                    company.billingCountry,
+                    LucideIcons.wallet,
+                  ),
+                ),
+                AppSpacing.horizontalSmall,
+                Expanded(
+                  child: _locationBox(
+                    'Shipping',
+                    company.shippingCity,
+                    company.shippingCountry,
+                    LucideIcons.truck,
+                  ),
+                ),
+              ],
+            ),
+
+            // Description
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _infoRow(IconData icon, String? value) {
+    if (value == null || value.isEmpty) return const SizedBox();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: primary),
+          AppSpacing.horizontalSmall,
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: textSecondary,
+              ),
             ),
           ),
-        ),
-        title: Text(
-          "doifnpdofignpsd ifg",
+        ],
+      ),
+    );
+  }
 
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: textPrimary,
-          ),
+  Widget _tag(IconData icon, String? label) {
+    if (label == null || label.isEmpty) return const SizedBox();
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(AppRadius.small),
+      ),
+      child: FittedBox(
+        child: Row(
+          children: [
+            Icon(icon, size: 16, color: primary),
+            AppSpacing.horizontalSmall,
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: textSecondary,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
         ),
-        subtitle: Text(
-          "+91 95575649898",
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: textSecondary,
-          ),
-        ),
-        trailing: FittedBox(
-          child: Row(
+      ),
+    );
+  }
+
+  Widget _locationBox(
+    String title,
+    String? city,
+    String? country,
+    IconData icon,
+  ) {
+    return CrmCard(
+      padding: const EdgeInsets.all(AppPadding.small),
+      color: Colors.blue.shade50,
+      boxShadow: [],
+      borderRadius: BorderRadius.circular(AppRadius.medium),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              CrmIc(iconPath: Ic.edit, color: success, onTap: onEdit),
+              Icon(icon, size: 20, color: Colors.blueAccent),
               AppSpacing.horizontalSmall,
-              CrmIc(iconPath: Ic.delete, color: error, onTap: onDelete),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: textPrimary,
+                ),
+              ),
             ],
           ),
-        ),
+          const SizedBox(height: 4),
+          Text(
+            '${city ?? "-"}, ${country ?? "-"}',
+            style: TextStyle(
+              fontSize: 12,
+              color: textSecondary,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class CrmNavigationBar extends StatelessWidget {
@@ -19,11 +19,11 @@ class CrmNavigationBar extends StatelessWidget {
     );
     final iconSize = 18.0;
     final items = [
-      {'icon': Icons.dashboard_rounded, 'title': 'Home'},
-      {'icon': FontAwesomeIcons.leaf, 'title': 'Leads'},
-      {'icon': FontAwesomeIcons.tasksAlt, 'title': 'Tasks'},
-      {'icon': FontAwesomeIcons.solidComments, 'title': 'Chats'},
-      {'icon': FontAwesomeIcons.solidUserCircle, 'title': 'Profile'},
+      {'icon': LucideIcons.layoutDashboard, 'title': 'Home'},
+      {'icon': LucideIcons.target, 'title': 'Leads'},
+      {'icon': LucideIcons.clipboardCheck, 'title': 'Tasks'},
+      {'icon': LucideIcons.messageCircle, 'title': 'Chats'},
+      {'icon': LucideIcons.userCircle, 'title': 'Profile'},
     ];
 
     return Card(
@@ -49,7 +49,9 @@ class CrmNavigationBar extends StatelessWidget {
           currentIndex: currentIndex,
           onTap: onTap,
           items:
-              items.map((item) => SalomonBottomBarItem(
+              items
+                  .map(
+                    (item) => SalomonBottomBarItem(
                       icon: Icon(item['icon'] as IconData, size: iconSize),
                       title: Text(item['title'] as String, style: style),
                     ),

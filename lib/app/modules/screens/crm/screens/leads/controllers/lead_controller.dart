@@ -7,7 +7,10 @@ class LeadController extends GetxController {
   LeadService leadService = LeadService();
   List<LeadModel> leads = [];
 
-  Future<List<LeadModel>> getLeads() async => await LeadService.getLeads();
+  Future<List<LeadModel>> getLeads() async {
+    final data = await LeadService.getLeads();
+    return data;
+  }
 }
 
 //   RxBool isLoading = false.obs;

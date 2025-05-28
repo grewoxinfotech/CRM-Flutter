@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/model/leave_model.dart';
 import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/service/leave_service.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/views/leave_overview_screen.dart';
 import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/views/leave_screen.dart';
 import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/widgets/leave_card.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
@@ -47,7 +48,7 @@ class LeaveList extends StatelessWidget {
                       ? itemCount!
                       : leaves.length,
               physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, i) => LeaveCard(leave: leaves[i],onTap: () => Get.to(LeaveScreen()),),
+              itemBuilder: (context, i) => LeaveCard(leave: leaves[i]),
             );
           }
         } else {

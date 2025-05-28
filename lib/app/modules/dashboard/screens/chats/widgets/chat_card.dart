@@ -15,7 +15,7 @@ class ChatCard extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             child: Text(
-              "H",
+              "J",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
@@ -24,7 +24,7 @@ class ChatCard extends StatelessWidget {
             ),
           ),
           title: Text(
-            "jayesh",
+            "Jeck",
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 16,
@@ -33,7 +33,7 @@ class ChatCard extends StatelessWidget {
             ),
           ),
           subtitle: Text(
-            "hiifljfsbohsdfohbdopsfhbgopsdhybgpisdbgpyisdfpbdbfyip",
+            "Hii...",
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 12,

@@ -2,6 +2,7 @@ import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/model/leave_model.dart';
 import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/controllers/leave_controller.dart';
+import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/views/leave_overview_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/status/crm_status_card.dart';
 import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
@@ -53,7 +54,7 @@ class LeaveCard extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => Get.to(LeaveOverviewScreen() , arguments: leave),
       child: CrmCard(
         boxShadow: [],
         border: Border.all(color: divider),

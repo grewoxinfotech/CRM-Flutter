@@ -3,6 +3,9 @@ import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 
 class CrmStatusCard extends StatelessWidget {
+  final double? width;
+  final double? height;
+  final double? fontSize;
   final Color? color;
   final String? title;
   final EdgeInsetsGeometry? padding;
@@ -14,11 +17,16 @@ class CrmStatusCard extends StatelessWidget {
     this.color = Colors.grey,
     this.borderRadius,
     this.padding,
+    this.fontSize,
+    this.width,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return CrmCard(
+      height: height ,
+      width:width ,
       color: color!.withAlpha(50),
       boxShadow: [],
       borderRadius: borderRadius ?? BorderRadius.circular(AppRadius.small),
@@ -30,7 +38,7 @@ class CrmStatusCard extends StatelessWidget {
       child: Text(
         title!,
         style: TextStyle(
-          fontSize: 12,
+          fontSize: fontSize ?? 12,
           fontWeight: FontWeight.w800,
           color: color,
         ),

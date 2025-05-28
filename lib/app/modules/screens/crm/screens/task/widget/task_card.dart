@@ -1,6 +1,7 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/task/model/task_model.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
+import 'package:crm_flutter/app/widgets/common/status/crm_status_card.dart';
 import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,24 +41,8 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String id = task.id;
-    final String relatedId = task.relatedId;
-    final String taskName = task.taskName;
-    final String file = task.file;
-    final String startDate = formatDate(task.startDate.toString());
-    final String dueDate = formatDate(task.dueDate.toString());
-    final String status = task.status;
-    final String priority = task.priority;
-    final String description = task.description;
-    final String reminderDate = formatDate(task.reminderDate.toString());
-    final String clientId = task.clientId;
-    final String taskReporter = task.taskReporter;
-    final String createdBy = formatDate(task.createdBy.toString());
-    final String updatedBy = formatDate(task.updatedBy.toString());
-    final String createdAt = formatDate(task.createdAt.toString());
-    final String updatedAt = formatDate(task.updatedAt.toString());
-
     return GestureDetector(
+
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.small),
         child: Column(
@@ -81,7 +66,7 @@ class TaskCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    createdBy.toString(),
+                    formatDate(task.createdBy.toString()).toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
@@ -89,7 +74,7 @@ class TaskCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    taskName.toString(),
+                    task.taskName.toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
@@ -125,34 +110,14 @@ class TaskCard extends StatelessWidget {
             Row(
               children: [
                 SizedBox(width: 5),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: getStatusColor(status).withAlpha(50),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Text(
-                    status,
-                    style: TextStyle(
-                      color: getStatusColor(status),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                CrmStatusCard(
+                  title: task.status,
+                  color: getPriorityColor(task.status).withAlpha(50),
                 ),
                 SizedBox(width: 5),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: getPriorityColor(priority).withAlpha(50),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Text(
-                    priority,
-                    style: TextStyle(
-                      color: getPriorityColor(priority),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                CrmStatusCard(
+                  title: task.priority,
+                  color: getPriorityColor(task.priority).withAlpha(50),
                 ),
                 SizedBox(width: 5),
               ],
@@ -179,7 +144,7 @@ class TaskCard extends StatelessWidget {
                         fontSize: 14,
                       ),
                     ),
-                    TextSpan(text: description.toString()),
+                    TextSpan(text: task.description.toString()),
                   ],
                 ),
               ),

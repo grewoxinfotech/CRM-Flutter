@@ -20,7 +20,6 @@ class TaskService {
     final jsonData = jsonDecode(response.body);
     final List<dynamic> data = jsonData['data'];
     if (response.statusCode == 200 && jsonData["success"] == true) {
-      print(".......................................................Task Service (data) : ${data}");
       return data.map((e) => TaskModel.fromJson(e)).toList();
     } else {
       print("Task Service (error) : ${jsonData['message']}");

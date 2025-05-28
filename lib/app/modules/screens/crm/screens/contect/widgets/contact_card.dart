@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/all/crm/contact/model/contact_model.dart';
 import 'package:crm_flutter/app/routes/app_routes.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
@@ -17,10 +18,13 @@ class ContactCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed(AppRoutes.contactOverView, arguments: contact),
       child: CrmCard(
-        child: ListTile(
-          leading: Hero(
-            tag: "contactLogo",
-            child: CircleAvatar(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppPadding.small,
+          vertical: AppPadding.small,
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
               child: Text(
                 contact.firstName!.substring(0, 1).toUpperCase(),
                 style: const TextStyle(
@@ -30,24 +34,40 @@ class ContactCard extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-          title: Text(
-            '${contact.firstName} ${contact.lastName}',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: primary,
-              fontSize: 16,
+            AppSpacing.horizontalSmall,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${contact.firstName} ${contact.lastName}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: primary,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    contact.email.toString(),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: textSecondary,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          subtitle: Text(
-            contact.email.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: textSecondary,
+            AppSpacing.horizontalSmall,
+            CircleAvatar(
+              backgroundColor: transparent,
+              child: const Icon(
+                Icons.chevron_right,
+                size: 20,
+                color: Colors.grey,
+              ),
             ),
-          ),
-          trailing: const Icon(Icons.chevron_right, size: 20),
+          ],
         ),
       ),
     );

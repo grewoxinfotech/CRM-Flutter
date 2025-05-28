@@ -12,6 +12,13 @@ class AppRoutes {
   // company
   static const company = '/company';
 
+
+  // customForm
+  static const customForm = '/company-accounts';
+
+
+  
+
   // contact
   static const contact = '/contact';
   static const contactOverView = '/contactOverView';
