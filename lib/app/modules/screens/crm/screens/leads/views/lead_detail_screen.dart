@@ -20,11 +20,11 @@ class LeadDetailScreen extends StatelessWidget {
 
     List<Widget> widgets = [
       LeadOverviewCard(lead: lead),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
     ];
 
     return Scaffold(

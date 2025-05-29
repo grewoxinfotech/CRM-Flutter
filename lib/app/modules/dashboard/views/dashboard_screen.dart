@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/modules/dashboard/controllers/exit_controller.dart';
 import 'package:crm_flutter/app/modules/dashboard/screens/home/views/home_screen.dart';
+import 'package:crm_flutter/app/test_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/app_bar/crm_app_bar.dart';
 import 'package:crm_flutter/app/widgets/bar/navigation_bar/crm_navigation_Bar.dart';
 import 'package:crm_flutter/app/widgets/bar/navigation_bar/navidation_controller.dart';
@@ -18,7 +19,7 @@ class DashboardScreen extends StatelessWidget {
 
     final List<Widget> screens = [
       HomeScreen(),
-      Center(child: Text("No Update")),
+      TestScreen(),
       Center(child: Text("No Update")),
       Center(child: Text("No Update")),
       Center(child: Text("No Update")),

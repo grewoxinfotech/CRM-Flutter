@@ -52,7 +52,7 @@ class CrmBarChart extends StatelessWidget {
           width: 20,
           borderRadius: BorderRadius.circular(8),
           gradient: LinearGradient(
-            colors: [primary.withOpacity(0.5), primary],
+            colors: [AppColors.primary.withOpacity(0.5), AppColors.primary],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
           ),

@@ -23,8 +23,8 @@ class PunchCard extends StatelessWidget {
           padding: EdgeInsets.all(
             AppPadding.small,
           ).copyWith(left: AppMargin.medium),
-          color: white,
-          border: Border.all(color: divider),
+          color: AppColors.white,
+          border: Border.all(color: AppColors.divider),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -33,7 +33,7 @@ class PunchCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: primary,
+                  color: AppColors.primary,
                 ),
               ),
               Text(
@@ -51,7 +51,7 @@ class PunchCard extends StatelessWidget {
                 width: 100,
                 boxShadow: [
                   BoxShadow(
-                    color: primary.withAlpha(100),
+                    color: AppColors.primary.withAlpha(100),
                     blurRadius: 5,
                     spreadRadius: 0,
                     offset: Offset(0, 5),
@@ -60,7 +60,7 @@ class PunchCard extends StatelessWidget {
                 titleTextStyle: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: white,
+                  color: AppColors.white,
                 ),
                 title:
                     (attendanceController.isPunchedIn.value == true)

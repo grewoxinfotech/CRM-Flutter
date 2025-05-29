@@ -136,7 +136,7 @@ class LeaveRequestDialog extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 14,
-              color: textPrimary,
+              color: AppColors.textPrimary,
             ),
           ),
         ],
@@ -157,7 +157,7 @@ class LeaveRequestDialog extends StatelessWidget {
                   ),
                   boxShadow: [],
                   gradient: LinearGradient(
-                    colors: [primary.withOpacity(0.8), primary],
+                    colors: [AppColors.primary.withOpacity(0.8), AppColors.primary],
                   ),
                   padding: EdgeInsets.symmetric(
                     horizontal: AppPadding.medium,
@@ -168,7 +168,7 @@ class LeaveRequestDialog extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: white,
+                      color:AppColors.white,
                     ),
                   ),
                 ),
@@ -189,11 +189,11 @@ class LeaveRequestDialog extends StatelessWidget {
                         height: 30,
                         boxShadow: [],
                         titleTextStyle: TextStyle(
-                          color: textPrimary,
+                          color: AppColors.textPrimary,
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
-                        backgroundColor: transparent,
+                        backgroundColor: AppColors.transparent,
                         title: "Cancel",
                         onTap: () => Navigator.pop(context),
                       ),

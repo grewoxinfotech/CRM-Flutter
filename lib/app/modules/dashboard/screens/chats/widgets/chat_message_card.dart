@@ -82,7 +82,7 @@ class _ChatMessageCardState extends State<ChatMessageCard> {
           child: CrmCard(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             boxShadow: [],
-            color: widget.isSender ? primary : white,
+            color: widget.isSender ? AppColors.primary : AppColors.white,
             borderRadius: borderRadius,
             child: Column(
               crossAxisAlignment:
@@ -94,7 +94,7 @@ class _ChatMessageCardState extends State<ChatMessageCard> {
                   widget.message,
                   style: TextStyle(
                     fontSize: 14,
-                    color: widget.isSender ? white : textPrimary,
+                    color: widget.isSender ? AppColors.white : AppColors.textPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

@@ -1,3 +1,5 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +14,9 @@ class ExitController extends GetxController {
 
       Fluttertoast.showToast(
         msg: "Press back again to exit.",
-        toastLength: Toast.LENGTH_SHORT,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: AppColors.textPrimary,
+        textColor: AppColors.white,
       );
 
       return false; // Don’t close yet

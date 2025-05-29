@@ -83,24 +83,6 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/icons/comments/
-    - assets/icons/employee/
-    - assets/icons/function/
-    - assets/icons/member/
-    - assets/icons/native_icons/actions/
-    - assets/icons/native_icons/auth/
-    - assets/icons/native_icons/business/
-    - assets/icons/native_icons/date_time/
-    - assets/icons/native_icons/file/
-    - assets/icons/native_icons/media/
-    - assets/icons/native_icons/navigation/
-    - assets/icons/native_icons/navigation/arrow/
-    - assets/icons/native_icons/notification/
-    - assets/icons/native_icons/productivity/
-    - assets/icons/native_icons/social/
-    - assets/icons/native_icons/system/
-    - assets/icons/native_icons/ui/
-
 
   # To add assets to your application, add an assets section, like this:
   # assets:

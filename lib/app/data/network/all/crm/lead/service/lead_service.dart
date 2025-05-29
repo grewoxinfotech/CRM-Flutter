@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
@@ -17,13 +18,13 @@ class LeadService {
   static Future<List<LeadModel>> getLeads() async {
     final response = await http.get(Uri.parse(url), headers: await headers());
     final jsonData = jsonDecode(response.body);
-    final List<dynamic> data = jsonData['data'];
+    final List<dynamic> data = jsonData["message"]['data'];
 
     if (response.statusCode == 200 && jsonData['success'] == true) {
-      print("Lead Service (data) : ${jsonData['data']}");
+      print("Lead Service (data) : ${jsonData["message"]['data']}");
       return data.map((e) => LeadModel.fromJson(e)).toList();
     } else {
-      print("Lead Service (error) : ${jsonData['message']}");
+      print("Lead Service (error) : $e");
       print("Lead Service (status code) : ${response.statusCode}");
       throw Exception('Failed to load lead data: ${response.statusCode}');
     }

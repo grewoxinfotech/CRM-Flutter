@@ -101,7 +101,7 @@ class CrmDropdownField<T> extends StatelessWidget {
                     : Get.theme.colorScheme.surface.withAlpha(128),
             hintText: hintText,
             hintStyle: TextStyle(
-              color: white.withAlpha(200),
+              color: AppColors.white.withAlpha(200),
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),

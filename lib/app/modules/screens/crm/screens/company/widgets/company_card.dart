@@ -38,7 +38,7 @@ class CompanyCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
-                      color: textPrimary,
+                      color:AppColors. textPrimary,
                     ),
                   ),
                 ),
@@ -102,7 +102,7 @@ class CompanyCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: primary),
+          Icon(icon, size: 16, color: AppColors.primary),
           AppSpacing.horizontalSmall,
           Expanded(
             child: Text(
@@ -110,7 +110,7 @@ class CompanyCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: textSecondary,
+                color:AppColors. textSecondary,
               ),
             ),
           ),
@@ -130,13 +130,13 @@ class CompanyCard extends StatelessWidget {
       child: FittedBox(
         child: Row(
           children: [
-            Icon(icon, size: 16, color: primary),
+            Icon(icon, size: 16, color:AppColors. primary),
             AppSpacing.horizontalSmall,
             Text(
               label,
               style: TextStyle(
                 fontSize: 12,
-                color: textSecondary,
+                color: AppColors.textSecondary,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -169,7 +169,7 @@ class CompanyCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: textPrimary,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -179,7 +179,7 @@ class CompanyCard extends StatelessWidget {
             '${city ?? "-"}, ${country ?? "-"}',
             style: TextStyle(
               fontSize: 12,
-              color: textSecondary,
+              color:AppColors. textSecondary,
               fontWeight: FontWeight.w400,
             ),
           ),

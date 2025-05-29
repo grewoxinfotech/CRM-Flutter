@@ -20,11 +20,11 @@ class DealCard extends StatelessWidget {
     Color stageColor(String status) {
       switch (status.toLowerCase()) {
         case 'won':
-          return success;
+          return AppColors.success;
         case 'lost':
-          return error;
+          return AppColors. error;
         case 'in progress':
-          return warning;
+          return AppColors.warning;
         default:
           return Colors.grey;
       }
@@ -33,11 +33,11 @@ class DealCard extends StatelessWidget {
     Color interestColor(String level) {
       switch (level.toLowerCase()) {
         case 'high':
-          return error;
+          return AppColors.error;
         case 'medium':
-          return warning;
+          return AppColors.warning;
         case 'low':
-          return success;
+          return AppColors.success;
         default:
           return Colors.grey;
       }
@@ -46,7 +46,7 @@ class DealCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed(AppRoutes.dealDetail, arguments: deal),
       child: CrmCard(
-        border: Border.all(color: divider),
+        border: Border.all(color: AppColors.divider),
         padding: const EdgeInsets.all(AppPadding.medium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class DealCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: textPrimary,
+                          color: AppColors.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -72,7 +72,7 @@ class DealCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right, color: divider),
+                Icon(Icons.chevron_right, color: AppColors.divider),
               ],
             ),
             AppSpacing.verticalSmall,
@@ -104,7 +104,7 @@ class DealCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: success,
+                    color: AppColors.success,
                   ),
                 ),
                 Row(
@@ -112,7 +112,7 @@ class DealCard extends StatelessWidget {
                     CrmIc(
                       icon: LucideIcons.calendar,
                       size: 14,
-                      color: textSecondary,
+                      color: AppColors.textSecondary,
                     ),
                     const SizedBox(width: 4),
                     Text(
@@ -120,7 +120,7 @@ class DealCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: textSecondary,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],

@@ -19,7 +19,7 @@ class CustomFormScreen extends StatelessWidget {
         leading: CrmBackButton(),
         title: const Text("Custom Form"),
         actionsPadding: EdgeInsets.only(right: AppPadding.medium),
-        actions: [CrmIc(icon: LucideIcons.filter, color: primary)],
+        actions: [CrmIc(icon: LucideIcons.filter, color:AppColors. primary)],
       ),
       floatingActionButton: CrmButton(
         onTap: () => Get.to(AppRoutes.customForm),

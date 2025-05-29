@@ -102,7 +102,7 @@ class CrmTextField extends StatelessWidget {
                     : Get.theme.colorScheme.surface.withAlpha(128),
             hintText: hintText,
             hintStyle: TextStyle(
-              color: textSecondary.withAlpha(200),
+              color: AppColors.textSecondary.withAlpha(200),
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),

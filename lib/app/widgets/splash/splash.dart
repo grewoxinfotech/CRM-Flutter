@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(SplashController()); // Inject Controller
     return Scaffold(
-      backgroundColor: surface,
+      backgroundColor: AppColors.surface,
       body: Center(child: CrmAppLogo(width: 120)),
     );
   }

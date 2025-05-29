@@ -17,7 +17,7 @@ class RevenueCard extends StatelessWidget {
 
     return CrmCard(
       margin: EdgeInsets.symmetric(horizontal: AppMargin.medium),
-      border: Border.all(color: divider),
+      border: Border.all(color: AppColors.divider),
       padding: EdgeInsets.all(AppPadding.medium),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,7 +27,7 @@ class RevenueCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: primary,
+              color: AppColors.primary,
             ),
           ),
           Text(

@@ -9,20 +9,27 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 class DrawerModel {
   String? title;
+  bool? showArrowRight;
   IconData? iconData;
   Widget? widget;
 
-  DrawerModel({this.title, this.iconData, this.widget});
+  DrawerModel({
+    this.title,
+    this.iconData,
+    this.widget,
+    this.showArrowRight = true,
+  });
 
   static List<DrawerModel> getDrawerItems() {
     return [
       DrawerModel(
         title: "DashBoard",
         iconData: LucideIcons.home,
+        showArrowRight: false,
         widget: DashboardScreen(),
       ),
       DrawerModel(
-        title: "Crm",
+        title: "CRM",
         iconData: LucideIcons.users,
         widget: CrmScreen(),
       ),
@@ -47,7 +54,7 @@ class DrawerModel {
         widget: CrmScreen(),
       ),
       DrawerModel(
-        title: "Hrm",
+        title: "HRM",
         iconData: LucideIcons.users,
         widget: HrmScreen(),
       ),

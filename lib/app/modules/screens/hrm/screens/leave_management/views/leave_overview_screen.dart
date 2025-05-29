@@ -44,11 +44,11 @@ class LeaveOverviewScreen extends StatelessWidget {
 
     Color statusColor(String status) {
       if (status == "pending") {
-        return warning;
+        return AppColors.warning;
       } else if (status == "approved") {
-        return success;
+        return AppColors.success;
       } else if (status == "rejected") {
-        return error;
+        return AppColors.error;
       } else {
         return Colors.grey;
       }
@@ -84,7 +84,7 @@ class LeaveOverviewScreen extends StatelessWidget {
                   text: TextSpan(
                     style: TextStyle(
                       fontSize: 18,
-                      color: textPrimary,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w900,
                     ),
                     children: [
@@ -106,7 +106,7 @@ class LeaveOverviewScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: textSecondary,
+                color: AppColors.textSecondary,
               ),
             ),
             AppSpacing.verticalMedium,

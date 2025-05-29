@@ -36,8 +36,9 @@ class CrmDrawer extends StatelessWidget {
                 return DrawerCard(
                   title: items[i].title!,
                   iconData: items[i].iconData,
-                  color: (j == i) ? primary : textSecondary,
+                  color: (j == i) ? AppColors.primary : AppColors.textSecondary,
                   isSelected: (j == i) ? true : false,
+                  showArrowRight: items[i].showArrowRight,
                   onTap: () {
                     Get.back();
                     drawerController.onchange(i);
@@ -53,13 +54,17 @@ class CrmDrawer extends StatelessWidget {
               onTap: () {},
               iconData: LucideIcons.user,
               title: "Profile",
-              color: textSecondary,
+              showArrowRight: false,
+              iconColor: Colors.blue,
+              color: AppColors.textSecondary,
             ),
             DrawerCard(
               onTap: () => AuthController().logout(),
               iconData: LucideIcons.logOut,
               title: "Logout",
-              color: textSecondary,
+              showArrowRight: false,
+              iconColor: Colors.red ,
+              color: AppColors.textSecondary,
             ),
             AppSpacing.verticalSmall,
           ],

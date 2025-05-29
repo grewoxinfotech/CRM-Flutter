@@ -7,40 +7,40 @@ ThemeData lightTheme = ThemeData(
 
   // Enable Material 3
   fontFamily: FontRes.nuNunitoSans,
-  primaryColor: primary,
-  scaffoldBackgroundColor: background,
-  dividerColor: divider,
-  disabledColor: disabled,
-  shadowColor: shadow,
-  dialogBackgroundColor: overlay,
+  primaryColor: AppColors.primary,
+  scaffoldBackgroundColor: AppColors.background,
+  dividerColor: AppColors.divider,
+  disabledColor: AppColors.disabled,
+  shadowColor:AppColors. shadow,
+  dialogBackgroundColor: AppColors.overlay,
 
   appBarTheme: AppBarTheme(
-    backgroundColor: transparent,
-    surfaceTintColor: transparent,
+    backgroundColor: AppColors.transparent,
+    surfaceTintColor:AppColors. transparent,
     elevation: 0.0,
     scrolledUnderElevation: 0.0,
     titleTextStyle: TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w800,
-      color: textPrimary,
+      color: AppColors.textPrimary,
     ),
   ),
 
   colorScheme: ColorScheme(
     brightness: Brightness.light,
     // theme colors
-    primary: primary,
-    secondary: secondary,
-    background: background,
-    surface: surface,
-    shadow: shadow,
-    error: error,
+    primary: AppColors.primary,
+    secondary: AppColors.secondary,
+    background:AppColors. background,
+    surface:AppColors. surface,
+    shadow: AppColors.shadow,
+    error: AppColors.error,
 
     // text colors
-    onPrimary: textPrimary,
-    onSecondary: textSecondary,
-    onBackground: textDisabled,
-    onSurface: textSecondary,
-    onError: error,
+    onPrimary: AppColors.textPrimary,
+    onSecondary:AppColors. textSecondary,
+    onBackground: AppColors.textDisabled,
+    onSurface:AppColors. textSecondary,
+    onError: AppColors.error,
   ),
 );

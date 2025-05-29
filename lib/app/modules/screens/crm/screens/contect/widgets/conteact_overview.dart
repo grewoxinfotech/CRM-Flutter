@@ -49,7 +49,7 @@ class ContactOverviewScreen extends StatelessWidget {
                       contact.firstName!.substring(0, 1).toUpperCase(),
                       style: TextStyle(
                         fontSize: 25,
-                        color: white,
+                        color: AppColors.white,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -59,7 +59,7 @@ class ContactOverviewScreen extends StatelessWidget {
                     "$firstName $lastName",
                     style: TextStyle(
                       fontSize: 16,
-                      color: textPrimary,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -70,7 +70,7 @@ class ContactOverviewScreen extends StatelessWidget {
                         "$email",
                         style: TextStyle(
                           fontSize: 12,
-                          color: textSecondary,
+                          color: AppColors.textSecondary,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -78,7 +78,7 @@ class ContactOverviewScreen extends StatelessWidget {
                         "+91 $phone",
                         style: TextStyle(
                           fontSize: 12,
-                          color: textSecondary,
+                          color:AppColors. textSecondary,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -126,7 +126,7 @@ class _tile extends StatelessWidget {
               "$title",
               style: TextStyle(
                 fontSize: 12,
-                color: textPrimary,
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -136,7 +136,7 @@ class _tile extends StatelessWidget {
           "$subTitle",
           style: TextStyle(
             fontSize: 12,
-            color: textSecondary,
+            color: AppColors.textSecondary,
             fontWeight: FontWeight.w600,
           ),
         ),

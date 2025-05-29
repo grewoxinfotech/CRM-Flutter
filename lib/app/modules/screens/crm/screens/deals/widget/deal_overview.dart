@@ -18,14 +18,14 @@ class DealOverviewCard extends StatelessWidget {
     Widget iconTile(IconData icon, String value) {
       return Row(
         children: [
-          Icon(icon, size: 16, color: textPrimary),
+          Icon(icon, size: 16, color: AppColors.textPrimary),
           AppSpacing.horizontalSmall,
           Text(
             value,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w700,
-              color: textSecondary,
+              color: AppColors.textSecondary,
             ),
           ),
         ],
@@ -43,7 +43,7 @@ class DealOverviewCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
-                color: textPrimary,
+                color:AppColors. textPrimary,
               ),
             ),
             AppSpacing.verticalSmall,
@@ -124,11 +124,11 @@ class DealOverviewCard extends StatelessWidget {
               height: 40,
               title: "Edit",
               onTap: () {},
-              backgroundColor: surface,
+              backgroundColor:AppColors. surface,
               titleTextStyle: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: success,
+                color: AppColors.success,
               ),
             ),
           ),
@@ -137,11 +137,11 @@ class DealOverviewCard extends StatelessWidget {
             child: CrmButton(
               height: 40,
               title: "Delete",
-              backgroundColor: surface,
+              backgroundColor: AppColors.surface,
               titleTextStyle: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: error,
+                color: AppColors.error,
               ),
               onTap: () {},
             ),
@@ -170,7 +170,7 @@ class _tile extends StatelessWidget {
   Widget build(BuildContext context) {
     return CrmCard(
       boxShadow: [],
-      color: background,
+      color: AppColors.background,
       padding: EdgeInsets.all(AppPadding.small),
       borderRadius: BorderRadius.circular(AppRadius.medium),
       child: Row(
@@ -178,14 +178,14 @@ class _tile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, size: 14, color: primary),
+              Icon(icon, size: 14, color: AppColors.primary),
               AppSpacing.horizontalSmall,
               Text(
                 title ?? '',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: textPrimary,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],

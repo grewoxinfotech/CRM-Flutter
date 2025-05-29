@@ -43,7 +43,7 @@ class ContactCard extends StatelessWidget {
                     '${contact.firstName} ${contact.lastName}',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: primary,
+                      color: AppColors.primary,
                       fontSize: 16,
                     ),
                   ),
@@ -52,7 +52,7 @@ class ContactCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
-                      color: textSecondary,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -60,7 +60,7 @@ class ContactCard extends StatelessWidget {
             ),
             AppSpacing.horizontalSmall,
             CircleAvatar(
-              backgroundColor: transparent,
+              backgroundColor: AppColors.transparent,
               child: const Icon(
                 Icons.chevron_right,
                 size: 20,

@@ -29,7 +29,7 @@ class ChatCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color: textPrimary,
+              color: AppColors.textPrimary,
             ),
           ),
           subtitle: Text(
@@ -38,7 +38,7 @@ class ChatCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: textSecondary,
+              color: AppColors.textSecondary,
             ),
           ),
           trailing: Text(
@@ -46,7 +46,7 @@ class ChatCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w400,
-              color: textDisabled,
+              color: AppColors.textDisabled,
             ),
           ),
         ),

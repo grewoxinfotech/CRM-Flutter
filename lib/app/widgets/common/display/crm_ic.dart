@@ -18,8 +18,7 @@ class CrmIc extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Icon(icon, size: size, color: color ?? Colors.black,
-      weight: 10,),
+      child: Icon(icon, size: size, color: color),
     );
   }
 }

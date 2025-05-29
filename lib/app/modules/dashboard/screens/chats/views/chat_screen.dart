@@ -18,7 +18,7 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: CrmBackButton(),
-        backgroundColor: white,
+        backgroundColor: AppColors.white,
         title: Text("Jay Babariya"),
         actionsPadding: EdgeInsets.only(right: AppPadding.medium),
         actions: [Icon(Icons.ac_unit_rounded)],

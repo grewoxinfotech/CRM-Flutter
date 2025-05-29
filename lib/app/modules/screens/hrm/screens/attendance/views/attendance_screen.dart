@@ -40,12 +40,12 @@ class AttendanceScreen extends StatelessWidget {
       Color bgColor = Colors.transparent;
       IconData? icon;
       if (status == 'present') {
-        bgColor = success.withAlpha(100);
+        bgColor = AppColors.success.withAlpha(100);
       } else if (status == 'absent') {
-        bgColor = error.withAlpha(100);
+        bgColor = AppColors.error.withAlpha(100);
         icon = LucideIcons.clock;
       } else if (status == 'model') {
-        bgColor = warning.withAlpha(100);
+        bgColor = AppColors.warning.withAlpha(100);
         icon = LucideIcons.home;
       } else {}
       if (isToday) bgColor = Get.theme.colorScheme.onPrimary.withAlpha(50);
@@ -85,11 +85,11 @@ class AttendanceScreen extends StatelessWidget {
             icon: CrmIc(icon: LucideIcons.info),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.large),
-              side: BorderSide(color: divider),
+              side: BorderSide(color: AppColors.divider),
             ),
             elevation: 5,
             useRootNavigator: true,
-            shadowColor: white,
+            shadowColor: AppColors.white,
             padding: EdgeInsets.all(0),
             onSelected: (value) {
               // Use selected value
@@ -125,7 +125,7 @@ class AttendanceScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
-            color: white,
+            color: AppColors.white,
           ),
         ),
       ),
@@ -136,7 +136,7 @@ class AttendanceScreen extends StatelessWidget {
             // calender
             CrmCard(
               boxShadow: [],
-              border: Border.all(color: divider),
+              border: Border.all(color: AppColors.divider),
               padding: EdgeInsets.all(AppPadding.small),
               child: Obx(
                 () => TableCalendar(

@@ -20,11 +20,11 @@ class LeadCard extends StatelessWidget {
     Color stageColor(String status) {
       switch (status.toLowerCase()) {
         case 'won':
-          return success;
+          return AppColors.success;
         case 'lost':
-          return error;
+          return AppColors.error;
         case 'in progress':
-          return warning;
+          return AppColors.warning;
         default:
           return Colors.grey;
       }
@@ -33,11 +33,11 @@ class LeadCard extends StatelessWidget {
     Color interestColor(String level) {
       switch (level.toLowerCase()) {
         case 'high':
-          return error;
+          return AppColors.error;
         case 'medium':
-          return warning;
+          return AppColors.warning;
         case 'low':
-          return success;
+          return AppColors.success;
         default:
           return Colors.grey;
       }
@@ -47,7 +47,7 @@ class LeadCard extends StatelessWidget {
       onTap: () => Get.toNamed(AppRoutes.leadDetail, arguments: lead),
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.medium),
-        border: Border.all(color: divider),
+        border: Border.all(color: AppColors.divider),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,13 +62,13 @@ class LeadCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: textPrimary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
-                Icon(LucideIcons.chevronRight, color: divider),
+                Icon(LucideIcons.chevronRight, color: AppColors.divider),
               ],
             ),
             AppSpacing.verticalSmall,
@@ -79,8 +79,13 @@ class LeadCard extends StatelessWidget {
               runSpacing: 4,
               children: [
                 CrmStatusCard(title: lead.source),
-                CrmStatusCard(title: lead.status,color: stageColor(lead.status ?? ''),),
-                CrmStatusCard(title: lead.interestLevel,color: interestColor(lead.interestLevel ?? ''),
+                CrmStatusCard(
+                  title: lead.status,
+                  color: stageColor(lead.status ?? ''),
+                ),
+                CrmStatusCard(
+                  title: lead.interestLevel,
+                  color: interestColor(lead.interestLevel ?? ''),
                 ),
               ],
             ),
@@ -96,7 +101,7 @@ class LeadCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: success,
+                    color: AppColors.success,
                   ),
                 ),
                 Row(
@@ -104,14 +109,14 @@ class LeadCard extends StatelessWidget {
                     CrmIc(
                       icon: LucideIcons.calendar,
                       size: 14,
-                      color: textSecondary,
+                      color: AppColors.textSecondary,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       formatDate(lead.createdAt.toString()),
                       style: TextStyle(
                         fontSize: 12,
-                        color: textSecondary,
+                        color: AppColors.textSecondary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

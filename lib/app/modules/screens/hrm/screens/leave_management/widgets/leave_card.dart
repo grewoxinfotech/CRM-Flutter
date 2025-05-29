@@ -43,11 +43,11 @@ class LeaveCard extends StatelessWidget {
 
     Color statusColor(String status) {
       if (status == "pending") {
-        return warning;
+        return AppColors.warning;
       } else if (status == "approved") {
-        return success;
+        return AppColors.success;
       } else if (status == "rejected") {
-        return error;
+        return AppColors.error;
       } else {
         return Colors.grey;
       }
@@ -57,7 +57,7 @@ class LeaveCard extends StatelessWidget {
       onTap: () => Get.to(LeaveOverviewScreen() , arguments: leave),
       child: CrmCard(
         boxShadow: [],
-        border: Border.all(color: divider),
+        border: Border.all(color: AppColors.divider),
         padding: const EdgeInsets.all(AppPadding.medium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +66,7 @@ class LeaveCard extends StatelessWidget {
               text: TextSpan(
                 style: TextStyle(
                   fontSize: 14,
-                  color: textPrimary,
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.w800,
                 ),
                 children: [
@@ -86,7 +86,7 @@ class LeaveCard extends StatelessWidget {
                   "Half Day Application",
                   style: TextStyle(
                     fontSize: 12,
-                    color: textSecondary,
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

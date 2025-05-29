@@ -24,23 +24,29 @@ class FunctionCard extends StatelessWidget {
       onTap: onTap,
       child: CrmCard(
         padding: EdgeInsets.all(AppPadding.medium),
-        border: Border.all(color: divider),
+        border: Border.all(color:AppColors. divider),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment:
+              (title != null)
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
           children: [
             Icon(icon ?? LucideIcons.filePlus, color: color, size: 18),
-            AppSpacing.horizontalSmall,
-            Expanded(
-              child: Text(
-                title.toString(),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: color,
+            if (title != null) ...[
+              AppSpacing.horizontalSmall,
+              Expanded(
+                child: Text(
+                  title.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: color,
+                  ),
                 ),
               ),
-            ),
+            ],
           ],
         ),
       ),

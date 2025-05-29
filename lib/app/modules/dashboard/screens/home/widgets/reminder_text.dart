@@ -26,7 +26,7 @@ class ReminderText extends StatelessWidget {
                 radius: 1,
                 child: CrmIc(
                   icon: LucideIcons.clock4,
-                  color: primary,
+                  color: AppColors.primary,
                   size: 12,
                 ),
               ),
@@ -36,7 +36,7 @@ class ReminderText extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: textSecondary,
+                  color: AppColors.textSecondary,
                 ),
               ),
             ],
@@ -46,7 +46,7 @@ class ReminderText extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: primary,
+              color: AppColors.primary,
             ),
           ),
           Text(
@@ -54,7 +54,7 @@ class ReminderText extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w400,
-              color: textSecondary,
+              color:AppColors. textSecondary,
             ),
           ),
         ],

@@ -19,13 +19,13 @@ class DealDetailScreen extends StatelessWidget {
 
     List<Widget> widgets = [
       DealOverviewCard(deal: deal),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
-      ViewScreen(itemCount: 5, itemBuilder: (context, i) => MemberCard()),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
+      ViewScreen(itemCount: 5, itemBuilder: (context, i) => Text(i.toString())),
     ];
     return Scaffold(
       appBar: AppBar(

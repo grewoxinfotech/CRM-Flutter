@@ -1,126 +1,54 @@
-import 'package:crm_flutter/app/care/constants/size_manager.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
+// widgets/payment_card.dart
+
+import 'package:crm_flutter/app/data/network/all/project/payment_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class PaymentCard extends StatelessWidget {
-  final String? id;
-  final String? project;
-  final String? startDate;
-  final String? endDate;
-  final String? projectMembers;
-  final String? completion;
-  final String? status;
-  final String? clientId;
-  final String? createdBy;
-  final String? createdAt;
-  final String? updatedAt;
-  final GestureTapCallback? onTap;
-  final GestureTapCallback? onDelete;
-  final GestureTapCallback? onEdit;
-
-  const PaymentCard({
-    super.key,
-    this.id,
-    this.project,
-    this.startDate,
-    this.endDate,
-    this.projectMembers,
-    this.completion,
-    this.status,
-    this.clientId,
-    this.createdBy,
-    this.createdAt,
-    this.updatedAt,
-    this.onTap,
-    this.onEdit,
-    this.onDelete,
-  });
+  final PaymentModel payment;
+  const PaymentCard({super.key, required this.payment});
 
   @override
   Widget build(BuildContext context) {
-    final Color textPrimary = Get.theme.colorScheme.onPrimary;
-    final Color textSecondary = Get.theme.colorScheme.onSecondary;
-    return GestureDetector(
-      onTap: onTap,
-      child: CrmCard(
-        padding: const EdgeInsets.all(AppPadding.medium),
+    final dateFormat = DateFormat.yMMMd();
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Project Name & Status
+            Text("Invoice: ${payment.invoice}",
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text("Amount: ₹${payment.amount.toStringAsFixed(2)}",
+                    style: const TextStyle(fontSize: 16)),
                 Text(
-                  project ?? "Untitled Project",
+                  payment.status.toUpperCase(),
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: textPrimary,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppPadding.small,
-                    vertical: AppPadding.small / 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: (status == "paid" ? Colors.green : Colors.orange)
-                        .withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppRadius.small),
-                  ),
-                  child: Text(
-                    status?.toUpperCase() ?? "UNPAID",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: status == "paid" ? Colors.green : Colors.orange,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    fontSize: 14,
+                    color: payment.status == "paid"
+                        ? Colors.green
+                        : Colors.orange,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-
-            AppSpacing.verticalSmall,
-            // Date Range
-            Text(
-              "Duration: ${startDate ?? '-'} to ${endDate ?? '-'}",
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: textSecondary,
+            const SizedBox(height: 6),
+            Text("Method: ${payment.paymentMethod}"),
+            Text("Paid On: ${dateFormat.format(payment.paidOn)}"),
+            if (payment.remark != null && payment.remark!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 6.0),
+                child: Text("Remark: ${payment.remark!}",
+                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
               ),
-            ),
-
-            // Completion & Members
-            Row(
-              children: [
-                Text(
-                  "Completion: ${completion ?? '0%'}",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: textSecondary,
-                  ),
-                ),
-                AppSpacing.horizontalSmall,
-                Text(
-                  "Members: ${projectMembers ?? '0'}",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: textSecondary,
-                  ),
-                ),
-              ],
-            ),
-
-            // Footer with created date and actions
-            Divider(height: AppPadding.medium, color: Get.theme.dividerColor),
-
-            // Edit / Delete buttons
           ],
         ),
       ),

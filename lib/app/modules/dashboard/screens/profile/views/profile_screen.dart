@@ -26,13 +26,13 @@ class UserProfileScreen extends StatelessWidget {
                       CrmCard(
                         borderRadius: BorderRadius.circular(1000),
                         boxShadow: [],
-                        color: primary.withAlpha(30),
+                        color: AppColors.primary.withAlpha(30),
                         padding: EdgeInsets.all(5),
                         child: CrmCard(
                           width: 60,
                           height: 60,
                           gradient: RadialGradient(
-                            colors: [primary.withAlpha(150), primary],
+                            colors: [AppColors.primary.withAlpha(150), AppColors.primary],
                           ),
                           borderRadius: BorderRadius.circular(1000),
                           boxShadow: [],
@@ -56,7 +56,7 @@ class UserProfileScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
-                              color: textPrimary,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           Text(
@@ -64,20 +64,20 @@ class UserProfileScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
-                              color: primary,
+                              color: AppColors.primary,
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  Divider(color: divider, height: AppPadding.large),
+                  Divider(color:AppColors. divider, height: AppPadding.large),
                   _tile(title: "Email", subTitle: "raiser2@yopmail.com"),
                   _tile(title: "Phone", subTitle: "1234567890"),
                   _tile(title: "Address", subTitle: "Sutar, Gujrat, India"),
                   AppSpacing.verticalSmall,
                   CrmCard(
-                    color: primary,
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(AppRadius.small),
                     alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(
@@ -86,13 +86,13 @@ class UserProfileScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        CrmIc(icon: LucideIcons.briefcase, color: white),
+                        CrmIc(icon: LucideIcons.briefcase, color: AppColors.white),
                         AppSpacing.horizontalSmall,
                         Text(
                           "Company",
                           style: TextStyle(
                             fontSize: 12,
-                            color: white,
+                            color: AppColors.white,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -125,7 +125,7 @@ class _tile extends StatelessWidget {
           "$title : ",
           style: TextStyle(
             fontSize: 12,
-            color: textPrimary,
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -133,7 +133,7 @@ class _tile extends StatelessWidget {
           "$subTitle",
           style: TextStyle(
             fontSize: 12,
-            color: textSecondary,
+            color:AppColors. textSecondary,
             fontWeight: FontWeight.w600,
           ),
         ),

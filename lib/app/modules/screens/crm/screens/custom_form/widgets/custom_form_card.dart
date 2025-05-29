@@ -38,11 +38,11 @@ class CustomFormCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
-                Icon(Icons.chevron_right, color: divider),
+                Icon(Icons.chevron_right, color:AppColors. divider),
               ],
             ),
 
@@ -52,7 +52,7 @@ class CustomFormCard extends StatelessWidget {
                 customForm.description!,
                 style: TextStyle(
                   fontSize: 12,
-                  color: textSecondary,
+                  color: AppColors.textSecondary,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -77,7 +77,7 @@ class CustomFormCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: textPrimary),
+          Icon(icon, size: 16, color: AppColors.textPrimary),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -85,7 +85,7 @@ class CustomFormCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: textSecondary,
+                color:AppColors. textSecondary,
               ),
             ),
           ),

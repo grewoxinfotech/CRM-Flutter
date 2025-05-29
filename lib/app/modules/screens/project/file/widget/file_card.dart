@@ -1,226 +1,40 @@
-import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/all/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
-import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FileCard extends StatelessWidget {
-  final String? id;
-  final String? url;
-  final String? name;
-  final String? role;
-  final String? description;
-  final String? file;
-  final String? clientId;
-  final String? createdBy;
-  final String? updatedBy;
-  final String? createdAt;
-  final String? updatedAt;
-  final GestureTapCallback? onTap;
-  final GestureTapCallback? onDelete;
-  final GestureTapCallback? onEdit;
+  final FileModel file;
 
-  const FileCard({
-    super.key,
-    this.url,
-    this.id,
-    this.name,
-    this.role,
-    this.description,
-    this.file,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
-    this.onTap,
-    this.onDelete,
-    this.onEdit,
-  });
+  const FileCard({Key? key, required this.file}) : super(key: key);
 
-  String _getFileExtension(String filename) {
-    return filename.split('.').last.toLowerCase();
-  }
-
-  IconData _getFileIcon(String extension) {
-    switch (extension) {
-      case 'pdf':
-        return Icons.picture_as_pdf;
-      case 'doc':
-      case 'docx':
-        return Icons.description;
-      case 'xls':
-      case 'xlsx':
-        return Icons.table_chart;
-      case 'ppt':
-      case 'pptx':
-        return Icons.slideshow;
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'gif':
-        return Icons.image;
-      default:
-        return Icons.insert_drive_file;
-    }
-  }
-
-  Color _getFileColor(String extension) {
-    switch (extension) {
-      case 'pdf':
-        return Colors.red;
-      case 'doc':
-      case 'docx':
-        return Colors.blue;
-      case 'xls':
-      case 'xlsx':
-        return Colors.green;
-      case 'ppt':
-      case 'pptx':
-        return Colors.orange;
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'gif':
-        return Colors.purple;
-      default:
-        return Colors.grey;
+  void _launchURL(BuildContext context) async {
+    final url = file.url ?? '';
+    if (url.isNotEmpty && await canLaunch(url)) {
+      await launch(url);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Cannot open file URL')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Color textPrimary = Get.theme.colorScheme.onPrimary;
-    Color textSecondary = Get.theme.colorScheme.onSecondary;
-    double cardHeight = 100;
-
-    // Get file extension and icon
-    final extension = name != null ? _getFileExtension(name!) : '';
-    final fileIcon = _getFileIcon(extension);
-    final fileColor = _getFileColor(extension);
-
-    return GestureDetector(
-      onTap: onTap,
-      child: CrmCard(
-        height: cardHeight,
-        borderRadius: BorderRadius.circular(AppRadius.large),
-        child: Row(
-          children: [
-            // File Preview/Icon Container
-            Container(
-              height: cardHeight,
-              width: cardHeight,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: fileColor.withOpacity(0.1),
-                borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(AppRadius.large),
-                ),
-              ),
-              child: url != null && (extension == 'jpg' || extension == 'jpeg' || extension == 'png' || extension == 'gif')
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(AppRadius.large),
-                      ),
-                      child: Image.network(
-                        url!,
-                        fit: BoxFit.cover,
-                        width: cardHeight,
-                        height: cardHeight,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          fileIcon,
-                          size: 32,
-                          color: fileColor,
-                        ),
-                      ),
-                    )
-                  : Icon(
-                      fileIcon,
-                      size: 32,
-                      color: fileColor,
-                    ),
-            ),
-            // File Details Container
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(AppPadding.medium),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // File Name
-                    Text(
-                      name ?? 'Unnamed File',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: textPrimary,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    // File Type and Size
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: fileColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(AppRadius.small),
-                          ),
-                          child: Text(
-                            extension.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: fileColor,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          role ?? 'File',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Action Buttons
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: AppPadding.small),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (onEdit != null)
-                    CrmIc(
-                      icon: LucideIcons.edit,
-                      color: textPrimary,
-                      onTap: onEdit,
-                    ),
-                  SizedBox(width: 8),
-                  if (onDelete != null)
-                    CrmIc(
-                      icon: LucideIcons.trash2,
-                      color: Get.theme.colorScheme.error,
-                      onTap: onDelete,
-                    ),
-                ],
-              ),
-            ),
-          ],
+    return CrmCard(
+      child: ListTile(
+        leading: const Icon(Icons.insert_drive_file, color: Colors.blue),
+        title: Text(file.filename ?? 'No file name'),
+        subtitle: Text(
+          file.url ?? 'No file URL',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.open_in_new, color: Colors.blue),
+          onPressed: () => _launchURL(context),
+          tooltip: 'Open File',
         ),
       ),
     );

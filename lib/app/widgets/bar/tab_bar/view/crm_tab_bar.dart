@@ -54,8 +54,8 @@ class CrmTabBar extends StatelessWidget implements PreferredSizeWidget {
                     decoration: BoxDecoration(
                       color:
                           tabBarController.selectedIndex.value == index
-                              ? primary.withAlpha(30)
-                              : transparent,
+                              ? AppColors.primary.withAlpha(30)
+                              : AppColors.transparent,
                       borderRadius: BorderRadius.circular(AppRadius.medium - 5),
                     ),
                     child: Row(
@@ -65,8 +65,8 @@ class CrmTabBar extends StatelessWidget implements PreferredSizeWidget {
                           size: 14,
                           color:
                               tabBarController.selectedIndex.value == index
-                                  ? primary
-                                  : textSecondary,
+                                  ? AppColors.primary
+                                  : AppColors.textSecondary,
                         ),
                         AppSpacing.horizontalSmall,
                         Text(
@@ -75,8 +75,8 @@ class CrmTabBar extends StatelessWidget implements PreferredSizeWidget {
                             fontSize: 12,
                             color:
                                 tabBarController.selectedIndex.value == index
-                                    ? primary
-                                    : textSecondary,
+                                    ? AppColors.primary
+                                    : AppColors.textSecondary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

@@ -21,6 +21,7 @@ class LeadModel {
   final String? updatedBy;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? key;
 
   LeadModel({
     this.id,
@@ -45,69 +46,38 @@ class LeadModel {
     this.updatedBy,
     this.createdAt,
     this.updatedAt,
+    this.key,
   });
 
   factory LeadModel.fromJson(Map<String, dynamic> json) {
-    // Safe parsing of leadMembers
-    List<String>? parseLeadMembers(dynamic jsonData) {
-      try {
-        if (jsonData == null) return null;
-        // If it is a Map with a key 'lead_members' holding a list
-        if (jsonData is Map && jsonData['lead_members'] != null) {
-          return List<String>.from(jsonData['lead_members']);
-        }
-        // If it is directly a List
-        if (jsonData is List) {
-          return List<String>.from(jsonData);
-        }
-      } catch (_) {}
-      return null;
-    }
-
-    // Safe parsing of files
-    List<LeadFile>? parseFiles(dynamic jsonData) {
-      try {
-        if (jsonData == null) return null;
-        if (jsonData is List) {
-          return jsonData.map((f) => LeadFile.fromJson(f)).toList();
-        }
-      } catch (_) {}
-      return null;
-    }
-
-    // Safe parsing of DateTime
-    DateTime? parseDate(String? dateString) {
-      try {
-        if (dateString == null || dateString.isEmpty) return null;
-        return DateTime.parse(dateString);
-      } catch (_) {
-        return null;
-      }
-    }
-
     return LeadModel(
-      id: json['id']?.toString(),
-      inquiryId: json['inquiry_id']?.toString(),
-      leadTitle: json['leadTitle']?.toString(),
-      leadStage: json['leadStage']?.toString(),
-      pipeline: json['pipeline']?.toString(),
-      currency: json['currency']?.toString(),
-      leadValue: json['leadValue'] is int ? json['leadValue'] : int.tryParse(json['leadValue']?.toString() ?? ''),
-      companyId: json['company_id']?.toString(),
-      contactId: json['contact_id']?.toString(),
-      leadMembers: parseLeadMembers(json['lead_members']),
-      source: json['source']?.toString(),
-      category: json['category']?.toString(),
-      files: parseFiles(json['files']),
-      status: json['status']?.toString(),
-      interestLevel: json['interest_level']?.toString(),
-      leadScore: json['lead_score'] is int ? json['lead_score'] : int.tryParse(json['lead_score']?.toString() ?? ''),
-      isConverted: json['is_converted'] == null ? null : (json['is_converted'] == true || json['is_converted'] == 1),
-      clientId: json['client_id']?.toString(),
-      createdBy: json['created_by']?.toString(),
-      updatedBy: json['updated_by']?.toString(),
-      createdAt: parseDate(json['createdAt']),
-      updatedAt: parseDate(json['updatedAt']),
+      id: json['id'],
+      inquiryId: json['inquiry_id'],
+      leadTitle: json['leadTitle'],
+      leadStage: json['leadStage'],
+      pipeline: json['pipeline'],
+      currency: json['currency'],
+      leadValue: json['leadValue'],
+      companyId: json['company_id'],
+      contactId: json['contact_id'],
+      leadMembers:
+          (json['lead_members']?['lead_members'] as List?)
+              ?.map((e) => e.toString())
+              .toList(),
+      source: json['source'],
+      category: json['category'],
+      files:
+          (json['files'] as List?)?.map((e) => LeadFile.fromJson(e)).toList(),
+      status: json['status'],
+      interestLevel: json['interest_level'],
+      leadScore: json['lead_score'],
+      isConverted: json['is_converted'],
+      clientId: json['client_id'],
+      createdBy: json['created_by'],
+      updatedBy: json['updated_by'],
+      createdAt: DateTime.tryParse(json['createdAt'] ?? ''),
+      updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
+      key: json['key'],
     );
   }
 }
@@ -119,9 +89,6 @@ class LeadFile {
   LeadFile({required this.url, required this.filename});
 
   factory LeadFile.fromJson(Map<String, dynamic> json) {
-    return LeadFile(
-      url: json['url']?.toString() ?? '',
-      filename: json['filename']?.toString() ?? '',
-    );
+    return LeadFile(url: json['url'] ?? '', filename: json['filename'] ?? '');
   }
 }

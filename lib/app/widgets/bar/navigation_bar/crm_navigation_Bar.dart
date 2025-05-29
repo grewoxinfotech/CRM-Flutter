@@ -17,15 +17,16 @@ class CrmNavigationBar extends StatelessWidget {
       {'icon': LucideIcons.target, 'title': 'Leads'},
       {'icon': LucideIcons.clipboardCheck, 'title': 'Tasks'},
       {'icon': LucideIcons.messageSquare, 'title': 'Chats'},
-      {'icon': LucideIcons.userCircle, 'title': 'Profile'},
+      {'icon': LucideIcons.user, 'title': 'Profile'},
     ];
 
     return Card(
-      elevation: 6,
+      elevation: 3,
+      shadowColor: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.large),
       ),
-      color: surface,
+      color: AppColors.white,
       margin: const EdgeInsets.symmetric(
         horizontal: AppMargin.small,
       ).copyWith(bottom: AppMargin.small),
@@ -42,10 +43,9 @@ class CrmNavigationBar extends StatelessWidget {
 
             return GestureDetector(
               onTap: () => onTap?.call(index),
-              child: AnimatedContainer(
+              child: Container(
                 height: 40,
                 width: 50,
-                duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
                   color:
                       isSelected
@@ -61,16 +61,6 @@ class CrmNavigationBar extends StatelessWidget {
                       color: iconColor,
                       size: 20,
                     ),
-                    // const SizedBox(height: 4),
-                    // AnimatedDefaultTextStyle(
-                    //   duration: const Duration(milliseconds: 300),
-                    //   style: TextStyle(
-                    //     fontSize: 12,
-                    //     fontWeight: FontWeight.w600,
-                    //     color: iconColor,
-                    //   ),
-                    //   child: Text(items[index]['title'] as String),
-                    // ),
                   ],
                 ),
               ),

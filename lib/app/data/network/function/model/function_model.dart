@@ -24,14 +24,14 @@ class FunctionModel {
         appRoutes: AppRoutes.lead,
       ),
       FunctionModel(
-        title: "Deals",
+        title: "Deal",
         icon: LucideIcons.heartHandshake,
         color: Color(0xff234567),
         appRoutes: AppRoutes.deal,
       ),
       FunctionModel(
         title: "Task",
-        icon: LucideIcons.checkSquare,
+        icon: LucideIcons.clipboardCheck,
         color: Color(0xff098765),
         appRoutes: AppRoutes.task,
       ),
