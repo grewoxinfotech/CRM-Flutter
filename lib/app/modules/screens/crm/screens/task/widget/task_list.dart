@@ -12,10 +12,11 @@ class TaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CrmFutureList<TaskModel>(
+    return CrmFutureList(
       padding: padding,
       itemCount: itemCount,
       emptyText: "No Task Found",
+      physics: NeverScrollableScrollPhysics(),
       future: TaskService().getTasks(),
       itemBuilder: (context, task) => TaskCard(task: task),
     );

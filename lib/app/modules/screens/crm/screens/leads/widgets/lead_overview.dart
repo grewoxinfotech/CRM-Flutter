@@ -18,7 +18,7 @@ class LeadOverviewCard extends StatelessWidget {
       return Row(
         children: [
           Icon(icon, size: 16, color: AppColors.textPrimary),
-          AppSpacing.horizontalSmall,
+          SizedBox(width: 10,),
           Text(
             value,
             style: TextStyle(
@@ -62,7 +62,7 @@ class LeadOverviewCard extends StatelessWidget {
                 ),
               ],
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(height: 10,),
             Wrap(
               spacing: 8,
               runSpacing: 4,
@@ -85,14 +85,14 @@ class LeadOverviewCard extends StatelessWidget {
               color: Colors.green.shade900,
               icon: LucideIcons.trendingUp,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(height: 10,),
             _tile(
               title: "Interest Level",
               subtitle: lead.interestLevel.toString(),
               color: interestColor(lead.interestLevel.toString()),
               icon: LucideIcons.flame,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(height: 10,),
             _tile(
               title: "Lead Member",
               subtitle: "${lead.leadMembers?.length ?? 0}",
@@ -110,21 +110,21 @@ class LeadOverviewCard extends StatelessWidget {
               subtitle: "High",
               icon: LucideIcons.gitBranch,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(height: 10,),
             _tile(title: "Source", subtitle: "Hign", icon: LucideIcons.share2),
-            AppSpacing.verticalSmall,
+            SizedBox(height: 10,),
             _tile(
               title: "Category",
               subtitle: "medieya",
               icon: LucideIcons.tags,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(height: 10,),
             _tile(
               title: "Status",
               subtitle: "Hign",
               icon: LucideIcons.activity,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(height: 10,),
             _tile(
               title: "Stage",
               subtitle: "Stage",
@@ -149,7 +149,7 @@ class LeadOverviewCard extends StatelessWidget {
               ),
             ),
           ),
-          AppSpacing.horizontalSmall,
+          SizedBox(width: 10,),
           Expanded(
             child: CrmButton(
               height: 40,
@@ -197,7 +197,7 @@ class _tile extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: 14, color:AppColors. primary),
-              AppSpacing.horizontalSmall,
+              SizedBox(width: 10,),
               Text(
                 title!,
                 style: TextStyle(
@@ -208,7 +208,7 @@ class _tile extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.verticalSmall,
+          SizedBox(height: 10,),
           Text(
             textAlign: TextAlign.end,
             subtitle!,

@@ -12,13 +12,14 @@ class CustomFormList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CrmFutureList<CustomFormModel>(
+    return CrmFutureList(
       padding: padding,
       itemCount: itemCount,
+      physics: NeverScrollableScrollPhysics(),
       emptyText: "No Custom Form Found",
       future: CustomFormService.getCustomFrom(),
       itemBuilder:
-          (context, customForm) => CustomFormCard(customForm: customForm),
+          (context, customForm) => CustomFormCard(),
     );
   }
 }

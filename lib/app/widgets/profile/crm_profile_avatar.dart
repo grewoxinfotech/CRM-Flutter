@@ -2,27 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CrmProfileAvatar extends StatelessWidget {
-  final double? radius;
+  final double radius;
+  final ImageProvider? image;
   final Widget? child;
-  final ImageProvider? foregroundImage;
+  final VoidCallback? onTap;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final double borderWidth;
+  final String heroTag;
+  final BoxShadow? shadow;
 
   const CrmProfileAvatar({
     super.key,
-    this.foregroundImage,
-    this.radius,
+    this.radius = 20,
+    this.image,
     this.child,
-  }); // Default radius set
+    this.onTap,
+    this.backgroundColor,
+    this.borderColor,
+    this.borderWidth = 0,
+    this.heroTag = "profileAvatar",
+    this.shadow,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: "profileAvtar",
+      tag: heroTag,
       child: GestureDetector(
-        onTap: (){},
-        child: CircleAvatar(
-          foregroundImage: foregroundImage,
-          radius: radius ?? 20,
-          child: child,
+        onTap: onTap,
+        child: Container(
+          width: radius * 2,
+          height: radius * 2,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: backgroundColor ?? Get.theme.colorScheme.background,
+            border:
+                borderColor != null
+                    ? Border.all(color: borderColor!, width: borderWidth)
+                    : null,
+            boxShadow: shadow != null ? [shadow!] : null,
+            image:
+                image != null
+                    ? DecorationImage(image: image!, fit: BoxFit.cover)
+                    : null,
+          ),
+          child: image == null ? Center(child: child) : null,
         ),
       ),
     );

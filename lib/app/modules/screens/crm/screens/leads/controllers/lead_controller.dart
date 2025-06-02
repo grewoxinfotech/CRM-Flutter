@@ -1,5 +1,4 @@
 import 'package:crm_flutter/app/data/network/all/crm/lead/model/lead_model.dart';
-import 'package:crm_flutter/app/data/network/all/crm/lead/service/lead_service.dart';
 import 'package:get/get.dart';
 
 /// Controller for managing lead in the CRM system
@@ -10,16 +9,14 @@ class LeadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchLeads();
-  }
-
-  void fetchLeads() async {
-    isLoading.value = true;
-    leads.value = await LeadService.getLeads();
-    isLoading.value = false;
   }
 
 }
+// void fetchLeads() async {
+//   isLoading.value = true;
+//   leads.value = await LeadService.getLeads();
+//   isLoading.value = false;
+// }
 
 //   RxBool isLoading = false.obs;
 //   List<LeadModel> leads = [];

@@ -14,19 +14,19 @@ class CustomFormModel {
   final DateTime? updatedAt;
 
   CustomFormModel({
-    this.id,
-    this.title,
-    this.description,
-    this.eventName,
-    this.eventLocation,
-    this.startDate,
-    this.endDate,
-    this.fields,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.eventName,
+    required this.eventLocation,
+    required this.startDate,
+    required this.endDate,
+    required this.fields,
+    required this.clientId,
+    required this.createdBy,
+    required this.updatedBy,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory CustomFormModel.fromJson(Map<String, dynamic> json) {

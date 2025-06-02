@@ -6,7 +6,7 @@ class CompanyController extends GetxController {
   CompanyService companyService = CompanyService();
   List<CompanyModel> company = [];
 
-  Future<List<CompanyModel>> getCompany() async {
+  Future<List> getCompany() async {
     final data = await CompanyService.getCompany();
     return data;
   }

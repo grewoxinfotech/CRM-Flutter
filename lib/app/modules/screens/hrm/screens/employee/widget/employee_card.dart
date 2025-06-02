@@ -108,8 +108,6 @@ class EmployeeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color textPrimary = Get.theme.colorScheme.onPrimary;
-    Color textSecondary = Get.theme.colorScheme.onSecondary;
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(
@@ -121,7 +119,6 @@ class EmployeeCard extends StatelessWidget {
             Text("id : $id",style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: textSecondary,
             ),),
             Text("employeeId : $employeeId"),
             Text("username : $username"),

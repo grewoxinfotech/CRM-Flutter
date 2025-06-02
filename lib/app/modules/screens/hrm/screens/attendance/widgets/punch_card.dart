@@ -23,7 +23,6 @@ class PunchCard extends StatelessWidget {
           padding: EdgeInsets.all(
             AppPadding.small,
           ).copyWith(left: AppMargin.medium),
-          color: AppColors.white,
           border: Border.all(color: AppColors.divider),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,18 +48,9 @@ class PunchCard extends StatelessWidget {
               ),
               CrmButton(
                 width: 100,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primary.withAlpha(100),
-                    blurRadius: 5,
-                    spreadRadius: 0,
-                    offset: Offset(0, 5),
-                  ),
-                ],
                 titleTextStyle: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.white,
                 ),
                 title:
                     (attendanceController.isPunchedIn.value == true)

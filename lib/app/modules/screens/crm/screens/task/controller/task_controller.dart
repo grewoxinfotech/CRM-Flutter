@@ -16,7 +16,7 @@ class TaskController extends GetxController {
   final descriptionController = TextEditingController();
 
 
-  Future<List<TaskModel>> getTasks() async {
+  Future<List> getTasks() async {
     return await taskService.getTasks();
   }
 

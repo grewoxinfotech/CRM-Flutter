@@ -18,7 +18,7 @@ class ActivityModel {
     required this.action,
     required this.performedBy,
     required this.activityMessage,
-    this.clientId,
+    required this.clientId,
     required this.createdAt,
     required this.updatedAt,
   });

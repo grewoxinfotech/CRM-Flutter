@@ -17,22 +17,22 @@ class FollowUpTaskModel {
   final DateTime? updatedAt;
 
   FollowUpTaskModel({
-    this.id,
-    this.subject,
-    this.dueDate,
-    this.priority,
-    this.taskReporter,
-    this.assignedTo,
-    this.status,
-    this.reminder,
-    this.repeat,
-    this.description,
-    this.relatedId,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
+   required this.id,
+   required this.subject,
+   required this.dueDate,
+   required this.priority,
+   required this.taskReporter,
+   required this.assignedTo,
+   required this.status,
+   required this.reminder,
+   required this.repeat,
+   required this.description,
+   required this.relatedId,
+   required this.clientId,
+   required this.createdBy,
+   required this.updatedBy,
+   required this.createdAt,
+   required this.updatedAt,
   });
 
   factory FollowUpTaskModel.fromJson(Map<String, dynamic> json) {

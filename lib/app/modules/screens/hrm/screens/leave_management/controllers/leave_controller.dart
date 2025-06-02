@@ -1,12 +1,9 @@
 import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/model/leave_model.dart';
-import 'package:crm_flutter/app/data/network/all/hrm/leave_manamgemant/service/leave_service.dart';
 import 'package:crm_flutter/app/modules/screens/hrm/screens/leave_management/widgets/leave_request_Dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeaveController extends GetxController {
-
-  var leaveStats = LeaveStatsModel(total: 0, approved: 0, pending: 0, rejected: 0).obs;
   var upcomingLeaves = <LeaveModel>[].obs;
 
   @override
@@ -15,14 +12,9 @@ class LeaveController extends GetxController {
     super.onInit();
   }
 
-  void fetchLeaveOverview() async {
-    // Call your service to fetch data and update:
-    // leaveStats.value = fetchedStats;
-    // upcomingLeaves.value = fetchedList;
-  }
+  void fetchLeaveOverview() async {}
 
   final List<LeaveColorModel> leaveColors = LeaveColorModel.getLeaves();
-  final LeaveService leaveService = LeaveService();
 
   Color getLeaveTypeColor(String leaveType) {
     return leaveColors
@@ -32,21 +24,6 @@ class LeaveController extends GetxController {
         )
         .color;
   }
-
-  Color getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'approved':
-        return Colors.green;
-      case 'pending':
-        return Colors.orange;
-      case 'rejected':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  Future<List<LeaveModel>> getLeaves() async => await LeaveService.getLeaves();
 
   void addLeave() {
     showDialog(

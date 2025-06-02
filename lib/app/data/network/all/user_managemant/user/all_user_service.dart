@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AllUserService extends GetxService {
-  final Uri url = Uri.parse(UrlRes.auth);
+  final Uri url = Uri.parse(UrlRes.authorization);
 
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
@@ -13,9 +13,9 @@ class AllUserService extends GetxService {
 
   Future<List> fetchAllUsers() async {
     final response = await http.get(url, headers: await headers());
-    final data = jsonDecode(response.body);
-    if (response.statusCode == 200 && data["success"] == true) {
-      return data["data"] ?? [];
+    final date = jsonDecode(response.body);
+    if (response.statusCode == 200 && date["success"] == true) {
+      return date["date"] ?? [];
     } else {
       return [];
     }

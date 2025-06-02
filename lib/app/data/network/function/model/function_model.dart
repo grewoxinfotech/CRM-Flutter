@@ -12,7 +12,7 @@ class FunctionModel {
     required this.title,
     required this.icon,
     required this.color,
-    this.appRoutes,
+    required this.appRoutes,
   });
 
   static List<FunctionModel> getFunctions() {
@@ -21,7 +21,7 @@ class FunctionModel {
         title: "Lead",
         icon: LucideIcons.target,
         color: Color(0xff632100),
-        appRoutes: AppRoutes.lead,
+        appRoutes: AppRoutes.deal,
       ),
       FunctionModel(
         title: "Deal",
@@ -33,13 +33,13 @@ class FunctionModel {
         title: "Task",
         icon: LucideIcons.clipboardCheck,
         color: Color(0xff098765),
-        appRoutes: AppRoutes.task,
+        appRoutes: AppRoutes.contact,
       ),
       FunctionModel(
         title: "Contact",
         icon:  LucideIcons.users2,
         color: Color(0xff284398),
-        appRoutes: AppRoutes.contact,
+        appRoutes: AppRoutes.lead,
       ),
     ];
   }

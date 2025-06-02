@@ -12,17 +12,17 @@ class NoteModel {
   final DateTime? updatedAt;
 
   NoteModel({
-    this.id,
-    this.relatedId,
-    this.noteTitle,
-    this.noteType,
-    this.employees,
-    this.description,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
+   required this.id,
+   required this.relatedId,
+   required this.noteTitle,
+   required this.noteType,
+   required this.employees,
+   required this.description,
+   required this.clientId,
+   required this.createdBy,
+   required this.updatedBy,
+   required this.createdAt,
+   required this.updatedAt,
   });
 
   factory NoteModel.fromJson(Map<String, dynamic> json) {

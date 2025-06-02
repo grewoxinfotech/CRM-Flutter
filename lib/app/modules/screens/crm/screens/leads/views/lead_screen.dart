@@ -22,12 +22,12 @@ class LeadScreen extends StatelessWidget {
         actions: [CrmIc(icon: LucideIcons.filter, size: 18, color: AppColors.primary)],
       ),
       floatingActionButton: CrmButton(
-        onTap: () => Get.to(AppRoutes.leadAdd),
+        onTap: () => Get.to(AppRoutes.lead),
         title: "Add Lead",
       ),
-      body: SingleChildScrollView(child: LeadList(
+      body: LeadList(
         itemCount: 1,
-      )),
+      ),
     );
   }
 }

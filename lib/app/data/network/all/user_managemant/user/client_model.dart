@@ -1,6 +1,3 @@
-
-
-
 class ClientUserModel {
   final String id;
   final String? employeeId;
@@ -50,7 +47,7 @@ class ClientUserModel {
 
   ClientUserModel({
     required this.id,
-    this.employeeId,
+    required this.employeeId,
     required this.username,
     required this.password,
     required this.email,
@@ -58,38 +55,38 @@ class ClientUserModel {
     required this.profilePic,
     required this.firstName,
     required this.lastName,
-    this.phoneCode,
+    required this.phoneCode,
     required this.phone,
     required this.address,
-    this.state,
-    this.city,
-    this.country,
-    this.zipcode,
-    this.website,
-    this.gender,
-    this.joiningDate,
-    this.leaveDate,
-    this.branch,
-    this.department,
-    this.designation,
-    this.salary,
-    required this.accountHolder ,
+    required this.state,
+    required this.city,
+    required this.country,
+    required this.zipcode,
+    required this.website,
+    required this.gender,
+    required this.joiningDate,
+    required this.leaveDate,
+    required this.branch,
+    required this.department,
+    required this.designation,
+    required this.salary,
+    required this.accountHolder,
     required this.accountNumber,
     required this.bankName,
     required this.ifsc,
-    this.gstIn,
+    required this.gstIn,
     required this.bankLocation,
-    this.cvPath,
-    this.links,
-    this.eSignature,
-    this.accountType,
+    required this.cvPath,
+    required this.links,
+    required this.eSignature,
+    required this.accountType,
     required this.clientId,
-    this.clientPlanId,
-    this.documents,
-    this.resetPasswordOTP,
-    this.resetPasswordOTPExpiry,
-    this.storageLimit,
-    this.storageUsed,
+    required this.clientPlanId,
+    required this.documents,
+    required this.resetPasswordOTP,
+    required this.resetPasswordOTPExpiry,
+    required this.storageLimit,
+    required this.storageUsed,
     required this.createdBy,
     required this.updatedBy,
     required this.createdAt,
@@ -118,8 +115,14 @@ class ClientUserModel {
       zipcode: json['zipcode'],
       website: json['website'],
       gender: json['gender'],
-      joiningDate: json['joiningDate'] != null ? DateTime.tryParse(json['joiningDate']) : null,
-      leaveDate: json['leaveDate'] != null ? DateTime.tryParse(json['leaveDate']) : null,
+      joiningDate:
+          json['joiningDate'] != null
+              ? DateTime.tryParse(json['joiningDate'])
+              : null,
+      leaveDate:
+          json['leaveDate'] != null
+              ? DateTime.tryParse(json['leaveDate'])
+              : null,
       branch: json['branch'],
       department: json['department'],
       designation: json['designation'],
@@ -149,7 +152,6 @@ class ClientUserModel {
   }
 
   Map<String, dynamic> toJson() {
-
     return {
       'id': id,
       'employeeId': employeeId,

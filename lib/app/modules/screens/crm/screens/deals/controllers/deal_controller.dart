@@ -30,7 +30,7 @@ class DealController extends GetxController {
   }
 
   /// 1. Get all deal with loading state management
-  Future<List<DealModel>> getDeals() async => await DealService.getDeals();
+  Future<List> getDeals() async => await DealService.getDeals();
 
   /// 2. Create a new deal
   Future<bool> addDeal() async {

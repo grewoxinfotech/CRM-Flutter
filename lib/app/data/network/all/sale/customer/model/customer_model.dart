@@ -16,21 +16,21 @@ class CustomerModel {
   final DateTime? updatedAt;
 
   CustomerModel({
-    this.id,
-    this.relatedId,
-    this.customerNumber,
-    this.name,
-    this.contact,
-    this.phoneCode,
-    this.email,
-    this.taxNumber,
-    this.billingAddress,
-    this.shippingAddress,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
+   required this.id,
+   required this.relatedId,
+   required this.customerNumber,
+   required this.name,
+   required this.contact,
+   required this.phoneCode,
+   required this.email,
+   required this.taxNumber,
+   required this.billingAddress,
+   required this.shippingAddress,
+   required this.clientId,
+   required this.createdBy,
+   required this.updatedBy,
+   required this.createdAt,
+   required this.updatedAt,
   });
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {

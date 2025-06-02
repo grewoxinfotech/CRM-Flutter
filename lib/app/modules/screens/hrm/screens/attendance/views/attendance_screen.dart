@@ -77,7 +77,6 @@ class AttendanceScreen extends StatelessWidget {
           CrmButton(
             width: 80,
             height: 30,
-            boxShadow: [],
             title: "Export",
             onTap: () => print("Export File"),
           ),
@@ -89,7 +88,6 @@ class AttendanceScreen extends StatelessWidget {
             ),
             elevation: 5,
             useRootNavigator: true,
-            shadowColor: AppColors.white,
             padding: EdgeInsets.all(0),
             onSelected: (value) {
               // Use selected value
@@ -125,7 +123,6 @@ class AttendanceScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
-            color: AppColors.white,
           ),
         ),
       ),
@@ -200,8 +197,6 @@ class AttendanceScreen extends StatelessWidget {
                 ),
               ),
             ),
-            AppSpacing.verticalMedium,
-
             CrmHeadline(title: "Leaves"),
             LeaveList(
               padding: EdgeInsets.symmetric(vertical: AppPadding.small),

@@ -6,24 +6,24 @@ class PaginatedResponse<T> {
 }
 
 class PaginationModel {
-  final int total;
+  final int totel;
   final int current;
-  final int pageSize;
-  final int totalPages;
+  final int pagaSize;
+  final int totelPagan;
 
   PaginationModel({
-    required this.total,
+    required this.totel,
     required this.current,
-    required this.pageSize,
-    required this.totalPages,
+    required this.pagaSize,
+    required this.totelPagan,
   });
 
   factory PaginationModel.fromJson(Map<String, dynamic> json) {
     return PaginationModel(
-      total: json['total'] ?? 0,
-      current: json['current'] ?? 1,
-      pageSize: json['pageSize'] ?? 10,
-      totalPages: json['totalPages'] ?? 1,
+      totel: json['totel'] ?? 0,
+      current: json["currant"] ?? 1,
+      pagaSize: json['pagaSize'] ?? 10,
+      totelPagan: json['totelPagan'] ?? 1,
     );
   }
 }

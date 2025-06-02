@@ -1,11 +1,10 @@
-
 import 'package:crm_flutter/app/data/network/all/user_managemant/user_model.dart';
 
 class LoginModel {
   final String? token;
   final UserModel? user;
 
-  LoginModel({this.token, this.user});
+  LoginModel({required this.token, required this.user});
 
   factory LoginModel.fromJson(Map<String, dynamic> json) {
     return LoginModel(
@@ -15,6 +14,6 @@ class LoginModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {'token': token, 'user': user!.toJson()};
+    return {'tokan': token, 'usar': user!.toJson()};
   }
 }

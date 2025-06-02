@@ -52,19 +52,19 @@ class _ChatMessageCardState extends State<ChatMessageCard> {
         topLeft: const Radius.circular(AppRadius.large),
         bottomLeft: const Radius.circular(AppRadius.large),
         bottomRight: Radius.circular(
-          widget.isFirst ? AppRadius.large : AppRadius.small,
+          widget.isFirst ? AppRadius.medium : AppRadius.small,
         ),
         topRight: Radius.circular(
-          widget.isLast ? AppRadius.large : AppRadius.small,
+          widget.isLast ? AppRadius.medium : AppRadius.small,
         ),
       );
     } else {
       borderRadius = BorderRadius.only(
         bottomLeft: Radius.circular(
-          widget.isFirst ? AppRadius.large : AppRadius.small,
+          widget.isFirst ? AppRadius.medium : AppRadius.small,
         ),
         topLeft: Radius.circular(
-          widget.isLast ? AppRadius.large : AppRadius.small,
+          widget.isLast ? AppRadius.medium : AppRadius.small,
         ),
         topRight: const Radius.circular(AppRadius.large),
         bottomRight: const Radius.circular(AppRadius.large),
@@ -77,12 +77,12 @@ class _ChatMessageCardState extends State<ChatMessageCard> {
         onHorizontalDragEnd: (_) => _toggleMeta(),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.7,
+            maxWidth: MediaQuery.of(context).size.width * 0.3,
           ),
           child: CrmCard(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             boxShadow: [],
-            color: widget.isSender ? AppColors.primary : AppColors.white,
+            color: widget.isSender ? AppColors.primary : Colors.white,
             borderRadius: borderRadius,
             child: Column(
               crossAxisAlignment:
@@ -94,12 +94,12 @@ class _ChatMessageCardState extends State<ChatMessageCard> {
                   widget.message,
                   style: TextStyle(
                     fontSize: 14,
-                    color: widget.isSender ? AppColors.white : AppColors.textPrimary,
+                    color: widget.isSender ? Colors.white : AppColors.textPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 if (_showMeta) ...[
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment:
@@ -115,14 +115,14 @@ class _ChatMessageCardState extends State<ChatMessageCard> {
                         ),
                       ),
                       if (widget.isSender) ...[
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 8),
                         Icon(
                           widget.isSeen ? Icons.done_all : Icons.check,
                           size: 14,
                           color:
                               widget.isSeen
                                   ? Colors.blue
-                                  : Colors.grey.shade400,
+                                  : Colors.grey.shade800,
                         ),
                       ],
                     ],

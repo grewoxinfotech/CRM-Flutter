@@ -1,5 +1,5 @@
-import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ViewScreen extends StatelessWidget {
   final int itemCount;
@@ -19,23 +19,22 @@ class ViewScreen extends StatelessWidget {
     this.controller,
     this.padding,
     this.physics,
-    this.scrollDirection = Axis.vertical,
+    this.scrollDirection = Axis.horizontal,
     this.reverse = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      controller: controller,
-      scrollDirection: scrollDirection,
-      physics: physics,
-      reverse: reverse,
-      shrinkWrap: true,
-      primary: true,
-      separatorBuilder: (context, s) => separatorWidget ?? AppSpacing.verticalSmall,
-      padding: padding ?? const EdgeInsets.all(AppMargin.medium).copyWith(bottom: 300),
-      itemCount: itemCount,
-      itemBuilder: itemBuilder,
+    return Obx(
+      () =>  ListView.separated(
+        physics: physics ?? NeverScrollableScrollPhysics(),
+        reverse: reverse,
+        padding: padding,
+        separatorBuilder:
+            (context, index) => Obx(() => separatorWidget ?? SizedBox(height: 10)),
+        itemCount: itemCount,
+        itemBuilder: itemBuilder,
+      ),
     );
   }
 }

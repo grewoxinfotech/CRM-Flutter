@@ -28,13 +28,9 @@ class SplashController extends GetxController {
   void splash() async {
     await Future.delayed(const Duration(seconds: 1));
     bool isLogin = await SecureStorage.getLoggedIn();
-    bool rememberMe = await SecureStorage.getRememberMe();
     String? token = await SecureStorage.getToken();
-
-    if (isLogin == true && rememberMe && token != null && token.isNotEmpty) {
-      Get.offAllNamed(AppRoutes.dashboard);
-    } else {
-      Get.offAllNamed(AppRoutes.login);
-    }
+    (isLogin == false && token != "")
+        ? Get.offAllNamed(AppRoutes.dashboard)
+        : Get.offAllNamed(AppRoutes.login);
   }
 }

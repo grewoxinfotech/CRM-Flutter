@@ -14,7 +14,7 @@ class DealService {
   }
 
   /// 1. Get all deals
-  static Future<List<DealModel>> getDeals() async {
+  static Future<List> getDeals() async {
     final response = await http.get(Uri.parse(url), headers: await headers());
     final jsonData = jsonDecode(response.body);
     final List<dynamic> data = jsonData['data'];

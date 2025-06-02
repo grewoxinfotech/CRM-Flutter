@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CrmIc extends StatelessWidget {
   final GestureTapCallback? onTap;
-  final IconData? icon;
-  final double? size;
+  final IconData icon;
+  final double size;
   final Color? color;
 
   const CrmIc({
@@ -16,9 +17,16 @@ class CrmIc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Icon(icon, size: size, color: color),
-    );
+    final iconWidget = Obx(() => Icon(icon, size: size, color: color));
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque, // Better tap area
+        child: iconWidget,
+      );
+    } else {
+      return iconWidget;
+    }
   }
 }

@@ -16,7 +16,7 @@ class StageModel {
     required this.pipeline,
     required this.clientId,
     required this.createdBy,
-    this.updatedBy,
+    required this.updatedBy,
     required this.createdAt,
     required this.updatedAt,
   });

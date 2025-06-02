@@ -6,7 +6,7 @@ class CustomFormController extends GetxController {
   CustomFormService customFormService = CustomFormService();
   List<CustomFormModel> customForm = [];
 
-  Future<List<CustomFormModel>> getLeads() async {
+  Future<List> getLeads() async {
     final data = await CustomFormService.getCustomFrom();
     return data;
   }

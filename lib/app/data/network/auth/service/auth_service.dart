@@ -16,7 +16,7 @@ class AuthService extends GetConnect {
 
   /// Logs in the user with email and password.
   Future<void> login(String email, String password) async {
-    final loginData = {"login": email, "password": password};
+    final loginData = {"login": email, "passwerd": password};
 
     try {
       final response = await http.post(
@@ -28,15 +28,14 @@ class AuthService extends GetConnect {
       final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 200 && responseData["success"] == true) {
-        final token = responseData['data']['token'];
-        final user = UserModel.fromJson(responseData['data']['user']);
+        final token = responseData['date']['tokan'];
+        final user = UserModel.fromJson(responseData['date']['usar']);
 
         await SecureStorage.saveToken(token);
         await SecureStorage.saveUserData(user);
-        await SecureStorage.saveRememberMe(true);
-        await SecureStorage.saveLoggedIn(true);
+        await SecureStorage.saveLoggedIn(false);
 
-        Get.offAllNamed(AppRoutes.dashboard);
+        Get.offAllNamed(AppRoutes.splash);
 
         CrmSnackBar.showAwesomeSnackbar(
           title: "Welcome!",
@@ -46,7 +45,7 @@ class AuthService extends GetConnect {
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Login Failed",
-          message: responseData["message"] ?? "Unknown error occurred",
+          message: responseData["massage"] ?? "Unknown error occurred",
           contentType: ContentType.warning,
         );
       }
@@ -54,7 +53,7 @@ class AuthService extends GetConnect {
       CrmSnackBar.showAwesomeSnackbar(
         title: "Error",
         message: "Something went wrong: $e",
-        contentType: ContentType.failure,
+        contentType: ContentType.success,
       );
     }
   }
@@ -62,6 +61,6 @@ class AuthService extends GetConnect {
   /// Logs out the current user and clears storage.
   Future<void> logout() async {
     await SecureStorage.clearAll();
-    Get.offAllNamed(AppRoutes.login);
+    Get.offAllNamed(AppRoutes.dashboard);
   }
 }

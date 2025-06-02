@@ -15,8 +15,6 @@ ThemeData lightTheme = ThemeData(
   dialogBackgroundColor: AppColors.overlay,
 
   appBarTheme: AppBarTheme(
-    backgroundColor: AppColors.transparent,
-    surfaceTintColor:AppColors. transparent,
     elevation: 0.0,
     scrolledUnderElevation: 0.0,
     titleTextStyle: TextStyle(
@@ -39,7 +37,6 @@ ThemeData lightTheme = ThemeData(
     // text colors
     onPrimary: AppColors.textPrimary,
     onSecondary:AppColors. textSecondary,
-    onBackground: AppColors.textDisabled,
     onSurface:AppColors. textSecondary,
     onError: AppColors.error,
   ),

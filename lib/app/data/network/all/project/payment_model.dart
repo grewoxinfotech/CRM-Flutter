@@ -1,14 +1,12 @@
-// models/payment_model.dart
-
 class PaymentModel {
   final String id;
   final String relatedId;
   final String? projectName;
-  final String invoice;
+  final String? invoice;
   final String? expense;
   final String? estimate;
-  final DateTime paidOn;
-  final double amount;
+  final DateTime? paidOn;
+  final String amount;
   final String currency;
   final String status;
   final String? transactionId;
@@ -51,8 +49,8 @@ class PaymentModel {
       invoice: json['invoice'],
       expense: json['expense'],
       estimate: json['estimate'],
-      paidOn: DateTime.parse(json['paidOn']),
-      amount: double.tryParse(json['amount'].toString()) ?? 0.0,
+      paidOn: json['paidOn'] != null ? DateTime.parse(json['paidOn']) : null,
+      amount: json['amount'],
       currency: json['currency'],
       status: json['status'],
       transactionId: json['transactionId'],
@@ -65,5 +63,29 @@ class PaymentModel {
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'related_id': relatedId,
+      'project_name': projectName,
+      'invoice': invoice,
+      'expense': expense,
+      'estimate': estimate,
+      'paidOn': paidOn?.toIso8601String(),
+      'amount': amount,
+      'currency': currency,
+      'status': status,
+      'transactionId': transactionId,
+      'paymentMethod': paymentMethod,
+      'receipt': receipt,
+      'remark': remark,
+      'client_id': clientId,
+      'created_by': createdBy,
+      'updated_by': updatedBy,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+    };
   }
 }

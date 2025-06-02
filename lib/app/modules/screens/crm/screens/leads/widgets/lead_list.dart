@@ -12,10 +12,11 @@ class LeadList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CrmFutureList<LeadModel>(
+    return CrmFutureList(
       padding: padding,
       itemCount: itemCount,
       emptyText: "No Lead Found",
+      physics: NeverScrollableScrollPhysics(),
       future: LeadService.getLeads(),
       itemBuilder: (context, lead) => LeadCard(lead: lead),
     );

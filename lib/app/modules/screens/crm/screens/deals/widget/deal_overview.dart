@@ -19,7 +19,7 @@ class DealOverviewCard extends StatelessWidget {
       return Row(
         children: [
           Icon(icon, size: 16, color: AppColors.textPrimary),
-          AppSpacing.horizontalSmall,
+          SizedBox(width: 10,),
           Text(
             value,
             style: TextStyle(
@@ -46,7 +46,7 @@ class DealOverviewCard extends StatelessWidget {
                 color:AppColors. textPrimary,
               ),
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(width: 10,),
             Wrap(
               spacing: 8,
               runSpacing: 4,
@@ -69,13 +69,13 @@ class DealOverviewCard extends StatelessWidget {
               icon: LucideIcons.trendingUp,
               color: Colors.green.shade800,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(width: 10,),
             _tile(
               title: "Status",
               subtitle: deal.status ?? '',
               icon: LucideIcons.activity,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(width: 10,),
             _tile(
               title: "Label",
               subtitle: deal.label ?? '',
@@ -93,19 +93,19 @@ class DealOverviewCard extends StatelessWidget {
               subtitle: deal.pipeline ?? '',
               icon: LucideIcons.gitBranch,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(width: 10,),
             _tile(
               title: "Stage",
               subtitle: deal.stage ?? '',
               icon: LucideIcons.barChart3,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(width: 10,),
             _tile(
               title: "Source",
               subtitle: deal.source ?? '',
               icon: LucideIcons.share2,
             ),
-            AppSpacing.verticalSmall,
+            SizedBox(height: 10,),
             _tile(
               title: "Closed Date",
               subtitle: deal.closedDate != null
@@ -132,7 +132,7 @@ class DealOverviewCard extends StatelessWidget {
               ),
             ),
           ),
-          AppSpacing.horizontalSmall,
+          SizedBox(height: 10,),
           Expanded(
             child: CrmButton(
               height: 40,
@@ -179,7 +179,7 @@ class _tile extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: 14, color: AppColors.primary),
-              AppSpacing.horizontalSmall,
+              SizedBox(width: 10,),
               Text(
                 title ?? '',
                 style: TextStyle(

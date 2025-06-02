@@ -12,9 +12,10 @@ class DealList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CrmFutureList<DealModel>(
+    return CrmFutureList(
       padding: padding,
       itemCount: itemCount,
+      physics: NeverScrollableScrollPhysics(),
       emptyText: "No Deal Found",
       future: DealService.getDeals(),
       itemBuilder: (context, deal) => DealCard(deal: deal),

@@ -9,7 +9,7 @@ class CompanyModel {
   String? companyCategory;
   String? companyRevenue;
   String? phoneCode;
-  String? phoneNumber;
+  int? phoneNumber;
   String? website;
   String? billingAddress;
   String? billingCity;
@@ -19,44 +19,44 @@ class CompanyModel {
   String? shippingAddress;
   String? shippingCity;
   String? shippingState;
-  String? shippingPinCode;
+  int? shippingPinCode;
   String? shippingCountry;
   String? description;
   String? clientId;
   String? createdBy;
   String? updatedBy;
-  String? createdAt;
-  String? updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   CompanyModel({
-    this.id,
-    this.accountOwner,
-    this.companyName,
-    this.companySource,
-    this.email,
-    this.companyNumber,
-    this.companyType,
-    this.companyCategory,
-    this.companyRevenue,
-    this.phoneCode,
-    this.phoneNumber,
-    this.website,
-    this.billingAddress,
-    this.billingCity,
-    this.billingState,
-    this.billingPinCode,
-    this.billingCountry,
-    this.shippingAddress,
-    this.shippingCity,
-    this.shippingState,
-    this.shippingPinCode,
-    this.shippingCountry,
-    this.description,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.accountOwner,
+    required this.companyName,
+    required this.companySource,
+    required this.email,
+    required this.companyNumber,
+    required this.companyType,
+    required this.companyCategory,
+    required this.companyRevenue,
+    required this.phoneCode,
+    required this.phoneNumber,
+    required this.website,
+    required this.billingAddress,
+    required this.billingCity,
+    required this.billingState,
+    required this.billingPinCode,
+    required this.billingCountry,
+    required this.shippingAddress,
+    required this.shippingCity,
+    required this.shippingState,
+    required this.shippingPinCode,
+    required this.shippingCountry,
+    required this.description,
+    required this.clientId,
+    required this.createdBy,
+    required this.updatedBy,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   CompanyModel.fromJson(Map<String, dynamic> json) {

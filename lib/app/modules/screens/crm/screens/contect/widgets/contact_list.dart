@@ -12,12 +12,13 @@ class ContactList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CrmFutureList<ContactModel>(
+    return CrmFutureList(
       padding: padding,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: itemCount,
       emptyText: "No Contact Found",
       future: ContactService.getContacts(),
-      itemBuilder: (context, contact) => ContactCard(contact: contact),
+      itemBuilder: (context, contact) => ContactCard(),
     );
   }
 }

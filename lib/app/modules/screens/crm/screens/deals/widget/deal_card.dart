@@ -44,7 +44,7 @@ class DealCard extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.dealDetail, arguments: deal),
+      onTap: () => Get.toNamed(AppRoutes.deal, arguments: deal),
       child: CrmCard(
         border: Border.all(color: AppColors.divider),
         padding: const EdgeInsets.all(AppPadding.medium),
@@ -75,9 +75,7 @@ class DealCard extends StatelessWidget {
                 Icon(Icons.chevron_right, color: AppColors.divider),
               ],
             ),
-            AppSpacing.verticalSmall,
-
-            /// Chips (Pipeline, Stage, Interest)
+          SizedBox(height: 10,),
             Wrap(
               spacing: 8,
               runSpacing: 4,
@@ -93,9 +91,7 @@ class DealCard extends StatelessWidget {
                 ),
               ],
             ),
-            AppSpacing.verticalSmall,
-
-            /// Value & Date
+            SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

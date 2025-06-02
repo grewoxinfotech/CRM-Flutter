@@ -13,10 +13,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List widgets = [
       ReminderText(),
-      RevenueCard(),
+      RevenueCard(revenue: 100000),
       FunctionsCard(),
       PunchCard(),
     ];
+
+
 
     return ViewScreen(
       itemCount: widgets.length,

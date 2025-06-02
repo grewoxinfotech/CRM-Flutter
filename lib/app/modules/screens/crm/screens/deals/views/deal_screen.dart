@@ -22,7 +22,7 @@ class DealScreen extends StatelessWidget {
         actions: [CrmIc(icon: LucideIcons.filter, color: AppColors.primary)],
       ),
       floatingActionButton: CrmButton(
-        onTap: () => Get.to(AppRoutes.dealAdd),
+        onTap: () => Get.to(AppRoutes.deal),
         title: "Add Deal",
       ),
       body: DealList(),

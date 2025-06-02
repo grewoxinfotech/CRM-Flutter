@@ -6,6 +6,7 @@ class CrmImg extends StatelessWidget {
   final GestureTapCallback? onTap;
   final double? width;
   final double? height;
+  final BoxFit fit;
 
   const CrmImg({
     super.key,
@@ -13,18 +14,27 @@ class CrmImg extends StatelessWidget {
     this.onTap,
     this.width,
     this.height,
+    this.fit = BoxFit.contain,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SvgPicture.asset(
-        imagePath,
-        width: width,
-        height: height,
-        alignment: Alignment.center,
-      ),
+    final imageWidget = SvgPicture.asset(
+      imagePath,
+      width: width,
+      height: height,
+      fit: fit,
+      alignment: Alignment.center,
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: imageWidget,
+      );
+    } else {
+      return imageWidget;
+    }
   }
 }

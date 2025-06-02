@@ -12,7 +12,7 @@ class TaskService {
   }
 
   /// 1. Get all tasks by ID
-  Future<List<TaskModel>> getTasks() async {
+  Future<List> getTasks() async {
     final response = await http.get(
       Uri.parse("$url/27QmTY0BI4nb89DW3lXrly9"),
       headers: await headers(),

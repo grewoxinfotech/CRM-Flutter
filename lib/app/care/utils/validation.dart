@@ -22,7 +22,7 @@ String? passwordValidation(String? password) {
 String? nameValidation(String? name) {
   if (name == null || name.trim().isEmpty) {
     return "Please enter your name!";
-  } else if (name.trim().length < 3) {
+  } else if (name.trim().length < 6) {
     return "Name must be at least 3 characters long!";
   }
   return null;
@@ -31,13 +31,13 @@ String? nameValidation(String? name) {
 String? phoneValidation(String? phone) {
   if (phone == null || phone.trim().isEmpty) {
     return "Please enter your phone number!";
-  } else if (!GetUtils.isPhoneNumber(phone.trim()) || phone.length != 10) {
-    return "Enter a valid 10-digit phone number!";
+  } else if (!GetUtils.isPhoneNumber(phone.trim()) || phone.trim().length != 10) {
+    return "Enter a valid more 9-digit phone number!";
   }
   return null;
 }
 
-/// Validates Generic Required Field
+/// Validates a generic required field with customizable field name
 String? requiredField(String? value, String fieldName) {
   if (value == null || value.trim().isEmpty) {
     return "Please enter $fieldName!";

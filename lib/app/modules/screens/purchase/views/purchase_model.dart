@@ -1,19 +1,21 @@
-import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_screen.dart';
 
 class PurchaseModel {
-  String? title;
-  Widget? widget;
-  Color? color;
-  IconData? iconData;
+  final String title;
+  final Widget widget;
+  final Color color;
+  final IconData iconData;
 
-   PurchaseModel({required this.title, this.color, this.widget, this.iconData});
+  PurchaseModel({
+    required this.title,
+    required this.widget,
+    required this.color,
+    required this.iconData,
+  });
 
-  static List< PurchaseModel> getCrmWidgets() {
-    return [
-       PurchaseModel(color: Color(0xff632100), title: "Vendor", widget: LeadScreen()),
-       PurchaseModel(color: Color(0xff632100), title: "Billing", widget: LeadScreen()),
-       PurchaseModel(color: Color(0xff632100), title: "Debit Note", widget: LeadScreen()),
-    ];
+  static List<PurchaseModel> getCrmWidgets() {
+    return [];
   }
 }

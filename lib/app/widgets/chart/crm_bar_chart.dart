@@ -22,16 +22,14 @@ class CrmBarChart extends StatelessWidget {
         titlesData: FlTitlesData(
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: false,
-              getTitlesWidget:
-                  (value, _) => Padding(
-                    padding: EdgeInsets.only(top: 0),
-                    child: Text(
-                      ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Set', 'Sun'][value
-                          .toInt()],
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
+              showTitles: true,  // <-- Set to true to display labels
+              getTitlesWidget: (value, _) => Padding(
+                padding: EdgeInsets.only(top: 0),
+                child: Text(
+                  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][value.toInt()],
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ),
           leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

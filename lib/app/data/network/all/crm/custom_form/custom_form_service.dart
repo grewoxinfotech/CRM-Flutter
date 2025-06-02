@@ -14,7 +14,7 @@ class CustomFormService extends GetxService {
   }
 
   /// 1. Get all Custom From
-  static Future<List<CustomFormModel>> getCustomFrom() async {
+  static Future<List> getCustomFrom() async {
     final response = await http.get(Uri.parse(url), headers: await headers());
     final jsonData = jsonDecode(response.body);
     final List<dynamic> data = jsonData['data'];

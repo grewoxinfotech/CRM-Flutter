@@ -15,7 +15,7 @@ class ReminderText extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: AppPadding.small,
-        horizontal: AppMargin.medium + AppPadding.medium,
+        horizontal: AppMargin.medium,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +34,7 @@ class ReminderText extends StatelessWidget {
               Text(
                 formatDate(DateTime.now().toString()),
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textSecondary,
                 ),
@@ -44,7 +44,7 @@ class ReminderText extends StatelessWidget {
           Text(
             "Good Morning, $username!",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 17,
               fontWeight: FontWeight.w800,
               color: AppColors.primary,
             ),
@@ -52,7 +52,7 @@ class ReminderText extends StatelessWidget {
           Text(
             "WellCome Back to your Work",
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w400,
               color:AppColors. textSecondary,
             ),

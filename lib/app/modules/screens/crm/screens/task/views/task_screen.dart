@@ -19,10 +19,10 @@ class TaskScreen extends StatelessWidget {
         leading: CrmBackButton(),
         title: const Text("Tasks"),
         actionsPadding: EdgeInsets.only(right: AppPadding.medium),
-        actions: [CrmIc(icon: LucideIcons.filter, color:AppColors. primary)],
+        actions: [CrmIc(icon: LucideIcons.filter, color: AppColors.primary)],
       ),
       floatingActionButton: CrmButton(
-        onTap: () => Get.to(AppRoutes.taskAdd),
+        onTap: () => Get.to(AppRoutes.task),
         title: "Add Task",
       ),
       body: TaskList(),

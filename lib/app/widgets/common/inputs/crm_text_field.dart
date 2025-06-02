@@ -25,7 +25,7 @@ class CrmTextField extends StatelessWidget {
   const CrmTextField({
     super.key,
     this.controller,
-    this.title = "",
+    this.title,
     this.validator,
     this.hintText,
     this.contentPadding,
@@ -48,40 +48,17 @@ class CrmTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        (title == "")
-            ? SizedBox()
-            : Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      title!,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Get.theme.colorScheme.onSecondary,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    if (isRequired)
-                      Text(
-                        ' *',
-                        style: TextStyle(
-                          color: Get.theme.colorScheme.error,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                  ],
-                ),
-                AppSpacing.verticalSmall,
-              ],
-            ),
+        if (title != null && title!.isNotEmpty) ...[
+          _buildTitle(),
+          SizedBox(height: 10,),
+        ],
         TextFormField(
           controller: controller,
           validator: validator,
           obscureText: obscureText,
           keyboardType: keyboardType,
           maxLines: maxLines,
+          minLines: minLines,
           enabled: enabled,
           focusNode: focusNode,
           textInputAction: textInputAction,
@@ -94,41 +71,38 @@ class CrmTextField extends StatelessWidget {
           ),
           decoration: InputDecoration(
             contentPadding:
-                contentPadding ?? const EdgeInsets.all(AppPadding.small),
+            contentPadding ?? const EdgeInsets.all(AppPadding.small),
             filled: true,
-            fillColor:
-                enabled
-                    ? Get.theme.colorScheme.surface
-                    : Get.theme.colorScheme.surface.withAlpha(128),
+            fillColor: enabled
+                ? Get.theme.colorScheme.surface
+                : Get.theme.colorScheme.surface.withAlpha(128),
             hintText: hintText,
             hintStyle: TextStyle(
               color: AppColors.textSecondary.withAlpha(200),
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
-            prefixIcon:
-                prefixIcon != null
-                    ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppPadding.small,
-                      ),
-                      child: prefixIcon,
-                    )
-                    : null,
+            prefixIcon: prefixIcon != null
+                ? Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppPadding.small,
+              ),
+              child: prefixIcon,
+            )
+                : null,
             prefixIconConstraints: const BoxConstraints(minWidth: 40),
-            suffixIcon:
-                suffixIcon != null
-                    ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppPadding.medium,
-                      ),
-                      child: suffixIcon,
-                    )
-                    : null,
-            enabledBorder: tile(Get.theme.dividerColor),
-            focusedBorder: tile(Get.theme.colorScheme.primary),
-            errorBorder: tile(Get.theme.colorScheme.error),
-            focusedErrorBorder: tile(Get.theme.colorScheme.error),
+            suffixIcon: suffixIcon != null
+                ? Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: AppPadding.medium,
+              ),
+              child: suffixIcon,
+            )
+                : null,
+            enabledBorder: _inputBorder(Get.theme.dividerColor),
+            focusedBorder: _inputBorder(Get.theme.colorScheme.primary),
+            errorBorder: _inputBorder(Get.theme.colorScheme.error),
+            focusedErrorBorder: _inputBorder(Get.theme.colorScheme.error),
             errorStyle: TextStyle(
               color: Get.theme.colorScheme.error,
               fontSize: 12,
@@ -139,9 +113,33 @@ class CrmTextField extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildTitle() {
+    return Row(
+      children: [
+        Text(
+          title!,
+          style: TextStyle(
+            fontSize: 14,
+            color: Get.theme.colorScheme.onSecondary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (isRequired)
+          Text(
+            ' *',
+            style: TextStyle(
+              color: Get.theme.colorScheme.error,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+      ],
+    );
+  }
 }
 
-InputBorder? tile(Color color) {
+InputBorder _inputBorder(Color color) {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(AppRadius.medium),
     borderSide: BorderSide(color: color, width: 1),

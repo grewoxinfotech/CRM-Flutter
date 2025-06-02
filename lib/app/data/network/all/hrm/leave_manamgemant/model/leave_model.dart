@@ -1,52 +1,55 @@
 class LeaveModel {
-  final String? id;
-  final String? employeeId;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final String? leaveType;
-  final String? reason;
-  final String? status;
+  final String id;
+  final String employeeId;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String leaveType;
+  final String reason;
+  final String status;
   final String? remarks;
-  final bool? isHalfDay;
-  final String? clientId;
-  final String? createdBy;
+  final bool isHalfDay;
+  final String clientId;
+  final String createdBy;
   final String? updatedBy;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String key;
 
   LeaveModel({
-    this.id,
-    this.employeeId,
-    this.startDate,
-    this.endDate,
-    this.leaveType,
-    this.reason,
-    this.status,
-    this.remarks,
-    this.isHalfDay,
-    this.clientId,
-    this.createdBy,
-    this.updatedBy,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.employeeId,
+    required this.startDate,
+    required this.endDate,
+    required this.leaveType,
+    required this.reason,
+    required this.status,
+    required this.remarks,
+    required this.isHalfDay,
+    required this.clientId,
+    required this.createdBy,
+    required this.updatedBy,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.key,
   });
 
   factory LeaveModel.fromJson(Map<String, dynamic> json) {
     return LeaveModel(
-      id: json['id'],
-      employeeId: json['employeeId'],
+      id: json['id'] ?? '',
+      employeeId: json['employeeId'] ?? '',
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
-      leaveType: json['leaveType'],
-      reason: json['reason'],
-      status: json['status'],
+      leaveType: json['leaveType'] ?? '',
+      reason: json['reason'] ?? '',
+      status: json['status'] ?? '',
       remarks: json['remarks'],
-      isHalfDay: json['isHalfDay'],
-      clientId: json['client_id'],
-      createdBy: json['created_by'],
+      isHalfDay: json['isHalfDay'] ?? false,
+      clientId: json['client_id'] ?? '',
+      createdBy: json['created_by'] ?? '',
       updatedBy: json['updated_by'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
+      key: json['key'] ?? '',
     );
   }
 
@@ -54,8 +57,8 @@ class LeaveModel {
     return {
       'id': id,
       'employeeId': employeeId,
-      'startDate': startDate!.toIso8601String(),
-      'endDate': endDate!.toIso8601String(),
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
       'leaveType': leaveType,
       'reason': reason,
       'status': status,
@@ -64,31 +67,9 @@ class LeaveModel {
       'client_id': clientId,
       'created_by': createdBy,
       'updated_by': updatedBy,
-      'createdAt': createdAt!.toIso8601String(),
-      'updatedAt': updatedAt!.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'key': key,
     };
-  }
-}
-
-class LeaveStatsModel {
-  final int total;
-  final int approved;
-  final int pending;
-  final int rejected;
-
-  LeaveStatsModel({
-    required this.total,
-    required this.approved,
-    required this.pending,
-    required this.rejected,
-  });
-
-  factory LeaveStatsModel.fromJson(Map<String, dynamic> json) {
-    return LeaveStatsModel(
-      total: json['total'],
-      approved: json['approved'],
-      pending: json['pending'],
-      rejected: json['rejected'],
-    );
   }
 }

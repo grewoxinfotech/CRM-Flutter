@@ -3,6 +3,6 @@ import 'package:crm_flutter/app/data/network/all/crm/contact/service/contact_ser
 import 'package:get/get.dart';
 
 class ContactController extends GetxController {
-  Future<List<ContactModel>> getLeaves() async =>
+  Future<List> getLeaves() async =>
       await ContactService.getContacts();
 }

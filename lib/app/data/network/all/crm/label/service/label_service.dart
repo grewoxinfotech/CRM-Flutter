@@ -5,7 +5,7 @@ import 'package:crm_flutter/app/data/network/all/crm/label/model/label_model.dar
 import 'package:http/http.dart' as http;
 
 class LabelService {
-  Future<List<LabelModel>> getLabels() async {
+  Future<List> getLabels() async {
     try {
       final token = await SecureStorage.getToken();
       final userData = await SecureStorage.getUserData();

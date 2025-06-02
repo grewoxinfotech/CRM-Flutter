@@ -8,13 +8,13 @@ class PipelineModel {
   final DateTime? updatedAt;
 
   PipelineModel({
-     this.id,
-     this.pipelineName,
-     this.clientId,
-     this.createdBy,
-    this.updatedBy,
-     this.createdAt,
-     this.updatedAt,
+    required this.id,
+    required this.pipelineName,
+    required this.clientId,
+    required this.createdBy,
+    required this.updatedBy,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory PipelineModel.fromJson(Map<String, dynamic> json) {

@@ -1,12 +1,12 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class CrmCalendar extends StatefulWidget {
-  final Map<DateTime, String> attendanceMap; // 'present', 'absent', etc.
+  final Map<DateTime, String> attendanceMap; // Keys: DateTime, Values: 'present', 'absent', etc.
 
-  const CrmCalendar({Key? key, required this.attendanceMap})
-      : super(key: key);
+  const CrmCalendar({Key? key, required this.attendanceMap}) : super(key: key);
 
   @override
   State<CrmCalendar> createState() => _CrmCalendarState();
@@ -17,29 +17,29 @@ class _CrmCalendarState extends State<CrmCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    final firstDayOfMonth = DateTime(_currentMonth.year, _currentMonth.month, 1);
+    final firstDay = DateTime(_currentMonth.year, _currentMonth.month, 1);
     final totalDays = DateUtils.getDaysInMonth(_currentMonth.year, _currentMonth.month);
+    final startingWeekday = firstDay.weekday;
 
-    final startingWeekday = firstDayOfMonth.weekday;
-    final days = List<Widget>.generate(startingWeekday - 1, (_) => Container()); // Empty spaces
+    final days = <Widget>[
+      ...List.generate(startingWeekday - 1, (_) => const SizedBox()), // Fillers
+      for (int day = 1; day <= totalDays; day++)
+        _buildDayCell(DateTime(_currentMonth.year, _currentMonth.month, day)),
+    ];
 
-    for (int day = 1; day <= totalDays; day++) {
-      final date = DateTime(_currentMonth.year, _currentMonth.month, day);
-      final status = widget.attendanceMap[DateTime(date.year, date.month, date.day)];
-
-      days.add(_buildDayCell(date, status));
-    }
-
-    return Column(
-      children: [
-        _buildMonthHeader(),
-        GridView.count(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          crossAxisCount: 7,
-          children: days,
-        ),
-      ],
+    return Obx(
+      ()=> Column(
+        children: [
+          _buildMonthHeader(),
+          const SizedBox(height: 8),
+          GridView.count(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            crossAxisCount: 7,
+            children: days,
+          ),
+        ],
+      ),
     );
   }
 
@@ -48,30 +48,32 @@ class _CrmCalendarState extends State<CrmCalendar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             setState(() {
               _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1);
             });
           },
-          icon: Icon(Icons.arrow_back),
         ),
         Text(
           DateFormat.yMMMM().format(_currentMonth),
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         IconButton(
+          icon: const Icon(Icons.arrow_forward),
           onPressed: () {
             setState(() {
               _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1);
             });
           },
-          icon: Icon(Icons.arrow_forward),
         ),
       ],
     );
   }
 
-  Widget _buildDayCell(DateTime date, String? status) {
+  Widget _buildDayCell(DateTime date) {
+    final status = widget.attendanceMap[DateTime(date.year, date.month, date.day)];
+
     Color bgColor;
     IconData? icon;
 
@@ -84,7 +86,7 @@ class _CrmCalendarState extends State<CrmCalendar> {
         bgColor = Colors.red.shade100;
         icon = Icons.cancel;
         break;
-      case 'model':
+      case 'leave':
         bgColor = Colors.orange.shade100;
         icon = Icons.beach_access;
         break;
@@ -92,17 +94,17 @@ class _CrmCalendarState extends State<CrmCalendar> {
         bgColor = Colors.grey.shade200;
     }
 
-    return Container(
-      margin: EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(AppRadius.large),
-      ),
-      child: Center(
+    return Obx(
+      ()=> Container(
+        margin: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(AppRadius.large),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${date.day}'),
+            Text('${date.day}', style: const TextStyle(fontWeight: FontWeight.bold)),
             if (icon != null) Icon(icon, size: 16),
           ],
         ),

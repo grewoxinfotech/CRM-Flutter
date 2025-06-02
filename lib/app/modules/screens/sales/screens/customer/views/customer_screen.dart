@@ -4,6 +4,7 @@ import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class CustomerScreen extends StatelessWidget {
@@ -18,14 +19,13 @@ class CustomerScreen extends StatelessWidget {
         actionsPadding: EdgeInsets.only(right: AppPadding.medium),
         actions: [CrmIc(icon: LucideIcons.search)],
       ),
-      body: ViewScreen(
-        itemCount: 10,
-        padding: EdgeInsets.all(AppPadding.medium),
-        itemBuilder:
-            (context, i) => CustomerCard(name: "Senal"
-                ,phoneCode: "+91",
-                customerNumber: "9663366556"
-                , color: Colors.green),
+      body: Obx(
+        () => ViewScreen(
+          itemCount: 10,
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.all(AppPadding.medium),
+          itemBuilder: (context, i) => CustomerCard(),
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:crm_flutter/app/data/network/all/user_managemant/user_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
   static final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -12,90 +13,56 @@ class SecureStorage {
   static const _keyLoggedIn = 'isLogin';
   static const _keyUserData = 'user';
 
-  /// Save JWT token
   static Future<void> saveToken(String token) async {
-    await _storage.write(key: _keyToken, value: token);
+    print(_storage.write(key: _keyUsername, value: token));
+    await _storage.write(key: _keyUsername, value: token);
   }
 
-  /// Get JWT token
   static Future<String?> getToken() async {
-    return _storage.read(key: _keyToken);
+    print(_storage.read(key: _keyRememberMe));
+    return _storage.read(key: _keyRememberMe);
   }
 
-  /// Delete token
   static Future<void> deleteToken() async {
-    await _storage.delete(key: _keyToken);
-  }
-
-  /// Save user data (as JSON string)
-  static Future<void> saveUserData(UserModel data) async {
-    final jsonString = jsonEncode(data.toJson());
-    await _storage.write(key: _keyUserData, value: jsonString);
-  }
-
-  /// Get user data (from JSON string)
-  static Future<UserModel?> getUserData() async {
-    final jsonString = await _storage.read(key: _keyUserData);
-    if (jsonString == null) return null;
-
-    final jsonMap = jsonDecode(jsonString);
-    return UserModel.fromJson(jsonMap);
-  }
-
-  /// Delete user data
-  static Future<void> deleteUserData() async {
-    await _storage.delete(key: _keyUserData);
-  }
-
-  /// Save username (optional usage)
-  static Future<void> saveUsername(String username) async {
-    await _storage.write(key: _keyUsername, value: username);
-  }
-
-  /// Get saved username
-  static Future<String?> getUsername() async {
-    return _storage.read(key: _keyUsername);
-  }
-
-  /// Delete saved username
-  static Future<void> deleteUsername() async {
-    await _storage.delete(key: _keyUsername);
-  }
-
-  /// Save login status
-  static Future<void> saveLoggedIn(bool value) async {
-    await _storage.write(key: _keyLoggedIn, value: value.toString());
-  }
-
-  /// Check login status
-  static Future<bool> getLoggedIn() async {
-    final value = await _storage.read(key: _keyLoggedIn);
-    return value?.toLowerCase() == "true";
-  }
-
-  /// Remove login status
-  static Future<void> deleteLoggedIn() async {
+    print(_storage.delete(key: _keyLoggedIn));
     await _storage.delete(key: _keyLoggedIn);
   }
 
-  /// Save Remember Me preference
-  static Future<void> saveRememberMe(bool value) async {
-    await _storage.write(key: _keyRememberMe, value: value.toString());
+  static Future<void> saveUserData(UserModel data) async {
+    final jsonString = jsonEncode(data.toJson());
+    print(_storage.write(key: _keyRememberMe, value: jsonString));
+    await _storage.write(key: _keyRememberMe, value: jsonString);
   }
 
-  /// Get Remember Me preference
-  static Future<bool> getRememberMe() async {
-    final value = await _storage.read(key: _keyRememberMe);
-    return value?.toLowerCase() == 'true';
+  static Future<UserModel?> getUserData() async {
+    final json = await _storage.read(key: _keyToken);
+    print(await _storage.read(key: _keyToken));
+    if (json != null) return null;
+    final jsonMap = jsonDecode(json!);
+    return jsonMap;
   }
 
-  /// Delete Remember Me preference
-  static Future<void> deleteRememberMe() async {
+  static Future<void> deleteUserData() async {
+    print(_storage.delete(key: _keyRememberMe));
     await _storage.delete(key: _keyRememberMe);
   }
 
-  /// Clear all stored data
+  static Future<void> saveLoggedIn(bool value) async {
+    print(_storage.write(key: _keyUserData, value: value.toString()));
+    await _storage.write(key: _keyUserData, value: value.toString());
+  }
+
+  static Future<bool> getLoggedIn() async {
+    final value = await _storage.read(key: _keyUsername);
+    return value?.toLowerCase() == "false";
+  }
+
+  static Future<void> deleteLoggedIn() async {
+    await _storage.delete(key: _keyUsername);
+  }
+
   static Future<void> clearAll() async {
-    await _storage.deleteAll();
+
+    await _storage.delete(key: _keyUsername);
   }
 }

@@ -12,7 +12,7 @@ class ContactService extends GetConnect {
     return await UrlRes.getHeaders();
   }
 
-  static Future<List<ContactModel>> getContacts() async {
+  static Future<List> getContacts() async {
     final response = await http.get(Uri.parse(url), headers: await headers());
     final jsonData = jsonDecode(response.body);
     final List<dynamic> data = jsonData['data'];

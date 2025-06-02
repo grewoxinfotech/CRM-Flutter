@@ -5,15 +5,15 @@ import 'package:get/get.dart';
 class CrmHeadline extends StatelessWidget {
   final String title;
   final EdgeInsetsGeometry? padding;
-  final bool? showTextButton;
-  final String? buttonText;
+  final bool showTextButton;
+  final String buttonText;
   final GestureTapCallback? onTap;
 
   const CrmHeadline({
     super.key,
     required this.title,
     this.padding,
-    this.showTextButton = false, // Default value set
+    this.showTextButton = false,
     this.buttonText = "View All",
     this.onTap,
   });
@@ -21,8 +21,7 @@ class CrmHeadline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          padding ?? const EdgeInsets.symmetric(horizontal: AppPadding.small),
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: AppPadding.small),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -34,19 +33,18 @@ class CrmHeadline extends StatelessWidget {
               color: Get.theme.colorScheme.onPrimary,
             ),
           ),
-          (showTextButton == true)
-              ? GestureDetector(
-                onTap: onTap,
-                child: Text(
-                  buttonText.toString(),
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Get.theme.colorScheme.primary,
-                  ),
+          if (showTextButton)  // cleaner conditional
+            GestureDetector(
+              onTap: onTap,
+              child: Text(
+                buttonText,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Get.theme.colorScheme.primary,
                 ),
-              )
-              : SizedBox(),
+              ),
+            ),
         ],
       ),
     );

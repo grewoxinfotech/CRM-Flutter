@@ -34,7 +34,8 @@ class FunctionCard extends StatelessWidget {
           children: [
             Icon(icon ?? LucideIcons.filePlus, color: color, size: 18),
             if (title != null) ...[
-              AppSpacing.horizontalSmall,
+              SizedBox(width: 20,),
+
               Expanded(
                 child: Text(
                   title.toString(),

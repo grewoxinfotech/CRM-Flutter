@@ -12,7 +12,7 @@ class CrmDeleteDialog extends StatelessWidget {
 
   const CrmDeleteDialog({
     super.key,
-    this.entityType,
+    this.entityType = "item",
     this.onConfirm,
     this.onCancel,
   });
@@ -21,69 +21,77 @@ class CrmDeleteDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Get.back(),
-      child: Container(
-        alignment: Alignment.center,
-        color: Get.theme.dialogBackgroundColor,
-        child: CrmCard(
-          padding: const EdgeInsets.all(AppPadding.medium),
-          width: 300,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Delete Confirmation",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: FontRes.nuNunitoSans,
-                  color: Get.theme.colorScheme.error,
-                  fontWeight: FontWeight.w700,
-                  decoration: TextDecoration.none,
-                ),
-              ),
-              AppSpacing.verticalSmall,
-              Text(
-                "Are you sure you want to delete this $entityType?",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: FontRes.nuNunitoSans,
-                  color: Get.theme.colorScheme.onSecondary,
-                  fontWeight: FontWeight.w600,
-                  decoration: TextDecoration.none,
-                ),
-              ),
-              AppSpacing.verticalSmall,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Obx(
+        () => Material(
+          color: Get.theme.dialogBackgroundColor.withOpacity(0.7),
+          child: Center(
+            child: CrmCard(
+              width: 300,
+              padding: const EdgeInsets.all(AppPadding.medium),
+              borderRadius: BorderRadius.circular(AppRadius.medium),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                      if (onCancel != null) onCancel!();
-                    },
-                    child: Text(
-                      "Cancel",
+                  Text(
+                    "Delete Confirmation",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: FontRes.nuNunitoSans,
+                      color: Get.theme.colorScheme.error,
+                      fontWeight: FontWeight.w700,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Obx(
+                    () => Text(
+                      "Are you sure you want to delete this $entityType?",
                       style: TextStyle(
-                        color: Get.theme.colorScheme.onSecondary,
                         fontSize: 14,
-                        fontWeight: FontWeight.w500,
                         fontFamily: FontRes.nuNunitoSans,
+                        color: Get.theme.colorScheme.onSecondary,
+                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.none,
                       ),
                     ),
                   ),
-                  CrmButton(
-                    width: 100,
-                    height: 35,
-                    backgroundColor: Get.theme.colorScheme.error,
-                    title: "Delete",
-                    onTap: () {
-                      Get.back();
-                      if (onConfirm != null) onConfirm!();
-                    },
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                          onCancel?.call();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                            color: Get.theme.colorScheme.onSecondary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: FontRes.nuNunitoSans,
+                          ),
+                        ),
+                      ),
+                      Obx(
+                        () => CrmButton(
+                          width: 100,
+                          height: 35,
+                          title: "Delete",
+                          backgroundColor: Get.theme.colorScheme.error,
+                          onTap: () {
+                            Get.back();
+                            onConfirm?.call();
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

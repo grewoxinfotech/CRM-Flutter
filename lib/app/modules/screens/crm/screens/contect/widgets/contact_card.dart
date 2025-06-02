@@ -7,16 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ContactCard extends StatelessWidget {
-  final ContactModel contact;
-  final VoidCallback? onTap;
+  final ContactModel? contact;
 
-  const ContactCard({Key? key, required this.contact, this.onTap})
+  const ContactCard({Key? key,this.contact})
     : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.contactOverView, arguments: contact),
       child: CrmCard(
         padding: EdgeInsets.symmetric(
           horizontal: AppPadding.small,
@@ -26,7 +24,7 @@ class ContactCard extends StatelessWidget {
           children: [
             CircleAvatar(
               child: Text(
-                contact.firstName!.substring(0, 1).toUpperCase(),
+                "N/A".substring(0, 1).toUpperCase(),
                 style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -34,13 +32,13 @@ class ContactCard extends StatelessWidget {
                 ),
               ),
             ),
-            AppSpacing.horizontalSmall,
+            SizedBox(height: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${contact.firstName} ${contact.lastName}',
+                    '"N/A" "N/A"',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: AppColors.primary,
@@ -48,7 +46,7 @@ class ContactCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    contact.email.toString(),
+                    "N/A",
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -58,9 +56,9 @@ class ContactCard extends StatelessWidget {
                 ],
               ),
             ),
-            AppSpacing.horizontalSmall,
+            SizedBox(height: 10),
             CircleAvatar(
-              backgroundColor: AppColors.transparent,
+              backgroundColor: Colors.transparent,
               child: const Icon(
                 Icons.chevron_right,
                 size: 20,

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class NetworkStatusService extends GetxService {
-  final RxBool hasInternet = true.obs;
+  final RxBool hasInternet = false.obs;
 
   Future<NetworkStatusService> init() async {
     _startMonitoring();

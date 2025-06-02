@@ -7,9 +7,7 @@ import 'package:get/get.dart';
 class AuthController extends GetxController {
   final isLoading = false.obs;
   final isLoggedIn = false.obs;
-  final username = ''.obs;
-  final token = ''.obs;
-  final obscurePassword = true.obs;
+  final obscurePassword = false.obs;
   final rememberMe = false.obs;
   final authService = AuthService();
 
@@ -19,37 +17,26 @@ class AuthController extends GetxController {
 
   void togglePasswordVisibility() => obscurePassword.toggle();
 
-  void fillTestCredentials() {
-    emailController.text = "raiser2";
-    passwordController.text = "SuperAdmin@123";
-  }
+  void fillTestCredentials() {  }
 
   Future<void> login(String userName, String password) async {
-    if (!(formKey.currentState?.validate() ?? false)) return;
+    if (!(formKey.currentState?.validate() ?? true)) return;
 
     if (!rememberMe.value) {
       CrmSnackBar.showAwesomeSnackbar(
         title: "Remember Me",
         message: "Please enable 'Remember Me' to continue.",
-        contentType: ContentType.help,
+        contentType: ContentType.success,
       );
       return;
     }
 
     isLoading.value = true;
     try {
-      await authService.login(userName, password);
+      await authService.login(password, userName);
     } finally {
       isLoading.value = false;
     }
   }
-
   void logout() => authService.logout();
-
-  @override
-  void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.onClose();
-  }
 }

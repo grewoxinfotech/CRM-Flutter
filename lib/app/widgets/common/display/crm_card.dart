@@ -1,5 +1,3 @@
-import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,61 +8,54 @@ class CrmCard extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final AlignmentGeometry? alignment;
   final Color? color;
-  final Gradient? gradient;
   final DecorationImage? image;
   final BorderRadiusGeometry? borderRadius;
   final List<BoxShadow>? boxShadow;
   final BoxBorder? border;
-  final BoxShape shape;
-  final BlendMode? backgroundBlendMode;
   final Widget? child;
 
   const CrmCard({
-    super.key,
+    Key? key,
     this.width,
     this.height,
     this.alignment,
     this.padding,
     this.margin,
     this.color,
-    this.gradient,
     this.image,
-    this.borderRadius,
     this.boxShadow,
     this.border,
-    this.shape = BoxShape.rectangle,
-    this.backgroundBlendMode,
     this.child,
-  });
+    this.borderRadius,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      padding: padding,
-      margin: margin,
-      alignment: alignment,
-      decoration: BoxDecoration(
-        color: color ?? Get.theme.colorScheme.surface,
-        borderRadius: borderRadius ?? BorderRadius.circular(AppRadius.large),
-        gradient: gradient,
-        image: image,
-        shape: shape,
-        border: border,
-        backgroundBlendMode: backgroundBlendMode,
-        boxShadow:
-            boxShadow ??
-            [
-              BoxShadow(
-                color: AppColors.black.withAlpha(50),
-                spreadRadius: -17,
-                blurRadius: 20,
-                offset: Offset(0, 10),
-              ),
-            ],
+    return Obx(
+      () => Container(
+        width: width,
+        height: height,
+        alignment: alignment,
+        padding: padding,
+        margin: margin,
+        decoration: BoxDecoration(
+          color: color ?? Colors.white,
+          image: image,
+          borderRadius: borderRadius ?? BorderRadius.circular(30),
+          border: border,
+          boxShadow:
+              boxShadow ??
+              [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 56,
+                  spreadRadius: 0,
+                  offset: Offset(0, 6),
+                ),
+              ],
+        ),
+        child: child,
       ),
-      child: child,
     );
   }
 }

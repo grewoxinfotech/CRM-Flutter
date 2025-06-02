@@ -1,7 +1,7 @@
 import 'package:crm_flutter/app/care/utils/validation.dart';
 import 'package:crm_flutter/app/modules/auth/controllers/auth_controller.dart';
-import 'package:crm_flutter/app/modules/auth/views/auth_background/auth_background.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
@@ -16,8 +16,27 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.put(AuthController());
-    return AuthBackground(
-      child: Padding(
+    return Scaffold(
+
+      appBar: AppBar(
+        backgroundColor: Get.theme.colorScheme.background,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CrmAppLogo(),
+            const SizedBox(width: 10),
+            Text(
+              "Grewox infotech",
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w700,
+                color: Get.theme.colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Padding(
         padding: EdgeInsets.all(15),
         child: Obx(() {
           return authController.isLoading.value
@@ -29,7 +48,7 @@ class LoginScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Sign In to Grewox',
+                        'Sign In to Grewox infotech',
                         style: TextStyle(
                           fontSize: 20,
                           color: Get.theme.colorScheme.onPrimary,

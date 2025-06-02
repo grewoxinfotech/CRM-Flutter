@@ -92,7 +92,8 @@ class LeaveRequestDialog extends StatelessWidget {
               ),
             ),
           ),
-          AppSpacing.horizontalSmall,
+          SizedBox(height: 10),
+
           Expanded(
             child: Obx(
               () => CrmDropdownField<String>(
@@ -130,13 +131,16 @@ class LeaveRequestDialog extends StatelessWidget {
       SizedBox(),
       Row(
         children: [
-          AppSpacing.horizontalSmall,
-          Text(
-            "Half Day",
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
-              color: AppColors.textPrimary,
+          SizedBox(width: 10),
+
+          Obx(
+            () =>  Text(
+              "Half Day",
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                color: AppColors.textPrimary,
+              ),
             ),
           ),
         ],
@@ -156,9 +160,6 @@ class LeaveRequestDialog extends StatelessWidget {
                     top: Radius.circular(AppRadius.large),
                   ),
                   boxShadow: [],
-                  gradient: LinearGradient(
-                    colors: [AppColors.primary.withOpacity(0.8), AppColors.primary],
-                  ),
                   padding: EdgeInsets.symmetric(
                     horizontal: AppPadding.medium,
                     vertical: AppPadding.small * 1.5,
@@ -168,7 +169,7 @@ class LeaveRequestDialog extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color:AppColors.white,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -178,7 +179,7 @@ class LeaveRequestDialog extends StatelessWidget {
                   itemBuilder: (context, i) => items[i],
                 ),
 
-                AppSpacing.verticalMedium,
+                SizedBox(height: 10),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: AppPadding.medium),
                   child: Row(
@@ -187,13 +188,11 @@ class LeaveRequestDialog extends StatelessWidget {
                       CrmButton(
                         width: 80,
                         height: 30,
-                        boxShadow: [],
                         titleTextStyle: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
-                        backgroundColor: AppColors.transparent,
                         title: "Cancel",
                         onTap: () => Navigator.pop(context),
                       ),

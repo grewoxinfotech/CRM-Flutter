@@ -10,40 +10,46 @@ class CrmNoInternet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final network = Get.find<NetworkStatusService>();
-    return Obx(
-      () => AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: network.hasInternet.value ? 0 : 210,
-        height: network.hasInternet.value ? 0 : 30,
-        margin: const EdgeInsets.all(AppMargin.small),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Get.theme.colorScheme.error,
-          borderRadius: BorderRadius.circular(AppRadius.medium),
-        ),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.wifi_off_rounded,
-                size: network.hasInternet.value ? 0 : 18,
-                color: AppColors.white,
-              ),
-              AppSpacing.horizontalSmall,
-              Text(
-                "No Internet Connection",
-                style: TextStyle(
-                  fontSize: network.hasInternet.value ? 0 : 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.white,
-                ),
-              ),
-            ],
+    return Obx(() {
+      final noInternet = !network.hasInternet.value;
+      return AnimatedOpacity(
+        duration: const Duration(milliseconds: 300),
+        opacity: noInternet ? 1 : 0,
+        child: noInternet
+            ? Container(
+          width: 210,
+          height: 30,
+          margin: const EdgeInsets.all(AppMargin.small),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(AppRadius.medium),
           ),
-        ),
-      ),
-    );
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  Icons.wifi_off_rounded,
+                  size: 18,
+                  color: Colors.white,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  "No Internet Connection",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+            : const SizedBox.shrink(),
+      );
+    });
   }
 }

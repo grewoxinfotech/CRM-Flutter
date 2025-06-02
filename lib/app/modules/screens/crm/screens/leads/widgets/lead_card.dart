@@ -44,7 +44,7 @@ class LeadCard extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.leadDetail, arguments: lead),
+      onTap: () => Get.toNamed(AppRoutes.lead),
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.medium),
         border: Border.all(color: AppColors.divider),
@@ -71,8 +71,7 @@ class LeadCard extends StatelessWidget {
                 Icon(LucideIcons.chevronRight, color: AppColors.divider),
               ],
             ),
-            AppSpacing.verticalSmall,
-
+SizedBox(height: 10,),
             /// Status Chips
             Wrap(
               spacing: 8,
@@ -89,8 +88,8 @@ class LeadCard extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 10,),
 
-            AppSpacing.verticalSmall,
 
             /// Lead Value and Created Date
             Row(
@@ -111,7 +110,7 @@ class LeadCard extends StatelessWidget {
                       size: 14,
                       color: AppColors.textSecondary,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 10),
                     Text(
                       formatDate(lead.createdAt.toString()),
                       style: TextStyle(

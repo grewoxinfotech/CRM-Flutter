@@ -1,21 +1,21 @@
-import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:crm_flutter/app/modules/screens/crm/screens/leads/views/lead_screen.dart';
 
 class SalesModel {
-  String? title;
-  Widget? widget;
-  Color? color;
-  IconData? iconData;
+  final String title;
+  final Widget widget;
+  final Color color;
+  final IconData iconData;
 
-  SalesModel({required this.title, this.color, this.widget, this.iconData});
+  SalesModel({
+    required this.title,
+    required this.widget,
+    required this.color,
+    required this.iconData,
+  });
 
-  static List< SalesModel> getCrmWidgets() {
-    return [
-      SalesModel(color: Color(0xff632100), title: "Product And Services", widget: LeadScreen()),
-      SalesModel(color: Color(0xff632100), title: "Customer", widget: LeadScreen()),
-      SalesModel(color: Color(0xff632100), title: "Invoice", widget: LeadScreen()),
-      SalesModel(color: Color(0xff632100), title: "Revenue", widget: LeadScreen()),
-      SalesModel(color: Color(0xff632100), title: "Credit Note", widget: LeadScreen()),
-    ];
+  static List<SalesModel> getCrmWidgets() {
+    return [];
   }
 }
