@@ -20,7 +20,7 @@ class AuthController extends GetxController {
   void togglePasswordVisibility() => obscurePassword.toggle();
 
   void fillTestCredentials() {
-    emailController.text = "raiser2";
+    emailController.text = "g@yopmail.com";
     passwordController.text = "SuperAdmin@123";
   }
 

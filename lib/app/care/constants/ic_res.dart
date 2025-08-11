@@ -21,6 +21,9 @@ class ICRes {
   static const customer = "${FunctionsPath}ic_custemer.svg";
   static const document = "${FunctionsPath}ic_document.svg";
   static const employees = "${FunctionsPath}ic_employee.svg";
+//  static const sales_functionality = "${FunctionsPath}ic_employee.svg";
+
+
   static const leads = "${FunctionsPath}ic_leads.svg";
   static const project = "${FunctionsPath}ic_project.svg";
   static const task = "${FunctionsPath}ic_task.svg";

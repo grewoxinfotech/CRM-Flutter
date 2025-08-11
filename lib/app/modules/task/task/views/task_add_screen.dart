@@ -4,63 +4,164 @@ import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
+import 'package:crm_flutter/app/widgets/common/inputs/crm_dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class TaskAddScreen extends StatelessWidget {
-  final TaskModel? task;
+  final String userId;
 
-  const TaskAddScreen({super.key, this.task});
+  const TaskAddScreen({
+    super.key,
+    required this.userId,
+  });
+
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      controller.text = DateFormat('dd-MM-yyyy').format(picked);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<TaskController>(() => TaskController());
-    final TaskController taskController = Get.find();
+    final TaskController taskController = Get.put(TaskController());
+    taskController.clearFormData();
+
     List<Widget> items = [
       CrmTextField(
         title: "Task Name",
         controller: taskController.taskNameController,
-        validator:
-            (value) =>
-                value == null || value.isEmpty ? 'Enter task name' : null,
+        hintText: "Enter task name",
+        validator: (value) => value == null || value.isEmpty ? 'Enter task name' : null,
+        prefixIcon: Icons.task_alt,
+        isRequired: true,
       ),
+      
       CrmTextField(
-        title: "Category",
-        controller: taskController.categoryController,
-        validator:
-            (value) =>
-                value == null || value.isEmpty ? 'Enter task name' : null,
+        title: "Start Date",
+        controller: taskController.startDateController,
+        hintText: "Select start date",
+        validator: (value) => value == null || value.isEmpty ? 'Select start date' : null,
+        prefixIcon: Icons.calendar_today,
+        isRequired: true,
+        onTap: () => _selectDate(context, taskController.startDateController),
+        enabled: true,
       ),
+      
       CrmTextField(
-        title: "Project",
-        controller: taskController.projectController,
-        validator:
-            (value) =>
-                value == null || value.isEmpty ? 'Enter task name' : null,
+        title: "Due Date",
+        controller: taskController.dueDateController,
+        hintText: "Select due date",
+        validator: (value) => value == null || value.isEmpty ? 'Select due date' : null,
+        prefixIcon: Icons.event,
+        isRequired: true,
+        onTap: () => _selectDate(context, taskController.dueDateController),
+        enabled: true,
       ),
+
+      CrmDropdownField<String>(
+        title: "Priority",
+        value: taskController.priority.value,
+        hintText: "Select priority",
+        isRequired: true,
+        prefixIcon: Icons.priority_high,
+        items: TaskController.priorities
+            .map((e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e),
+                ))
+            .toList(),
+        onChanged: (val) => taskController.priority.value = val,
+      ),
+
+      CrmDropdownField<String>(
+        title: "Status",
+        value: taskController.status.value,
+        hintText: "Select status",
+        isRequired: true,
+        prefixIcon: Icons.flag,
+        items: TaskController.statuses
+            .map((e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e),
+                ))
+            .toList(),
+        onChanged: (val) => taskController.status.value = val,
+      ),
+
+      Obx(() => CrmDropdownField<String>(
+        title: "Assign To",
+        value: taskController.assignTo.toList(),
+        hintText: "Select team members",
+        isRequired: true,
+        isMultiSelect: true,
+        prefixIcon: Icons.people,
+        items: taskController.teamMembers
+            .map((e) => DropdownMenuItem<String>(
+                  value: e['username'] as String,
+                  child: Text(e['username']?.toString() ?? ''),
+                ))
+            .toList(),
+        onChanged: (val) {
+          if (val is List<String>) {
+            taskController.assignTo.clear();
+            taskController.assignTo.addAll(val);
+          }
+        },
+      )),
+
+      Obx(() => CrmDropdownField<String>(
+        title: "Task Reporter",
+        value: taskController.taskReporter.value,
+        hintText: "Select task reporter",
+        isRequired: true,
+        prefixIcon: Icons.person,
+        items: taskController.teamMembers
+            .map((e) => DropdownMenuItem<String>(
+                  value: e['username'] as String,
+                  child: Text(e['username']?.toString() ?? ''),
+                ))
+            .toList(),
+        onChanged: (val) => taskController.taskReporter.value = val,
+      )),
+      
       CrmTextField(
-        title: "Lead",
-        controller: taskController.leadController,
-        validator:
-            (value) =>
-                value == null || value.isEmpty ? 'Enter task name' : null,
+        title: "Reminder Date",
+        controller: taskController.reminderDateController,
+        hintText: "Select reminder date",
+        prefixIcon: Icons.notifications,
+        onTap: () => _selectDate(context, taskController.reminderDateController),
+        enabled: true,
       ),
-      CrmTextField(
-        title: "File",
-        controller: taskController.fileController,
-        validator:
-            (value) =>
-                value == null || value.isEmpty ? 'Enter task name' : null,
-      ),
+      
       CrmTextField(
         title: "Description",
         controller: taskController.descriptionController,
-        validator:
-            (value) =>
-                value == null || value.isEmpty ? 'Enter task name' : null,
+        hintText: "Enter task description",
+        prefixIcon: Icons.description,
+        maxLines: 3,
       ),
-      SizedBox(),
-      CrmButton(onTap: () => taskController.addTask(), title: "Save"),
+      
+      CrmTextField(
+        title: "Task File",
+        controller: taskController.fileController,
+        hintText: "Enter file URL",
+        prefixIcon: Icons.attach_file,
+      ),
+      
+      const SizedBox(height: 20),
+      
+      CrmButton(
+        onTap: () => taskController.addTask(userId: userId),
+        title: "Create Task",
+      ),
     ];
 
     return Scaffold(
@@ -71,9 +172,7 @@ class TaskAddScreen extends StatelessWidget {
       body: ViewScreen(
         itemCount: items.length,
         padding: const EdgeInsets.all(20),
-        itemBuilder: (context, i) {
-          return items[i];
-        },
+        itemBuilder: (context, i) => items[i],
       ),
     );
   }

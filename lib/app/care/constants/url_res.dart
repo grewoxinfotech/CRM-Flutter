@@ -1,4 +1,3 @@
-
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 
 class UrlRes {
@@ -9,7 +8,7 @@ class UrlRes {
   static const String login = "$auth/login";
 
   static const String leads = "$baseURL/leads";
-  
+
   static const String pipelines = "$baseURL/pipelines";
 
   static const String stages = "$baseURL/stages";
@@ -20,7 +19,33 @@ class UrlRes {
 
   static const String roles = "$baseURL/roles";
 
-  
+  static const String labels = "$baseURL/labels";
+
+  static const String allUsers = "$baseURL/auth";
+
+  static const String notes = "$baseURL/notes";
+
+  static const String leadsFiles = "$baseURL/leads/files";
+
+  static const String dealsFiles = "$baseURL/deals/files";
+
+  static const String activities = "$baseURL/activities";
+
+  static const String salesInvoices = "$baseURL/sales-invoices";
+
+  static const String products = "$baseURL/products";
+
+  static const String customers = "$baseURL/customers";
+
+  static const String companies = "$baseURL/company-accounts";
+
+  static const String contacts = "$baseURL/contacts";
+
+  static const String currencies = "$baseURL/currencies";
+
+  //sales_functionality-APIs
+  // static const String sales = "$baseURL/products";
+  // static const String addsales = "$baseURL/products/$getClientId()";
 
   // headers from api
   static const String contentType = "Content-type";
@@ -33,4 +58,8 @@ class UrlRes {
     final token = await SecureStorage.getToken();
     return {contentType: applicationJson, authorization: "Bearer $token"};
   }
+
+  // static Future<String?> getClientId() async {
+  //   return await SecureStorage.getClientId();
+  // }
 }

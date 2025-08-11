@@ -8,6 +8,8 @@ class MemberCard extends StatelessWidget {
   final String? title;
   final String? subTitle;
   final String? role;
+  final String? email;
+  final String? phone;
   final GestureTapCallback? onTap;
 
   const MemberCard({
@@ -17,6 +19,8 @@ class MemberCard extends StatelessWidget {
     this.title,
     this.subTitle,
     this.role,
+    this.email,
+    this.phone,
   });
 
   String getInitials(String? name) {
@@ -33,6 +37,18 @@ class MemberCard extends StatelessWidget {
     Color primary = Get.theme.colorScheme.primary;
     Color textPrimary = Get.theme.colorScheme.onPrimary;
     Color textSecondary = Get.theme.colorScheme.onSecondary;
+
+    // Determine what to show as subtitle
+    String displaySubtitle = '';
+    if (subTitle != null && subTitle!.isNotEmpty) {
+      displaySubtitle = subTitle!;
+    } else if (email != null && email!.isNotEmpty) {
+      displaySubtitle = email!;
+    } else if (phone != null && phone!.isNotEmpty) {
+      displaySubtitle = phone!;
+    } else {
+      displaySubtitle = 'No contact information';
+    }
 
     return GestureDetector(
       onTap: onTap,
@@ -58,10 +74,12 @@ class MemberCard extends StatelessWidget {
             ),
           ),
           subtitle: Text(
-            subTitle ?? 'No Designation',
-            style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600, color: textSecondary),
+            displaySubtitle,
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: textSecondary),
           ),
-          trailing: Container(
+          trailing: (role == null || role!.isEmpty) 
+              ? null 
+              : Container(
             padding: EdgeInsets.symmetric(
               horizontal: AppPadding.small,
               vertical: AppPadding.small / 2,
@@ -71,7 +89,7 @@ class MemberCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppRadius.small),
             ),
             child: Text(
-              role ?? 'No Role',
+                    role!,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w800,

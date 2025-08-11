@@ -1,31 +1,56 @@
 import 'dart:ui';
 
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/label/controller/label_controller.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_service.dart';
 import 'package:crm_flutter/app/data/network/system/function_model.dart';
-import 'package:crm_flutter/app/modules/account/sales/view/sales_customer/views/customer_screen.dart';
-import 'package:crm_flutter/app/modules/crm/deal/controllers/deal_controller.dart';
-import 'package:crm_flutter/app/modules/crm/deal/views/deal_screen.dart';
-import 'package:crm_flutter/app/modules/crm/lead/controllers/lead_controller.dart';
-import 'package:crm_flutter/app/modules/crm/lead/views/lead_screen.dart';
-import 'package:crm_flutter/app/modules/task/task/controller/task_controller.dart';
+import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
+import 'package:crm_flutter/app/modules/role/controllers/role_controller.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/products_services_page.dart';
 import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:crm_flutter/app/test_screen.dart';
 import 'package:get/get.dart';
 
-class FunctionController extends GetxController{
+import '../../crm/crm_functionality/company/view/company_screen.dart';
+import '../../crm/crm_functionality/contact/views/contact_screen.dart';
+import '../../crm/crm_functionality/deal/views/deal_screen.dart';
+
+class FunctionController extends GetxController {
   final RxList<FunctionModel> functions = <FunctionModel>[].obs;
   @override
   void onInit() {
     super.onInit();
     updateFunctions();
   }
-  void updateFunctions (){
-    functions.value = [ FunctionModel(
-      title: 'Leads',
-      iconPath: ICRes.leads,
-      color: const Color(0xffFFBD21),
-      screenBuilder: LeadScreen(),
-    ),
+
+  void updateFunctions() {
+    // Initialize RolesService first
+    if (!Get.isRegistered<RolesService>()) {
+      Get.put(RolesService());
+    }
+
+    // Then initialize RoleController
+    if (!Get.isRegistered<RoleController>()) {
+      Get.put(RoleController());
+    }
+
+    // Initialize LabelService and LabelController
+    if (!Get.isRegistered<LabelService>()) {
+      Get.put(LabelService());
+    }
+
+    if (!Get.isRegistered<LabelController>()) {
+      Get.put(LabelController());
+    }
+
+    functions.value = [
+      FunctionModel(
+        title: 'Leads',
+        iconPath: ICRes.leads,
+        color: const Color(0xffFFBD21),
+        screenBuilder: LeadScreen(),
+      ),
       FunctionModel(
         title: 'Deals',
         iconPath: ICRes.leads,
@@ -39,23 +64,25 @@ class FunctionController extends GetxController{
         screenBuilder: TaskScreen(),
       ),
       FunctionModel(
-        title: 'Customer',
+        title: 'Contacts',
         iconPath: ICRes.customer,
         color: const Color(0xff6D5DD3),
-        screenBuilder: CustomerScreen(),
         count: 10,
+        screenBuilder: ContactScreen(),
       ),
       FunctionModel(
-        title: 'Employee',
-        iconPath: ICRes.employees,
+        title: 'Company',
+        iconPath: ICRes.company,
         color: const Color(0xff2B648F),
         count: 4,
+        screenBuilder: CompanyScreen(),
       ),
       FunctionModel(
-        title: 'Clients',
+        title: 'Sales',
         iconPath: ICRes.clients,
         color: const Color(0xffFFCC01),
         count: 45,
+        screenBuilder: ProductsServicesScreen(),
       ),
       FunctionModel(
         title: 'Contract',

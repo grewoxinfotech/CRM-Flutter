@@ -12,6 +12,7 @@ class CrmButton extends StatelessWidget {
   final Color? backgroundColor;
   final List<BoxShadow>? boxShadow;
   final BorderRadiusGeometry? borderRadius;
+  final String? heroTag;
 
   const CrmButton({
     super.key,
@@ -23,6 +24,7 @@ class CrmButton extends StatelessWidget {
     this.backgroundColor,
     this.borderRadius,
     this.boxShadow,
+    this.heroTag,
   });
 
   @override
@@ -49,10 +51,12 @@ class CrmButton extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Hero(
-        tag: "button",
-        child: Material(color: Colors.transparent, child: button),
-      ),
+      child: heroTag != null 
+        ? Hero(
+            tag: heroTag!,
+            child: Material(color: Colors.transparent, child: button),
+          )
+        : Material(color: Colors.transparent, child: button),
     );
   }
 }

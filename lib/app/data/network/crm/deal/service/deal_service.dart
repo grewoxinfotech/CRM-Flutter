@@ -18,12 +18,16 @@ class DealService {
       final response = await http.get(Uri.parse(url), headers: await headers());
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 && data["success"] == true) {
+        // Check if data is in the new structure (nested under message.data)
+        if (data["message"] != null && data["message"]["data"] != null) {
+          return data["message"]["data"] ?? [];
+        }
+        // Fallback to old structure
         return data['data'] ?? [];
       } else {
         return [];
       }
     } catch (e) {
-      print(e);
       return [];
     }
   }
@@ -35,7 +39,12 @@ class DealService {
       headers: await headers(),
     );
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['data'];
+      final data = jsonDecode(response.body);
+      // Check if data is in the new structure
+      if (data["message"] != null && data["message"]["data"] != null) {
+        return data["message"]["data"];
+      }
+      return data['data'];
     } else {
       return null;
     }
@@ -68,7 +77,7 @@ class DealService {
     final data = jsonDecode(response.body);
     CrmSnackBar.showAwesomeSnackbar(
       title: "Message",
-      message: data['message'],
+      message: data['message'] is String ? data['message'] : "Operation completed",
       contentType: ContentType.success,
     );
     return data['success'];

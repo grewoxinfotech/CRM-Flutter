@@ -44,23 +44,28 @@ class CrmNavigationBar extends StatelessWidget {
             onTap: (i) => controller.changeIndex(i),
             items: [
               SalomonBottomBarItem(
-                icon: Icon(FontAwesomeIcons.instagram, size: iconSize),
-                title: Text("Instagram", style: style),
+                icon: Icon(FontAwesomeIcons.dashboard, size: iconSize),
+                title: Text("Dashboard", style: style),
               ),
 
               SalomonBottomBarItem(
                 icon: Icon(FontAwesomeIcons.whatsapp, size: iconSize),
-                title: Text("whatsapp", style: style),
+                title: Text("CRM", style: style),
               ),
 
               SalomonBottomBarItem(
                 icon: Icon(FontAwesomeIcons.facebookF, size: iconSize),
-                title: Text("facebook", style: style),
+                title: Text("Sales", style: style),
               ),
 
               SalomonBottomBarItem(
                 icon: Icon(FontAwesomeIcons.google, size: iconSize),
                 title: Text("google", style: style),
+              ),
+
+              SalomonBottomBarItem(
+                icon: Icon(FontAwesomeIcons.twitter, size: iconSize),
+                title: Text("twitter", style: style),
               ),
             ],
           ),
