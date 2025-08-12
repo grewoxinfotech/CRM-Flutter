@@ -90,6 +90,7 @@ class ProductsServicesController extends PaginatedController<Data> {
     }
   }
 
+//test
   Future<bool> deleteProduct(String id) async {
     try {
       final success = await _service.deleteProduct(id);
