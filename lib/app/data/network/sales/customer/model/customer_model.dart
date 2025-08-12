@@ -183,6 +183,21 @@ class Address {
       'postal_code': postalCode,
     };
   }
+
+  static String formatAddress(Address? address) {
+    if (address == null) return '-';
+
+    final parts =
+        [
+          address.street?.trim(),
+          address.city?.trim(),
+          address.state?.trim(),
+          address.country?.trim(),
+          address.postalCode?.trim(),
+        ].where((e) => e != null && e.isNotEmpty).toList();
+
+    return parts.isEmpty ? '-' : parts.join(', ');
+  }
 }
 
 class Pagination {

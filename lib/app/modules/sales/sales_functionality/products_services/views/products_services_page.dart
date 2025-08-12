@@ -1,4 +1,5 @@
 
+import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/bindings/product_service_binding.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/add_product_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/widget/productcard.dart';
@@ -14,6 +15,7 @@ class ProductsServicesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.lazyPut<ProductsServicesController>(() => ProductsServicesController());
     final ProductsServicesController controller = Get.find();
+    ProductServicesBinding().dependencies();
 
     return Scaffold(
       appBar: AppBar(
@@ -22,7 +24,7 @@ class ProductsServicesScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to add product_service screen
-          Get.to(() => const AddProductScreen());
+          Get.to(() => const AddProductScreen(), binding: ProductServicesBinding());
         },
         child: const Icon(Icons.add),
       ),

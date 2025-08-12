@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/data/network/sales/customer/model/customer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +10,7 @@ import '../../../../project/invoice/widget/invoice_card.dart';
 
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 
+import '../../customer/controllers/customer_controller.dart';
 import '../controllers/invoice_controller.dart';
 import 'invoice_detail_screen.dart';
 
@@ -63,6 +65,9 @@ class InvoiceScreen extends StatelessWidget {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             return Obx(() {
+              Get.lazyPut<CustomerController>(() => CustomerController());
+              final CustomerController customerController = Get.find();
+
               if (!controller.isLoading.value && controller.items.isEmpty) {
                 return const Center(child: Text("No Invoices found."));
               }
@@ -81,6 +86,10 @@ class InvoiceScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
                         final invoice = controller.items[index];
+                        final CustomerData? customer = customerController.items
+                            .firstWhereOrNull(
+                              (element) => element.id == invoice.customer,
+                            );
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
@@ -115,7 +124,10 @@ class InvoiceScreen extends StatelessWidget {
                               // ),
                               onTap:
                                   () => Get.to(
-                                    () => InvoiceDetailPage(invoice: invoice),
+                                    () => InvoiceDetailScreen(
+                                      invoice: invoice,
+                                      customer: customer,
+                                    ),
                                   ),
                             ),
                           ),

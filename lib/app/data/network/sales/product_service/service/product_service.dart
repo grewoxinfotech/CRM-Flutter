@@ -196,7 +196,7 @@ class ProductsServicesService {
 
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl"),
+        Uri.parse("$baseUrl/$userId"),
         headers: await headers(),
         body: jsonEncode(product.toJson()),
       );

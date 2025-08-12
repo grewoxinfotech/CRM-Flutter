@@ -58,6 +58,8 @@ dependencies:
   google_nav_bar:
   salomon_bottom_bar:
   dio: ^5.4.1
+  qr_flutter: ^4.1.0
+  image_picker:
 
 dev_dependencies:
   flutter_test:
