@@ -13,6 +13,51 @@ class SalesInvoiceService {
     return await UrlRes.getHeaders();
   }
 
+  /// Get all sales invoices with optional pagination & search
+  Future<List<SalesInvoice>> fetchSalesInvoices({
+    int page = 1,
+    int pageSize = 10,
+    String search = '',
+  }) async {
+    try {
+      final uri = Uri.parse(url).replace(
+        queryParameters: {
+          'page': page.toString(),
+          'pageSize': pageSize.toString(),
+          'search': search,
+        },
+      );
+
+      final response = await http.get(uri, headers: await headers());
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        List<dynamic>? invoicesList;
+
+        if (data["data"] != null && data["data"] is List) {
+          // Direct list format
+          invoicesList = data["data"];
+        } else if (data["message"] != null &&
+            data["message"] is Map &&
+            data["message"]["data"] != null &&
+            data["message"]["data"] is List) {
+          // Nested list under message
+          invoicesList = data["message"]["data"];
+        }
+
+        if (invoicesList != null) {
+          return invoicesList
+              .map((json) => SalesInvoice.fromJson(json))
+              .toList();
+        }
+      }
+    } catch (e) {
+      print("fetchSalesInvoices Exception: $e");
+    }
+    return [];
+  }
+
   /// Get a single invoice by ID
   Future<SalesInvoice?> getSalesInvoiceById(String id) async {
     try {

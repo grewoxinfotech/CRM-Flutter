@@ -10,6 +10,7 @@ import '../../../../project/invoice/widget/invoice_card.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 
 import '../controllers/invoice_controller.dart';
+import 'invoice_detail_screen.dart';
 
 class InvoiceScreen extends StatelessWidget {
   InvoiceScreen({super.key});
@@ -112,10 +113,10 @@ class InvoiceScreen extends StatelessWidget {
                               //     dealId: dealId,
                               //   ),
                               // ),
-                              // onTap:
-                              //     () => Get.to(
-                              //       () => InvoiceDetailPage(invoice: invoice),
-                              //     ),
+                              onTap:
+                                  () => Get.to(
+                                    () => InvoiceDetailPage(invoice: invoice),
+                                  ),
                             ),
                           ),
                         );

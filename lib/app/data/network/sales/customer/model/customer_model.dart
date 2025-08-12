@@ -62,14 +62,19 @@ class CustomerData {
   String? phonecode;
   String? email;
   String? taxNumber;
-  Map<String, dynamic>? billingAddress;
-  Map<String, dynamic>? shippingAddress;
+  String? alternateNumber;
+  String? textNumber;
+  String? company;
+  String? status;
+  Address? billingAddress;
+  Address? shippingAddress;
   String? clientId;
   String? createdBy;
   String? updatedBy;
   String? createdAt;
   String? updatedAt;
   String? key;
+  String? notes;
 
   CustomerData({
     this.id,
@@ -80,6 +85,10 @@ class CustomerData {
     this.phonecode,
     this.email,
     this.taxNumber,
+    this.alternateNumber,
+    this.textNumber,
+    this.company,
+    this.status,
     this.billingAddress,
     this.shippingAddress,
     this.clientId,
@@ -88,6 +97,7 @@ class CustomerData {
     this.createdAt,
     this.updatedAt,
     this.key,
+    this.notes,
   });
 
   CustomerData.fromJson(Map<String, dynamic> json) {
@@ -99,14 +109,25 @@ class CustomerData {
     phonecode = json['phonecode'];
     email = json['email'];
     taxNumber = json['tax_number'];
-    billingAddress = json['billing_address'] ?? {};
-    shippingAddress = json['shipping_address'] ?? {};
+    alternateNumber = json['alternate_number'];
+    textNumber = json['text_number'];
+    company = json['company'];
+    status = json['status'];
+    billingAddress =
+        json['billing_address'] != null
+            ? Address.fromJson(json['billing_address'])
+            : null;
+    shippingAddress =
+        json['shipping_address'] != null
+            ? Address.fromJson(json['shipping_address'])
+            : null;
     clientId = json['client_id'];
     createdBy = json['created_by'];
     updatedBy = json['updated_by'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     key = json['key'];
+    notes = json['notes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -119,15 +140,48 @@ class CustomerData {
     map['phonecode'] = phonecode;
     map['email'] = email;
     map['tax_number'] = taxNumber;
-    map['billing_address'] = billingAddress ?? {};
-    map['shipping_address'] = shippingAddress ?? {};
+    map['alternate_number'] = alternateNumber;
+    map['text_number'] = textNumber;
+    map['company'] = company;
+    map['status'] = status;
+    map['billing_address'] = billingAddress?.toJson();
+    map['shipping_address'] = shippingAddress?.toJson();
     map['client_id'] = clientId;
     map['created_by'] = createdBy;
     map['updated_by'] = updatedBy;
     map['createdAt'] = createdAt;
     map['updatedAt'] = updatedAt;
     map['key'] = key;
+    map['notes'] = notes;
     return map;
+  }
+}
+
+class Address {
+  String? street;
+  String? city;
+  String? state;
+  String? country;
+  String? postalCode;
+
+  Address({this.street, this.city, this.state, this.country, this.postalCode});
+
+  Address.fromJson(Map<String, dynamic> json) {
+    street = json['street'];
+    city = json['city'];
+    state = json['state'];
+    country = json['country'];
+    postalCode = json['postal_code'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'street': street,
+      'city': city,
+      'state': state,
+      'country': country,
+      'postal_code': postalCode,
+    };
   }
 }
 

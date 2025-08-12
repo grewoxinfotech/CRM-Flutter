@@ -1,3 +1,6 @@
+import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/controllers/customer_controller.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/views/add_customer_screen.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/widget/customer_card.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/add_product_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/widget/productcard.dart';
@@ -5,22 +8,24 @@ import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../widget/customer_detail_screen.dart';
+
 class CustomerScreen extends StatelessWidget {
   CustomerScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<ProductsServicesController>(() => ProductsServicesController());
-    final ProductsServicesController controller = Get.find();
+    Get.lazyPut<CustomerController>(() => CustomerController());
+    final CustomerController controller = Get.find();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Customers")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to add product_service screen
-          Get.to(() => const AddProductScreen());
+          Get.to(() => AddCustomerScreen(customers: controller.items.length));
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
       body: FutureBuilder(
         future: controller.loadInitial(), // Load initial data
@@ -59,8 +64,14 @@ class CustomerScreen extends StatelessWidget {
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
-                        final product = controller.items[index];
-                        return ProductCard(product: product);
+                        final customer = controller.items[index];
+                        return GestureDetector(
+                          onTap:
+                              () => Get.to(
+                                CustomerDetailScreen(customer: customer),
+                              ),
+                          child: CustomerCard(customer: customer),
+                        );
                       } else if (controller.isPaging.value) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),

@@ -6,33 +6,39 @@ import 'package:http/http.dart' as http;
 import '../../../../database/storage/secure_storage_service.dart';
 
 class CustomerService {
-  final String baseUrl = "${UrlRes.customers}";
+  final String baseUrl = UrlRes.customers;
 
   // Common headers
-  Future<Map<String, String>> headers() async {
-    return {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      // If you store token in SecureStorage:
-      'Authorization': 'Bearer ${await SecureStorage.getToken()}',
-    };
+  static Future<Map<String, String>> headers() async {
+    return await UrlRes.getHeaders();
   }
 
-  /// Get all customers
-  Future<List<CustomerData>> getCustomers() async {
+  /// Fetch customers with optional pagination & search
+  Future<List<CustomerData>> fetchCustomers({
+    int page = 1,
+    int pageSize = 10,
+    String search = '',
+  }) async {
     try {
-      final response = await http.get(
-        Uri.parse(baseUrl),
-        headers: await headers(),
+      final uri = Uri.parse(baseUrl).replace(
+        queryParameters: {
+          'page': page.toString(),
+          'pageSize': pageSize.toString(),
+          'search': search,
+        },
       );
+
+      final response = await http.get(uri, headers: await headers());
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> customerList = data["message"]["data"];
-        return customerList.map((json) => CustomerData.fromJson(json)).toList();
+        final List<dynamic> customers = data["message"]["data"];
+        return customers.map((json) => CustomerData.fromJson(json)).toList();
+      } else {
+        print("Failed to load customers: ${response.statusCode}");
       }
     } catch (e) {
-      print("Get customers exception: $e");
+      print("Exception in fetchCustomers: $e");
     }
     return [];
   }
@@ -58,14 +64,20 @@ class CustomerService {
   /// Create new customer
   Future<bool> createCustomer(CustomerData customer) async {
     final userId = (await SecureStorage.getUserData())?.id;
+    if (userId == null) {
+      print("Error: No user ID found. Cannot create customer.");
+      return false;
+    }
+
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/$userId"),
+        Uri.parse("$baseUrl"),
         headers: await headers(),
         body: jsonEncode(customer.toJson()),
       );
 
-      print("[DEBUG]=> Create Customer: $customer");
+      print("[DEBUG]=> $baseUrl/$userId ---- ${customer.name}");
+      print("[DEBUG]=> $baseUrl/$userId ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create customer exception: $e");
@@ -82,7 +94,6 @@ class CustomerService {
         body: jsonEncode(customer.toJson()),
       );
 
-      print("[DEBUG]=> Update Customer: $customer");
       return response.statusCode == 200;
     } catch (e) {
       print("Update customer exception: $e");
@@ -97,7 +108,7 @@ class CustomerService {
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
       );
-      return response.statusCode == 200;
+      return response.statusCode == 200 || response.statusCode == 204;
     } catch (e) {
       print("Delete customer exception: $e");
       return false;
