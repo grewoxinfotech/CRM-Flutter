@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 import '../controller/sales_function_controller.dart';
 
-
 class SalesFunctionsWidget extends StatelessWidget {
   const SalesFunctionsWidget({super.key});
 
@@ -33,9 +32,11 @@ class SalesFunctionsWidget extends StatelessWidget {
                 iconPath: controller.functions[i].iconPath,
                 title: controller.functions[i].title,
                 color: controller.functions[i].color,
-                onTap: () => (controller.functions[i].screenBuilder != null)
-                    ? Get.to(controller.functions[i].screenBuilder)
-                    : null,
+                onTap:
+                    () =>
+                        (controller.functions[i].screenBuilder != null)
+                            ? Get.to(controller.functions[i].screenBuilder)
+                            : null,
               );
             },
           ),

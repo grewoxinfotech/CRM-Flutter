@@ -1,4 +1,3 @@
-
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/bindings/product_service_binding.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/add_product_screen.dart';
@@ -6,7 +5,6 @@ import 'package:crm_flutter/app/modules/sales/sales_functionality/products_servi
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 class ProductsServicesScreen extends StatelessWidget {
   ProductsServicesScreen({Key? key}) : super(key: key);
@@ -18,13 +16,11 @@ class ProductsServicesScreen extends StatelessWidget {
     ProductServicesBinding().dependencies();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Products & Services"),
-      ),
+      appBar: AppBar(title: const Text("Products & Services")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to add product_service screen
-          Get.to(() => const AddProductScreen(), binding: ProductServicesBinding());
+          Get.to(() => AddProductScreen(), binding: ProductServicesBinding());
         },
         child: const Icon(Icons.add),
       ),
