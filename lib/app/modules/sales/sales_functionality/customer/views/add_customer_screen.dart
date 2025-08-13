@@ -150,6 +150,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             children: [
               // CrmTextField(

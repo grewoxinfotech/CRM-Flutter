@@ -699,6 +699,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
           padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

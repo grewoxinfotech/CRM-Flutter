@@ -74,6 +74,7 @@ class CompanyOverviewCard extends StatelessWidget {
       return CrmCard(
         padding: const EdgeInsets.all(10),
         borderRadius: BorderRadius.circular(AppRadius.medium),
+        boxShadow: [],
         color: Get.theme.colorScheme.background,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -25,7 +25,7 @@ class CompanyCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
           if (onTap != null) {
             onTap!(company);
