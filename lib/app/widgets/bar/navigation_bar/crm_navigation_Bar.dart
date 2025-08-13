@@ -50,7 +50,7 @@ class CrmNavigationBar extends StatelessWidget {
 
               SalomonBottomBarItem(
                 icon: Icon(FontAwesomeIcons.whatsapp, size: iconSize),
-                title: Text("CRM", style: style),
+                title: Text("Crm", style: style),
               ),
 
               SalomonBottomBarItem(
@@ -60,7 +60,7 @@ class CrmNavigationBar extends StatelessWidget {
 
               SalomonBottomBarItem(
                 icon: Icon(FontAwesomeIcons.google, size: iconSize),
-                title: Text("google", style: style),
+                title: Text("purchase", style: style),
               ),
 
               SalomonBottomBarItem(

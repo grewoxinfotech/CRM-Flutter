@@ -14,7 +14,7 @@ import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:crm_flutter/app/test_screen.dart';
 import 'package:get/get.dart';
 
-class CrmFunctionController extends GetxController {
+class SalesFunctionController extends GetxController {
   final RxList<FunctionModel> functions = <FunctionModel>[].obs;
   @override
   void onInit() {
@@ -43,47 +43,13 @@ class CrmFunctionController extends GetxController {
     }
 
     functions.value = [
+
       FunctionModel(
-        title: 'Leads',
-        iconPath: ICRes.leads,
-        color: const Color(0xffFFBD21),
-        screenBuilder: LeadScreen(),
-      ),
-      FunctionModel(
-        title: 'Deals',
-        iconPath: ICRes.leads,
-        color: const Color(0xff28B999),
-      ),
-      FunctionModel(
-        title: 'Tasks',
-        iconPath: ICRes.task,
-        color: const Color(0xff0AC947),
-        screenBuilder: TaskScreen(),
-      ),
-      FunctionModel(
-        title: 'Contacts',
-        iconPath: ICRes.customer,
-        color: const Color(0xff6D5DD3),
-        count: 10,
-      ),
-      FunctionModel(
-        title: 'Company',
-        iconPath: ICRes.employees,
-        color: const Color(0xff2B648F),
-        count: 4,
-      ),
-      FunctionModel(
-        title: 'Sales',
+        title: 'Product & Service',
         iconPath: ICRes.clients,
         color: const Color(0xffFFCC01),
         count: 45,
         screenBuilder: ProductsServicesScreen(),
-      ),
-      FunctionModel(
-        title: 'Contract',
-        iconPath: ICRes.contract,
-        color: const Color(0xff3400AD),
-        count: 66,
       ),
       FunctionModel(
         title: 'Customer',

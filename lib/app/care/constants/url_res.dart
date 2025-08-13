@@ -43,6 +43,10 @@ class UrlRes {
 
   static const String currencies = "$baseURL/currencies";
 
+  //vendor
+  static const String vendors = "$baseURL/vendors";
+
+
   //sales_functionality-APIs
   // static const String sales = "$baseURL/products";
   // static const String addsales = "$baseURL/products/$getClientId()";

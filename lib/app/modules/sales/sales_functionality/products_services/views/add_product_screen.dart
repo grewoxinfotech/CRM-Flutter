@@ -29,7 +29,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final skuController = TextEditingController();
   final descriptionController = TextEditingController();
   final taxNameController = TextEditingController();
-  final taxPercentageController = TextEditingController();
+  final taxPercentageController = TextEditingController(text: '0');
   final hsnSacController = TextEditingController();
   final stockQuantityController = TextEditingController(text: '0');
   final minStockLevelController = TextEditingController(text: '0');
@@ -132,8 +132,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final product = Data(
       name: nameController.text.trim(),
       category: selectedCategoryId!,
-      buyingPrice: int.tryParse(buyingPriceController.text) ?? 0,
-      sellingPrice: int.tryParse(sellingPriceController.text) ?? 0,
+      buyingPrice: int.tryParse(buyingPriceController.text),
+      sellingPrice: int.tryParse(sellingPriceController.text),
       currency: selectedCurrencyCode!,
       sku: skuController.text.trim(),
       taxName: taxNameController.text.trim(),

@@ -4,13 +4,15 @@ import 'package:crm_flutter/app/modules/crm/crm_functions/widget/crm_function_ca
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/sales_function_controller.dart';
 
-class CrmFunctionsWidget extends StatelessWidget {
-  const CrmFunctionsWidget({super.key});
+
+class SalesFunctionsWidget extends StatelessWidget {
+  const SalesFunctionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CrmFunctionController());
+    final controller = Get.put(SalesFunctionController());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppMargin.medium),
       child: Column(

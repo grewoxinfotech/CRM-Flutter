@@ -2,8 +2,13 @@
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../purchase_functions/purchase_functions/controller/purchase_function_controller.dart';
-import '../purchase_functions/purchase_functions/widget/purchase_functions_widget.dart';
+
+import '../controller/purchase_function_controller.dart';
+import '../widget/purchase_functions_widget.dart';
+
+
+
+
 
 
 class PurchaseScreen extends StatelessWidget {

@@ -3,8 +3,11 @@ import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../sales_functions/controller/sales_function_controller.dart';
-import '../sales_functions/widget/sales_functions_widget.dart';
+import '../controller/sales_function_controller.dart';
+import '../widget/sales_functions_widget.dart';
+
+
+
 
 
 class SalesScreen extends StatelessWidget {

@@ -27,6 +27,7 @@ class ProductsServicesController extends PaginatedController<Data> {
     return await UrlRes.getHeaders();
   }
 
+
   @override
   Future<List<Data>> fetchItems(int page) async {
     final response = await _service.fetchProductsServices(page: page);

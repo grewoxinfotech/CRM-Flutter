@@ -49,21 +49,21 @@ class PurchaseFunctionController extends GetxController {
         iconPath: ICRes.clients,
         color: const Color(0xffFFCC01),
         count: 45,
-        //screenBuilder: ProductsServicesScreen(),
+        screenBuilder: ProductsServicesScreen(),
       ),
       FunctionModel(
         title: 'Billing',
         iconPath: ICRes.customer,
         color: const Color(0xff00a7ad),
         count: 66,
-        //screenBuilder: CustomerScreen(),
+        screenBuilder: CustomerScreen(),
       ),
       FunctionModel(
         title: 'Debit Note',
         iconPath: ICRes.document,
         color: const Color(0xff00a7ad),
         count: 66,
-        //screenBuilder: InvoiceScreen(),
+        screenBuilder: InvoiceScreen(),
       ),
     ];
   }
