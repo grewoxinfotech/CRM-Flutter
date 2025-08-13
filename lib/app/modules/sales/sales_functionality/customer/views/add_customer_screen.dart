@@ -57,6 +57,16 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
   String? selectedCountryCode = '+91';
   final List<String> countryCodes = ['+91', '+1', '+44', '+61', '+81'];
 
+  String? requiredFieldValidator(
+    String? value, {
+    String fieldName = 'This field',
+  }) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName is required';
+    }
+    return null;
+  }
+
   void _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -154,6 +164,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                       controller: nameController,
                       title: 'Name',
                       isRequired: true,
+                      validator:
+                          (value) =>
+                              requiredFieldValidator(value, fieldName: 'Name'),
                     ),
                   ),
                   SizedBox(width: 16),

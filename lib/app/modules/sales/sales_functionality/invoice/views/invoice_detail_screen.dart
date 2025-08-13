@@ -1059,6 +1059,7 @@ class InvoiceDetailScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+          SizedBox(width: 8),
           Flexible(
             child: Text(
               value,
@@ -1123,8 +1124,8 @@ class InvoiceDetailScreen extends StatelessWidget {
             // SECTION: Amounts
             _buildSectionTitle("Amounts"),
             _buildRow("Subtotal", _formatAmount(invoice.subtotal)),
-            _buildRow("Discount", _formatAmount(invoice.discount)),
-            _buildRow("Tax", _formatAmount(invoice.tax)),
+            _buildRow("Discount", "-${_formatAmount(invoice.discount)}"),
+            _buildRow("Tax", "+${_formatAmount(invoice.tax)}"),
             _buildRow("Total", _formatAmount(invoice.total)),
             _buildRow("Pending Amount", _formatAmount(invoice.pendingAmount)),
             _buildRow("Amount Paid", _formatAmount(invoice.amount)),

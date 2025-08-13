@@ -7,6 +7,7 @@ import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/role/controllers/role_controller.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/credit_notes/views/credit_notes_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/views/customer_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/invoice/views/invoice_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/products_services_page.dart';
@@ -43,7 +44,6 @@ class SalesFunctionController extends GetxController {
     }
 
     functions.value = [
-
       FunctionModel(
         title: 'Product & Service',
         iconPath: ICRes.clients,
@@ -61,9 +61,16 @@ class SalesFunctionController extends GetxController {
       FunctionModel(
         title: 'Invoice',
         iconPath: ICRes.document,
-        color: const Color(0xff00a7ad),
+        color: const Color(0xff5f00ad),
         count: 66,
         screenBuilder: InvoiceScreen(),
+      ),
+      FunctionModel(
+        title: 'Credit Notes',
+        iconPath: ICRes.document,
+        color: const Color(0xffad001a),
+        count: 66,
+        screenBuilder: CreditNoteScreen(),
       ),
     ];
   }
