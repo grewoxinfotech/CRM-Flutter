@@ -21,12 +21,14 @@ class VendorService {
     String id = '',
   }) async {
     try {
-      final uri = Uri.parse(baseUrl).replace(queryParameters: {
-        'page': page.toString(),
-        'pageSize': pageSize.toString(),
-        'search': search,
-        'id': id,
-      });
+      final uri = Uri.parse(baseUrl).replace(
+        queryParameters: {
+          'page': page.toString(),
+          'pageSize': pageSize.toString(),
+          'search': search,
+          'id': id,
+        },
+      );
 
       final response = await http.get(uri, headers: await headers());
 
@@ -47,7 +49,10 @@ class VendorService {
   // Get all vendors
   Future<List<VendorData>> getAllVendors() async {
     try {
-      final response = await http.get(Uri.parse(baseUrl), headers: await headers());
+      final response = await http.get(
+        Uri.parse(baseUrl),
+        headers: await headers(),
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -64,16 +69,14 @@ class VendorService {
   // Create a new vendor
   Future<bool> createVendor(VendorData vendor) async {
     try {
-      final userId = (await SecureStorage.getUserData())?.id;
-      if (userId == null) return false;
+        final response = await http.post(
+          Uri.parse("$baseUrl"),
+          headers: await headers(),
+          body: jsonEncode(vendor.toJson()),
+        );
 
-      final response = await http.post(
-        Uri.parse("$baseUrl/$userId"),
-        headers: await headers(),
-        body: jsonEncode(vendor.toJson()),
-      );
 
-      return response.statusCode == 201 || response.statusCode == 200;
+        return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create vendor exception: $e");
       return false;

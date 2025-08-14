@@ -1,10 +1,10 @@
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/Widget/vendor_card.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/contoller/vendor_controller.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/add_vendor_screen.dart';
+import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_detail_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../binding/vendorbinding.dart';
 
 class VendorsScreen extends StatelessWidget {
@@ -13,12 +13,13 @@ class VendorsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(()=>VendorController());
     final VendorController controller = Get.find();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Vendors")),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => AddVendorScreen(),  binding: VendorBinding()),
+        onPressed: () => Get.to(() => AddVendorScreen(),binding: VendorBinding()),
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder(
@@ -60,10 +61,11 @@ class VendorsScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
                         final vendor = controller.items[index];
-                        return VendorCard(
-                          vendor: vendor,
-                          onEdit: () {},
-                          onDelete: () => controller.deleteVendor(vendor.id ?? ""),
+                        return InkWell(
+                          onTap: () {
+                            Get.to(() => VendorDetailScreen(vendor: vendor));
+                          },
+                          child: VendorCard(vendor: vendor),
                         );
                       } else if (controller.isPaging.value) {
                         return const Padding(
@@ -75,6 +77,7 @@ class VendorsScreen extends StatelessWidget {
                       }
                     },
                   ),
+
                 ),
               );
             });

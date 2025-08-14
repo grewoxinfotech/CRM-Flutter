@@ -109,25 +109,25 @@ class VendorData {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'contact': contact,
-      'phonecode': phonecode,
-      'email': email,
-      'taxNumber': taxNumber,
-      'address': address,
-      'city': city,
-      'state': state,
-      'country': country,
-      'zipcode': zipcode,
-      'client_id': clientId,
-      'created_by': createdBy,
-      'updated_by': updatedBy,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'key': key,
-    };
+    final Map<String, dynamic> data = {};
+    if (id != null && id!.isNotEmpty) data['id'] = id;
+    if (name != null && name!.isNotEmpty) data['name'] = name;
+    if (contact != null && contact!.isNotEmpty) data['contact'] = contact;
+    if (phonecode != null && phonecode!.isNotEmpty) data['phonecode'] = phonecode;
+    if (email != null && email!.isNotEmpty) data['email'] = email; // omit if null/empty
+    if (taxNumber != null && taxNumber!.isNotEmpty) data['taxNumber'] = taxNumber;
+    if (address != null && address!.isNotEmpty) data['address'] = address;
+    if (city != null && city!.isNotEmpty) data['city'] = city;
+    if (state != null && state!.isNotEmpty) data['state'] = state;
+    if (country != null && country!.isNotEmpty) data['country'] = country;
+    if (zipcode != null && zipcode!.isNotEmpty) data['zipcode'] = zipcode;
+    if (clientId != null && clientId!.isNotEmpty) data['client_id'] = clientId;
+    if (createdBy != null && createdBy!.isNotEmpty) data['created_by'] = createdBy;
+    if (updatedBy != null && updatedBy!.isNotEmpty) data['updated_by'] = updatedBy;
+    if (createdAt != null && createdAt!.isNotEmpty) data['createdAt'] = createdAt;
+    if (updatedAt != null && updatedAt!.isNotEmpty) data['updatedAt'] = updatedAt;
+    if (key != null && key!.isNotEmpty) data['key'] = key;
+    return data;
   }
 }
 
@@ -149,11 +149,11 @@ class Pagination {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'total': total,
-      'current': current,
-      'pageSize': pageSize,
-      'totalPages': totalPages,
-    };
+    final Map<String, dynamic> data = {};
+    if (total != null) data['total'] = total;
+    if (current != null) data['current'] = current;
+    if (pageSize != null) data['pageSize'] = pageSize;
+    if (totalPages != null) data['totalPages'] = totalPages;
+    return data;
   }
 }

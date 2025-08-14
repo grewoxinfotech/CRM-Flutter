@@ -6,6 +6,7 @@ import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_
 import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
+import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
 import 'package:crm_flutter/app/modules/role/controllers/role_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/views/customer_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/invoice/views/invoice_screen.dart';
@@ -49,21 +50,21 @@ class PurchaseFunctionController extends GetxController {
         iconPath: ICRes.clients,
         color: const Color(0xffFFCC01),
         count: 45,
-        screenBuilder: ProductsServicesScreen(),
+        screenBuilder: VendorsScreen(),
       ),
       FunctionModel(
         title: 'Billing',
         iconPath: ICRes.customer,
         color: const Color(0xff00a7ad),
         count: 66,
-        screenBuilder: CustomerScreen(),
+      //  screenBuilder: CustomerScreen(),
       ),
       FunctionModel(
         title: 'Debit Note',
         iconPath: ICRes.document,
         color: const Color(0xff00a7ad),
         count: 66,
-        screenBuilder: InvoiceScreen(),
+        //screenBuilder: InvoiceScreen(),
       ),
     ];
   }
