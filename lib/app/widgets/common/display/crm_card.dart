@@ -18,7 +18,6 @@ class CrmCard extends StatelessWidget {
   final BlendMode? backgroundBlendMode;
   final Widget? child;
 
-
   const CrmCard({
     super.key,
     this.width,
@@ -57,12 +56,12 @@ class CrmCard extends StatelessWidget {
             boxShadow ??
             [
               BoxShadow(
-                  color: Colors.black12,
-                  spreadRadius: 0,
-                  blurRadius: 10,
-                  offset: Offset(0,10)
-              )
-
+                color: Colors.grey.shade300,
+                // color: Colors.black12,
+                spreadRadius: 0,
+                blurRadius: 10,
+                offset: Offset(0, 10),
+              ),
             ],
       ),
       child: child,

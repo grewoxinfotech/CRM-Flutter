@@ -39,12 +39,13 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 30),
                       Form(
                         key: authController.formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+
                         child: Column(
                           children: [
                             CrmTextField(
                               title: "Email Address",
                               controller: authController.emailController,
-
                             ),
                             const SizedBox(height: 10),
                             Obx(
