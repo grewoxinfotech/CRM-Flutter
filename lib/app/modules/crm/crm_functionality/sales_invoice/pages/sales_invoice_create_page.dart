@@ -3,6 +3,7 @@ import 'package:crm_flutter/app/data/network/sales_customer/model/sales_customer
 import 'package:crm_flutter/app/data/network/sales_customer/service/sales_customer_service.dart';
 import 'package:crm_flutter/app/data/network/sales_invoice/model/sales_invoice_item_model.dart';
 import 'package:crm_flutter/app/data/network/system/currency/model/currency_model.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/sales_invoice/controller/sales_invoice_create_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_dropdown_field.dart';
@@ -28,120 +29,21 @@ class SalesInvoiceCreatePage extends StatefulWidget {
 }
 
 class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
-  final _formKey = GlobalKey<FormState>();
-  final _productService = ProductsServicesService();
-  final _customerService = SalesCustomerService();
-  final _currencyService = CurrencyService();
-
-  late String _selectedCustomerId;
-  late List<SalesCustomer> _customers = [];
-  bool _isLoadingCustomers = false;
-
-  late TextEditingController _gstinController;
-  late List<TextEditingController> _quantityControllers;
-  late List<TextEditingController> _unitPriceControllers;
-  late List<TextEditingController> _itemDiscountControllers;
-  late List<TextEditingController> _itemGstControllers;
-  late TextEditingController _taxController;
-  late TextEditingController _discountController;
-  late TextEditingController _additionalNotesController;
-  late DateTime _issueDate;
-  late DateTime _dueDate;
-  late String _paymentStatus;
-  late String _currency;
-  late String _currencyCode;
-  late String _currencyIcon;
-  late List<String> _itemDiscountTypes;
-  bool _isGstEnabled = false;
-
-  List<Data?> _products = [];
-  List<Data?> _selectedProducts = [];
-  bool _isLoadingProducts = false;
-
-  List<CurrencyModel> _currencies = [];
-  bool _isLoadingCurrencies = false;
-  bool _currenciesLoaded = false;
-
-  // Standard GST rates for reference
-  final List<double> _gstRates = [0, 5, 12, 18, 28];
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeControllers();
-
-    // Load data in the background without blocking UI
-    _loadDataInBackground();
-  }
-
-  void _loadDataInBackground() {
-    // Start loading data in parallel without waiting
-    _loadProducts();
-    _loadCustomers();
-
-    // Don't load currencies immediately - will load when dropdown is opened
-    // This improves initial page load time
-  }
-
-  Future<void> _loadCurrencies() async {
-    // Prevent multiple simultaneous API calls
-    if (_isLoadingCurrencies) return;
-
-    // Set loading flag
-    setState(() => _isLoadingCurrencies = true);
-
-    try {
-      final currencies = await _currencyService.getCurrencies();
-      if (mounted) {
-        setState(() {
-          _currencies = currencies;
-          _currenciesLoaded = true;
-
-          // Update currency details if we have currencies in the list
-          if (currencies.isNotEmpty) {
-            final selectedCurrency = currencies.firstWhereOrNull(
-              (c) => c.id == _currency,
-            );
-            if (selectedCurrency != null) {
-              _currencyCode = selectedCurrency.currencyCode;
-              _currencyIcon = selectedCurrency.currencyIcon;
-            } else {
-              // If the selected currency is not found, use the first available currency
-              _currency = currencies.first.id;
-              _currencyCode = currencies.first.currencyCode;
-              _currencyIcon = currencies.first.currencyIcon;
-            }
-          }
-        });
-      }
-    } catch (e) {
-      // Only show error if we're not in initial loading
-      if (mounted && _currenciesLoaded) {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: 'Error',
-          message: 'Failed to load currencies: ${e.toString()}',
-          contentType: ContentType.failure,
-        );
-      }
-    } finally {
-      // Clear loading flag if component is still mounted
-      if (mounted) {
-        setState(() => _isLoadingCurrencies = false);
-      }
-    }
-  }
+  final SalesInvoiceCreateController createController = Get.put(
+    SalesInvoiceCreateController(),
+  );
 
   void _updateCurrencyDetails(String currencyId) {
     // First check if we have currencies from API
-    if (_currencies.isNotEmpty) {
-      final selectedCurrency = _currencies.firstWhereOrNull(
+    if (createController.currencies.isNotEmpty) {
+      final selectedCurrency = createController.currencies.firstWhereOrNull(
         (c) => c.id == currencyId,
       );
       if (selectedCurrency != null) {
         setState(() {
-          _currency = currencyId;
-          _currencyCode = selectedCurrency.currencyCode;
-          _currencyIcon = selectedCurrency.currencyIcon;
+          createController.currency.value = currencyId;
+          createController.currencyCode.value = selectedCurrency.currencyCode;
+          createController.currencyIcon.value = selectedCurrency.currencyIcon;
         });
         return;
       }
@@ -157,25 +59,27 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
     final details = staticCurrencyDetails[currencyId];
     if (details != null) {
       setState(() {
-        _currency = currencyId;
-        _currencyCode = details['code'] ?? '';
-        _currencyIcon = details['icon'] ?? '';
+        createController.currency.value = currencyId;
+        createController.currencyCode.value = details['code'] ?? '';
+        createController.currencyIcon.value = details['icon'] ?? '';
       });
     }
   }
 
   // Check if the current currency exists in the dropdown items
   String? _getCurrencyValue() {
-    if (_isLoadingCurrencies) return null;
+    if (createController.isLoadingCurrencies.value) return null;
 
     // If using API currencies, check if current currency exists in the list
-    if (_currencies.isNotEmpty) {
-      bool currencyExists = _currencies.any((c) => c.id == _currency);
+    if (createController.currencies.isNotEmpty) {
+      bool currencyExists = createController.currencies.any(
+        (c) => c.id == createController.currency.value,
+      );
       if (currencyExists) {
-        return _currency;
+        return createController.currency.value;
       } else {
         // If currency doesn't exist in API list, return first available currency
-        return _currencies.first.id;
+        return createController.currencies.first.id;
       }
     }
 
@@ -185,119 +89,46 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
       'BHNTpSNJHMypuNF6iPcMLr2',
       'CHNTpSNJHMypuNF6iPcMLr3',
     ];
-    if (staticCurrencies.contains(_currency)) {
-      return _currency;
+    if (staticCurrencies.contains(createController.currency.value)) {
+      return createController.currency.value;
     } else {
       // Return default static currency if current currency doesn't exist
       return 'AHNTpSNJHMypuNF6iPcMLrz';
     }
   }
 
-  Future<void> _loadProducts() async {
-    setState(() => _isLoadingProducts = true);
-    try {
-      final products = await _productService.getProducts();
-      setState(() {
-        _products = products;
-      });
-    } catch (e) {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: 'Error',
-        message: 'Failed to load products: ${e.toString()}',
-        contentType: ContentType.failure,
-      );
-    } finally {
-      setState(() => _isLoadingProducts = false);
-    }
-  }
-
-  Future<void> _loadCustomers() async {
-    setState(() => _isLoadingCustomers = true);
-    try {
-      final customers = await _customerService.getSalesCustomers();
-      setState(() {
-        _customers = customers;
-        // Set first customer as default if available
-        if (customers.isNotEmpty) {
-          _selectedCustomerId = customers.first.id;
-          // Enable GST if customer has tax number
-          _isGstEnabled = customers.first.taxNumber?.isNotEmpty ?? false;
-          _gstinController.text = customers.first.taxNumber ?? '';
-        }
-      });
-    } catch (e) {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: 'Error',
-        message: 'Failed to load customers: ${e.toString()}',
-        contentType: ContentType.failure,
-      );
-    } finally {
-      setState(() => _isLoadingCustomers = false);
-    }
-  }
-
-  void _initializeControllers() {
-    _gstinController = TextEditingController();
-    _quantityControllers = [TextEditingController(text: '1')];
-    _unitPriceControllers = [TextEditingController(text: '0')];
-    _itemDiscountControllers = [TextEditingController(text: '0')];
-    _itemGstControllers = [TextEditingController(text: '0')];
-    _taxController = TextEditingController(text: '0');
-    _discountController = TextEditingController(text: '0');
-    _additionalNotesController = TextEditingController();
-    _issueDate = DateTime.now();
-    _dueDate = DateTime.now().add(const Duration(days: 7));
-    _paymentStatus = 'unpaid';
-
-    // Default currency (will be updated from API when loaded)
-    _currency = 'AHNTpSNJHMypuNF6iPcMLrz';
-    _currencyCode = 'INR';
-    _currencyIcon = '₹';
-
-    _itemDiscountTypes = ['percentage'];
-    _selectedProducts = [];
-    _selectedCustomerId = '';
-  }
-
   void _addProductItem() {
     setState(() {
-      _selectedProducts.add(null);
-      _quantityControllers.add(TextEditingController(text: '1'));
-      _unitPriceControllers.add(TextEditingController(text: '0'));
-      _itemDiscountControllers.add(TextEditingController(text: '0'));
-      _itemGstControllers.add(TextEditingController(text: '0'));
-      _itemDiscountTypes.add('percentage');
+      createController.selectedProducts.add(null);
+      createController.quantityControllers.add(
+        TextEditingController(text: '1'),
+      );
+      createController.unitPriceControllers.add(
+        TextEditingController(text: '0'),
+      );
+      createController.itemDiscountControllers.add(
+        TextEditingController(text: '0'),
+      );
+      createController.itemGstControllers.add(TextEditingController(text: '0'));
+      createController.itemDiscountTypes.add('percentage');
     });
   }
 
-  void _removeProductItem(int index) {
-    if (_selectedProducts.length > 1) {
-      setState(() {
-        _selectedProducts.removeAt(index);
-        _quantityControllers[index].dispose();
-        _quantityControllers.removeAt(index);
-        _unitPriceControllers[index].dispose();
-        _unitPriceControllers.removeAt(index);
-        _itemDiscountControllers[index].dispose();
-        _itemDiscountControllers.removeAt(index);
-        _itemGstControllers[index].dispose();
-        _itemGstControllers.removeAt(index);
-        _itemDiscountTypes.removeAt(index);
-      });
-    }
-  }
-
   double _calculateItemSubtotal(int index) {
-    final quantity = int.tryParse(_quantityControllers[index].text) ?? 0;
-    final unitPrice = double.tryParse(_unitPriceControllers[index].text) ?? 0;
+    final quantity =
+        int.tryParse(createController.quantityControllers[index].text) ?? 0;
+    final unitPrice =
+        double.tryParse(createController.unitPriceControllers[index].text) ?? 0;
     return quantity * unitPrice;
   }
 
   double _calculateItemDiscount(int index) {
     final subtotal = _calculateItemSubtotal(index);
-    final discount = double.tryParse(_itemDiscountControllers[index].text) ?? 0;
+    final discount =
+        double.tryParse(createController.itemDiscountControllers[index].text) ??
+        0;
 
-    if (_itemDiscountTypes[index] == 'percentage') {
+    if (createController.itemDiscountTypes[index] == 'percentage') {
       return subtotal * discount / 100;
     } else {
       return discount;
@@ -305,11 +136,12 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
   }
 
   double _calculateItemGst(int index) {
-    if (!_isGstEnabled) return 0;
+    if (!createController.isGstEnabled.value) return 0;
 
     final subtotal = _calculateItemSubtotal(index);
     final discount = _calculateItemDiscount(index);
-    final gstRate = double.tryParse(_itemGstControllers[index].text) ?? 0;
+    final gstRate =
+        double.tryParse(createController.itemGstControllers[index].text) ?? 0;
 
     return (subtotal - discount) * gstRate / 100;
   }
@@ -324,7 +156,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
 
   double _calculateSubtotal() {
     double subtotal = 0;
-    for (int i = 0; i < _selectedProducts.length; i++) {
+    for (int i = 0; i < createController.selectedProducts.length; i++) {
       subtotal += _calculateItemSubtotal(i);
     }
     return subtotal;
@@ -332,17 +164,18 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
 
   double _calculateTotalDiscount() {
     double totalDiscount = 0;
-    for (int i = 0; i < _selectedProducts.length; i++) {
+    for (int i = 0; i < createController.selectedProducts.length; i++) {
       totalDiscount += _calculateItemDiscount(i);
     }
-    return totalDiscount + (double.tryParse(_discountController.text) ?? 0);
+    return totalDiscount +
+        (double.tryParse(createController.discountController.text) ?? 0);
   }
 
   double _calculateTotalGst() {
-    if (!_isGstEnabled) return 0;
+    if (!createController.isGstEnabled.value) return 0;
 
     double totalGst = 0;
-    for (int i = 0; i < _selectedProducts.length; i++) {
+    for (int i = 0; i < createController.selectedProducts.length; i++) {
       totalGst += _calculateItemGst(i);
     }
     return totalGst;
@@ -359,32 +192,101 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
     ;
   }
 
-  Widget _buildCustomerField() {
-    if (_isLoadingCustomers) {
-      return const Center(child: CircularProgressIndicator());
-    }
+  // Widget _buildCustomerField() {
+  //   if (createController.isLoadingCustomers.value) {
+  //     return const Center(child: CircularProgressIndicator());
+  //   }
+  //
+  //   return Obx(
+  //     () => Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         CrmDropdownField<String>(
+  //           title: 'Customer',
+  //           value:
+  //               createController.selectedCustomerId.isNotEmpty
+  //                   ? createController.selectedCustomerId
+  //                   : null,
+  //           items:
+  //               createController.customers
+  //                   .map(
+  //                     (customer) => DropdownMenuItem(
+  //                       value: customer.id,
+  //                       child: Text('${customer.name} (${customer.contact})'),
+  //                     ),
+  //                   )
+  //                   .toList(),
+  //           onChanged: (customerId) {
+  //             if (customerId != null) {
+  //               setState(() {
+  //                 createController.selectedCustomerId = customerId;
+  //                 // Auto-fill GSTIN when customer is selected
+  //                 final selectedCustomer = createController.customers
+  //                     .firstWhere(
+  //                       (c) => c.id == customerId,
+  //                       orElse:
+  //                           () => SalesCustomer(
+  //                             id: '',
+  //                             name: '',
+  //                             contact: '',
+  //                             phonecode: '',
+  //                             clientId: '',
+  //                             createdBy: '',
+  //                             createdAt: DateTime.now(),
+  //                             updatedAt: DateTime.now(),
+  //                           ),
+  //                     );
+  //                 // Enable GST if customer has tax number
+  //                 createController.isGstEnabled.value =
+  //                     selectedCustomer.taxNumber?.isNotEmpty ?? false;
+  //                 createController.gstinController.text =
+  //                     selectedCustomer.taxNumber ?? '';
+  //               });
+  //             }
+  //           },
+  //           isRequired: true,
+  //         ),
+  //         if (createController.selectedCustomerId.isNotEmpty) ...[
+  //           const SizedBox(height: 8),
+  //           Text(
+  //             'Contact: ${createController.customers.firstWhere((c) => c.id == createController.selectedCustomerId).contact}',
+  //             style: const TextStyle(fontSize: 12, color: Colors.grey),
+  //           ),
+  //         ],
+  //       ],
+  //     ),
+  //   );
+  // }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CrmDropdownField<String>(
-          title: 'Customer',
-          value: _selectedCustomerId.isNotEmpty ? _selectedCustomerId : null,
-          items:
-              _customers
-                  .map(
-                    (customer) => DropdownMenuItem(
-                      value: customer.id,
-                      child: Text('${customer.name} (${customer.contact})'),
-                    ),
-                  )
-                  .toList(),
-          onChanged: (customerId) {
-            if (customerId != null) {
-              setState(() {
-                _selectedCustomerId = customerId;
-                // Auto-fill GSTIN when customer is selected
-                final selectedCustomer = _customers.firstWhere(
+  Widget _buildCustomerField() {
+    return Obx(() {
+      if (createController.isLoadingCustomers.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CrmDropdownField<String>(
+            title: 'Customer',
+            value:
+                createController.selectedCustomerId.value.isNotEmpty
+                    ? createController.selectedCustomerId.value
+                    : null,
+            items:
+                createController.customers
+                    .map(
+                      (customer) => DropdownMenuItem(
+                        value: customer.id,
+                        child: Text('${customer.name} (${customer.contact})'),
+                      ),
+                    )
+                    .toList(),
+            onChanged: (customerId) {
+              if (customerId != null) {
+                createController.selectedCustomerId.value = customerId;
+
+                final selectedCustomer = createController.customers.firstWhere(
                   (c) => c.id == customerId,
                   orElse:
                       () => SalesCustomer(
@@ -398,27 +300,30 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                         updatedAt: DateTime.now(),
                       ),
                 );
+
                 // Enable GST if customer has tax number
-                _isGstEnabled = selectedCustomer.taxNumber?.isNotEmpty ?? false;
-                _gstinController.text = selectedCustomer.taxNumber ?? '';
-              });
-            }
-          },
-          isRequired: true,
-        ),
-        if (_selectedCustomerId.isNotEmpty) ...[
-          const SizedBox(height: 8),
-          Text(
-            'Contact: ${_customers.firstWhere((c) => c.id == _selectedCustomerId).contact}',
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                createController.isGstEnabled.value =
+                    selectedCustomer.taxNumber?.isNotEmpty ?? false;
+                createController.gstinController.text =
+                    selectedCustomer.taxNumber ?? '';
+              }
+            },
+            isRequired: true,
           ),
+          if (createController.selectedCustomerId.value.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Contact: ${createController.customers.firstWhere((c) => c.id == createController.selectedCustomerId.value).contact}',
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+          ],
         ],
-      ],
-    );
+      );
+    });
   }
 
   Widget _buildGstField(int index) {
-    if (!_isGstEnabled) return const SizedBox.shrink();
+    if (!createController.isGstEnabled.value) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -429,9 +334,11 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
             Expanded(
               child: CrmDropdownField<double>(
                 title: 'GST Rate (%)',
-                value: double.tryParse(_itemGstControllers[index].text),
+                value: double.tryParse(
+                  createController.itemGstControllers[index].text,
+                ),
                 items:
-                    _gstRates
+                    createController.gstRates
                         .map(
                           (rate) => DropdownMenuItem(
                             value: rate,
@@ -442,7 +349,8 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                 onChanged: (value) {
                   if (value != null) {
                     setState(() {
-                      _itemGstControllers[index].text = value.toString();
+                      createController.itemGstControllers[index].text =
+                          value.toString();
                     });
                   }
                 },
@@ -452,7 +360,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'GST Amount: $_currencyIcon${_calculateItemGst(index).toStringAsFixed(2)}',
+          'GST Amount: ${createController.currencyIcon.value}${_calculateItemGst(index).toStringAsFixed(2)}',
           style: const TextStyle(fontSize: 12),
         ),
       ],
@@ -460,193 +368,210 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
   }
 
   Widget _buildProductField(int index) {
-    if (_isLoadingProducts) {
+    if (createController.isLoadingProducts.value) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: CrmDropdownField<Data>(
-                title: 'Product ${index + 1}',
-                value:
-                    index < _selectedProducts.length
-                        ? _selectedProducts[index]
-                        : null,
-                items:
-                    _products
-                        .map(
-                          (product) => DropdownMenuItem<Data>(
-                            value: product,
-                            child: Text(
-                              '${product!.name} (Stock: ${product.stockQuantity})',
-                            ),
-                          ),
-                        )
-                        .toList(),
-                onChanged: (product) {
-                  if (product != null) {
-                    setState(() {
-                      if (index >= _selectedProducts.length) {
-                        _selectedProducts.add(product);
-                      } else {
-                        _selectedProducts[index] = product;
-                      }
-                      _unitPriceControllers[index].text =
-                          product.sellingPrice.toString();
+    final stockProduct = createController.products.where(
+      (p0) => p0!.stockQuantity! > 0,
+    );
 
-                      // Reset quantity if current quantity exceeds stock
-                      final currentQty =
-                          int.tryParse(_quantityControllers[index].text) ?? 0;
-                      if (currentQty > product.stockQuantity) {
-                        _quantityControllers[index].text =
-                            product.stockQuantity.toString();
-                        CrmSnackBar.showAwesomeSnackbar(
-                          title: 'Notice',
-                          message:
-                              'Quantity adjusted to available stock: ${product.stockQuantity}',
-                          contentType: ContentType.help,
-                        );
-                      }
-                    });
-                  }
-                },
-                isRequired: true,
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: CrmDropdownField<Data>(
+                  title: 'Product ${index + 1}',
+                  value:
+                      index < createController.selectedProducts.length
+                          ? createController.selectedProducts[index]
+                          : null,
+                  items:
+                      stockProduct
+                          .map(
+                            (product) => DropdownMenuItem<Data>(
+                              value: product,
+                              child: Text(
+                                '${product!.name} (Stock: ${product.stockQuantity})',
+                              ),
+                            ),
+                          )
+                          .toList(),
+                  onChanged: (product) {
+                    if (product != null) {
+                      setState(() {
+                        if (index >= createController.selectedProducts.length) {
+                          createController.selectedProducts.add(product);
+                        } else {
+                          createController.selectedProducts[index] = product;
+                        }
+                        createController.unitPriceControllers[index].text =
+                            product.sellingPrice.toString();
+
+                        // Reset quantity if current quantity exceeds stock
+                        final currentQty =
+                            int.tryParse(
+                              createController.quantityControllers[index].text,
+                            ) ??
+                            0;
+                        if (currentQty > product.stockQuantity) {
+                          createController.quantityControllers[index].text =
+                              product.stockQuantity.toString();
+                          CrmSnackBar.showAwesomeSnackbar(
+                            title: 'Notice',
+                            message:
+                                'Quantity adjusted to available stock: ${product.stockQuantity}',
+                            contentType: ContentType.help,
+                          );
+                        }
+                      });
+                    }
+                  },
+                  isRequired: true,
+                ),
+              ),
+              if (createController.selectedProducts.length > 1)
+                IconButton(
+                  icon: const Icon(Icons.remove_circle_outline),
+                  onPressed: () => createController.removeProductItem(index),
+                  color: Colors.red,
+                ),
+            ],
+          ),
+          if (index < createController.selectedProducts.length &&
+              createController.selectedProducts[index] != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Available Stock: ${createController.selectedProducts[index]!.stockQuantity}',
+              style: TextStyle(
+                color:
+                    createController.selectedProducts[index]!.stockQuantity! <
+                            10
+                        ? Colors.red
+                        : Colors.green,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            if (_selectedProducts.length > 1)
-              IconButton(
-                icon: const Icon(Icons.remove_circle_outline),
-                onPressed: () => _removeProductItem(index),
-                color: Colors.red,
-              ),
           ],
-        ),
-        if (index < _selectedProducts.length &&
-            _selectedProducts[index] != null) ...[
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(child: _buildQuantityField(index)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: CrmTextField(
+                  controller: createController.unitPriceControllers[index],
+                  title: 'Unit Price (${createController.currencyIcon.value})',
+                  hintText: 'Enter unit price',
+                  keyboardType: TextInputType.number,
+                  isRequired: true,
+                  onChanged: (value) => setState(() {}),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter unit price';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid price';
+                    }
+                    if (double.parse(value) <= 0) {
+                      return 'Price must be greater than 0';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: CrmTextField(
+                  controller: createController.itemDiscountControllers[index],
+                  title: 'Discount',
+                  hintText: 'Enter discount',
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) => setState(() {}),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: CrmDropdownField<String>(
+                  title: 'Discount Type',
+                  value: createController.itemDiscountTypes[index],
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'percentage',
+                      child: Text('Percentage'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'fixed',
+                      child: Text('Fixed Amount'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(
+                        () => createController.itemDiscountTypes[index] = value,
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+          _buildGstField(index),
           const SizedBox(height: 8),
-          Text(
-            'Available Stock: ${_selectedProducts[index]!.stockQuantity}',
-            style: TextStyle(
-              color:
-                  _selectedProducts[index]!.stockQuantity! < 10
-                      ? Colors.red
-                      : Colors.green,
-              fontWeight: FontWeight.bold,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Subtotal: ${createController.currencyIcon.value}${_calculateItemSubtotal(index).toStringAsFixed(2)}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              if (_calculateItemDiscount(index) > 0)
+                Text(
+                  'Discount: -${createController.currencyIcon.value}${_calculateItemDiscount(index).toStringAsFixed(2)}',
+                  style: const TextStyle(fontSize: 12, color: Colors.red),
+                ),
+              if (createController.isGstEnabled.value &&
+                  _calculateItemGst(index) > 0)
+                Text(
+                  'GST: ${createController.currencyIcon.value}${_calculateItemGst(index).toStringAsFixed(2)}',
+                  style: const TextStyle(fontSize: 12, color: Colors.blue),
+                ),
+              const SizedBox(height: 4),
+              Text(
+                'Item Total: ${createController.currencyIcon.value}${_calculateItemTotal(index).toStringAsFixed(2)}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ],
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(child: _buildQuantityField(index)),
-            const SizedBox(width: 16),
-            Expanded(
-              child: CrmTextField(
-                controller: _unitPriceControllers[index],
-                title: 'Unit Price ($_currencyIcon)',
-                hintText: 'Enter unit price',
-                keyboardType: TextInputType.number,
-                isRequired: true,
-                onChanged: (value) => setState(() {}),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter unit price';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid price';
-                  }
-                  if (double.parse(value) <= 0) {
-                    return 'Price must be greater than 0';
-                  }
-                  return null;
-                },
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: CrmTextField(
-                controller: _itemDiscountControllers[index],
-                title: 'Discount',
-                hintText: 'Enter discount',
-                keyboardType: TextInputType.number,
-                onChanged: (value) => setState(() {}),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: CrmDropdownField<String>(
-                title: 'Discount Type',
-                value: _itemDiscountTypes[index],
-                items: const [
-                  DropdownMenuItem(
-                    value: 'percentage',
-                    child: Text('Percentage'),
-                  ),
-                  DropdownMenuItem(value: 'fixed', child: Text('Fixed Amount')),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() => _itemDiscountTypes[index] = value);
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-        _buildGstField(index),
-        const SizedBox(height: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Subtotal: $_currencyIcon${_calculateItemSubtotal(index).toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 12),
-            ),
-            if (_calculateItemDiscount(index) > 0)
-              Text(
-                'Discount: -$_currencyIcon${_calculateItemDiscount(index).toStringAsFixed(2)}',
-                style: const TextStyle(fontSize: 12, color: Colors.red),
-              ),
-            if (_isGstEnabled && _calculateItemGst(index) > 0)
-              Text(
-                'GST: $_currencyIcon${_calculateItemGst(index).toStringAsFixed(2)}',
-                style: const TextStyle(fontSize: 12, color: Colors.blue),
-              ),
-            const SizedBox(height: 4),
-            Text(
-              'Item Total: $_currencyIcon${_calculateItemTotal(index).toStringAsFixed(2)}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ],
+      ),
     );
   }
 
   Widget _buildQuantityField(int index) {
     return CrmTextField(
-      controller: _quantityControllers[index],
+      controller: createController.quantityControllers[index],
       title: 'Quantity',
       hintText: 'Enter quantity',
       keyboardType: TextInputType.number,
       isRequired: true,
       onChanged: (value) {
         setState(() {
-          if (_selectedProducts[index] != null) {
+          if (createController.selectedProducts[index] != null) {
             final quantity = int.tryParse(value) ?? 0;
-            if (quantity > _selectedProducts[index]!.stockQuantity!) {
+            if (quantity >
+                createController.selectedProducts[index]!.stockQuantity!) {
               CrmSnackBar.showAwesomeSnackbar(
                 title: 'Warning',
                 message:
-                    'Available stock: ${_selectedProducts[index]!.stockQuantity}',
+                    'Available stock: ${createController.selectedProducts[index]!.stockQuantity}',
                 contentType: ContentType.warning,
               );
             }
@@ -664,9 +589,10 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
         if (quantity <= 0) {
           return 'Quantity must be greater than 0';
         }
-        if (_selectedProducts[index] != null &&
-            quantity > _selectedProducts[index]!.stockQuantity!) {
-          return 'Insufficient stock (Available: ${_selectedProducts[index]!.stockQuantity})';
+        if (createController.selectedProducts[index] != null &&
+            quantity >
+                createController.selectedProducts[index]!.stockQuantity!) {
+          return 'Insufficient stock (Available: ${createController.selectedProducts[index]!.stockQuantity})';
         }
         return null;
       },
@@ -698,12 +624,96 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Form(
-            key: _formKey,
+            key: createController.formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildCustomerField(),
+
+                const SizedBox(height: 16),
+                CrmTextField(
+                  controller: createController.gstinController,
+                  title: 'GSTIN',
+                  hintText: 'Customer GST number',
+                  readOnly: true,
+                  // Make field non-editable
+                  enabled: false, // Visually show it's disabled
+                ),
+                const SizedBox(height: 16),
+                Obx(
+                  () => Stack(
+                    children: [
+                      CrmDropdownField<String>(
+                        title: 'Currency',
+                        value: _getCurrencyValue(),
+                        items:
+                            createController.isLoadingCurrencies.value &&
+                                    createController.currenciesLoaded.value
+                                ? [
+                                  DropdownMenuItem(
+                                    value: createController.currency.value,
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 16,
+                                          width: 16,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text('Loading currencies...'),
+                                      ],
+                                    ),
+                                  ),
+                                ]
+                                : createController.currencies.isNotEmpty
+                                ? createController.currencies
+                                    .map(
+                                      (currency) => DropdownMenuItem(
+                                        value: currency.id,
+                                        child: Text(
+                                          '${currency.currencyName} (${currency.currencyIcon})',
+                                        ),
+                                      ),
+                                    )
+                                    .toList()
+                                : [
+                                  DropdownMenuItem(
+                                    value: 'AHNTpSNJHMypuNF6iPcMLrz',
+                                    child: Text('INR (₹)'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'BHNTpSNJHMypuNF6iPcMLr2',
+                                    child: Text('USD (\$)'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'CHNTpSNJHMypuNF6iPcMLr3',
+                                    child: Text('EUR (€)'),
+                                  ),
+                                ],
+                        onChanged: (value) {
+                          // Don't process changes during loading
+                          if (value != null &&
+                              !(createController.isLoadingCurrencies.value &&
+                                  createController.currenciesLoaded.value)) {
+                            _updateCurrencyDetails(value);
+                          }
+                        },
+                        onMenuOpened: () {
+                          // Load currencies if they haven't been loaded yet or if we're not currently loading
+                          if (!createController.isLoadingCurrencies.value) {
+                            createController.loadCurrencies();
+                          }
+                        },
+                        isRequired: true,
+                      ),
+                      // Don't show loading indicator at all - it causes confusion
+                      // when static values are shown with a loading indicator
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -714,101 +724,19 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                       ),
                     ),
                     Switch(
-                      value: _isGstEnabled,
+                      value: createController.isGstEnabled.value,
                       onChanged: (value) {
                         setState(() {
-                          _isGstEnabled = value;
-                          if (!value) {
-                            _gstinController.clear();
-                          }
+                          createController.isGstEnabled.value = value;
                         });
                       },
                     ),
                   ],
                 ),
-                if (_isGstEnabled) ...[
-                  const SizedBox(height: 16),
-                  CrmTextField(
-                    controller: _gstinController,
-                    title: 'GSTIN',
-                    hintText: 'Customer GST number',
-                    readOnly: true,
-                    // Make field non-editable
-                    enabled: false, // Visually show it's disabled
-                  ),
-                ],
                 const SizedBox(height: 16),
-                Stack(
-                  children: [
-                    CrmDropdownField<String>(
-                      title: 'Currency',
-                      value: _getCurrencyValue(),
-                      items:
-                          _isLoadingCurrencies && _currenciesLoaded
-                              ? [
-                                DropdownMenuItem(
-                                  value: _currency,
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        height: 16,
-                                        width: 16,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text('Loading currencies...'),
-                                    ],
-                                  ),
-                                ),
-                              ]
-                              : _currencies.isNotEmpty
-                              ? _currencies
-                                  .map(
-                                    (currency) => DropdownMenuItem(
-                                      value: currency.id,
-                                      child: Text(
-                                        '${currency.currencyName} (${currency.currencyIcon})',
-                                      ),
-                                    ),
-                                  )
-                                  .toList()
-                              : [
-                                DropdownMenuItem(
-                                  value: 'AHNTpSNJHMypuNF6iPcMLrz',
-                                  child: Text('INR (₹)'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'BHNTpSNJHMypuNF6iPcMLr2',
-                                  child: Text('USD (\$)'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'CHNTpSNJHMypuNF6iPcMLr3',
-                                  child: Text('EUR (€)'),
-                                ),
-                              ],
-                      onChanged: (value) {
-                        // Don't process changes during loading
-                        if (value != null &&
-                            !(_isLoadingCurrencies && _currenciesLoaded)) {
-                          _updateCurrencyDetails(value);
-                        }
-                      },
-                      onMenuOpened: () {
-                        // Load currencies if they haven't been loaded yet or if we're not currently loading
-                        if (!_isLoadingCurrencies) {
-                          _loadCurrencies();
-                        }
-                      },
-                      isRequired: true,
-                    ),
-                    // Don't show loading indicator at all - it causes confusion
-                    // when static values are shown with a loading indicator
-                  ],
-                ),
-                const SizedBox(height: 16),
-                ..._selectedProducts.asMap().entries.map((entry) {
+                ...createController.selectedProducts.asMap().entries.map((
+                  entry,
+                ) {
                   final index = entry.key;
                   return Column(
                     children: [
@@ -828,10 +756,12 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                     Expanded(
                       child: _buildDateField(
                         title: 'Issue Date',
-                        date: _issueDate,
+                        date: createController.issueDate.value,
                         onChanged: (date) {
                           if (date != null) {
-                            setState(() => _issueDate = date);
+                            setState(
+                              () => createController.issueDate.value = date,
+                            );
                           }
                         },
                       ),
@@ -840,10 +770,12 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                     Expanded(
                       child: _buildDateField(
                         title: 'Due Date',
-                        date: _dueDate,
+                        date: createController.dueDate.value,
                         onChanged: (date) {
                           if (date != null) {
-                            setState(() => _dueDate = date);
+                            setState(
+                              () => createController.dueDate.value = date,
+                            );
                           }
                         },
                       ),
@@ -853,14 +785,16 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                 const SizedBox(height: 16),
                 CrmDropdownField<String>(
                   title: 'Payment Status',
-                  value: _paymentStatus,
+                  value: createController.paymentStatus.value,
                   items: const [
                     DropdownMenuItem(value: 'unpaid', child: Text('Unpaid')),
                     DropdownMenuItem(value: 'paid', child: Text('Paid')),
                   ],
                   onChanged: (value) {
                     if (value != null) {
-                      setState(() => _paymentStatus = value);
+                      setState(
+                        () => createController.paymentStatus.value = value,
+                      );
                     }
                   },
                   isRequired: true,
@@ -890,7 +824,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                         children: [
                           const Text('Subtotal:'),
                           Text(
-                            '$_currencyIcon${_calculateSubtotal().toStringAsFixed(2)}',
+                            '${createController.currencyIcon.value}${_calculateSubtotal().toStringAsFixed(2)}',
                             style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         ],
@@ -902,7 +836,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                           children: [
                             const Text('Total Discount:'),
                             Text(
-                              '-$_currencyIcon${_calculateTotalDiscount().toStringAsFixed(2)}',
+                              '-${createController.currencyIcon.value}${_calculateTotalDiscount().toStringAsFixed(2)}',
                               style: TextStyle(
                                 color: Colors.red.shade600,
                                 fontWeight: FontWeight.w500,
@@ -911,14 +845,15 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                           ],
                         ),
                       ],
-                      if (_isGstEnabled && _calculateTotalGst() > 0) ...[
+                      if (createController.isGstEnabled.value &&
+                          _calculateTotalGst() > 0) ...[
                         const SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Total GST:'),
                             Text(
-                              '$_currencyIcon${_calculateTotalGst().toStringAsFixed(2)}',
+                              '${createController.currencyIcon.value}${_calculateTotalGst().toStringAsFixed(2)}',
                               style: TextStyle(
                                 color: Colors.blue.shade600,
                                 fontWeight: FontWeight.w500,
@@ -937,7 +872,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '$_currencyIcon${_calculateTotal().toStringAsFixed(2)}',
+                            '${createController.currencyIcon.value}${_calculateTotal().toStringAsFixed(2)}',
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
@@ -993,8 +928,8 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
   }
 
   Future<void> _createInvoice() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      if (_selectedCustomerId.isEmpty) {
+    if (createController.formKey.currentState?.validate() ?? false) {
+      if (createController.selectedCustomerId.isEmpty) {
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Error',
           message: 'Please select a customer',
@@ -1004,8 +939,8 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
       }
 
       // Validate all products are selected
-      for (int i = 0; i < _selectedProducts.length; i++) {
-        if (_selectedProducts[i] == null) {
+      for (int i = 0; i < createController.selectedProducts.length; i++) {
+        if (createController.selectedProducts[i] == null) {
           CrmSnackBar.showAwesomeSnackbar(
             title: 'Error',
             message: 'Please select product_service ${i + 1}',
@@ -1016,13 +951,18 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
       }
 
       // Validate stock quantities
-      for (int i = 0; i < _selectedProducts.length; i++) {
-        final quantity = int.parse(_quantityControllers[i].text);
-        if (!_validateStockQuantity(_selectedProducts[i]!, quantity)) {
+      for (int i = 0; i < createController.selectedProducts.length; i++) {
+        final quantity = int.parse(
+          createController.quantityControllers[i].text,
+        );
+        if (!_validateStockQuantity(
+          createController.selectedProducts[i]!,
+          quantity,
+        )) {
           CrmSnackBar.showAwesomeSnackbar(
             title: 'Error',
             message:
-                'Insufficient stock for ${_selectedProducts[i]!.name}. Available: ${_selectedProducts[i]!.stockQuantity}',
+                'Insufficient stock for ${createController.selectedProducts[i]!.name}. Available: ${createController.selectedProducts[i]!.stockQuantity}',
             contentType: ContentType.failure,
           );
           return;
@@ -1033,36 +973,45 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
       final subtotal = _calculateSubtotal();
       final total = _calculateTotal();
 
-      final items = List.generate(_selectedProducts.length, (i) {
+      final items = List.generate(createController.selectedProducts.length, (
+        i,
+      ) {
         return SalesInvoiceItem(
           total: total,
           amount: _calculateItemTotal(i),
-          hsnSac: _selectedProducts[i]!.hsnSac!,
-          discount: double.parse(_itemDiscountControllers[i].text),
-          quantity: int.parse(_quantityControllers[i].text),
+          hsnSac: createController.selectedProducts[i]!.hsnSac!,
+          discount: double.parse(
+            createController.itemDiscountControllers[i].text,
+          ),
+          quantity: int.parse(createController.quantityControllers[i].text),
           subtotal: _calculateItemSubtotal(i),
-          productId: _selectedProducts[i]!.id!,
+          productId: createController.selectedProducts[i]!.id!,
           taxAmount: _calculateItemGst(i),
-          unitPrice: double.parse(_unitPriceControllers[i].text),
-          discountType: _itemDiscountTypes[i],
+          unitPrice: double.parse(
+            createController.unitPriceControllers[i].text,
+          ),
+          discountType: createController.itemDiscountTypes[i],
           discountAmount: _calculateItemDiscount(i),
           taxName: "",
-          tax: _isGstEnabled ? double.parse(_itemGstControllers[i].text) : 0,
+          tax:
+              createController.isGstEnabled.value
+                  ? double.parse(createController.itemGstControllers[i].text)
+                  : 0,
         );
       });
 
       // final items = List.generate(
-      //   _selectedProducts.length,
+      //   createController.selectedProducts.length,
       //   (i) => {
-      //     'product_id': _selectedProducts[i]!.id,
-      //     'quantity': int.parse(_quantityControllers[i].text),
-      //     'unit_price': double.parse(_unitPriceControllers[i].text),
-      //     'tax': _isGstEnabled ? double.parse(_itemGstControllers[i].text) : 0,
+      //     'product_id': createController.selectedProducts[i]!.id,
+      //     'quantity': int.parse(createController.quantityControllers[i].text),
+      //     'unit_price': double.parse(createController.unitPriceControllers[i].text),
+      //     'tax': createController.isGstEnabled.value ? double.parse(createController.itemGstControllers[i].text) : 0,
       //     'tax_amount': _calculateItemGst(i),
-      //     'discount': double.parse(_itemDiscountControllers[i].text),
-      //     'discount_type': _itemDiscountTypes[i],
+      //     'discount': double.parse(createController.itemDiscountControllers[i].text),
+      //     'discount_type': createController.itemDiscountTypes[i],
       //     'discount_amount': _calculateItemDiscount(i),
-      //     'hsn_sac': _selectedProducts[i]!.hsnSac,
+      //     'hsn_sac': createController.selectedProducts[i]!.hsnSac,
       //     'amount': _calculateItemTotal(i),
       //     'subtotal': _calculateItemSubtotal(i),
       //     'tax_name': "",
@@ -1070,37 +1019,40 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
       // );
 
       final data = SalesInvoice(
-        customer: _selectedCustomerId,
-        issueDate: _issueDate,
-        dueDate: _dueDate,
+        customer: createController.selectedCustomerId.value,
+        issueDate: createController.issueDate.value,
+        dueDate: createController.dueDate.value,
         discount: _calculateTotalDiscount(),
         tax: _calculateTotalGst(),
         subtotal: _calculateSubtotal(),
         total: _calculateTotal(),
-        paymentStatus: _paymentStatus,
-        currency: _currency,
-        gstin: _isGstEnabled ? _gstinController.text : '',
+        paymentStatus: createController.paymentStatus.value,
+        currency: createController.currency.value,
+        gstin:
+            createController.isGstEnabled.value
+                ? createController.gstinController.text
+                : '',
         section: 'sales-invoice',
-        currencyCode: _currencyCode,
-        currencyIcon: _currencyIcon,
+        currencyCode: createController.currencyCode.value,
+        currencyIcon: createController.currencyIcon.value,
         items: items,
       );
 
       // final data = {
-      //   'customer': _selectedCustomerId,
-      //   'gstin': _isGstEnabled ? _gstinController.text : '',
+      //   'customer': createController.selectedCustomerId,
+      //   'gstin': createController.isGstEnabled.value ? createController.gstinController.text : '',
       //   'section': 'sales-invoice',
-      //   'issueDate': DateFormat('yyyy-MM-dd').format(_issueDate),
-      //   'dueDate': DateFormat('yyyy-MM-dd').format(_dueDate),
-      //   'currency': _currency,
-      //   'currency_code': _currencyCode,
-      //   'currency_icon': _currencyIcon,
+      //   'issueDate': DateFormat('yyyy-MM-dd').format(createController.issueDate.value),
+      //   'dueDate': DateFormat('yyyy-MM-dd').format(createController.dueDate.value),
+      //   'currency': createController.currency.value,
+      //   'currency_code': createController.currency.valueCode,
+      //   'currency_icon': createController.currencyIcon.value,
       //   'items': items,
       //   'subtotal': _calculateSubtotal(),
       //   'tax': _calculateTotalGst(),
       //   'discount': _calculateTotalDiscount(),
       //   'total': _calculateTotal(),
-      //   'payment_status': _paymentStatus,
+      //   'payment_status': createController.paymentStatus.value,
       // };
 
       try {

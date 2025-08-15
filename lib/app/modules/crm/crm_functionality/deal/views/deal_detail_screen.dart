@@ -419,8 +419,12 @@ class DealDetailScreen extends StatelessWidget {
           right: AppPadding.medium,
           bottom: AppPadding.medium,
           child: FloatingActionButton(
-            onPressed:
-                () => Get.to(() => SalesInvoiceCreatePage(dealId: dealId)),
+            onPressed: () {
+              Get.to(
+                () => SalesInvoiceCreatePage(dealId: dealId),
+                binding: DealBinding(),
+              );
+            },
             child: const Icon(Icons.add, color: Colors.white),
           ),
         ),

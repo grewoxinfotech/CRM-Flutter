@@ -46,6 +46,11 @@ class UrlRes {
   static const String creditNotes = "$baseURL/sales-creditnote";
 
   //puchase
+  static const String revenue = "$baseURL/sales-revenue";
+
+  static const String billing = "$baseURL/bills";
+
+  //vendor
   static const String vendors = "$baseURL/vendors";
 
   static const String debitnotes = "$baseURL/bill-debits";

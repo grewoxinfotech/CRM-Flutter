@@ -38,7 +38,7 @@ class CustomerController extends PaginatedController<CustomerData> {
       } else {
         final customer = await _service.getCustomerById(id);
         if (customer != null) {
-          items.add(customer);
+          // items.add(customer);
           items.refresh();
         }
       }

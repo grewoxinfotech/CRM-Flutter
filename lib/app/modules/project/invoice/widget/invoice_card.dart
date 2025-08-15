@@ -9,10 +9,10 @@ import 'package:intl/intl.dart';
 
 class InvoiceCard extends StatelessWidget {
   final String? id;
-  final String? leadTitle;  // Invoice Number
-  final String? firstName;  // Customer Name
+  final String? leadTitle; // Invoice Number
+  final String? firstName; // Customer Name
   final String? createdAt; // Issue Date
-  final String? dueDate;   // Due Date
+  final String? dueDate; // Due Date
   final String? currency;
   final String? leadValue; // Total Amount
   final String? pendingAmount;
@@ -77,20 +77,22 @@ class InvoiceCard extends StatelessWidget {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+                    children: [
+                      Text(
                         leadTitle ?? '-',
                         style: const TextStyle(
-                    fontSize: 16,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
-                  ),
-                ),
+                        ),
+                      ),
                       const SizedBox(height: 4),
-            Text(
+                      Text(
                         firstName ?? '-',
-              style: TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Get.theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: Get.theme.colorScheme.onSurface.withOpacity(
+                            0.7,
+                          ),
                         ),
                       ),
                     ],
@@ -130,13 +132,10 @@ class InvoiceCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Get.theme.colorScheme.surface,
                 borderRadius: BorderRadius.circular(AppRadius.small),
-                border: Border.all(
-                  color: Get.theme.dividerColor,
-                  width: 1,
-                ),
+                border: Border.all(color: Get.theme.dividerColor, width: 1),
               ),
               child: Column(
-              children: [
+                children: [
                   _buildDetailRow(
                     'Issue Date',
                     formatDate(createdAt),
@@ -146,9 +145,9 @@ class InvoiceCard extends StatelessWidget {
                   const Divider(height: 24),
                   _buildDetailRow(
                     'Total Amount',
-                    "${currency ?? '₹'} ${leadValue ?? '0.00'}",
+                    "${'₹'} ${leadValue ?? '0.00'}",
                     'Pending Amount',
-                    "${currency ?? '₹'} ${pendingAmount ?? '0.00'}",
+                    "${'₹'} ${pendingAmount ?? '0.00'}",
                     firstValueColor: ColorRes.success,
                     secondValueColor: ColorRes.error,
                   ),
@@ -166,18 +165,18 @@ class InvoiceCard extends StatelessWidget {
                   _buildActionButton(
                     icon: ICRes.edit,
                     label: 'Edit',
-                  onTap: onEdit,
-                  color: ColorRes.success,
-                ),
+                    onTap: onEdit,
+                    color: ColorRes.success,
+                  ),
                   const SizedBox(width: 12),
                 ],
                 if (onDelete != null)
                   _buildActionButton(
                     icon: ICRes.delete,
                     label: 'Delete',
-                  onTap: onDelete,
-                  color: ColorRes.error,
-                ),
+                    onTap: onDelete,
+                    color: ColorRes.error,
+                  ),
               ],
             ),
           ],
@@ -265,10 +264,7 @@ class InvoiceCard extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CrmIc(
-                iconPath: icon,
-                color: color,
-              ),
+              CrmIc(iconPath: icon, color: color),
               const SizedBox(width: 4),
               Text(
                 label,

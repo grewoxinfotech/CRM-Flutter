@@ -179,7 +179,6 @@ class ProductsServicesController extends PaginatedController<Data> {
     return await UrlRes.getHeaders();
   }
 
-
   @override
   Future<List<Data>> fetchItems(int page) async {
     final response = await _service.fetchProductsServices(page: page);
@@ -223,20 +222,6 @@ class ProductsServicesController extends PaginatedController<Data> {
       isLoading.value = false;
     }
   }
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   labelController = Get.put(LabelController());
-  //
-  //   // Defaults
-  //   selectedCategoryId =
-  //       categoryOptions.isNotEmpty ? categoryOptions.first['id'] : null;
-  //   selectedCurrencyCode = currencies.first['code'];
-  //   selectedStockStatus = stockStatuses.first;
-  //
-  //   loadInitial();
-  // }
 
   String? requiredValidator(String? value, String message) {
     if (value == null || value.trim().isEmpty) return message;
@@ -395,6 +380,19 @@ class ProductsServicesController extends PaginatedController<Data> {
       return success;
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<Data?> getProductById(String id) async {
+    try {
+      final response = await _service.getProductById(id);
+      print("[DEBUG]=> ${response?.toJson()}");
+      if (response != null) {
+        return response;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
   }
 

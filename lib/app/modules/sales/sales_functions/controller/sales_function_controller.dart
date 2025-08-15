@@ -11,6 +11,7 @@ import 'package:crm_flutter/app/modules/sales/sales_functionality/credit_notes/v
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/views/customer_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/invoice/views/invoice_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/products_services_page.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/revenue/views/revenue_screen.dart';
 import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:crm_flutter/app/test_screen.dart';
 import 'package:get/get.dart';
@@ -71,6 +72,14 @@ class SalesFunctionController extends GetxController {
         color: const Color(0xffad001a),
         count: 66,
         screenBuilder: CreditNoteScreen(),
+      ),
+      FunctionModel(
+        title: 'Revenue',
+        iconPath: ICRes.document,
+        color: const Color(0xff005fad),
+        // color: const Color(0xff005fad),
+        count: 66,
+        screenBuilder: RevenueScreen(),
       ),
     ];
   }

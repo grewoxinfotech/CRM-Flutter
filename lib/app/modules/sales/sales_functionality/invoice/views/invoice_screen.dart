@@ -11,6 +11,7 @@ import '../../../../project/invoice/widget/invoice_card.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 
 import '../../customer/controllers/customer_controller.dart';
+import '../bindings/invoice_binding.dart';
 import '../controllers/invoice_controller.dart';
 import 'invoice_detail_screen.dart';
 
@@ -41,7 +42,10 @@ class InvoiceScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Invoices")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => SalesInvoiceCreatePage(dealId: customerId!));
+          Get.to(
+            () => SalesInvoiceCreatePage(dealId: customerId!),
+            binding: InvoiceBinding(),
+          );
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),

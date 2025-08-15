@@ -44,16 +44,35 @@ class CustomerService {
   }
 
   /// Get single customer by ID
+  // Future<CustomerData?> getCustomerById(String id) async {
+  //   try {
+  //     final response = await http.get(
+  //       Uri.parse("$baseUrl/$id"),
+  //       headers: await headers(),
+  //     );
+  //     print("[DEBUG]=> $baseUrl/$id ---- ${response.body}");
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       return CustomerData.fromJson(data["message"]["data"]);
+  //     }
+  //   } catch (e) {
+  //     print("Get customer by ID exception: $e");
+  //   }
+  //   return null;
+  // }
+
   Future<CustomerData?> getCustomerById(String id) async {
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
       );
-
+      print("[DEBUG]=> $baseUrl/$id ---- ${response.body}");
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return CustomerData.fromJson(data["message"]["data"]);
+        final json = jsonDecode(response.body);
+        if (json['data'] != null) {
+          return CustomerData.fromJson(json['data']);
+        }
       }
     } catch (e) {
       print("Get customer by ID exception: $e");

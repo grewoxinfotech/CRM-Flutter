@@ -54,11 +54,12 @@ class CrmFunctionController extends GetxController {
         iconPath: ICRes.leads,
         color: const Color(0xff28B999),
       ),
+
       FunctionModel(
-        title: 'Tasks',
-        iconPath: ICRes.task,
-        color: const Color(0xff0AC947),
-        screenBuilder: TaskScreen(),
+        title: 'Company',
+        iconPath: ICRes.employees,
+        color: const Color(0xff2B648F),
+        count: 4,
       ),
       FunctionModel(
         title: 'Contacts',
@@ -67,38 +68,38 @@ class CrmFunctionController extends GetxController {
         count: 10,
       ),
       FunctionModel(
-        title: 'Company',
-        iconPath: ICRes.employees,
-        color: const Color(0xff2B648F),
-        count: 4,
+        title: 'Tasks',
+        iconPath: ICRes.task,
+        color: const Color(0xffad5c00),
+        screenBuilder: TaskScreen(),
       ),
-      FunctionModel(
-        title: 'Sales',
-        iconPath: ICRes.clients,
-        color: const Color(0xffFFCC01),
-        count: 45,
-        screenBuilder: ProductsServicesScreen(),
-      ),
+      // FunctionModel(
+      //   title: 'Sales',
+      //   iconPath: ICRes.clients,
+      //   color: const Color(0xffFFCC01),
+      //   count: 45,
+      //   screenBuilder: ProductsServicesScreen(),
+      // ),
       FunctionModel(
         title: 'Contract',
         iconPath: ICRes.contract,
         color: const Color(0xff3400AD),
         count: 66,
       ),
-      FunctionModel(
-        title: 'Customer',
-        iconPath: ICRes.customer,
-        color: const Color(0xff00a7ad),
-        count: 66,
-        screenBuilder: CustomerScreen(),
-      ),
-      FunctionModel(
-        title: 'Invoice',
-        iconPath: ICRes.document,
-        color: const Color(0xff00a7ad),
-        count: 66,
-        screenBuilder: InvoiceScreen(),
-      ),
+      // FunctionModel(
+      //   title: 'Customer',
+      //   iconPath: ICRes.customer,
+      //   color: const Color(0xff00a7ad),
+      //   count: 66,
+      //   screenBuilder: CustomerScreen(),
+      // ),
+      // FunctionModel(
+      //   title: 'Invoice',
+      //   iconPath: ICRes.document,
+      //   color: const Color(0xff00a7ad),
+      //   count: 66,
+      //   screenBuilder: InvoiceScreen(),
+      // ),
     ];
   }
 }

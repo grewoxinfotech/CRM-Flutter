@@ -235,4 +235,21 @@ class ProductsServicesService {
       return false;
     }
   }
+
+  Future<Data?> getProductById(String id) async {
+    try {
+      print("[DEBUG]=> $baseUrl/$id");
+      final url = Uri.parse("$baseUrl/$id");
+      final response = await http.get(url, headers: await headers());
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print("[DEBUG]=> ${data}");
+        return Data.fromJson(data["data"]);
+      }
+      return null;
+    } catch (e) {
+      print("Get product by ID exception: $e");
+      return null;
+    }
+  }
 }

@@ -7,6 +7,7 @@ import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/debit_notes/views/debit_note_screen.dart';
+import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
 import 'package:crm_flutter/app/modules/role/controllers/role_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/views/customer_screen.dart';
@@ -45,7 +46,6 @@ class PurchaseFunctionController extends GetxController {
     }
 
     functions.value = [
-
       FunctionModel(
         title: 'Vendor',
         iconPath: ICRes.clients,
@@ -58,7 +58,7 @@ class PurchaseFunctionController extends GetxController {
         iconPath: ICRes.customer,
         color: const Color(0xff00a7ad),
         count: 66,
-      //  screenBuilder: CustomerScreen(),
+        screenBuilder: BillingScreen(),
       ),
       FunctionModel(
         title: 'Debit Note',
