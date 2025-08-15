@@ -44,6 +44,7 @@ class AddVendorScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: controller.formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
