@@ -75,7 +75,7 @@ class CustomerCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
-                        'Address: ${customer.shippingAddress}',
+                        'Address: ${Address.formatAddress(customer.shippingAddress)}',
                         style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                       ),
                     ),

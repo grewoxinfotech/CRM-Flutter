@@ -12,8 +12,10 @@ class DebitNoteService {
   /// Get all debit notes
   Future<List<DebitNoteItem>> getAllDebitNotes() async {
     try {
-      final response =
-      await http.get(Uri.parse(baseUrl), headers: await headers());
+      final response = await http.get(
+        Uri.parse(baseUrl),
+        headers: await headers(),
+      );
 
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
@@ -34,9 +36,7 @@ class DebitNoteService {
         print('debug---${response.body}');
 
         // If data is a single object
-        return [
-          DebitNoteItem.fromJson(data),
-        ];
+        return [DebitNoteItem.fromJson(data)];
       } else {
         throw Exception("Failed to fetch debit notes");
       }
@@ -49,8 +49,10 @@ class DebitNoteService {
   /// Find a debit note by ID
   Future<DebitNoteItem?> getDebitNoteById(String id) async {
     try {
-      final response =
-      await http.get(Uri.parse("$baseUrl/$id"), headers: await headers());
+      final response = await http.get(
+        Uri.parse("$baseUrl/$id"),
+        headers: await headers(),
+      );
 
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
@@ -70,7 +72,9 @@ class DebitNoteService {
   }
 
   /// Create a new debit note
-  Future<Map<String, dynamic>> createDebitNote(Map<String, dynamic> payload) async {
+  Future<Map<String, dynamic>> createDebitNote(
+    Map<String, dynamic> payload,
+  ) async {
     try {
       final response = await http.post(
         Uri.parse(baseUrl),
@@ -82,21 +86,22 @@ class DebitNoteService {
 
       return {
         'success': response.statusCode == 200 || response.statusCode == 201,
-        'message': decoded['message'] ?? 'Unknown error occurred'
+        'message': decoded['message'] ?? 'Unknown error occurred',
       };
     } catch (e) {
-      return {
-        'success': false,
-        'message': 'Network error: $e'
-      };
+      return {'success': false, 'message': 'Network error: $e'};
     }
   }
 
   /// Delete a debit note
   Future<bool> deleteDebitNote(String id) async {
     try {
-      final response =
-      await http.delete(Uri.parse("$baseUrl/$id"), headers: await headers());
+      print("[DEBUG]=> $baseUrl/$id");
+      final response = await http.delete(
+        Uri.parse("$baseUrl/$id"),
+        headers: await headers(),
+      );
+      print("[DEBUG]=> ${response.body}");
       return response.statusCode == 200 || response.statusCode == 204;
     } catch (e) {
       print("Delete debit note error: $e");

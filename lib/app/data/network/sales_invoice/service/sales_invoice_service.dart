@@ -226,4 +226,51 @@ class SalesInvoiceService {
       return false;
     }
   }
+
+  /// Delete an invoice by ID
+  Future<bool> deleteSalesInvoice(String id) async {
+    try {
+      final response = await http.delete(
+        Uri.parse("$url/$id"),
+        headers: await headers(),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        final responseData = jsonDecode(response.body);
+
+        if (responseData["success"] == true) {
+          CrmSnackBar.showAwesomeSnackbar(
+            title: "Success",
+            message: "Invoice deleted successfully",
+            contentType: ContentType.success,
+          );
+          return true;
+        } else {
+          CrmSnackBar.showAwesomeSnackbar(
+            title: "Error",
+            message:
+                responseData['message'] is String
+                    ? responseData['message']
+                    : 'Failed to delete invoice',
+            contentType: ContentType.failure,
+          );
+          return false;
+        }
+      } else {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: "Error",
+          message: "Failed to delete invoice. Status: ${response.statusCode}",
+          contentType: ContentType.failure,
+        );
+        return false;
+      }
+    } catch (e) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Error deleting invoice: ${e.toString()}",
+        contentType: ContentType.failure,
+      );
+      return false;
+    }
+  }
 }

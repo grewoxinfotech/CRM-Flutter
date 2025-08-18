@@ -1,33 +1,35 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/care/utils/format.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
-import '../../../../../widgets/common/messages/crm_snack_bar.dart';
-import '../controllers/credit_notes_controller.dart';
-import '../widget/credit_note_card.dart';
-import 'add_credit_note_screen.dart';
+import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
+import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../controllers/employee_controller.dart';
+import '../widget/employee_card.dart';
+import 'add_employee_screen.dart';
 
-class CreditNoteScreen extends StatelessWidget {
-  CreditNoteScreen({Key? key}) : super(key: key);
+class EmployeeScreen extends StatelessWidget {
+  EmployeeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<CreditNoteController>(() => CreditNoteController());
-    final CreditNoteController controller = Get.find();
+    Get.lazyPut<EmployeeController>(() => EmployeeController());
+    final EmployeeController controller = Get.find();
 
-    void _deleteCreditNote(String id, String name) {
+    void _deleteEmployee(String id, String name) {
       Get.dialog(
         CrmDeleteDialog(
           entityType: name,
           onConfirm: () async {
-            final success = await controller.deleteCreditNote(id);
+            final success = await controller.deleteEmployee(id);
             if (success) {
               Get.back();
               CrmSnackBar.showAwesomeSnackbar(
                 title: "Success",
-                message: "Debit note deleted successfully",
+                message: "Employee deleted successfully",
                 contentType: ContentType.success,
               );
             }
@@ -37,11 +39,11 @@ class CreditNoteScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Credit Notes")),
+      appBar: AppBar(title: const Text("Employees")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to add credit note screen
-          Get.to(() => AddCreditNoteScreen());
+          // Navigate to add employee screen
+          Get.to(() => AddEmployeeScreen());
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -66,7 +68,7 @@ class CreditNoteScreen extends StatelessWidget {
           } else if (snapshot.connectionState == ConnectionState.done) {
             return Obx(() {
               if (!controller.isLoading.value && controller.items.isEmpty) {
-                return const Center(child: Text("No Credit Notes found."));
+                return const Center(child: Text("No Employees found."));
               }
               return NotificationListener<ScrollEndNotification>(
                 onNotification: (scrollEnd) {
@@ -82,37 +84,30 @@ class CreditNoteScreen extends StatelessWidget {
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
-                        final creditNote = controller.items[index];
-                        return Stack(
-                          children: [
-                            CreditNoteCard(creditNote: creditNote),
-                            Positioned(
-                              right: 8,
-                              bottom: 8,
-                              child: Row(
-                                children: [
-                                  // IconButton(
-                                  //   icon: const Icon(Icons.edit, color: Colors.blue),
-                                  //   onPressed: () {
-                                  //     Get.to(() => AddDebitNoteScreen());
-                                  //   },
-                                  // ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      _deleteCreditNote(
-                                        creditNote.id ?? '',
-                                        creditNote.id ?? 'Credit Note',
-                                      );
-                                    },
-                                  ),
-                                ],
+                        final employee = controller.items[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(AppSpacing.small),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: EmployeeCard(
+                              id: employee.id,
+                              firstName: employee.firstName,
+                              lastName: employee.lastName,
+                              email: employee.email,
+                              phone: employee.phone,
+                              address: employee.address,
+                              branch: employee.branch,
+                              employeeId: employee.employeeId,
+                              username: employee.username,
+                              department: employee.department,
+                              designation: employee.designation,
+                              joiningDate: formatDateString(
+                                employee.joiningDate?.toIso8601String(),
                               ),
+                              phoneCode: employee.phoneCode,
+                              salary: employee.salary,
                             ),
-                          ],
+                          ),
                         );
                       } else if (controller.isPaging.value) {
                         return const Padding(

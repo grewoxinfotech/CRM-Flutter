@@ -6,6 +6,7 @@ import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_
 import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/employee/views/employee_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/debit_notes/views/debit_note_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
@@ -63,9 +64,16 @@ class PurchaseFunctionController extends GetxController {
       FunctionModel(
         title: 'Debit Note',
         iconPath: ICRes.document,
-        color: const Color(0xff00a7ad),
+        color: const Color(0xff68ad00),
         count: 66,
         screenBuilder: DebitNotesScreen(),
+      ),
+      FunctionModel(
+        title: 'Employee',
+        iconPath: ICRes.employee,
+        color: const Color(0xffad0000),
+        count: 66,
+        screenBuilder: EmployeeScreen(),
       ),
     ];
   }

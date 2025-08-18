@@ -1011,13 +1011,17 @@
 //   }
 // }
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/data/network/sales/customer/model/customer_model.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/invoice/controllers/invoice_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../../data/network/sales_invoice/model/sales_invoice_model.dart';
+import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
+import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../../../../../widgets/date_time/format_date.dart';
 import '../../customer/controllers/customer_controller.dart'; // Your model file
 
@@ -1074,6 +1078,27 @@ class InvoiceDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => InvoiceController());
+    final controller = Get.find<InvoiceController>();
+    void _deleteCreditNote(String id, String name) {
+      Get.dialog(
+        CrmDeleteDialog(
+          entityType: name,
+          onConfirm: () async {
+            final success = await controller.deleteInvoice(id);
+            if (success) {
+              Get.back();
+              CrmSnackBar.showAwesomeSnackbar(
+                title: "Success",
+                message: "Debit note deleted successfully",
+                contentType: ContentType.success,
+              );
+            }
+          },
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Invoice #${invoice.salesInvoiceNumber ?? '-'}"),
@@ -1082,6 +1107,15 @@ class InvoiceDetailScreen extends StatelessWidget {
             icon: const Icon(Icons.download),
             onPressed: () {
               // _generatePdf(context);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: () {
+              _deleteCreditNote(
+                invoice.id ?? '',
+                invoice.salesInvoiceNumber ?? 'Credit Note',
+              );
             },
           ),
         ],

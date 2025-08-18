@@ -1,9 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/pagination/controller/pagination_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../../../care/constants/url_res.dart';
 import '../../../../../data/network/sales/customer/model/customer_model.dart';
 import '../../../../../data/network/sales/customer/service/customer_service.dart';
+import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 
 class CustomerController extends PaginatedController<CustomerData> {
   final CustomerService _service = CustomerService();
@@ -87,7 +89,11 @@ class CustomerController extends PaginatedController<CustomerData> {
       }
       return success;
     } catch (e) {
-      print("Delete customer error: $e");
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Failed to delete debit note: ${e.toString()}",
+        contentType: ContentType.failure,
+      );
       return false;
     }
   }

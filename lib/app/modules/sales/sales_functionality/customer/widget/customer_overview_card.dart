@@ -124,7 +124,7 @@ class CustomerOverviewCard extends StatelessWidget {
                 ),
                 divider,
                 Text(
-                  "$firstName $lastName",
+                  "$firstName ",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

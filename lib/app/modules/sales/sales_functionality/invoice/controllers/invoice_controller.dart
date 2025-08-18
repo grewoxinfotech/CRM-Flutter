@@ -85,18 +85,19 @@ class InvoiceController extends PaginatedController<SalesInvoice> {
     }
   }
 
-  // Future<bool> deleteInvoice(String id) async {
-  //   try {
-  //     final success = await _service.deleteSalesInvoice(id);
-  //     if (success) {
-  //       items.removeWhere((item) => item.id == id);
-  //     }
-  //     return success;
-  //   } catch (e) {
-  //     print("Delete invoice error: $e");
-  //     return false;
-  //   }
-  // }
+  Future<bool> deleteInvoice(String id) async {
+    try {
+      final success = await _service.deleteSalesInvoice(id);
+      if (success) {
+        items.removeWhere((item) => item.id == id);
+      }
+      return success;
+    } catch (e) {
+      print("Delete invoice error: $e");
+      return false;
+    }
+  }
+
   //
   // /// Extra helper to get customer name from customerId inside invoice
   // String getCustomerName(CustomerData? customer) {

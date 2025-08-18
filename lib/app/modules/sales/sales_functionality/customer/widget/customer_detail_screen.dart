@@ -1,6 +1,9 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/widget/address_detail_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/widget/customer_overview_card.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
+import 'package:crm_flutter/app/widgets/common/dialogs/crm_delete_dialog.dart';
+import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +15,7 @@ import '../controllers/customer_controller.dart';
 
 class CustomerDetailScreen extends StatefulWidget {
   final CustomerData customer;
+
   const CustomerDetailScreen({super.key, required this.customer});
 
   @override
@@ -46,6 +50,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
   @override
   Widget build(BuildContext context) {
     final tabBarController = Get.put(TabBarController());
+    final customerController = Get.put(CustomerController());
 
     return Scaffold(
       appBar: AppBar(
@@ -92,6 +97,24 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
       phone: c.contact ?? "-",
       email: c.email ?? "-",
       companyName: c.company ?? "-",
+      address: Address.formatAddress(customer!.billingAddress),
+      onDelete:
+          () => Get.dialog(
+            CrmDeleteDialog(
+              onConfirm: () async {
+                final success = await customerController.deleteCustomer(c.id!);
+                if (success) {
+                  CrmSnackBar.showAwesomeSnackbar(
+                    title: 'Success',
+                    message: "${c.name} is Deleted Successfully",
+                    contentType: ContentType.success,
+                  );
+                  Get.back();
+                }
+              },
+              entityType: c.name,
+            ),
+          ),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:collection/collection.dart';
 
+import '../../../../../data/database/storage/secure_storage_service.dart';
 import '../../../../../data/network/sales/product_service/model/product_model.dart';
 import '../../../../../data/network/sales/product_service/service/product_service.dart';
 import '../../../../../data/network/purchase/vendor/model/vendor_model.dart';
@@ -18,6 +19,8 @@ class BillCreateController extends GetxController {
   final _vendorService = VendorService();
   final _currencyService = CurrencyService();
 
+  var userId = ''.obs;
+
   // State variables
   var selectedVendorId = ''.obs;
   var vendors = <VendorData>[].obs;
@@ -32,8 +35,8 @@ class BillCreateController extends GetxController {
   late TextEditingController discountController;
   late TextEditingController additionalNotesController;
 
-  var issueDate = DateTime.now().obs;
-  var dueDate = DateTime.now().add(const Duration(days: 7)).obs;
+  var billDate = DateTime.now().obs;
+  // var dueDate = DateTime.now().add(const Duration(days: 7)).obs;
   var paymentStatus = 'unpaid'.obs;
 
   var currency = 'AHNTpSNJHMypuNF6iPcMLrz'.obs;
@@ -75,6 +78,11 @@ class BillCreateController extends GetxController {
     _loadProducts();
     _loadVendors();
     loadCurrencies();
+    getUserData();
+  }
+
+  Future<void> getUserData() async {
+    userId.value = (await SecureStorage.getUserData())!.id!;
   }
 
   Future<void> loadCurrencies() async {
@@ -195,8 +203,8 @@ class BillCreateController extends GetxController {
     discountController = TextEditingController(text: '0');
     additionalNotesController = TextEditingController();
 
-    issueDate.value = DateTime.now();
-    dueDate.value = DateTime.now().add(const Duration(days: 7));
+    billDate.value = DateTime.now();
+    // dueDate.value = DateTime.now().add(const Duration(days: 7));
     paymentStatus.value = 'unpaid';
 
     currency.value = 'AHNTpSNJHMypuNF6iPcMLrz';

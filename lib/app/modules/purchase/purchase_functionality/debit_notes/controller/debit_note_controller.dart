@@ -1,5 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/data/network/purchase/billing/model/billing_model.dart';
 import 'package:crm_flutter/app/data/network/purchase/debit_notes/service/debit_note_service.dart';
+import 'package:crm_flutter/app/data/network/purchase/vendor/model/vendor_model.dart';
+import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/controllers/billing_controller.dart';
+import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/contoller/vendor_controller.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,21 +22,26 @@ class DebitNoteController extends GetxController {
   final amountController = TextEditingController();
   final billIdController = TextEditingController();
   final dateController = TextEditingController();
-
+  var selectedBill = Rxn<BillingData>();
 
   // New: Date & Currency
   final Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
   final Rx<String?> selectedCurrency = Rx<String?>(null);
   final List<String> currencies = ['INR', 'USD', 'EUR'];
 
-  static Future<Map<String, String>> headers() async => await UrlRes.getHeaders();
+  RxList<BillingData> bills = <BillingData>[].obs;
+  // RxList<VendorData> vendors = <VendorData>[].obs;
+  final billingController = Get.put(BillingController());
+
+  static Future<Map<String, String>> headers() async =>
+      await UrlRes.getHeaders();
 
   @override
   void onInit() {
     super.onInit();
     fetchAllDebitNotes();
+    loadBills();
     dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
   }
 
   @override
@@ -61,6 +70,16 @@ class DebitNoteController extends GetxController {
     }
   }
 
+  Future<void> loadBills() async {
+    await billingController.loadInitial();
+    bills.assignAll(billingController.items.where((b) => b.amount! > 0));
+
+    if (bills.isNotEmpty) {
+      selectedBill.value = bills.first;
+      billIdController.text = bills.first.id ?? '';
+      amountController.text = bills.first.amount?.toString() ?? '0';
+    }
+  }
 
   /// Fetch all debit notes
   Future<void> fetchAllDebitNotes() async {
@@ -83,7 +102,9 @@ class DebitNoteController extends GetxController {
 
     if (dateController.text.isNotEmpty) {
       try {
-        selectedDate.value = DateFormat('yyyy-MM-dd').parse(dateController.text);
+        selectedDate.value = DateFormat(
+          'yyyy-MM-dd',
+        ).parse(dateController.text);
       } catch (_) {
         selectedDate.value = null;
       }
@@ -111,9 +132,6 @@ class DebitNoteController extends GetxController {
         'currency': selectedCurrency.value!,
       };
 
-
-
-
       print('CONTROLLER_DEBUG${billIdController.text.trim()}');
 
       final result = await _service.createDebitNote(payload);
@@ -133,7 +151,6 @@ class DebitNoteController extends GetxController {
           contentType: ContentType.failure,
         );
       }
-
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: "Error",
@@ -144,7 +161,6 @@ class DebitNoteController extends GetxController {
       isLoading.value = false;
     }
   }
-
 
   /// Delete a debit note
   Future<bool> deleteDebitNote(String id) async {

@@ -45,6 +45,8 @@ class UrlRes {
 
   static const String creditNotes = "$baseURL/sales-creditnote";
 
+  static const String employees = "$baseURL/employees";
+
   //puchase
   static const String revenue = "$baseURL/sales-revenue";
 
@@ -55,6 +57,7 @@ class UrlRes {
 
   static const String debitnotes = "$baseURL/bill-debits";
 
+  static const String verifySignup = "$baseURL/verify-signup";
 
   //sales_functionality-APIs
   // static const String sales = "$baseURL/products";
