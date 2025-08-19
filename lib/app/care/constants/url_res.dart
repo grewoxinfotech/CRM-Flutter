@@ -47,6 +47,17 @@ class UrlRes {
 
   static const String employees = "$baseURL/employees";
 
+  /// HRM
+  static const String branches = "$baseURL/branches";
+
+  static const String designations = "$baseURL/designations";
+
+  static const String departments = "$baseURL/departments";
+
+  static const String holidays = "$baseURL/holidays";
+
+  static const String leaves = "$baseURL/leaves";
+
   //puchase
   static const String revenue = "$baseURL/sales-revenue";
 

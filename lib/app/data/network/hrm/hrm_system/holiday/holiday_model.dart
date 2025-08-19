@@ -1,62 +1,15 @@
-// class DepartmentModel {
-//   final String id;
-//   final String branch;
-//   final String departmentName;
-//   final String clientId;
-//   final String createdBy;
-//   final String? updatedBy;
-//   final DateTime createdAt;
-//   final DateTime updatedAt;
-//
-//   DepartmentModel({
-//     required this.id,
-//     required this.branch,
-//     required this.departmentName,
-//     required this.clientId,
-//     required this.createdBy,
-//     this.updatedBy,
-//     required this.createdAt,
-//     required this.updatedAt,
-//   });
-//
-//   factory DepartmentModel.fromJson(Map<String, dynamic> json) {
-//     return DepartmentModel(
-//       id: json['id'],
-//       branch: json['branch'],
-//       departmentName: json['department_name'],
-//       clientId: json['client_id'],
-//       createdBy: json['created_by'],
-//       updatedBy: json['updated_by'],
-//       createdAt: DateTime.parse(json['createdAt']),
-//       updatedAt: DateTime.parse(json['updatedAt']),
-//     );
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'id': id,
-//       'branch': branch,
-//       'department_name': departmentName,
-//       'client_id': clientId,
-//       'created_by': createdBy,
-//       'updated_by': updatedBy,
-//       'createdAt': createdAt.toIso8601String(),
-//       'updatedAt': updatedAt.toIso8601String(),
-//     };
-//   }
-// }
-class DepartmentModel {
+class HolidayModel {
   bool? success;
-  DepartmentMessage? message;
+  HolidayMessage? message;
   dynamic data;
 
-  DepartmentModel({this.success, this.message, this.data});
+  HolidayModel({this.success, this.message, this.data});
 
-  DepartmentModel.fromJson(Map<String, dynamic> json) {
+  HolidayModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message =
         json['message'] != null
-            ? DepartmentMessage.fromJson(json['message'])
+            ? HolidayMessage.fromJson(json['message'])
             : null;
     data = json['data'];
   }
@@ -72,16 +25,16 @@ class DepartmentModel {
   }
 }
 
-class DepartmentMessage {
-  List<DepartmentData>? data;
+class HolidayMessage {
+  List<HolidayData>? data;
   Pagination? pagination;
 
-  DepartmentMessage({this.data, this.pagination});
+  HolidayMessage({this.data, this.pagination});
 
-  DepartmentMessage.fromJson(Map<String, dynamic> json) {
+  HolidayMessage.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = List<DepartmentData>.from(
-        json['data'].map((x) => DepartmentData.fromJson(x)),
+      data = List<HolidayData>.from(
+        json['data'].map((x) => HolidayData.fromJson(x)),
       );
     }
     pagination =
@@ -102,33 +55,41 @@ class DepartmentMessage {
   }
 }
 
-class DepartmentData {
+class HolidayData {
   String? id;
-  String? branch;
-  String? departmentName;
+  String? holidayName;
+  String? leaveType;
+  String? startDate;
+  String? endDate;
   String? clientId;
   String? createdBy;
   String? updatedBy;
   String? createdAt;
   String? updatedAt;
+  String? section;
   String? key;
 
-  DepartmentData({
+  HolidayData({
     this.id,
-    this.branch,
-    this.departmentName,
+    this.holidayName,
+    this.leaveType,
+    this.startDate,
+    this.endDate,
     this.clientId,
     this.createdBy,
     this.updatedBy,
     this.createdAt,
     this.updatedAt,
+    this.section,
     this.key,
   });
 
-  DepartmentData.fromJson(Map<String, dynamic> json) {
+  HolidayData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    branch = json['branch'];
-    departmentName = json['department_name'];
+    holidayName = json['holiday_name'];
+    leaveType = json['leave_type'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
     clientId = json['client_id'];
     createdBy = json['created_by'];
     updatedBy = json['updated_by'];
@@ -140,9 +101,12 @@ class DepartmentData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> map = {};
     map['id'] = id;
-    map['branch'] = branch;
-    map['department_name'] = departmentName;
+    map['holiday_name'] = holidayName;
+    map['leave_type'] = leaveType;
+    map['start_date'] = startDate;
+    map['end_date'] = endDate;
     map['client_id'] = clientId;
+    map['section'] = section;
     map['created_by'] = createdBy;
     map['updated_by'] = updatedBy;
     map['createdAt'] = createdAt;

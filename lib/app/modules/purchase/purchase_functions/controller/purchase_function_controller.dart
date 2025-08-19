@@ -6,7 +6,12 @@ import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_
 import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/branch/views/branch_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/department/views/department_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/designation/views/designation_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/employee/views/employee_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/holiday/views/holiday_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/leave_management/views/leave_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/debit_notes/views/debit_note_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
@@ -74,6 +79,41 @@ class PurchaseFunctionController extends GetxController {
         color: const Color(0xffad0000),
         count: 66,
         screenBuilder: EmployeeScreen(),
+      ),
+      FunctionModel(
+        title: 'Branch',
+        iconPath: ICRes.employee,
+        color: const Color(0xff0070ad),
+        count: 66,
+        screenBuilder: BranchScreen(),
+      ),
+      FunctionModel(
+        title: 'Designation',
+        iconPath: ICRes.employee,
+        color: const Color(0xff2000ad),
+        count: 66,
+        screenBuilder: DesignationScreen(),
+      ),
+      FunctionModel(
+        title: 'Department',
+        iconPath: ICRes.employee,
+        color: const Color(0xffad4800),
+        count: 66,
+        screenBuilder: DepartmentScreen(),
+      ),
+      FunctionModel(
+        title: 'Holiday',
+        iconPath: ICRes.calendar,
+        color: const Color(0xff00ad09),
+        count: 66,
+        screenBuilder: HolidayScreen(),
+      ),
+      FunctionModel(
+        title: 'Leave Management',
+        iconPath: ICRes.calendar,
+        color: const Color(0xff00ad99),
+        count: 66,
+        screenBuilder: LeaveScreen(),
       ),
     ];
   }

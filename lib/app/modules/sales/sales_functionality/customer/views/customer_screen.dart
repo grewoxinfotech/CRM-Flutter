@@ -68,7 +68,7 @@ class CustomerScreen extends StatelessWidget {
                         return GestureDetector(
                           onTap:
                               () => Get.to(
-                                CustomerDetailScreen(customer: customer),
+                                () => CustomerDetailScreen(customer: customer),
                               ),
                           child: CustomerCard(customer: customer),
                         );

@@ -4,7 +4,6 @@ import 'package:crm_flutter/app/modules/crm/crm_functions/widget/crm_function_ca
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class CrmFunctionsWidget extends StatelessWidget {
   const CrmFunctionsWidget({super.key});
 
@@ -31,9 +30,11 @@ class CrmFunctionsWidget extends StatelessWidget {
                 iconPath: controller.functions[i].iconPath,
                 title: controller.functions[i].title,
                 color: controller.functions[i].color,
-                onTap: () => (controller.functions[i].screenBuilder != null)
-                    ? Get.to(controller.functions[i].screenBuilder)
-                    : null,
+                onTap:
+                    () =>
+                        (controller.functions[i].screenBuilder != null)
+                            ? Get.to(controller.functions[i].screenBuilder)
+                            : null,
               );
             },
           ),

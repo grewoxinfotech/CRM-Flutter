@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import '../../../purchase/purchase_functions/widget/purchase_function_card.dart';
 import '../controller/purchase_function_controller.dart';
 
-
-
 class PurchaseFunctionsWidget extends StatelessWidget {
   const PurchaseFunctionsWidget({super.key});
 
@@ -33,9 +31,11 @@ class PurchaseFunctionsWidget extends StatelessWidget {
                 iconPath: controller.functions[i].iconPath,
                 title: controller.functions[i].title,
                 color: controller.functions[i].color,
-                onTap: () => (controller.functions[i].screenBuilder != null)
-                    ? Get.to(controller.functions[i].screenBuilder)
-                    : null,
+                onTap:
+                    () =>
+                        (controller.functions[i].screenBuilder != null)
+                            ? Get.to(controller.functions[i].screenBuilder)
+                            : null,
               );
             },
           ),
