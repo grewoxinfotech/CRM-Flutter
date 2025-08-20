@@ -6,12 +6,15 @@ import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_
 import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/announcement/views/announcement_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/branch/views/branch_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/department/views/department_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/designation/views/designation_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/employee/views/employee_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/holiday/views/holiday_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/leave_management/views/leave_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/meeting/views/meeting_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/training/views/training_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/debit_notes/views/debit_note_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
@@ -114,6 +117,27 @@ class PurchaseFunctionController extends GetxController {
         color: const Color(0xff00ad99),
         count: 66,
         screenBuilder: LeaveScreen(),
+      ),
+      FunctionModel(
+        title: 'Announcement',
+        iconPath: ICRes.notifications,
+        color: const Color(0xff005fad),
+        count: 66,
+        screenBuilder: AnnouncementScreen(),
+      ),
+      FunctionModel(
+        title: 'Meeting',
+        iconPath: ICRes.notifications,
+        color: const Color(0xff3a00ad),
+        count: 66,
+        screenBuilder: MeetingScreen(),
+      ),
+      FunctionModel(
+        title: 'Training',
+        iconPath: ICRes.notifications,
+        color: const Color(0xffad0062),
+        count: 66,
+        screenBuilder: TrainingScreen(),
       ),
     ];
   }

@@ -17,7 +17,7 @@ class PurchaseFunctionsWidget extends StatelessWidget {
         children: [
           GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               mainAxisSpacing: AppPadding.small,
               crossAxisSpacing: AppPadding.small,
               childAspectRatio: 1.2,
