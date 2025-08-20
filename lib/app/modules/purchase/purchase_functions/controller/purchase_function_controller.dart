@@ -13,8 +13,7 @@ import 'package:crm_flutter/app/modules/hrm/designation/views/designation_screen
 import 'package:crm_flutter/app/modules/hrm/employee/views/employee_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/holiday/views/holiday_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/leave_management/views/leave_screen.dart';
-import 'package:crm_flutter/app/modules/hrm/meeting/views/meeting_screen.dart';
-import 'package:crm_flutter/app/modules/hrm/training/views/training_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/payroll/views/payroll_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/debit_notes/views/debit_note_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
@@ -117,6 +116,12 @@ class PurchaseFunctionController extends GetxController {
         color: const Color(0xff00ad99),
         count: 66,
         screenBuilder: LeaveScreen(),
+      ),FunctionModel(
+        title: 'Pay Roll',
+        iconPath: ICRes.calendar,
+        color: const Color(0xff6e00ad),
+        count: 66,
+        screenBuilder: PayrollScreen(),
       ),
       FunctionModel(
         title: 'Announcement',

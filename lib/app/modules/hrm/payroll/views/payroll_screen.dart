@@ -1,33 +1,34 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:crm_flutter/app/modules/hrm/leave_management/views/add_leave_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/payroll/views/add_payroll_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/payroll/widget/payroll_card.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
-import '../controllers/leave_controller.dart';
-import '../widget/leave_card.dart';
+import '../controller/payroll_controller.dart';
 
-class LeaveScreen extends StatelessWidget {
-  LeaveScreen({Key? key}) : super(key: key);
+
+class PayrollScreen extends StatelessWidget {
+  PayrollScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<LeaveController>(() => LeaveController());
-    final LeaveController controller = Get.find();
+    Get.lazyPut<PayrollController>(() => PayrollController());
+    final PayrollController controller = Get.find();
 
-    void _deleteLeave(String id, String type) {
+    void _deletePayslip(String id, String name) {
       Get.dialog(
         CrmDeleteDialog(
-          entityType: type,
+          entityType: name,
           onConfirm: () async {
-            final success = await controller.deleteLeave(id);
+            final success = await controller.deletePayslip(id);
             if (success) {
               Get.back();
               CrmSnackBar.showAwesomeSnackbar(
                 title: "Success",
-                message: "Leave deleted successfully",
+                message: "Payslip deleted successfully",
                 contentType: ContentType.success,
               );
             }
@@ -37,12 +38,12 @@ class LeaveScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Leaves")),
+      appBar: AppBar(title: const Text("Payroll")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to add leave screen
+          // Navigate to add payslip screen
           controller.resetForm();
-          Get.to(() => AddLeaveScreen());
+          Get.to(() => AddPayrollScreen());
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -67,7 +68,7 @@ class LeaveScreen extends StatelessWidget {
           } else if (snapshot.connectionState == ConnectionState.done) {
             return Obx(() {
               if (!controller.isLoading.value && controller.items.isEmpty) {
-                return const Center(child: Text("No Leaves found."));
+                return const Center(child: Text("No Payslips found."));
               }
               return NotificationListener<ScrollEndNotification>(
                 onNotification: (scrollEnd) {
@@ -83,27 +84,19 @@ class LeaveScreen extends StatelessWidget {
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
-                        final leave = controller.items[index];
+                        final payslip = controller.items[index];
                         return Stack(
                           children: [
-                            LeaveCard(leave: leave),
+                            PayslipCard(payslip: payslip),
                             Positioned(
                               right: 8,
                               bottom: 8,
                               child: Row(
                                 children: [
                                   IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
-                                    ),
+                                    icon: const Icon(Icons.edit, color: Colors.blue),
                                     onPressed: () {
-                                      Get.to(
-                                            () => AddLeaveScreen(
-                                          leave: leave,
-                                          isFromEdit: true,
-                                        ),
-                                      );
+                                      Get.to(() => AddPayrollScreen(payslipData: payslip,isFromEdit: true,));
                                     },
                                   ),
                                   IconButton(
@@ -112,9 +105,10 @@ class LeaveScreen extends StatelessWidget {
                                       color: Colors.red,
                                     ),
                                     onPressed: () {
-                                      _deleteLeave(
-                                        leave.id ?? '',
-                                        leave.leaveType ?? 'Leave',
+                                      controller.resetForm();
+                                      _deletePayslip(
+                                        payslip.id ?? '',
+                                        payslip.employeeId ?? 'Payslip',
                                       );
                                     },
                                   ),

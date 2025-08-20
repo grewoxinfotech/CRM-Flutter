@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../care/constants/url_res.dart';
+import '../../../../data/network/hrm/employee/employee_model.dart';
 import '../../../../data/network/hrm/hrm_system/leave_type/leave_service.dart';
 import '../../../../data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
+import '../../employee/controllers/employee_controller.dart';
 
 class LeaveController extends PaginatedController<LeaveData> {
   final LeaveService _service = LeaveService();
@@ -18,11 +20,18 @@ class LeaveController extends PaginatedController<LeaveData> {
   final TextEditingController reasonController = TextEditingController();
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
-  List<String> leaveTypes = ["annual"];
+  Rxn<DateTime> selectedStartDate = Rxn<DateTime>();
+  Rxn<DateTime> selectedEndDate = Rxn<DateTime>();
+  List<String> leaveTypes = ["annual","sick","casual","other"];
   final RxnString selectedLeaveType = RxnString(); // e.g., sick, casual, annual
   final RxBool isHalfDay = false.obs;
-  final Rx<DateTime?> startDate = Rx<DateTime?>(null);
-  final Rx<DateTime?> endDate = Rx<DateTime?>(null);
+  // final Rx<DateTime?> startDate = Rx<DateTime?>(null);
+  // final Rx<DateTime?> endDate = Rx<DateTime?>(null);
+
+  // --- EMPLOYEE ---
+  final RxList<EmployeeData> employees = <EmployeeData>[].obs;
+  final EmployeeController employeeController = Get.put(EmployeeController());
+  var selectedEmployee = Rxn<EmployeeData>();
 
   @override
   Future<List<LeaveData>> fetchItems(int page) async {
@@ -39,15 +48,51 @@ class LeaveController extends PaginatedController<LeaveData> {
   void onInit() {
     super.onInit();
     loadInitial();
+    _loadEmployees();
   }
+
+  void _loadEmployees() async {
+    try {
+      await employeeController.loadInitial(); // fetches branches
+      employees.assignAll(employeeController.items);
+    } catch (e) {
+      print("Load branches error: $e");
+    }
+  }
+
+  Future<void> getEmployeeById(String id) async {
+    try {
+      final employee = await employeeController.getEmployeeById(id);
+      if (employee != null) {
+        selectedEmployee.value = employee;
+      }
+    } catch (e) {
+      print("Get employee error: $e");
+    }
+
+  }
+
 
   void resetForm() {
     reasonController.clear();
     selectedLeaveType.value = null;
-    startDate.value = null;
-    endDate.value = null;
+    selectedStartDate.value = null;
+    selectedEndDate.value = null;
+    startDateController.clear();
+    endDateController.clear();
     isHalfDay.value = false;
+    selectedEmployee.value = null;
+    if (employeeController.items.isNotEmpty && selectedEmployee.value == null) {
+      selectedEmployee.value = employeeController.items.first;
+      selectedLeaveType.value = leaveTypes.first;
+
+
+    }
   }
+
+
+
+
 
   /// Get single leave by ID
   Future<LeaveData?> getLeaveById(String id) async {

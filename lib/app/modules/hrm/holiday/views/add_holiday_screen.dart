@@ -150,8 +150,10 @@ class AddHolidayScreen extends StatelessWidget {
       controller.holidayNameController.text = holiday!.holidayName ?? '';
       controller.selectedLeaveType.value = holiday!.leaveType ?? '';
       if (holiday!.startDate != null) {
+        print('[DEBUG]=>date ${holiday!.startDate!}');
         final start = DateTime.tryParse(holiday!.startDate!);
         if (start != null) {
+          print('[DEBUG]=>date ${start}');
           controller.selectedStartDate.value = start;
           controller.startDateController.text = DateFormat(
             'dd-MM-yyyy',
