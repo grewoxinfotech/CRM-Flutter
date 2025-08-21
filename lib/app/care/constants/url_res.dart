@@ -66,6 +66,8 @@ class UrlRes {
 
   static const String trainings = "$baseURL/trainings";
 
+  static const String documents = "$baseURL/documents";
+
   //puchase
   static const String revenue = "$baseURL/sales-revenue";
 

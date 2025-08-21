@@ -10,10 +10,12 @@ import 'package:crm_flutter/app/modules/hrm/announcement/views/announcement_scre
 import 'package:crm_flutter/app/modules/hrm/branch/views/branch_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/department/views/department_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/designation/views/designation_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/document/screen/document_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/employee/views/employee_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/holiday/views/holiday_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/leave_management/views/leave_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/payroll/views/payroll_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/role/views/role_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/debit_notes/views/debit_note_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
@@ -24,6 +26,9 @@ import 'package:crm_flutter/app/modules/sales/sales_functionality/products_servi
 import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:crm_flutter/app/test_screen.dart';
 import 'package:get/get.dart';
+
+import '../../../hrm/meeting/views/meeting_screen.dart';
+import '../../../hrm/training/views/training_screen.dart';
 
 class PurchaseFunctionController extends GetxController {
   final RxList<FunctionModel> functions = <FunctionModel>[].obs;
@@ -143,6 +148,19 @@ class PurchaseFunctionController extends GetxController {
         color: const Color(0xffad0062),
         count: 66,
         screenBuilder: TrainingScreen(),
+      ),
+      FunctionModel(
+        title: 'Document',
+        iconPath: ICRes.file,
+        color: const Color(0xff00a7ad),
+        count: 66,
+        screenBuilder: DocumentScreen(),
+      ),FunctionModel(
+        title: 'Role',
+        iconPath: ICRes.file,
+        color: const Color(0xff68ad00),
+        count: 66,
+        screenBuilder: RoleScreen(),
       ),
     ];
   }

@@ -55,6 +55,8 @@ class FunctionCard extends StatelessWidget {
                 fontSize: 14,
                 color: Get.theme.colorScheme.onPrimary,
               ),
+              textAlign: TextAlign.center,
+
             ),
           ],
         ),
