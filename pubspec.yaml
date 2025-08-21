@@ -60,6 +60,7 @@ dependencies:
   dio: ^5.4.1
   qr_flutter: ^4.1.0
   image_picker:
+  multi_view_calendar:
 
 dev_dependencies:
   flutter_test:

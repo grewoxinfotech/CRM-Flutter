@@ -28,6 +28,7 @@ import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:crm_flutter/app/test_screen.dart';
 import 'package:get/get.dart';
 
+import '../../../hrm/calendar/views/calendar_screen.dart';
 import '../../../hrm/meeting/views/meeting_screen.dart';
 import '../../../hrm/training/views/training_screen.dart';
 
@@ -171,6 +172,12 @@ class PurchaseFunctionController extends GetxController {
         color: const Color(0xff0028ad),
         count: 66,
         screenBuilder: AttendanceScreen(),
+      ),FunctionModel(
+        title: 'Calendar',
+        iconPath: ICRes.calendar,
+        color: const Color(0xff0028ad),
+        count: 66,
+        screenBuilder: CalendarScreen(),
       ),
     ];
   }
