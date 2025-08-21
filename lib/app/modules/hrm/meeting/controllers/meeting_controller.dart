@@ -26,7 +26,7 @@ class MeetingController extends PaginatedController<MeetingData> {
   final TextEditingController endTimeController = TextEditingController();
 
   RxString selectedDepartment = "".obs;
-  RxList<String> selectedEmployees = <String>[].obs;
+  RxList<EmployeeData> selectedEmployees = <EmployeeData>[].obs;
   RxString selectedClientId = "".obs;
 
   Rxn<DateTime> selectedDate = Rxn<DateTime>();
@@ -79,6 +79,19 @@ class MeetingController extends PaginatedController<MeetingData> {
       employees.assignAll(employeeController.items);
     } catch (e) {
       print("Load branches error: $e");
+    }
+  }
+
+  Future<void> loadSelectedEmployees(List<String> ids) async {
+    try {
+      for (final id in ids) {
+        final employee = await employeeController.getEmployeeById(id);
+        if (employee != null) {
+          selectedEmployees.add(employee);
+        }
+      }
+    } catch (e) {
+      print("Load employees error: $e");
     }
   }
 

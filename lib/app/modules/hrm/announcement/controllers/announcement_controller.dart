@@ -25,7 +25,8 @@ class AnnouncementController extends PaginatedController<AnnouncementData> {
   // --- BRANCHES ---
   final RxList<BranchData> branches = <BranchData>[].obs;
   final BranchController branchController = Get.put(BranchController());
-  RxList<String> selectedBranch = <String>[].obs;
+  // RxList<String> selectedBranch = <String>[].obs;
+  RxList<BranchData> selectedBranch = <BranchData>[].obs;
 
   @override
   Future<List<AnnouncementData>> fetchItems(int page) async {
@@ -52,9 +53,6 @@ class AnnouncementController extends PaginatedController<AnnouncementData> {
     timeController.clear();
     dateController.clear();
     selectedBranch.value = [];
-    if (branches.isNotEmpty) {
-      selectedBranch.add(branches.first.id!);
-    }
   }
 
   void _loadBranches() async {
@@ -63,6 +61,19 @@ class AnnouncementController extends PaginatedController<AnnouncementData> {
       branches.assignAll(branchController.items);
     } catch (e) {
       print("Load branches error: $e");
+    }
+  }
+
+  Future<void> loadSelectedBranches(List<String> ids) async {
+    try {
+      for (final id in ids) {
+        final employee = await branchController.getBranchById(id);
+        if (employee != null) {
+          selectedBranch.add(employee);
+        }
+      }
+    } catch (e) {
+      print("Load employees error: $e");
     }
   }
 

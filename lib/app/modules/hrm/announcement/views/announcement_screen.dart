@@ -98,6 +98,7 @@ class AnnouncementScreen extends StatelessWidget {
                                       color: Colors.blue,
                                     ),
                                     onPressed: () {
+                                      controller.resetForm();
                                       Get.to(
                                         () => AddAnnouncementScreen(
                                           announcement: announcement,

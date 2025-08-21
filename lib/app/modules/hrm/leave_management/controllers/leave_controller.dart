@@ -22,7 +22,7 @@ class LeaveController extends PaginatedController<LeaveData> {
   final TextEditingController endDateController = TextEditingController();
   Rxn<DateTime> selectedStartDate = Rxn<DateTime>();
   Rxn<DateTime> selectedEndDate = Rxn<DateTime>();
-  List<String> leaveTypes = ["annual","sick","casual","other"];
+  List<String> leaveTypes = ["annual", "sick", "casual", "other"];
   final RxnString selectedLeaveType = RxnString(); // e.g., sick, casual, annual
   final RxBool isHalfDay = false.obs;
   // final Rx<DateTime?> startDate = Rx<DateTime?>(null);
@@ -69,9 +69,7 @@ class LeaveController extends PaginatedController<LeaveData> {
     } catch (e) {
       print("Get employee error: $e");
     }
-
   }
-
 
   void resetForm() {
     reasonController.clear();
@@ -85,14 +83,8 @@ class LeaveController extends PaginatedController<LeaveData> {
     if (employeeController.items.isNotEmpty && selectedEmployee.value == null) {
       selectedEmployee.value = employeeController.items.first;
       selectedLeaveType.value = leaveTypes.first;
-
-
     }
   }
-
-
-
-
 
   /// Get single leave by ID
   Future<LeaveData?> getLeaveById(String id) async {
@@ -118,6 +110,19 @@ class LeaveController extends PaginatedController<LeaveData> {
   Future<bool> createLeave(LeaveData leave) async {
     try {
       final success = await _service.createLeave(leave);
+      if (success) {
+        await loadInitial();
+      }
+      return success;
+    } catch (e) {
+      print("Create leave error: $e");
+      return false;
+    }
+  }
+
+  Future<bool> approveLeave(LeaveData leave) async {
+    try {
+      final success = await _service.approveLeave(leave);
       if (success) {
         await loadInitial();
       }

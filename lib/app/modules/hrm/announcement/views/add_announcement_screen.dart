@@ -1,5 +1,6 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/hrm/hrm_system/branch/branch_model.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
@@ -143,7 +144,10 @@ class AddAnnouncementScreen extends StatelessWidget {
     }
 
     final announcementData = AnnouncementData(
-      branch: Branch(branch: controller.selectedBranch),
+      branch: Branch(
+        branch:
+            controller.selectedBranch.map((element) => element.id!).toList(),
+      ),
       title: controller.titleController.text,
       description: controller.descriptionController.text,
       date: controller.selectedDate.value?.toIso8601String(),
@@ -171,7 +175,10 @@ class AddAnnouncementScreen extends StatelessWidget {
     if (!controller.formKey.currentState!.validate()) return;
 
     final announcementData = AnnouncementData(
-      branch: Branch(branch: controller.selectedBranch),
+      branch: Branch(
+        branch:
+            controller.selectedBranch.map((element) => element.id!).toList(),
+      ),
       title: controller.titleController.text,
       description: controller.descriptionController.text,
       date: controller.selectedDate.value?.toIso8601String(),
@@ -207,6 +214,7 @@ class AddAnnouncementScreen extends StatelessWidget {
       controller.titleController.text = announcement!.title ?? '';
       controller.descriptionController.text = announcement!.description ?? '';
       controller.selectedDate.value = DateTime.tryParse(announcement!.date!);
+      controller.loadSelectedBranches(announcement!.branch?.branch ?? []);
       if (announcement!.date != null) {
         final date = DateTime.tryParse(announcement!.date!);
         controller.selectedDate.value = date;
@@ -228,12 +236,27 @@ class AddAnnouncementScreen extends StatelessWidget {
         }
       }
 
-      if (announcement!.branch != null &&
-          announcement!.branch!.branch != null &&
-          announcement!.branch!.branch!.isNotEmpty) {
-        // announcement.branch!.branch is a list of branch IDs
-        controller.selectedBranch.value = announcement!.branch!.branch!;
+      if (announcement!.time != null) {
+        final parts = announcement!.time!.split(":");
+
+        if (parts.length >= 2) {
+          final hour = int.tryParse(parts[0]) ?? 0;
+          final minute = int.tryParse(parts[1]) ?? 0;
+          final endTime = TimeOfDay(hour: hour, minute: minute);
+
+          controller.selectedTime.value = endTime; // if you store it reactively
+          controller.timeController.text = endTime.format(
+            context,
+          ); // optional for text field
+        }
       }
+
+      // if (announcement!.branch != null &&
+      //     announcement!.branch!.branch != null &&
+      //     announcement!.branch!.branch!.isNotEmpty) {
+      //   // announcement.branch!.branch is a list of branch IDs
+      //   controller.selectedBranch.value = announcement!.branch!.branch!;
+      // }
     }
 
     return Scaffold(
@@ -257,17 +280,18 @@ class AddAnnouncementScreen extends StatelessWidget {
               ),
               SizedBox(height: AppSpacing.medium),
 
-              /// Branch Dropdown
+              // /// Branch Dropdown
               Obx(
-                () => CrmDropdownField<String>(
+                () => CrmDropdownField<BranchData>(
                   title: 'Branch',
-                  value: controller.selectedBranch,
+                  showSelectedItems: false,
+                  value: controller.selectedBranch.value,
                   isMultiSelect: true,
                   items:
                       controller.branches
                           .map(
-                            (branch) => DropdownMenuItem<String>(
-                              value: branch.id!,
+                            (branch) => DropdownMenuItem<BranchData>(
+                              value: branch,
                               child: Text(branch.branchName ?? ''),
                             ),
                           )
@@ -279,6 +303,49 @@ class AddAnnouncementScreen extends StatelessWidget {
                 ),
               ),
 
+              Obx(
+                () => Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children:
+                      controller.selectedBranch.map((branch) {
+                        if (branch == null) return const SizedBox.shrink();
+                        return Chip(
+                          label: Text(branch.branchName ?? 'Unnamed'),
+                          deleteIcon: const Icon(Icons.close),
+                          onDeleted: () {
+                            controller.selectedBranch.remove(branch);
+                          },
+                        );
+                      }).toList(),
+                ),
+              ),
+
+              // Obx(
+              //   () => CrmDropdownField<String>(
+              //     title: 'Branch',
+              //     value:
+              //         controller.selectedBranch.isNotEmpty
+              //             ? controller.selectedBranch.first
+              //             : null,
+              //     isMultiSelect: true,
+              //     items:
+              //         controller.branches
+              //             .map(
+              //               (branch) => DropdownMenuItem<String>(
+              //                 value: branch.id!,
+              //                 child: Text(branch.branchName ?? ''),
+              //               ),
+              //             )
+              //             .toList(),
+              //     onChanged: (branchId) {
+              //       if (branchId != null) {
+              //         controller.selectedBranch.assign(branchId);
+              //       }
+              //     },
+              //     isRequired: true,
+              //   ),
+              // ),
               const SizedBox(height: 24),
 
               /// Description

@@ -58,6 +58,8 @@ class UrlRes {
 
   static const String leaves = "$baseURL/leaves";
 
+  static const String approveLeaves = "$leaves/approve";
+
   static const String salary = "$baseURL/salary";
 
   static const String announcements = "$baseURL/announcements";
@@ -67,6 +69,8 @@ class UrlRes {
   static const String trainings = "$baseURL/trainings";
 
   static const String documents = "$baseURL/documents";
+
+  static const String attendance = "$baseURL/attendance";
 
   //puchase
   static const String revenue = "$baseURL/sales-revenue";

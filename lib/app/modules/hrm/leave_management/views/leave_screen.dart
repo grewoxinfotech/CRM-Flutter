@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
 import 'package:crm_flutter/app/modules/hrm/leave_management/views/add_leave_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../controllers/leave_controller.dart';
+import '../widget/leave_action_screen.dart';
 import '../widget/leave_card.dart';
 
 class LeaveScreen extends StatelessWidget {
@@ -86,7 +88,36 @@ class LeaveScreen extends StatelessWidget {
                         final leave = controller.items[index];
                         return Stack(
                           children: [
-                            LeaveCard(leave: leave),
+                            GestureDetector(
+                              onTap:
+                                  leave.status == "pending"
+                                      ? () async {
+                                        final result =
+                                            await showLeaveReasonDialog(
+                                              context,
+                                              leave,
+                                            );
+                                        if (result == 'approve') {
+                                          final approveLeave = LeaveData(
+                                            id: leave.id,
+                                            status: "approved",
+                                            employeeId: leave.employeeId,
+                                            remarks: "Leave approved.",
+                                          );
+                                          controller.approveLeave(approveLeave);
+                                        } else if (result == 'reject') {
+                                          final rejectLeave = LeaveData(
+                                            id: leave.id,
+                                            status: "rejected",
+                                            employeeId: leave.employeeId,
+                                            remarks: "Leave rejected.",
+                                          );
+                                          controller.approveLeave(rejectLeave);
+                                        }
+                                      }
+                                      : null,
+                              child: LeaveCard(leave: leave),
+                            ),
                             Positioned(
                               right: 8,
                               bottom: 8,
@@ -99,7 +130,7 @@ class LeaveScreen extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       Get.to(
-                                            () => AddLeaveScreen(
+                                        () => AddLeaveScreen(
                                           leave: leave,
                                           isFromEdit: true,
                                         ),
