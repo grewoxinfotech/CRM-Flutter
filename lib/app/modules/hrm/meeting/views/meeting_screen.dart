@@ -98,12 +98,13 @@ class MeetingScreen extends StatelessWidget {
                                       color: Colors.blue,
                                     ),
                                     onPressed: () {
-                                      Get.to(
-                                        () => AddMeetingScreen(
+                                      Get.to(() {
+                                        controller.resetForm();
+                                        return AddMeetingScreen(
                                           meeting: meeting,
                                           isFromEdit: true,
-                                        ),
-                                      );
+                                        );
+                                      });
                                     },
                                   ),
                                   IconButton(

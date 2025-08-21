@@ -242,10 +242,10 @@ class EmployeeCard extends StatelessWidget {
       onTap: onTap,
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.medium),
-        // margin: const EdgeInsets.symmetric(
-        //   horizontal: AppMargin.large,
-        //   vertical: AppMargin.small,
-        // ),
+        margin: const EdgeInsets.symmetric(
+          horizontal: AppMargin.small,
+          vertical: AppMargin.small,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

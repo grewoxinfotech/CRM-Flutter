@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/data/network/hrm/employee/employee_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -96,7 +97,8 @@ class AddMeetingScreen extends StatelessWidget {
       title: controller.titleController.text,
       department: controller.selectedDepartment.value,
       section: "meeting",
-      employee: controller.selectedEmployees,
+      employee:
+          controller.selectedEmployees.map((element) => element.id!).toList(),
       description: controller.descriptionController.text,
       date: controller.selectedDate.value?.toIso8601String().split("T").first,
       startTime: formatTimeOfDay(controller.selectedStartTime.value),
@@ -127,7 +129,8 @@ class AddMeetingScreen extends StatelessWidget {
       title: controller.titleController.text,
       department: controller.selectedDepartment.value,
       section: "meeting",
-      employee: controller.selectedEmployees,
+      employee:
+          controller.selectedEmployees.map((element) => element.id!).toList(),
       description: controller.descriptionController.text,
       date: controller.selectedDate.value?.toIso8601String().split("T").first,
       startTime: formatTimeOfDay(controller.selectedStartTime.value),
@@ -158,10 +161,47 @@ class AddMeetingScreen extends StatelessWidget {
       controller.descriptionController.text = meeting!.description ?? "";
       controller.meetingLinkController.text = meeting!.meetingLink ?? "";
       controller.selectedDepartment.value = meeting!.department ?? "";
-      controller.selectedEmployees.value = meeting!.employee ?? [];
+      controller.loadSelectedEmployees(meeting!.employee!);
       controller.status.value = meeting!.status ?? "scheduled";
+      controller.dateController.text =
+          meeting!.date != null
+              ? DateFormat(
+                'yyyy-MM-dd',
+              ).format(DateTime.tryParse(meeting!.date!)!)
+              : "";
       controller.selectedDate.value =
           meeting!.date != null ? DateTime.tryParse(meeting!.date!) : null;
+      if (meeting!.startTime != null) {
+        final parts = meeting!.startTime!.split(":");
+
+        if (parts.length >= 2) {
+          final hour = int.tryParse(parts[0]) ?? 0;
+          final minute = int.tryParse(parts[1]) ?? 0;
+          final startTime = TimeOfDay(hour: hour, minute: minute);
+
+          controller.selectedStartTime.value =
+              startTime; // if you store it reactively
+          controller.startTimeController.text = startTime.format(
+            context,
+          ); // optional for text field
+        }
+
+        if (meeting!.endTime != null) {
+          final parts = meeting!.endTime!.split(":");
+
+          if (parts.length >= 2) {
+            final hour = int.tryParse(parts[0]) ?? 0;
+            final minute = int.tryParse(parts[1]) ?? 0;
+            final endTime = TimeOfDay(hour: hour, minute: minute);
+
+            controller.selectedEndTime.value =
+                endTime; // if you store it reactively
+            controller.endTimeController.text = endTime.format(
+              context,
+            ); // optional for text field
+          }
+        }
+      }
     }
 
     return Scaffold(
@@ -210,16 +250,39 @@ class AddMeetingScreen extends StatelessWidget {
 
               /// Employees Dropdown (multi-select simulation)
               /// Branch Dropdown
+              // Obx(
+              //   () => CrmDropdownField<String>(
+              //     title: 'Employee',
+              //     value: controller.selectedEmployees,
+              //     isMultiSelect: true,
+              //     items:
+              //         controller.employees
+              //             .map(
+              //               (employee) => DropdownMenuItem<String>(
+              //                 value: employee.id!,
+              //                 child: Text(employee.firstName ?? ''),
+              //               ),
+              //             )
+              //             .toList(),
+              //     onChanged: (branchId) {
+              //       controller.selectedEmployees.value = branchId!;
+              //     },
+              //     isRequired: true,
+              //   ),
+              // ),
+
+              // /// Branch Dropdown
               Obx(
-                () => CrmDropdownField<String>(
+                () => CrmDropdownField<EmployeeData>(
                   title: 'Employee',
-                  value: controller.selectedEmployees,
+                  showSelectedItems: false,
+                  value: controller.selectedEmployees.value,
                   isMultiSelect: true,
                   items:
                       controller.employees
                           .map(
-                            (employee) => DropdownMenuItem<String>(
-                              value: employee.id!,
+                            (employee) => DropdownMenuItem<EmployeeData>(
+                              value: employee,
                               child: Text(employee.firstName ?? ''),
                             ),
                           )
@@ -228,6 +291,24 @@ class AddMeetingScreen extends StatelessWidget {
                     controller.selectedEmployees.value = branchId!;
                   },
                   isRequired: true,
+                ),
+              ),
+
+              Obx(
+                () => Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children:
+                      controller.selectedEmployees.map((employee) {
+                        if (employee == null) return const SizedBox.shrink();
+                        return Chip(
+                          label: Text(employee.firstName ?? 'Unnamed'),
+                          deleteIcon: const Icon(Icons.close),
+                          onDeleted: () {
+                            controller.selectedEmployees.remove(employee);
+                          },
+                        );
+                      }).toList(),
                 ),
               ),
 

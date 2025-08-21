@@ -7,6 +7,7 @@ import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/announcement/views/announcement_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/attendance/views/attendance_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/branch/views/branch_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/department/views/department_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/designation/views/designation_screen.dart';
@@ -121,7 +122,8 @@ class PurchaseFunctionController extends GetxController {
         color: const Color(0xff00ad99),
         count: 66,
         screenBuilder: LeaveScreen(),
-      ),FunctionModel(
+      ),
+      FunctionModel(
         title: 'Pay Roll',
         iconPath: ICRes.calendar,
         color: const Color(0xff6e00ad),
@@ -155,12 +157,20 @@ class PurchaseFunctionController extends GetxController {
         color: const Color(0xff00a7ad),
         count: 66,
         screenBuilder: DocumentScreen(),
-      ),FunctionModel(
+      ),
+      FunctionModel(
         title: 'Role',
         iconPath: ICRes.file,
         color: const Color(0xff68ad00),
         count: 66,
         screenBuilder: RoleScreen(),
+      ),
+      FunctionModel(
+        title: 'Attendance',
+        iconPath: ICRes.file,
+        color: const Color(0xff0028ad),
+        count: 66,
+        screenBuilder: AttendanceScreen(),
       ),
     ];
   }
