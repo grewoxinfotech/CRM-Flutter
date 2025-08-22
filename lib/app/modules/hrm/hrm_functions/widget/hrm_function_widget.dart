@@ -1,23 +1,23 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/modules/hrm/hrm_functions/controller/hrm_function_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../purchase/purchase_functions/widget/purchase_function_card.dart';
-import '../controller/purchase_function_controller.dart';
 
-class PurchaseFunctionsWidget extends StatelessWidget {
-  const PurchaseFunctionsWidget({super.key});
+class HrmFunctionsWidget extends StatelessWidget {
+  const HrmFunctionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(PurchaseFunctionController());
+    final controller = Get.put(HrmFunctionController());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppMargin.medium),
       child: Column(
         children: [
           GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               mainAxisSpacing: AppPadding.small,
               crossAxisSpacing: AppPadding.small,
               childAspectRatio: 1.2,
@@ -33,9 +33,9 @@ class PurchaseFunctionsWidget extends StatelessWidget {
                 color: controller.functions[i].color,
                 onTap:
                     () =>
-                        (controller.functions[i].screenBuilder != null)
-                            ? Get.to(controller.functions[i].screenBuilder)
-                            : null,
+                (controller.functions[i].screenBuilder != null)
+                    ? Get.to(controller.functions[i].screenBuilder)
+                    : null,
               );
             },
           ),

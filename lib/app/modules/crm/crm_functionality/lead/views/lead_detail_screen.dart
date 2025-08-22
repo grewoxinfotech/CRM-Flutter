@@ -42,7 +42,9 @@ import 'package:crm_flutter/app/data/network/crm/crm_system/stage/controller/sta
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
+import '../../../../../care/constants/access_res.dart';
 import '../../../../../data/network/crm/contact/medel/contact_medel.dart';
+import '../../../../access/controller/access_controller.dart';
 import '../../../../project/notes/widget/note_card.dart';
 import '../../activity/views/activity_card.dart';
 import '../../company/view/company_detail_screen.dart';
@@ -64,6 +66,7 @@ class LeadDetailScreen extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+
     final tabBarController = Get.put(TabBarController());
     final leadController = Get.find<LeadController>();
     final usersController = Get.find<UsersController>();
@@ -304,6 +307,7 @@ class LeadDetailScreen extends StatelessWidget {
     String leadId,
     BuildContext context,
   ) {
+    final accessController = Get.find<AccessController>();
     // Initial file load
     fileController.refreshFiles(leadId, isDeal: true);
 
@@ -336,6 +340,7 @@ class LeadDetailScreen extends StatelessWidget {
             },
           );
         }),
+        if(accessController.can(AccessModule.lead, AccessAction.create))
         Positioned(
           right: AppPadding.medium,
           bottom: AppPadding.medium,

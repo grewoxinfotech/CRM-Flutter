@@ -32,7 +32,7 @@ import '../../../hrm/calendar/views/calendar_screen.dart';
 import '../../../hrm/meeting/views/meeting_screen.dart';
 import '../../../hrm/training/views/training_screen.dart';
 
-class PurchaseFunctionController extends GetxController {
+class HrmFunctionController extends GetxController {
   final RxList<FunctionModel> functions = <FunctionModel>[].obs;
   @override
   void onInit() {
@@ -62,27 +62,103 @@ class PurchaseFunctionController extends GetxController {
 
     functions.value = [
       FunctionModel(
-        title: 'Vendor',
-        iconPath: ICRes.clients,
-        color: const Color(0xffFFCC01),
-        count: 45,
-        screenBuilder: VendorsScreen(),
+        title: 'Employee',
+        iconPath: ICRes.employee,
+        color: const Color(0xffad0000),
+        count: 66,
+        screenBuilder: EmployeeScreen(),
       ),
       FunctionModel(
-        title: 'Billing',
-        iconPath: ICRes.customer,
+        title: 'Branch',
+        iconPath: ICRes.employee,
+        color: const Color(0xff0070ad),
+        count: 66,
+        screenBuilder: BranchScreen(),
+      ),
+      FunctionModel(
+        title: 'Designation',
+        iconPath: ICRes.employee,
+        color: const Color(0xff2000ad),
+        count: 66,
+        screenBuilder: DesignationScreen(),
+      ),
+      FunctionModel(
+        title: 'Department',
+        iconPath: ICRes.employee,
+        color: const Color(0xffad4800),
+        count: 66,
+        screenBuilder: DepartmentScreen(),
+      ),
+      FunctionModel(
+        title: 'Holiday',
+        iconPath: ICRes.calendar,
+        color: const Color(0xff00ad09),
+        count: 66,
+        screenBuilder: HolidayScreen(),
+      ),
+      FunctionModel(
+        title: 'Leave Management',
+        iconPath: ICRes.calendar,
+        color: const Color(0xff00ad99),
+        count: 66,
+        screenBuilder: LeaveScreen(),
+      ),
+      FunctionModel(
+        title: 'Pay Roll',
+        iconPath: ICRes.calendar,
+        color: const Color(0xff6e00ad),
+        count: 66,
+        screenBuilder: PayrollScreen(),
+      ),
+      FunctionModel(
+        title: 'Announcement',
+        iconPath: ICRes.notifications,
+        color: const Color(0xff005fad),
+        count: 66,
+        screenBuilder: AnnouncementScreen(),
+      ),
+      FunctionModel(
+        title: 'Meeting',
+        iconPath: ICRes.notifications,
+        color: const Color(0xff3a00ad),
+        count: 66,
+        screenBuilder: MeetingScreen(),
+      ),
+      FunctionModel(
+        title: 'Training',
+        iconPath: ICRes.notifications,
+        color: const Color(0xffad0062),
+        count: 66,
+        screenBuilder: TrainingScreen(),
+      ),
+      FunctionModel(
+        title: 'Document',
+        iconPath: ICRes.file,
         color: const Color(0xff00a7ad),
         count: 66,
-        screenBuilder: BillingScreen(),
+        screenBuilder: DocumentScreen(),
       ),
       FunctionModel(
-        title: 'Debit Note',
-        iconPath: ICRes.document,
+        title: 'Role',
+        iconPath: ICRes.file,
         color: const Color(0xff68ad00),
         count: 66,
-        screenBuilder: DebitNotesScreen(),
+        screenBuilder: RoleScreen(),
       ),
-
+      FunctionModel(
+        title: 'Attendance',
+        iconPath: ICRes.file,
+        color: const Color(0xff0028ad),
+        count: 66,
+        screenBuilder: AttendanceScreen(),
+      ),
+      FunctionModel(
+        title: 'Calendar',
+        iconPath: ICRes.calendar,
+        color: const Color(0xffad0000),
+        count: 66,
+        screenBuilder: CalendarScreen(),
+      ),
     ];
   }
 }

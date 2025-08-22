@@ -1,4 +1,6 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
+import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/task/task/controller/task_controller.dart';
 import 'package:crm_flutter/app/modules/task/task/views/task_add_screen.dart';
 import 'package:crm_flutter/app/modules/task/task/views/task_edit_screen.dart';
@@ -16,6 +18,7 @@ class TaskScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.put(AccessController());
     final TaskController taskController = Get.put(TaskController());
     
     return Scaffold(
@@ -23,7 +26,9 @@ class TaskScreen extends StatelessWidget {
         leading: const CrmBackButton(), 
         title: const Text("Tasks")
       ),
-      floatingActionButton: CrmButton(
+      floatingActionButton:
+          accessController.can(AccessModule.task, AccessAction.create)?
+      CrmButton(
                 title: "Add New Task",
         onTap: () async {
           final userData = await SecureStorage.getUserData();
@@ -41,7 +46,7 @@ class TaskScreen extends StatelessWidget {
             );
           }
         },
-      ),
+      ):null,
       body: FutureBuilder(
         future: taskController.refreshData(),
         builder: (context, snapshot) {

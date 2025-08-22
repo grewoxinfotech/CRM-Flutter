@@ -55,7 +55,7 @@ class AuthController extends GetxController {
         print("[DEBUG]=> created Roles: ${roles.map((e) => e.toJson())}");
         print("[DEBUG]=> created Roles: ${roles.length}");
         print("[DEBUG]=> User Get By Id: ${user!.toJson()}");
-        final role = await _dbHelper.getRoleById(user!.roleId!);
+        final role = await _dbHelper.getRoleById(user.roleId!);
         print("[DEBUG]=> Role Get By Id: ${role!.toJson()}");
       }
     } finally {

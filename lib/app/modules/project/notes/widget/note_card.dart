@@ -5,6 +5,9 @@ import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../care/constants/access_res.dart';
+import '../../../access/controller/access_controller.dart';
+
 class NoteCard extends StatelessWidget {
   final String? id;
   final String? relatedId;
@@ -39,6 +42,7 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accessController = Get.find<AccessController>();
     return GestureDetector(
       onTap: onTap,
       child: CrmCard(padding: const EdgeInsets.all(10),
@@ -60,7 +64,9 @@ class NoteCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                if(accessController.can(AccessModule.deal, AccessAction.update)&&accessController.can(AccessModule.salesInvoice, AccessAction.update))
                 CrmIc(iconPath: ICRes.edit,color: ColorRes.success,onTap: onEdit,width: 50,),
+                if(accessController.can(AccessModule.deal, AccessAction.delete)&&accessController.can(AccessModule.salesInvoice, AccessAction.delete))
                 CrmIc(iconPath: ICRes.delete,color: ColorRes.error,onTap: onDelete,width: 50,),
               ],
             )

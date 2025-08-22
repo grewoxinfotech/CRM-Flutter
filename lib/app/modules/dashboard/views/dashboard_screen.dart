@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/home/views/home_screen.dart';
+import 'package:crm_flutter/app/modules/hrm/hrm_functions/view/hrm_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functions/view/purchase_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/app_bar/crm_app_bar.dart';
 import 'package:crm_flutter/app/widgets/bar/navigation_bar/crm_navigation_Bar.dart';
@@ -34,7 +35,7 @@ class DashboardScreen extends StatelessWidget {
         } else if (navigationController.currentIndex.value == 3) {
           return PurchaseScreen();
         } else if (navigationController.currentIndex.value == 4) {
-          return Center(child: Text("No Update"));
+          return HrmScreen();
         } else if (navigationController.currentIndex.value == 5) {
           return Center(child: Text("No Update"));
         } else {

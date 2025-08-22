@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../care/constants/access_res.dart';
+import '../../../access/controller/access_controller.dart';
+
 class TaskCard extends StatelessWidget {
   final String? id;
   final String? relatedId;
@@ -259,6 +262,7 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accessController = Get.find<AccessController>();
     final Color primary = Get.theme.colorScheme.onPrimary;
     final Color secondary = Get.theme.colorScheme.onSecondary;
     final Color borderColor = Get.theme.dividerColor;
@@ -437,12 +441,15 @@ class TaskCard extends StatelessWidget {
                 // Action Buttons
                 Row(
                   children: [
+                    if (accessController.can(AccessModule.task, AccessAction.update))
                     CrmIc(
                       iconPath: ICRes.edit,
                       color: ColorRes.success,
                       onTap: onEdit,
                     ),
                     const SizedBox(width: 16),
+                    if (accessController.can(AccessModule.task, AccessAction.delete))
+
                     CrmIc(
                       iconPath: ICRes.delete,
                       color: ColorRes.error,

@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
@@ -7,6 +8,8 @@ import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+
+import '../../../../access/controller/access_controller.dart';
 
 class LeadOverviewCard extends StatelessWidget {
   final String? id;
@@ -76,6 +79,8 @@ class LeadOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accessController = Get.find<AccessController>();
+
     Color textPrimary = Get.theme.colorScheme.onPrimary;
     Color textSecondary = Get.theme.colorScheme.onSecondary;
 
@@ -306,6 +311,7 @@ class LeadOverviewCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              if (accessController.can(AccessModule.lead, AccessAction.update))
               Expanded(
                 child: CrmButton(
                   title: "Edit",
@@ -319,6 +325,7 @@ class LeadOverviewCard extends StatelessWidget {
                 ),
               ),
               AppSpacing.horizontalSmall,
+              if (accessController.can(AccessModule.lead, AccessAction.delete))
               Expanded(
                 child: CrmButton(
                   title: "Delete",

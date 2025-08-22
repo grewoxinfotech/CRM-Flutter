@@ -31,6 +31,8 @@ import 'package:crm_flutter/app/data/network/sales_invoice/controller/sales_invo
 import 'package:crm_flutter/app/widgets/button/crm_icon_button.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/follow_up_card.dart';
 
+import '../../../../../care/constants/access_res.dart';
+import '../../../../access/controller/access_controller.dart';
 import '../../../../project/notes/widget/note_card.dart';
 import '../../activity/views/activity_card.dart';
 import '../../sales_invoice/pages/sales_invoice_create_page.dart';
@@ -215,6 +217,7 @@ class DealDetailScreen extends StatelessWidget {
     String dealId,
     BuildContext context,
   ) {
+    final accessController = Get.find<AccessController>();
     // Initial file load
     fileController.refreshFiles(dealId, isDeal: true);
 
@@ -244,6 +247,7 @@ class DealDetailScreen extends StatelessWidget {
             },
           ),
         ),
+        if(accessController.can(AccessModule.deal, AccessAction.create))
         Positioned(
           right: AppPadding.medium,
           bottom: AppPadding.medium,
@@ -314,6 +318,7 @@ class DealDetailScreen extends StatelessWidget {
     String dealId,
     BuildContext context,
   ) {
+    final accessController = Get.find<AccessController>();
     return Stack(
       children: [
         Obx(
@@ -345,6 +350,7 @@ class DealDetailScreen extends StatelessWidget {
             },
           ),
         ),
+        if(accessController.can(AccessModule.deal, AccessAction.create)&&accessController.can(AccessModule.salesInvoice, AccessAction.create))
         Positioned(
           right: AppPadding.medium,
           bottom: AppPadding.medium,

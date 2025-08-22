@@ -2,6 +2,7 @@ import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/controller/label_controller.dart';
 import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
+import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/bindings/lead_binding.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_detail_screen.dart';
@@ -21,6 +22,8 @@ class LeadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      final accessController = Get.find<AccessController>();
+
     // Initialize required controllers
     Get.put(UsersController());
     Get.put(RolesService());

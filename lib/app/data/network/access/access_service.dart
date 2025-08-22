@@ -32,6 +32,7 @@ class AccessService {
 
       if (permList is List) {
         for (var item in permList) {
+          print("item: $item");
           // Accept any map-like object
           if (item is Map) {
             final permsList = item['permissions'];

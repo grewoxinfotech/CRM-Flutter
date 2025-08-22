@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
@@ -6,6 +7,8 @@ import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../../access/controller/access_controller.dart';
 
 class FileCard extends StatelessWidget {
   final String? id;
@@ -128,6 +131,7 @@ class FileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accessController = Get.find<AccessController>();
     Color textPrimary = Get.theme.colorScheme.onPrimary;
     Color textSecondary = Get.theme.colorScheme.onSecondary;
     double cardHeight = 100;
@@ -240,6 +244,7 @@ class FileCard extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if(accessController.can(AccessModule.lead, AccessAction.update))
                   if (onEdit != null)
                     CrmIc(
                       iconPath: ICRes.edit,
@@ -247,6 +252,7 @@ class FileCard extends StatelessWidget {
                       onTap: onEdit,
                     ),
                   SizedBox(width: 8),
+                  if(accessController.can(AccessModule.lead, AccessAction.delete))
                   if (onDelete != null)
                     CrmIc(
                       iconPath: ICRes.delete,

@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/views/deal_add_screen.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/views/deal_detail_screen.dart';
@@ -10,6 +11,8 @@ import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../access/controller/access_controller.dart';
+
 class DealScreen extends StatelessWidget {
 
 
@@ -17,6 +20,7 @@ class DealScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accessController = Get.find<AccessController>();
     Get.lazyPut<DealController>(() => DealController());
     final DealController dealController = Get.find<DealController>();
     return Scaffold(
@@ -27,10 +31,13 @@ class DealScreen extends StatelessWidget {
         centerTitle: false,
         backgroundColor: Colors.transparent,
       ),
-      floatingActionButton: CrmButton(
+
+      floatingActionButton:
+      accessController.can(AccessModule.deal, AccessAction.create) ?
+      CrmButton(
         title: "Add Deal",
         onTap: () => Get.to(DealAddScreen()),
-      ),
+      ):null,
       body: FutureBuilder(
         future: dealController.getDeals(),
         builder: (context, snapshot) {
