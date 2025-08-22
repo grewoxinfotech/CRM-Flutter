@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/home/views/home_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functions/view/purchase_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/app_bar/crm_app_bar.dart';
@@ -16,6 +17,7 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<AccessController>(() => AccessController());
     final navigationController = Get.put(NavigationController());
     return Scaffold(
       extendBody: true,

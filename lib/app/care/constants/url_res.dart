@@ -72,6 +72,8 @@ class UrlRes {
 
   static const String attendance = "$baseURL/attendance";
 
+  static const String calendar = "$baseURL/calendar";
+
   //puchase
   static const String revenue = "$baseURL/sales-revenue";
 

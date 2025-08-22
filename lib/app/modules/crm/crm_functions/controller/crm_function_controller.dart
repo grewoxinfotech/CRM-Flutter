@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/data/database/helper/sqlite_db_helper.dart';
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/controller/label_controller.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_service.dart';
 import 'package:crm_flutter/app/data/network/system/function_model.dart';
@@ -14,15 +16,56 @@ import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:crm_flutter/app/test_screen.dart';
 import 'package:get/get.dart';
 
+import '../../../access/controller/access_controller.dart';
+import '../../crm_functionality/deal/views/deal_screen.dart';
+
 class CrmFunctionController extends GetxController {
   final RxList<FunctionModel> functions = <FunctionModel>[].obs;
   @override
   void onInit() {
     super.onInit();
-    updateFunctions();
+    _initAccessController();
   }
 
-  void updateFunctions() {
+  // Future<void> _initAccessController() async {
+  //   // Replace this with actual role data fetched from RoleController / RolesService
+  //   final DBHelper dbHelper = DBHelper();
+  //   final User = await SecureStorage.getUserData();
+  //   final roleId = User!.roleId;
+  //   final roleData = await dbHelper.getRoleById(roleId!);
+  //   final accessController = Get.find<AccessController>();
+  //   accessController.init(roleData!.permissions!);
+  // }
+
+  Future<void> _initAccessController() async {
+    // Initialize AccessController if not already
+    AccessController accessController;
+    if (!Get.isRegistered<AccessController>()) {
+      accessController = Get.put(AccessController());
+    } else {
+      accessController = Get.find<AccessController>();
+    }
+
+    // Fetch role data
+    final DBHelper dbHelper = DBHelper();
+    final user = await SecureStorage.getUserData();
+    final roleId = user?.roleId;
+    if (roleId == null) return;
+
+    final roleData = await dbHelper.getRoleById(roleId);
+    if (roleData == null) return;
+
+    // Initialize AccessController with permissions
+    accessController.init(roleData.permissions ?? {});
+
+    // Now safely update functions
+    updateFunctions(accessController);
+  }
+
+  void updateFunctions(AccessController accessController) {
+    print(
+      'updateFunctions called ${accessController.can('dashboards-deal', 'view')}',
+    );
     // Initialize RolesService first
     if (!Get.isRegistered<RolesService>()) {
       Get.put(RolesService());
@@ -42,6 +85,10 @@ class CrmFunctionController extends GetxController {
       Get.put(LabelController());
     }
 
+    if (!Get.isRegistered<AccessController>()) {
+      Get.put(AccessController());
+    }
+
     functions.value = [
       FunctionModel(
         title: 'Leads',
@@ -49,11 +96,13 @@ class CrmFunctionController extends GetxController {
         color: const Color(0xffFFBD21),
         screenBuilder: LeadScreen(),
       ),
-      FunctionModel(
-        title: 'Deals',
-        iconPath: ICRes.leads,
-        color: const Color(0xff28B999),
-      ),
+      if (accessController.can('dashboards-deal', 'create'))
+        FunctionModel(
+          title: 'Deals',
+          iconPath: ICRes.leads,
+          color: const Color(0xff28B999),
+          screenBuilder: DealScreen(),
+        ),
 
       FunctionModel(
         title: 'Company',
