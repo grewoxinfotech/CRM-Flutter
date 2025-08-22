@@ -76,6 +76,11 @@ class CrmNavigationBar extends StatelessWidget {
 }
 
 class NavigationController extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
   RxInt currentIndex = 0.obs;
 
   changeIndex(int i) => currentIndex(i);

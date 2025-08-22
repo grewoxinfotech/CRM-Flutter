@@ -15,7 +15,7 @@ class CalendarController extends PaginatedController<CalendarData> {
 
   final formKey = GlobalKey<FormState>();
 
-  // Form field controllers
+  // Form controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
@@ -25,8 +25,7 @@ class CalendarController extends PaginatedController<CalendarData> {
   // Calendar State
   var focusedMonth = DateTime.now().obs;
   var selectedDay = Rxn<DateTime>();
-
-  var swipeDirection = 0.obs; // -1 = left, +1 = right
+  var swipeDirection = 0.obs;
 
   @override
   Future<List<CalendarData>> fetchItems(int page) async {
@@ -56,32 +55,80 @@ class CalendarController extends PaginatedController<CalendarData> {
   /// ---- Calendar Navigation ----
   void previousMonth() {
     swipeDirection.value = 1;
-    focusedMonth.value =
-        DateTime(focusedMonth.value.year, focusedMonth.value.month - 1);
+    focusedMonth.value = DateTime(
+      focusedMonth.value.year,
+      focusedMonth.value.month - 1,
+    );
   }
 
   void nextMonth() {
     swipeDirection.value = -1;
-    focusedMonth.value =
-        DateTime(focusedMonth.value.year, focusedMonth.value.month + 1);
+    focusedMonth.value = DateTime(
+      focusedMonth.value.year,
+      focusedMonth.value.month + 1,
+    );
+  }
+
+  void goToToday() {
+    focusedMonth.value = DateTime.now();
+    selectedDay.value = DateTime.now();
   }
 
   void selectDay(DateTime day) {
     selectedDay.value = day;
   }
 
-  /// ---- Get events for a day ----
+  /// ---- Get events for a day (support multi-day) ----
   List<CalendarData> getEventsForDay(DateTime day) {
-    return items
-        .where((event) =>
-    event.startDate != null &&
-        DateFormat("yyyy-MM-dd").format(DateTime.tryParse(event.startDate!)!) ==
-            DateFormat("yyyy-MM-dd").format(day))
-        .toList();
+    return items.where((event) {
+      if (event.startDate == null) return false;
+
+      DateTime? start = DateTime.tryParse(event.startDate!);
+      DateTime? end =
+          event.endDate != null ? DateTime.tryParse(event.endDate!) : start;
+
+      if (start == null || end == null) return false;
+
+      final dayOnly = DateTime(day.year, day.month, day.day);
+      final startOnly = DateTime(start.year, start.month, start.day);
+      final endOnly = DateTime(end.year, end.month, end.day);
+
+      return (dayOnly.isAtSameMomentAs(startOnly) ||
+          dayOnly.isAtSameMomentAs(endOnly) ||
+          (dayOnly.isAfter(startOnly) && dayOnly.isBefore(endOnly)));
+    }).toList();
   }
 
-  /// ---- Map labels to colors ----
-  Color _getColorByLabel(String? label) {
+  /// Get all events in the currently focused month (supports multi-day events)
+  List<CalendarData> getEventsForFocusedMonth() {
+    final startOfMonth = DateTime(
+      focusedMonth.value.year,
+      focusedMonth.value.month,
+      1,
+    );
+    final endOfMonth = DateTime(
+      focusedMonth.value.year,
+      focusedMonth.value.month + 1,
+      0,
+    );
+
+    return items.where((event) {
+      if (event.startDate == null) return false;
+
+      DateTime? start = DateTime.tryParse(event.startDate!);
+      DateTime? end =
+          event.endDate != null ? DateTime.tryParse(event.endDate!) : start;
+
+      if (start == null || end == null) return false;
+
+      // Event overlaps the month if it starts before the end of month and ends after the start of month
+      return start.isBefore(endOfMonth.add(const Duration(days: 1))) &&
+          end.isAfter(startOfMonth.subtract(const Duration(days: 1)));
+    }).toList();
+  }
+
+  /// Map labels to colors
+  Color getColorByLabel(String? label) {
     switch (label?.toLowerCase()) {
       case "personal":
         return Colors.blue;
@@ -90,22 +137,18 @@ class CalendarController extends PaginatedController<CalendarData> {
       case "important":
         return Colors.red;
       default:
-        return Colors.orange; // other
+        return Colors.orange;
     }
   }
 
   List<Color> getEventColorsForDay(DateTime day) {
     final eventsForDay = getEventsForDay(day);
     final colors = <Color>[];
-
     for (var e in eventsForDay) {
-      final color = _getColorByLabel(e.label);
-      if (!colors.contains(color)) {
-        colors.add(color);
-      }
+      final color = getColorByLabel(e.label);
+      if (!colors.contains(color)) colors.add(color);
     }
-
-    return colors.take(4).toList(); // max 4 ticks
+    return colors.take(4).toList();
   }
 
   /// ---- CRUD METHODS ----
@@ -173,28 +216,44 @@ class CalendarController extends PaginatedController<CalendarData> {
 
   /// ---- Build Calendar Days ----
   List<Widget> buildCalendarDays() {
-    final firstDayOfMonth =
-    DateTime(focusedMonth.value.year, focusedMonth.value.month, 1);
-    final lastDayOfMonth =
-    DateTime(focusedMonth.value.year, focusedMonth.value.month + 1, 0);
+    final firstDayOfMonth = DateTime(
+      focusedMonth.value.year,
+      focusedMonth.value.month,
+      1,
+    );
+    final lastDayOfMonth = DateTime(
+      focusedMonth.value.year,
+      focusedMonth.value.month + 1,
+      0,
+    );
 
-    int startWeekday = firstDayOfMonth.weekday; // Monday=1
+    int startWeekday = firstDayOfMonth.weekday; // Monday = 1
     int daysInMonth = lastDayOfMonth.day;
 
     List<Widget> dayWidgets = [];
 
-    // Empty slots before 1st day
+    // Empty slots before first day
     for (int i = 1; i < startWeekday; i++) {
       dayWidgets.add(const SizedBox());
     }
 
-    // Days of current month
     for (int day = 1; day <= daysInMonth; day++) {
-      DateTime currentDay =
-      DateTime(focusedMonth.value.year, focusedMonth.value.month, day);
-      bool isSelected = selectedDay.value != null &&
+      DateTime currentDay = DateTime(
+        focusedMonth.value.year,
+        focusedMonth.value.month,
+        day,
+      );
+
+      bool isSelected =
+          selectedDay.value != null &&
           selectedDay.value!.day == day &&
-          selectedDay.value!.month == focusedMonth.value.month;
+          selectedDay.value!.month == focusedMonth.value.month &&
+          selectedDay.value!.year == focusedMonth.value.year;
+
+      bool isToday =
+          DateTime.now().day == day &&
+          DateTime.now().month == focusedMonth.value.month &&
+          DateTime.now().year == focusedMonth.value.year;
 
       final eventColors = getEventColorsForDay(currentDay);
 
@@ -204,7 +263,12 @@ class CalendarController extends PaginatedController<CalendarData> {
           child: Container(
             margin: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: isSelected ? Colors.orange.withOpacity(0.2) : Colors.transparent,
+              color:
+                  isSelected
+                      ? Colors.orange.withOpacity(0.2)
+                      : Colors.transparent,
+              border:
+                  isToday ? Border.all(color: Colors.orange, width: 1.5) : null,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -223,18 +287,24 @@ class CalendarController extends PaginatedController<CalendarData> {
                     padding: const EdgeInsets.only(top: 2),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: eventColors
-                          .map((c) => Container(
-                        width: 20,
-                        height: 3,
-                        margin:
-                        const EdgeInsets.symmetric(horizontal: 1),
-                        decoration: BoxDecoration(
-                          color: c,
-                          shape: BoxShape.rectangle,borderRadius: BorderRadius.circular(AppSpacing.large)
-                        ),
-                      ))
-                          .toList(),
+                      children:
+                          eventColors
+                              .map(
+                                (c) => Container(
+                                  width: 20,
+                                  height: 3,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 1,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: c,
+                                    borderRadius: BorderRadius.circular(
+                                      AppSpacing.large,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
                     ),
                   ),
               ],

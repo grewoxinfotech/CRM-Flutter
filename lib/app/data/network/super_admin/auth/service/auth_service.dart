@@ -16,7 +16,6 @@ class AuthService extends GetConnect {
   final String i = UrlRes.contentType;
   final String j = UrlRes.applicationJson;
 
-
   Future<void> login(String email, String password) async {
     final loginData = {"login": email, "password": password};
 
