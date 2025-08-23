@@ -75,6 +75,12 @@ class InvoiceScreen extends StatelessWidget {
               if (!controller.isLoading.value && controller.items.isEmpty) {
                 return const Center(child: Text("No Invoices found."));
               }
+
+              final invoices =
+                  controller.items
+                      .where((item) => item.relatedId == customerId!)
+                      .toList();
+
               return NotificationListener<ScrollEndNotification>(
                 onNotification: (scrollEnd) {
                   final metrics = scrollEnd.metrics;
@@ -85,11 +91,12 @@ class InvoiceScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
+
                   child: ListView.builder(
-                    itemCount: controller.items.length + 1,
+                    itemCount: invoices.length,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
-                        final invoice = controller.items[index];
+                        final invoice = invoices[index];
                         final CustomerData? customer = customerController.items
                             .firstWhereOrNull(
                               (element) => element.id == invoice.customer,

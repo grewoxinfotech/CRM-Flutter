@@ -1,3 +1,5 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
+import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/controllers/customer_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/views/add_customer_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/widget/customer_card.dart';
@@ -15,18 +17,24 @@ class CustomerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
     Get.lazyPut<CustomerController>(() => CustomerController());
     final CustomerController controller = Get.find();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Customers")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add product_service screen
-          Get.to(() => AddCustomerScreen(customers: controller.items.length));
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.salesCustomer, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add product_service screen
+                  Get.to(
+                    () => AddCustomerScreen(customers: controller.items.length),
+                  );
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(), // Load initial data
         builder: (context, snapshot) {

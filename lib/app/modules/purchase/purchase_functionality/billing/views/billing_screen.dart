@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/care/utils/format.dart';
 import 'package:crm_flutter/app/data/network/sales/customer/model/customer_model.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/bill_detail_screen.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../../../data/database/storage/secure_storage_service.dart';
 import '../../../../../widgets/common/indicators/crm_loading_circle.dart';
+import '../../../../access/controller/access_controller.dart';
 import '../../../../sales/sales_functionality/customer/controllers/customer_controller.dart';
 import '../controllers/billing_controller.dart';
 import '../widget/billing_card.dart';
@@ -23,6 +25,7 @@ class BillingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
     getCustomerId();
 
     // Controllers
@@ -31,14 +34,20 @@ class BillingScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Billings")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (customerId != null) {
-            Get.to(() => BillingCreatePage());
-          }
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(
+                AccessModule.purchaseBilling,
+                AccessAction.create,
+              )
+              ? FloatingActionButton(
+                onPressed: () {
+                  if (customerId != null) {
+                    Get.to(() => BillingCreatePage());
+                  }
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {

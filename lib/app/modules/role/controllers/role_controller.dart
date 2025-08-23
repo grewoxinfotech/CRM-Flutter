@@ -6,30 +6,30 @@ import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 
 class RoleController extends GetxController {
   final RolesService _rolesService = Get.find<RolesService>();
-  
+
   final RxList<RoleModel> roles = <RoleModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
-  
+
   @override
   void onInit() {
     super.onInit();
     fetchRoles();
   }
-  
+
   Future<void> fetchRoles() async {
     try {
       isLoading.value = true;
       error.value = '';
-      
+
       final rolesList = await _rolesService.getRoles();
       roles.assignAll(rolesList);
-      
-      print("Loaded ${roles.length} roles:");
-      for (var role in roles) {
-        print("Role ID: ${role.id}, Name: ${role.roleName}");
-      }
-      
+
+      // print("Loaded ${roles.length} roles:");
+      // for (var role in roles) {
+      //   print("Role ID: ${role.id}, Name: ${role.roleName}");
+      // }
+
       if (roles.isEmpty) {
         error.value = 'No roles found';
       }
@@ -45,19 +45,19 @@ class RoleController extends GetxController {
       isLoading.value = false;
     }
   }
-  
+
   // Get role name by ID
   String getRoleName(String roleId) {
     try {
       print("Looking for role with ID: $roleId in ${roles.length} roles");
-      
+
       if (roleId.isEmpty) {
         print("Role ID is empty");
         return 'No Role';
       }
-      
+
       final role = roles.firstWhereOrNull((role) => role.id == roleId);
-      
+
       if (role == null) {
         print("Role not found for ID: $roleId");
         // If role not found, try to fetch roles again
@@ -67,7 +67,7 @@ class RoleController extends GetxController {
         }
         return 'Unknown Role';
       }
-      
+
       print("Found role: ${role.roleName} for ID: $roleId");
       return role.roleName;
     } catch (e) {
@@ -75,29 +75,34 @@ class RoleController extends GetxController {
       return 'Unknown Role';
     }
   }
-  
-  bool hasPermission(String roleId, String permissionKey, String permissionType) {
+
+  bool hasPermission(
+    String roleId,
+    String permissionKey,
+    String permissionType,
+  ) {
     try {
       if (roleId.isEmpty) return false;
-      
+
       final role = roles.firstWhereOrNull((role) => role.id == roleId);
       if (role == null) return false;
-      
+
       final permissionList = role.permissions[permissionKey];
       if (permissionList == null) return false;
-      
-      return permissionList.any((permission) => 
-        permission.permissions.contains(permissionType));
+
+      return permissionList.any(
+        (permission) => permission.permissions.contains(permissionType),
+      );
     } catch (e) {
       return false;
     }
   }
-  
+
   // Get roles filtered by client ID
   List<RoleModel> getRolesByClientId(String clientId) {
     return roles.where((role) => role.clientId == clientId).toList();
   }
-  
+
   // Ensure roles are loaded
   Future<bool> ensureRolesLoaded() async {
     try {
@@ -110,4 +115,4 @@ class RoleController extends GetxController {
       return false;
     }
   }
-} 
+}

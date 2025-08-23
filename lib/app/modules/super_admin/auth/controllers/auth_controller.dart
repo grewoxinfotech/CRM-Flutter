@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/json/client_access_res.dart';
 import 'package:crm_flutter/app/data/database/helper/sqlite_db_helper.dart';
 import 'package:crm_flutter/app/data/network/super_admin/auth/service/auth_service.dart';
 import 'package:crm_flutter/app/modules/hrm/role/controllers/role_controller.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../data/database/storage/secure_storage_service.dart';
+import '../../../../data/network/hrm/hrm_system/role/role_model.dart';
 
 class AuthController extends GetxController {
   final isLoading = false.obs;
@@ -48,15 +50,15 @@ class AuthController extends GetxController {
       await authService.login(userName, password);
       final user = await SecureStorage.getUserData();
       await roleController.loadInitial();
-
       if (roleController.items.isNotEmpty) {
+        roleController.items.add(RoleData.fromJson(ClientPermissions.client));
         await _dbHelper.syncRolesFromAPI(roleController.items);
         final roles = await _dbHelper.getAllRoles();
-        print("[DEBUG]=> created Roles: ${roles.map((e) => e.toJson())}");
-        print("[DEBUG]=> created Roles: ${roles.length}");
-        print("[DEBUG]=> User Get By Id: ${user!.toJson()}");
-        final role = await _dbHelper.getRoleById(user.roleId!);
-        print("[DEBUG]=> Role Get By Id: ${role!.toJson()}");
+        // print("[DEBUG]=> created Roles: ${roles.map((e) => e.toJson())}");
+        // print("[DEBUG]=> created Roles: ${roles.length}");
+        // print("[DEBUG]=> User Get By Id: ${user!.toJson()}");
+        final role = await _dbHelper.getRoleById(user!.roleId!);
+        // print("[DEBUG]=> Role Get By Id: ${role!.toJson()}");
       }
     } finally {
       isLoading.value = false;

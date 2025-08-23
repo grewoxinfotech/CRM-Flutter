@@ -1,3 +1,5 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
+import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/bindings/product_service_binding.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/add_product_screen.dart';
@@ -11,19 +13,29 @@ class ProductsServicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
     Get.lazyPut<ProductsServicesController>(() => ProductsServicesController());
     final ProductsServicesController controller = Get.find();
     ProductServicesBinding().dependencies();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Products & Services")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add product_service screen
-          Get.to(() => AddProductScreen(), binding: ProductServicesBinding());
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton:
+          accessController.can(
+                AccessModule.productServices,
+                AccessAction.create,
+              )
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add product_service screen
+                  Get.to(
+                    () => AddProductScreen(),
+                    binding: ProductServicesBinding(),
+                  );
+                },
+                child: const Icon(Icons.add),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(), // Load initial data
         builder: (context, snapshot) {

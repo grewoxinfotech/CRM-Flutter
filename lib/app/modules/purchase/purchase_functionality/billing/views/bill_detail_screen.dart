@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/data/network/purchase/billing/model/billing_model.dart';
 import 'package:crm_flutter/app/data/network/purchase/vendor/model/vendor_model.dart';
 import 'package:crm_flutter/app/data/network/sales/product_service/model/product_model.dart';
@@ -12,6 +13,7 @@ import '../../../../../data/network/sales/customer/model/customer_model.dart';
 import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../../../../../widgets/date_time/format_date.dart';
+import '../../../../access/controller/access_controller.dart';
 import '../../vendor/contoller/vendor_controller.dart';
 import '../controllers/billing_controller.dart';
 
@@ -103,6 +105,8 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     Get.lazyPut(() => BillingController());
     final BillingController controller = Get.find();
     void _deleteCreditNote(String id, String name) {
@@ -134,15 +138,19 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
               // Download PDF / Export logic here
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: () {
-              _deleteCreditNote(
-                widget.bill.id ?? '',
-                widget.bill.billNumber ?? 'Credit Note',
-              );
-            },
-          ),
+          if (accessController.can(
+            AccessModule.purchaseBilling,
+            AccessAction.update,
+          ))
+            IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                _deleteCreditNote(
+                  widget.bill.id ?? '',
+                  widget.bill.billNumber ?? 'Credit Note',
+                );
+              },
+            ),
         ],
       ),
       body: SingleChildScrollView(

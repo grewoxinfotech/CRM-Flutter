@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../care/constants/access_res.dart';
+import '../../../../../care/constants/access_res.dart';
 
-class InvoiceCard extends StatelessWidget {
+class DealInvoiceCard extends StatelessWidget {
   final String? id;
   final String? leadTitle; // Invoice Number
   final String? firstName; // Customer Name
@@ -24,7 +24,7 @@ class InvoiceCard extends StatelessWidget {
   final GestureTapCallback? onDelete;
   final GestureTapCallback? onEdit;
 
-  const InvoiceCard({
+  const DealInvoiceCard({
     super.key,
     this.id,
     this.leadTitle,
@@ -165,30 +165,38 @@ class InvoiceCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // if (accessController.can(
-                //   AccessModule.salesInvoice,
-                //   AccessAction.update,
-                // ))
-                if (onEdit != null) ...[
-                  _buildActionButton(
-                    icon: ICRes.edit,
-                    label: 'Edit',
-                    onTap: onEdit,
-                    color: ColorRes.success,
-                  ),
-                  const SizedBox(width: 12),
-                ],
-                // if (accessController.can(
-                //   AccessModule.salesInvoice,
-                //   AccessAction.delete,
-                // ))
-                if (onDelete != null)
-                  _buildActionButton(
-                    icon: ICRes.delete,
-                    label: 'Delete',
-                    onTap: onDelete,
-                    color: ColorRes.error,
-                  ),
+                if (accessController.can(
+                      AccessModule.deal,
+                      AccessAction.update,
+                    ) &&
+                    accessController.can(
+                      AccessModule.salesInvoice,
+                      AccessAction.update,
+                    ))
+                  if (onEdit != null) ...[
+                    _buildActionButton(
+                      icon: ICRes.edit,
+                      label: 'Edit',
+                      onTap: onEdit,
+                      color: ColorRes.success,
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                if (accessController.can(
+                      AccessModule.deal,
+                      AccessAction.delete,
+                    ) &&
+                    accessController.can(
+                      AccessModule.salesInvoice,
+                      AccessAction.delete,
+                    ))
+                  if (onDelete != null)
+                    _buildActionButton(
+                      icon: ICRes.delete,
+                      label: 'Delete',
+                      onTap: onDelete,
+                      color: ColorRes.error,
+                    ),
               ],
             ),
           ],

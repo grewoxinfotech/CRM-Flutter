@@ -5,6 +5,7 @@ import 'package:crm_flutter/app/data/network/crm/crm_system/label/controller/lab
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_service.dart';
 import 'package:crm_flutter/app/data/network/system/function_model.dart';
 import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dart';
+import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/announcement/views/announcement_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/attendance/views/attendance_screen.dart';
@@ -28,6 +29,9 @@ import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:crm_flutter/app/test_screen.dart';
 import 'package:get/get.dart';
 
+import '../../../../care/constants/access_res.dart';
+import '../../../../data/database/helper/sqlite_db_helper.dart';
+import '../../../../data/database/storage/secure_storage_service.dart';
 import '../../../hrm/calendar/views/calendar_screen.dart';
 import '../../../hrm/meeting/views/meeting_screen.dart';
 import '../../../hrm/training/views/training_screen.dart';
@@ -37,10 +41,35 @@ class PurchaseFunctionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    updateFunctions();
+    _initAccessController();
   }
 
-  void updateFunctions() {
+  Future<void> _initAccessController() async {
+    // Initialize AccessController if not already
+    AccessController accessController;
+    if (!Get.isRegistered<AccessController>()) {
+      accessController = Get.put(AccessController());
+    } else {
+      accessController = Get.find<AccessController>();
+    }
+
+    // Fetch role data
+    final DBHelper dbHelper = DBHelper();
+    final user = await SecureStorage.getUserData();
+    final roleId = user?.roleId;
+    if (roleId == null) return;
+
+    final roleData = await dbHelper.getRoleById(roleId);
+    if (roleData == null) return;
+
+    // Initialize AccessController with permissions
+    accessController.init(roleData.permissions ?? {});
+
+    // Now safely update functions
+    updateFunctions(accessController);
+  }
+
+  void updateFunctions(AccessController accessController) {
     // Initialize RolesService first
     if (!Get.isRegistered<RolesService>()) {
       Get.put(RolesService());
@@ -60,29 +89,68 @@ class PurchaseFunctionController extends GetxController {
       Get.put(LabelController());
     }
 
-    functions.value = [
-      FunctionModel(
-        title: 'Vendor',
-        iconPath: ICRes.clients,
-        color: const Color(0xffFFCC01),
-        count: 45,
-        screenBuilder: VendorsScreen(),
-      ),
-      FunctionModel(
-        title: 'Billing',
-        iconPath: ICRes.customer,
-        color: const Color(0xff00a7ad),
-        count: 66,
-        screenBuilder: BillingScreen(),
-      ),
-      FunctionModel(
-        title: 'Debit Note',
-        iconPath: ICRes.document,
-        color: const Color(0xff68ad00),
-        count: 66,
-        screenBuilder: DebitNotesScreen(),
-      ),
+    if (!Get.isRegistered<AccessController>()) {
+      Get.put(AccessController());
+    }
 
+    functions.value = [
+      if (accessController.can(
+            AccessModule.purchaseVendor,
+            AccessAction.view,
+          ) ||
+          accessController.can(
+            AccessModule.purchaseVendor,
+            AccessAction.create,
+          ) ||
+          accessController.can(
+            AccessModule.purchaseVendor,
+            AccessAction.update,
+          ) ||
+          accessController.can(
+            AccessModule.purchaseVendor,
+            AccessAction.delete,
+          ))
+        FunctionModel(
+          title: 'Vendor',
+          iconPath: ICRes.clients,
+          color: const Color(0xffFFCC01),
+          count: 45,
+          screenBuilder: VendorsScreen(),
+        ),
+      if (accessController.can(
+            AccessModule.purchaseBilling,
+            AccessAction.view,
+          ) ||
+          accessController.can(
+            AccessModule.purchaseBilling,
+            AccessAction.create,
+          ) ||
+          accessController.can(
+            AccessModule.purchaseBilling,
+            AccessAction.update,
+          ) ||
+          accessController.can(
+            AccessModule.purchaseBilling,
+            AccessAction.delete,
+          ))
+        FunctionModel(
+          title: 'Billing',
+          iconPath: ICRes.customer,
+          color: const Color(0xff00a7ad),
+          count: 66,
+          screenBuilder: BillingScreen(),
+        ),
+      if (accessController.can(AccessModule.debitNote, AccessAction.view) ||
+          accessController.can(AccessModule.debitNote, AccessAction.create) ||
+          accessController.can(AccessModule.debitNote, AccessAction.update) ||
+          accessController.can(AccessModule.debitNote, AccessAction.delete))
+        FunctionModel(
+          title: 'Debit Note',
+          iconPath: ICRes.document,
+          color: const Color(0xff68ad00),
+          count: 66,
+          screenBuilder: DebitNotesScreen(),
+        ),
     ];
   }
 }

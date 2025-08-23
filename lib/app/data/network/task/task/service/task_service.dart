@@ -19,7 +19,6 @@ class TaskService {
         Uri.parse("$url/$cleanUserId"),
         headers: await headers(),
       );
-      
       return Response(
         statusCode: response.statusCode,
         body: response.body,
@@ -40,7 +39,7 @@ class TaskService {
         Uri.parse("$url/$id"),
         headers: await headers(),
       );
-      
+
       return Response(
         statusCode: response.statusCode,
         body: response.body,
@@ -70,13 +69,13 @@ class TaskService {
         'assignTo': task.assignTo,
         'file': task.file,
       };
-      
+
       final response = await http.post(
         Uri.parse("$url/$userId"),
         headers: await headers(),
         body: jsonEncode(data),
       );
-      
+
       return Response(
         statusCode: response.statusCode,
         body: response.body,
@@ -92,7 +91,10 @@ class TaskService {
 
   /// 4. Update Task by ID
   /// 4. Update Task by ID
-  Future<Response<dynamic>> updateTask(String id, Map<String, dynamic> data) async {
+  Future<Response<dynamic>> updateTask(
+    String id,
+    Map<String, dynamic> data,
+  ) async {
     try {
       final cleanData = <String, dynamic>{};
       data.forEach((key, value) {
@@ -100,13 +102,13 @@ class TaskService {
           cleanData[key] = value;
         }
       });
-      
+
       final response = await http.put(
         Uri.parse("$url/$id"),
         headers: await headers(),
         body: jsonEncode(cleanData),
       );
-      
+
       return Response(
         statusCode: response.statusCode,
         body: response.body,
@@ -119,6 +121,7 @@ class TaskService {
       );
     }
   }
+
   /// 5. Delete Task by ID
   Future<Response<dynamic>> deleteTask(String id) async {
     try {
@@ -126,7 +129,7 @@ class TaskService {
         Uri.parse("$url/$id"),
         headers: await headers(),
       );
-      
+
       return Response(
         statusCode: response.statusCode,
         body: response.body,

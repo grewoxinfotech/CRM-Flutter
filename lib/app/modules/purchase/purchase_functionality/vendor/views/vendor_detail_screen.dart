@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/contoller/vendor_controller.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/update_vendor_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../../../data/network/purchase/vendor/model/vendor_model.dart';
 import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../../access/controller/access_controller.dart';
 
 class VendorDetailScreen extends StatefulWidget {
   VendorData vendor;
@@ -21,7 +23,8 @@ class VendorDetailScreen extends StatefulWidget {
 class _VendorDetailScreenState extends State<VendorDetailScreen> {
   final VendorController vendorController = Get.find<VendorController>();
 
-  String _formatText(String? value) => value == null || value.isEmpty ? "-" : value;
+  String _formatText(String? value) =>
+      value == null || value.isEmpty ? "-" : value;
 
   Widget _buildSectionTitle(String title) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -58,7 +61,9 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
       CrmDeleteDialog(
         entityType: widget.vendor.name,
         onConfirm: () async {
-          final success = await vendorController.deleteVendor(widget.vendor.id!);
+          final success = await vendorController.deleteVendor(
+            widget.vendor.id!,
+          );
           if (success) {
             Get.back(); // go back to vendor list
             CrmSnackBar.showAwesomeSnackbar(
@@ -74,26 +79,37 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.vendor.name ?? "Vendor Details"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () async {
-              final updatedVendor =
-              await Get.to(() => UpdateVendorScreen(vendor: widget.vendor));
-              if (updatedVendor != null) {
-                setState(() {
-                  widget.vendor = updatedVendor; // refresh UI
-                });
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _deleteVendor,
-          ),
+          if (accessController.can(
+            AccessModule.purchaseVendor,
+            AccessAction.update,
+          ))
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () async {
+                final updatedVendor = await Get.to(
+                  () => UpdateVendorScreen(vendor: widget.vendor),
+                );
+                if (updatedVendor != null) {
+                  setState(() {
+                    widget.vendor = updatedVendor; // refresh UI
+                  });
+                }
+              },
+            ),
+          if (accessController.can(
+            AccessModule.purchaseVendor,
+            AccessAction.delete,
+          ))
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: _deleteVendor,
+            ),
         ],
       ),
       body: SingleChildScrollView(

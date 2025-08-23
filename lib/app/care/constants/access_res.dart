@@ -1,4 +1,5 @@
 class AccessModule {
+  AccessModule._();
   static const String role = "extra-hrm-role";
   static const String deal = "dashboards-deal";
   static const String lead = "dashboards-lead";
@@ -37,7 +38,8 @@ class AccessModule {
   static const String attendanceList = "extra-hrm-attendance-attendancelist";
 }
 
-class AccessAction{
+class AccessAction {
+  AccessAction._();
   static const String view = "view";
   static const String create = "create";
   static const String update = "update";

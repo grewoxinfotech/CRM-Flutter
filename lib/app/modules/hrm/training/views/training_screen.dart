@@ -1,10 +1,12 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controllers/training_controller.dart';
 import '../widget/training_card.dart';
 import 'add_training_screen.dart';
@@ -14,6 +16,8 @@ class TrainingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     Get.lazyPut<TrainingController>(() => TrainingController());
     final TrainingController controller = Get.find();
 
@@ -38,14 +42,17 @@ class TrainingScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Trainings")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add training screen
-          controller.resetForm();
-          Get.to(() => AddTrainingScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.trainingSetup, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add training screen
+                  controller.resetForm();
+                  Get.to(() => AddTrainingScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -92,32 +99,40 @@ class TrainingScreen extends StatelessWidget {
                               bottom: 8,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                  if (accessController.can(
+                                    AccessModule.trainingSetup,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => AddTrainingScreen(
+                                            training: training,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      Get.to(
-                                        () => AddTrainingScreen(
-                                          training: training,
-                                          isFromEdit: true,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.trainingSetup,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteTraining(
+                                          training.id ?? '',
+                                          training.title ?? 'Training',
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteTraining(
-                                        training.id ?? '',
-                                        training.title ?? 'Training',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),

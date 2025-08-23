@@ -3,6 +3,7 @@ import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/bindings.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/widget/deal_invoice_card.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/file/controllers/file_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/notes/controllers/note_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/sales_invoice/pages/sales_invoice_edit_page.dart';
@@ -237,25 +238,30 @@ class DealDetailScreen extends StatelessWidget {
                 role: "File",
                 onTap: null,
                 onDelete:
-                    () => _showDeleteFileDialog(
-                      context,
-                      fileController,
-                      dealId,
-                      file.filename ?? '',
-                    ),
+                    (accessController.can(
+                          AccessModule.deal,
+                          AccessAction.delete,
+                        ))
+                        ? () => _showDeleteFileDialog(
+                          context,
+                          fileController,
+                          dealId,
+                          file.filename ?? '',
+                        )
+                        : null,
               );
             },
           ),
         ),
-        if(accessController.can(AccessModule.deal, AccessAction.create))
-        Positioned(
-          right: AppPadding.medium,
-          bottom: AppPadding.medium,
-          child: FloatingActionButton(
-            onPressed: () => _uploadFile(context, dealId),
-            child: const Icon(Icons.upload_file, color: Colors.white),
+        if (accessController.can(AccessModule.deal, AccessAction.create))
+          Positioned(
+            right: AppPadding.medium,
+            bottom: AppPadding.medium,
+            child: FloatingActionButton(
+              onPressed: () => _uploadFile(context, dealId),
+              child: const Icon(Icons.upload_file, color: Colors.white),
+            ),
           ),
-        ),
       ],
     );
   }
@@ -350,21 +356,22 @@ class DealDetailScreen extends StatelessWidget {
             },
           ),
         ),
-        if(accessController.can(AccessModule.deal, AccessAction.create)&&accessController.can(AccessModule.salesInvoice, AccessAction.create))
-        Positioned(
-          right: AppPadding.medium,
-          bottom: AppPadding.medium,
-          child: FloatingActionButton(
-            onPressed: () => _showNoteDialog(context, noteController, dealId),
-            child: const Icon(Icons.add, color: Colors.white),
+        if (accessController.can(AccessModule.deal, AccessAction.create))
+          Positioned(
+            right: AppPadding.medium,
+            bottom: AppPadding.medium,
+            child: FloatingActionButton(
+              onPressed: () => _showNoteDialog(context, noteController, dealId),
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
           ),
-        ),
       ],
     );
   }
 
   Widget _buildInvoicesTab(String dealId, BuildContext context) {
     final salesInvoiceController = Get.find<SalesInvoiceController>();
+    final accessController = Get.find<AccessController>();
 
     // Load invoices for this deal
     _loadInvoices(dealId);
@@ -384,7 +391,7 @@ class DealDetailScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final invoice = invoices[index];
 
-              return InvoiceCard(
+              return DealInvoiceCard(
                 id: invoice.id,
                 leadTitle: invoice.salesInvoiceNumber,
                 firstName: salesInvoiceController.getCustomerName(
@@ -421,19 +428,24 @@ class DealDetailScreen extends StatelessWidget {
             },
           );
         }),
-        Positioned(
-          right: AppPadding.medium,
-          bottom: AppPadding.medium,
-          child: FloatingActionButton(
-            onPressed: () {
-              Get.to(
-                () => SalesInvoiceCreatePage(dealId: dealId),
-                binding: DealBinding(),
-              );
-            },
-            child: const Icon(Icons.add, color: Colors.white),
+        if (accessController.can(AccessModule.deal, AccessAction.create) &&
+            accessController.can(
+              AccessModule.salesInvoice,
+              AccessAction.create,
+            ))
+          Positioned(
+            right: AppPadding.medium,
+            bottom: AppPadding.medium,
+            child: FloatingActionButton(
+              onPressed: () {
+                Get.to(
+                  () => SalesInvoiceCreatePage(dealId: dealId),
+                  binding: DealBinding(),
+                );
+              },
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
           ),
-        ),
       ],
     );
   }

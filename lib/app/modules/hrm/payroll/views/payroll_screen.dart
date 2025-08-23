@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/modules/hrm/payroll/views/add_payroll_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/payroll/widget/payroll_card.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
@@ -7,14 +8,16 @@ import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controller/payroll_controller.dart';
-
 
 class PayrollScreen extends StatelessWidget {
   PayrollScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     Get.lazyPut<PayrollController>(() => PayrollController());
     final PayrollController controller = Get.find();
 
@@ -39,14 +42,17 @@ class PayrollScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Payroll")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add payslip screen
-          controller.resetForm();
-          Get.to(() => AddPayrollScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.payroll, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add payslip screen
+                  controller.resetForm();
+                  Get.to(() => AddPayrollScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -93,25 +99,41 @@ class PayrollScreen extends StatelessWidget {
                               bottom: 8,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit, color: Colors.blue),
-                                    onPressed: () {
-                                      Get.to(() => AddPayrollScreen(payslipData: payslip,isFromEdit: true,));
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.payroll,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => AddPayrollScreen(
+                                            payslipData: payslip,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      controller.resetForm();
-                                      _deletePayslip(
-                                        payslip.id ?? '',
-                                        payslip.employeeId ?? 'Payslip',
-                                      );
-                                    },
-                                  ),
+                                  if (accessController.can(
+                                    AccessModule.payroll,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        controller.resetForm();
+                                        _deletePayslip(
+                                          payslip.id ?? '',
+                                          payslip.employeeId ?? 'Payslip',
+                                        );
+                                      },
+                                    ),
                                 ],
                               ),
                             ),

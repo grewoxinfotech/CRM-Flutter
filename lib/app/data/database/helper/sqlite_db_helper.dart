@@ -317,9 +317,6 @@ class DBHelper {
 
       permMap[module[DBConstants.colModuleKey] as String] = permissionItems;
     }
-    print(
-      "[DEBUG]=>PermMap : ${permMap.map((key, value) => MapEntry(key, value.map((e) => e.toJson()).toList()))}",
-    );
 
     return RoleData(
       id: roleMap[DBConstants.colRoleId] as String?,

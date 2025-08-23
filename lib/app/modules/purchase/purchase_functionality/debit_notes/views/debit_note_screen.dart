@@ -1,9 +1,11 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../widgets/common/indicators/crm_loading_circle.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import '../../../../access/controller/access_controller.dart';
 import '../binding/debit_note_binding.dart';
 import '../controller/debit_note_controller.dart';
 import '../widget/debit_note_card.dart';
@@ -116,6 +118,8 @@ class DebitNotesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     final DebitNoteController controller = Get.put(DebitNoteController());
 
     void _deleteDebitNote(String id, String name) {
@@ -139,12 +143,17 @@ class DebitNotesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Debit Notes")),
-      floatingActionButton: FloatingActionButton(
-        onPressed:
-            () =>
-                Get.to(() => AddDebitNoteScreen(), binding: DebitNoteBinding()),
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.debitNote, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed:
+                    () => Get.to(
+                      () => AddDebitNoteScreen(),
+                      binding: DebitNoteBinding(),
+                    ),
+                child: const Icon(Icons.add),
+              )
+              : null,
       body: Obx(() {
         if (controller.isLoading.value && controller.debitNotes.isEmpty) {
           return const Center(child: CrmLoadingCircle());
@@ -178,15 +187,19 @@ class DebitNotesScreen extends StatelessWidget {
                           //     Get.to(() => AddDebitNoteScreen());
                           //   },
                           // ),
-                          IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              _deleteDebitNote(
-                                note.debitNote.id ?? '',
-                                note.debitNote.description ?? 'Debit Note',
-                              );
-                            },
-                          ),
+                          if (accessController.can(
+                            AccessModule.debitNote,
+                            AccessAction.delete,
+                          ))
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                _deleteDebitNote(
+                                  note.debitNote.id ?? '',
+                                  note.debitNote.description ?? 'Debit Note',
+                                );
+                              },
+                            ),
                         ],
                       ),
                     ),

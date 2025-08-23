@@ -1,10 +1,12 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controllers/department_controller.dart';
 import '../widget/department_card.dart';
 import 'add_department_screen.dart';
@@ -14,6 +16,8 @@ class DepartmentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     Get.lazyPut<DepartmentController>(() => DepartmentController());
     final DepartmentController controller = Get.find();
 
@@ -38,14 +42,17 @@ class DepartmentScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Departments")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add department screen
-          controller.resetForm();
-          Get.to(() => AddDepartmentScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.department, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add department screen
+                  controller.resetForm();
+                  Get.to(() => AddDepartmentScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -92,33 +99,41 @@ class DepartmentScreen extends StatelessWidget {
                               bottom: 8,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                  if (accessController.can(
+                                    AccessModule.department,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => AddDepartmentScreen(
+                                            department: department,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      Get.to(
-                                        () => AddDepartmentScreen(
-                                          department: department,
-                                          isFromEdit: true,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.department,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteDepartment(
+                                          department.id ?? '',
+                                          department.departmentName ??
+                                              'Department',
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteDepartment(
-                                        department.id ?? '',
-                                        department.departmentName ??
-                                            'Department',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),

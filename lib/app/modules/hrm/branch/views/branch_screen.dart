@@ -1,10 +1,12 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controllers/branch_controller.dart';
 import '../widget/branch_card.dart';
 import 'add_branch_screen.dart';
@@ -14,6 +16,8 @@ class BranchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     Get.lazyPut<BranchController>(() => BranchController());
     final BranchController controller = Get.find();
 
@@ -38,14 +42,17 @@ class BranchScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Branches")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add branch screen
-          controller.resetForm();
-          Get.to(() => AddBranchScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.branch, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add branch screen
+                  controller.resetForm();
+                  Get.to(() => AddBranchScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -93,32 +100,40 @@ class BranchScreen extends StatelessWidget {
                               child: Row(
                                 children: [
                                   // Uncomment when edit screen ready
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                  if (accessController.can(
+                                    AccessModule.branch,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => AddBranchScreen(
+                                            branch: branch,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      Get.to(
-                                        () => AddBranchScreen(
-                                          branch: branch,
-                                          isFromEdit: true,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.branch,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteBranch(
+                                          branch.id ?? '',
+                                          branch.branchName ?? 'Branch',
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteBranch(
-                                        branch.id ?? '',
-                                        branch.branchName ?? 'Branch',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),

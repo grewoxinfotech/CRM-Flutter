@@ -1,10 +1,12 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controllers/designation_controller.dart';
 import '../widget/designation_card.dart';
 import 'add_designation_screen.dart';
@@ -14,6 +16,8 @@ class DesignationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     Get.lazyPut<DesignationController>(() => DesignationController());
     final DesignationController controller = Get.find();
 
@@ -38,14 +42,17 @@ class DesignationScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Designations")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add designation screen
-          controller.resetForm();
-          Get.to(() => AddDesignationScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.designation, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add designation screen
+                  controller.resetForm();
+                  Get.to(() => AddDesignationScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -93,33 +100,41 @@ class DesignationScreen extends StatelessWidget {
                               child: Row(
                                 children: [
                                   // Uncomment if you want Edit
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                  if (accessController.can(
+                                    AccessModule.designation,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => AddDesignationScreen(
+                                            designation: designation,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      Get.to(
-                                        () => AddDesignationScreen(
-                                          designation: designation,
-                                          isFromEdit: true,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.designation,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteDesignation(
+                                          designation.id ?? '',
+                                          designation.designationName ??
+                                              'Designation',
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteDesignation(
-                                        designation.id ?? '',
-                                        designation.designationName ??
-                                            'Designation',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),

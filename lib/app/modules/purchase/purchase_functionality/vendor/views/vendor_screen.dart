@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/Widget/vendor_card.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/contoller/vendor_controller.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/add_vendor_screen.dart';
@@ -5,23 +6,31 @@ import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/v
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../access/controller/access_controller.dart';
 import '../binding/vendorbinding.dart';
 
 class VendorsScreen extends StatelessWidget {
   const VendorsScreen({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(()=>VendorController());
+    final AccessController accessController = Get.find<AccessController>();
+    Get.lazyPut(() => VendorController());
     final VendorController controller = Get.find();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Vendors")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => AddVendorScreen(),binding: VendorBinding()),
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.purchaseVendor, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed:
+                    () => Get.to(
+                      () => AddVendorScreen(),
+                      binding: VendorBinding(),
+                    ),
+                child: const Icon(Icons.add),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -77,7 +86,6 @@ class VendorsScreen extends StatelessWidget {
                       }
                     },
                   ),
-
                 ),
               );
             });

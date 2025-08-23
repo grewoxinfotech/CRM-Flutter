@@ -65,7 +65,7 @@ class CrmNavigationBar extends StatelessWidget {
 
               SalomonBottomBarItem(
                 icon: Icon(FontAwesomeIcons.twitter, size: iconSize),
-                title: Text("twitter", style: style),
+                title: Text("Hrm", style: style),
               ),
             ],
           ),

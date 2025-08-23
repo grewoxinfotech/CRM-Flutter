@@ -29,7 +29,13 @@ class TaskController extends GetxController {
   final RxList<Map<String, dynamic>> teamMembers = <Map<String, dynamic>>[].obs;
 
   static const List<String> priorities = ['Low', 'Medium', 'High', 'Highest'];
-  static const List<String> statuses = ['Not Started', 'In Progress', 'Completed', 'On Hold', 'Cancelled'];
+  static const List<String> statuses = [
+    'Not Started',
+    'In Progress',
+    'Completed',
+    'On Hold',
+    'Cancelled',
+  ];
 
   @override
   void onInit() {
@@ -42,10 +48,7 @@ class TaskController extends GetxController {
       final userData = await SecureStorage.getUserData();
       final userId = userData?.id;
       if (userId != null) {
-        await Future.wait([
-          getTasks(userId),
-          fetchUsers(),
-        ]);
+        await Future.wait([getTasks(userId), fetchUsers()]);
       }
     } catch (e) {
       print('Error initializing data: $e');
@@ -55,10 +58,10 @@ class TaskController extends GetxController {
   Future<void> fetchUsers() async {
     try {
       final users = await _allUsersService.getUsers();
-      teamMembers.value = users.map((user) => {
-        'id': user.id,
-        'username': user.username,
-      }).toList();
+      teamMembers.value =
+          users
+              .map((user) => {'id': user.id, 'username': user.username})
+              .toList();
     } catch (e) {
       print('Error in fetchUsers: $e');
     }
@@ -70,8 +73,14 @@ class TaskController extends GetxController {
 
   String _getDisplayValue(String? storageValue) {
     if (storageValue == null) return priorities[0];
-    return storageValue.split('_')
-        .map((word) => word.isEmpty ? '' : '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}')
+    return storageValue
+        .split('_')
+        .map(
+          (word) =>
+              word.isEmpty
+                  ? ''
+                  : '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}',
+        )
         .join(' ');
   }
 
@@ -81,7 +90,9 @@ class TaskController extends GetxController {
   }
 
   String? _getIdFromUsername(String username) {
-    final user = teamMembers.firstWhereOrNull((member) => member['username'] == username);
+    final user = teamMembers.firstWhereOrNull(
+      (member) => member['username'] == username,
+    );
     return user?['id'];
   }
 
@@ -100,9 +111,9 @@ class TaskController extends GetxController {
 
   void initializeTaskData(TaskModel task) {
     clearFormData();
-    
+
     taskNameController.text = task.taskName ?? '';
-    
+
     if (task.startDate != null) {
       try {
         final date = DateTime.parse(task.startDate!);
@@ -111,7 +122,7 @@ class TaskController extends GetxController {
         startDateController.text = task.startDate!;
       }
     }
-    
+
     if (task.dueDate != null) {
       try {
         final date = DateTime.parse(task.dueDate!);
@@ -120,7 +131,7 @@ class TaskController extends GetxController {
         dueDateController.text = task.dueDate!;
       }
     }
-    
+
     if (task.reminderDate != null) {
       try {
         final date = DateTime.parse(task.reminderDate!);
@@ -129,23 +140,24 @@ class TaskController extends GetxController {
         reminderDateController.text = task.reminderDate!;
       }
     }
-    
+
     descriptionController.text = task.description ?? '';
     fileController.text = task.file ?? '';
-    
+
     priority.value = _getDisplayValue(task.priority);
     status.value = _getDisplayValue(task.status);
-    
+
     if (task.assignTo?['assignedusers']?.isNotEmpty == true) {
       final assigneeIds = task.assignTo!['assignedusers'] as List;
-      final assigneeUsernames = assigneeIds
-          .map((id) => getUsernameFromId(id.toString()))
-          .where((name) => name != null)
-          .map((name) => name!)
-          .toList();
+      final assigneeUsernames =
+          assigneeIds
+              .map((id) => getUsernameFromId(id.toString()))
+              .where((name) => name != null)
+              .map((name) => name!)
+              .toList();
       assignTo.assignAll(assigneeUsernames);
     }
-    
+
     if (task.taskReporter != null) {
       taskReporter.value = getUsernameFromId(task.taskReporter!);
     }
@@ -155,15 +167,15 @@ class TaskController extends GetxController {
     try {
       isLoading.value = true;
       final response = await _taskService.getTasks(userId);
-      
+
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        if (responseData['data'] != null) {
-          final data = responseData['data'];
+        if (responseData['message']['data'] != null) {
+          final data = responseData['message']['data'];
           if (data is List) {
-          final tasks = data.map((e) => TaskModel.fromJson(e)).toList();
-          task.assignAll(tasks);
-          return tasks;
+            final tasks = data.map((e) => TaskModel.fromJson(e)).toList();
+            task.assignAll(tasks);
+            return tasks;
           }
         }
       }
@@ -199,7 +211,11 @@ class TaskController extends GetxController {
 
   Future<void> addTask({required String userId}) async {
     try {
-      final assigneeIds = assignTo.map((username) => _getIdFromUsername(username)).where((id) => id != null).toList();
+      final assigneeIds =
+          assignTo
+              .map((username) => _getIdFromUsername(username))
+              .where((id) => id != null)
+              .toList();
       final reporterId = _getIdFromUsername(taskReporter.value ?? '');
 
       final task = TaskModel(
@@ -221,7 +237,7 @@ class TaskController extends GetxController {
       );
 
       final response = await _taskService.createTask(task, userId);
-      
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.back();
         CrmSnackBar.showAwesomeSnackbar(
@@ -257,7 +273,11 @@ class TaskController extends GetxController {
         return;
       }
 
-      final assigneeIds = assignTo.map((username) => _getIdFromUsername(username)).where((id) => id != null).toList();
+      final assigneeIds =
+          assignTo
+              .map((username) => _getIdFromUsername(username))
+              .where((id) => id != null)
+              .toList();
       final reporterId = _getIdFromUsername(taskReporter.value ?? '');
 
       final updatedTask = TaskModel(
@@ -278,7 +298,10 @@ class TaskController extends GetxController {
         updatedBy: model.updatedBy,
       );
 
-      final response = await _taskService.updateTask(model.id!, updatedTask.toJson());
+      final response = await _taskService.updateTask(
+        model.id!,
+        updatedTask.toJson(),
+      );
 
       if (response.statusCode == 200) {
         CrmSnackBar.showAwesomeSnackbar(

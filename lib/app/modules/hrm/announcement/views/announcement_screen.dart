@@ -1,10 +1,12 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controllers/announcement_controller.dart';
 import '../widget/announcement_card.dart';
 import 'add_announcement_screen.dart';
@@ -14,6 +16,7 @@ class AnnouncementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
     // Lazy put the controller
     Get.lazyPut<AnnouncementController>(() => AnnouncementController());
     final AnnouncementController controller = Get.find();
@@ -39,13 +42,16 @@ class AnnouncementScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Announcements")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          controller.resetForm();
-          Get.to(() => AddAnnouncementScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.announcement, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  controller.resetForm();
+                  Get.to(() => AddAnnouncementScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -92,33 +98,41 @@ class AnnouncementScreen extends StatelessWidget {
                               bottom: 8,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                  if (accessController.can(
+                                    AccessModule.announcement,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        controller.resetForm();
+                                        Get.to(
+                                          () => AddAnnouncementScreen(
+                                            announcement: announcement,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      controller.resetForm();
-                                      Get.to(
-                                        () => AddAnnouncementScreen(
-                                          announcement: announcement,
-                                          isFromEdit: true,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.announcement,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteAnnouncement(
+                                          announcement.id ?? '',
+                                          announcement.title ?? 'Announcement',
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteAnnouncement(
-                                        announcement.id ?? '',
-                                        announcement.title ?? 'Announcement',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),

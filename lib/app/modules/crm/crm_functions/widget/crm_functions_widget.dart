@@ -58,7 +58,23 @@ class CrmFunctionsWidget extends StatelessWidget {
 
         // Return empty container if list is empty
         if (functions.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return SizedBox(
+            height:
+                MediaQuery.of(context).size.height * 0.7, // or a fixed height
+            child: const Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.lock_outline, size: 48, color: Colors.grey),
+                  SizedBox(height: 8),
+                  Text(
+                    "Access Denied",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+          );
         }
 
         return Column(

@@ -3,8 +3,10 @@ import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../care/constants/access_res.dart';
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controllers/holiday_controller.dart';
 import '../widget/holiday_card.dart';
 import 'add_holiday_screen.dart';
@@ -14,6 +16,8 @@ class HolidayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     Get.lazyPut<HolidayController>(() => HolidayController());
     final HolidayController controller = Get.find();
 
@@ -38,13 +42,16 @@ class HolidayScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Holidays")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          controller.resetForm();
-          Get.to(() => AddHolidayScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.holiday, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  controller.resetForm();
+                  Get.to(() => AddHolidayScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -91,32 +98,40 @@ class HolidayScreen extends StatelessWidget {
                               bottom: 8,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                  if (accessController.can(
+                                    AccessModule.holiday,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => AddHolidayScreen(
+                                            holiday: holiday,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      Get.to(
-                                        () => AddHolidayScreen(
-                                          holiday: holiday,
-                                          isFromEdit: true,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.holiday,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteHoliday(
+                                          holiday.id ?? '',
+                                          holiday.holidayName ?? 'Holiday',
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteHoliday(
-                                        holiday.id ?? '',
-                                        holiday.holidayName ?? 'Holiday',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),

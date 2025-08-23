@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
 import 'package:crm_flutter/app/modules/hrm/leave_management/views/add_leave_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controllers/leave_controller.dart';
 import '../widget/leave_action_screen.dart';
 import '../widget/leave_card.dart';
@@ -16,6 +18,8 @@ class LeaveScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
+
     Get.lazyPut<LeaveController>(() => LeaveController());
     final LeaveController controller = Get.find();
 
@@ -40,14 +44,17 @@ class LeaveScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Leaves")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add leave screen
-          controller.resetForm();
-          Get.to(() => AddLeaveScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.leaveList, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add leave screen
+                  controller.resetForm();
+                  Get.to(() => AddLeaveScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -123,32 +130,40 @@ class LeaveScreen extends StatelessWidget {
                               bottom: 8,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                  if (accessController.can(
+                                    AccessModule.leaveList,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => AddLeaveScreen(
+                                            leave: leave,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      Get.to(
-                                        () => AddLeaveScreen(
-                                          leave: leave,
-                                          isFromEdit: true,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.leaveList,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteLeave(
+                                          leave.id ?? '',
+                                          leave.leaveType ?? 'Leave',
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteLeave(
-                                        leave.id ?? '',
-                                        leave.leaveType ?? 'Leave',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),

@@ -1,10 +1,12 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../../access/controller/access_controller.dart';
 import '../controllers/credit_notes_controller.dart';
 import '../widget/credit_note_card.dart';
 import 'add_credit_note_screen.dart';
@@ -14,6 +16,7 @@ class CreditNoteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AccessController accessController = Get.find<AccessController>();
     Get.lazyPut<CreditNoteController>(() => CreditNoteController());
     final CreditNoteController controller = Get.find();
 
@@ -38,13 +41,16 @@ class CreditNoteScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Credit Notes")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add credit note screen
-          Get.to(() => AddCreditNoteScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.creditNotes, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add credit note screen
+                  Get.to(() => AddCreditNoteScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -97,18 +103,22 @@ class CreditNoteScreen extends StatelessWidget {
                                   //     Get.to(() => AddDebitNoteScreen());
                                   //   },
                                   // ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                  if (accessController.can(
+                                    AccessModule.creditNotes,
+                                    AccessAction.create,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteCreditNote(
+                                          creditNote.id ?? '',
+                                          creditNote.id ?? 'Credit Note',
+                                        );
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteCreditNote(
-                                        creditNote.id ?? '',
-                                        creditNote.id ?? 'Credit Note',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),

@@ -52,7 +52,6 @@ class AccessController extends GetxController {
   bool can(String module, String action) {
     if (_accessService == null) return false;
     final canAccess = _accessService.can(module, action);
-    print("canAccess: $canAccess");
     return canAccess;
   }
 

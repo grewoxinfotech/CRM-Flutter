@@ -1,15 +1,19 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../../../access/controller/access_controller.dart';
 import '../controllers/meeting_controller.dart';
 import '../widget/meeting_card.dart';
 import 'add_meeting_screen.dart';
 
 class MeetingScreen extends StatelessWidget {
+  final AccessController accessController = Get.find<AccessController>();
+
   MeetingScreen({Key? key}) : super(key: key);
 
   @override
@@ -38,14 +42,17 @@ class MeetingScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Meetings")),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add meeting screen
-          controller.resetForm();
-          Get.to(() => AddMeetingScreen());
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton:
+          accessController.can(AccessModule.meeting, AccessAction.create)
+              ? FloatingActionButton(
+                onPressed: () {
+                  // Navigate to add meeting screen
+                  controller.resetForm();
+                  Get.to(() => AddMeetingScreen());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+              : null,
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -92,33 +99,41 @@ class MeetingScreen extends StatelessWidget {
                               bottom: 8,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.blue,
+                                  if (accessController.can(
+                                    AccessModule.meeting,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(() {
+                                          controller.resetForm();
+                                          return AddMeetingScreen(
+                                            meeting: meeting,
+                                            isFromEdit: true,
+                                          );
+                                        });
+                                      },
                                     ),
-                                    onPressed: () {
-                                      Get.to(() {
-                                        controller.resetForm();
-                                        return AddMeetingScreen(
-                                          meeting: meeting,
-                                          isFromEdit: true,
+                                  if (accessController.can(
+                                    AccessModule.meeting,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteMeeting(
+                                          meeting.id ?? '',
+                                          meeting.title ?? 'Meeting',
                                         );
-                                      });
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                      },
                                     ),
-                                    onPressed: () {
-                                      _deleteMeeting(
-                                        meeting.id ?? '',
-                                        meeting.title ?? 'Meeting',
-                                      );
-                                    },
-                                  ),
                                 ],
                               ),
                             ),
