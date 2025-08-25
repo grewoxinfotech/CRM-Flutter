@@ -81,7 +81,7 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
     // Start loading data in parallel without waiting
     _loadProducts();
     _loadCustomers();
-
+    _loadCurrencies();
     // Don't load currencies immediately - will load when dropdown is opened
     // This improves initial page load time
   }
@@ -177,13 +177,14 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
     try {
       final products = await _productService.getProducts();
       setState(() {
-        _products = products;
+        final data = products.where((e) => e!.stockQuantity! > 0,).toList();
+        _products = data;
         // Initialize selected products from invoice items
         _selectedProducts =
             widget.invoice.items.map((item) {
-              return products.firstWhere(
+              return products.firstWhereOrNull(
                 (p) => p!.id == item.productId,
-                orElse: () => products.first,
+                // orElse: () => products.first,
               );
             }).toList();
       });
@@ -469,6 +470,10 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
       return const Center(child: CircularProgressIndicator());
     }
 
+    double availableStock = _selectedProducts[index]!.stockQuantity!.toDouble() -
+        (int.tryParse(_quantityControllers[index].text.trim()) ?? 0).toDouble();
+
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -532,12 +537,13 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
         ),
         if (index < _selectedProducts.length &&
             _selectedProducts[index] != null) ...[
+
           const SizedBox(height: 8),
           Text(
-            'Available Stock: ${_selectedProducts[index]!.stockQuantity}',
+            'Available Stock: ${availableStock.toStringAsFixed(0)}',
             style: TextStyle(
               color:
-                  _selectedProducts[index]!.stockQuantity! < 10
+                  availableStock < 10
                       ? Colors.red
                       : Colors.green,
               fontWeight: FontWeight.bold,
@@ -783,27 +789,7 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
               children: [
                 _buildCustomerField(),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Enable GST',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                    Switch(
-                      value: _isGstEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          _isGstEnabled = value;
-                          if (!value) {
-                            _gstinController.clear();
-                          }
-                        });
-                      },
-                    ),
-                  ],
-                ),
+
                 if (_isGstEnabled) ...[
                   const SizedBox(height: 16),
                   CrmTextField(
@@ -820,6 +806,7 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
                     CrmDropdownField<String>(
                       title: 'Currency',
                       value: _getCurrencyValue(),
+                      enabled: false,
                       items:
                           _isLoadingCurrencies && _currenciesLoaded
                               ? [
@@ -872,12 +859,12 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
                           _updateCurrencyDetails(value);
                         }
                       },
-                      onMenuOpened: () {
-                        // Load currencies if they haven't been loaded yet or if we're not currently loading
-                        if (!_isLoadingCurrencies) {
-                          _loadCurrencies();
-                        }
-                      },
+                      // onMenuOpened: () {
+                      //   // Load currencies if they haven't been loaded yet or if we're not currently loading
+                      //   if (!_isLoadingCurrencies) {
+                      //     _loadCurrencies();
+                      //   }
+                      // },
                       isRequired: true,
                     ),
                     // Don't show loading indicator at all - it causes confusion
@@ -885,6 +872,28 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
                   ],
                 ),
                 const SizedBox(height: 16),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Enable GST',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                    Switch(
+                      value: _isGstEnabled,
+                      onChanged: (value) {
+                        setState(() {
+                          _isGstEnabled = value;
+                          if (!value) {
+                            _gstinController.clear();
+                          }
+                        });
+                      },
+                    ),
+                  ],
+                ),
                 ..._selectedProducts.asMap().entries.map((entry) {
                   final index = entry.key;
                   return Column(
@@ -1148,6 +1157,7 @@ class _SalesInvoiceEditPageState extends State<SalesInvoiceEditPage> {
           widget.invoice.id!,
           data,
         );
+       
         if (success) {
           Get.back();
         }

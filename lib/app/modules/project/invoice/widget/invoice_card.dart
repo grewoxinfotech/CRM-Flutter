@@ -2,6 +2,7 @@ import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/invoice/controllers/invoice_controller.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,14 @@ class InvoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<InvoiceController>(() => InvoiceController());
+    final InvoiceController invoiceController = Get.find();
+    // trigger fetch only once per card
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (currency != null) {
+        invoiceController.getCurrencyById(currency!);
+      }
+    });
     final accessController = Get.find<AccessController>();
     return GestureDetector(
       onTap: onTap,
@@ -147,14 +156,20 @@ class InvoiceCard extends StatelessWidget {
                     formatDate(dueDate),
                   ),
                   const Divider(height: 24),
-                  _buildDetailRow(
-                    'Total Amount',
-                    "${'₹'} ${leadValue ?? '0.00'}",
-                    'Pending Amount',
-                    "${'₹'} ${pendingAmount ?? '0.00'}",
-                    firstValueColor: ColorRes.success,
-                    secondValueColor: ColorRes.error,
-                  ),
+
+
+                  // Currency display with Obx
+                  Obx(() {
+                    final icon = invoiceController.currencyIcons[currency] ?? '';
+                    return _buildDetailRow(
+                      'Total Amount',
+                      "$icon ${leadValue ?? '0.00'}",
+                      'Pending Amount',
+                      "$icon ${pendingAmount ?? '0.00'}",
+                      firstValueColor: ColorRes.success,
+                      secondValueColor: ColorRes.error,
+                    );
+                  }),
                 ],
               ),
             ),

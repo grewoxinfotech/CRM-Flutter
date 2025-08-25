@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/care/pagination/controller/pagination_controller.dart';
 import 'package:crm_flutter/app/data/network/sales_invoice/model/sales_invoice_model.dart';
+import 'package:crm_flutter/app/data/network/system/currency/controller/currency_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../../../care/constants/url_res.dart';
@@ -11,6 +12,10 @@ class InvoiceController extends PaginatedController<SalesInvoice> {
   final SalesInvoiceService _service = SalesInvoiceService();
   final String url = UrlRes.salesInvoices;
   var error = ''.obs;
+
+  RxMap<String, String> currencyIcons = <String, String>{}.obs;
+  RxMap<String, String> currencyCodes = <String, String>{}.obs;
+  final CurrencyController currencyController = Get.put(CurrencyController());
 
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
@@ -32,6 +37,22 @@ class InvoiceController extends PaginatedController<SalesInvoice> {
     super.onInit();
     loadInitial();
   }
+
+
+
+  Future<void> getCurrencyById(String id) async {
+    if (currencyIcons.containsKey(id)) return; // avoid duplicate API calls
+    final currency = await currencyController.getCurrencyById(id);
+    if (currency != null) {
+      currencyIcons[id] = currency.currencyIcon;
+      currencyCodes[id] = currency.currencyCode;
+      currencyIcons.refresh();
+      currencyCodes.refresh();
+    }
+  }
+
+
+
 
   Future<SalesInvoice?> getInvoiceById(String id) async {
     try {

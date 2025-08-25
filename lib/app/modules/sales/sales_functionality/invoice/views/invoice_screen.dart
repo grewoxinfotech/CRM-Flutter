@@ -1,9 +1,11 @@
 import 'package:crm_flutter/app/data/network/sales/customer/model/customer_model.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/sales_invoice/pages/sales_invoice_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../data/database/storage/secure_storage_service.dart';
 import '../../../../../data/network/sales_invoice/controller/sales_invoice_controller.dart';
+import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../crm/crm_functionality/deal/controllers/deal_controller.dart';
 import '../../../../crm/crm_functionality/sales_invoice/pages/sales_invoice_create_page.dart';
 import '../../../../project/invoice/widget/invoice_card.dart';
@@ -26,6 +28,29 @@ class InvoiceScreen extends StatelessWidget {
   /// This function accesses user data stored securely,
   /// extracting the user ID and converting it to a string.
   /// If the user data is null, `customerId` will also be null.
+  void _showDeleteInvoiceDialog(
+      BuildContext context,
+      SalesInvoiceController controller,
+      String invoiceId,
+      String dealId,
+      ) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => CrmDeleteDialog(
+        entityType: "invoice",
+        onConfirm: () async {
+          final success = await controller.deleteInvoice(invoiceId);
+          if (success) {
+            // Refresh the invoices list
+            await controller.fetchInvoicesForDeal(dealId);
+          }
+          // Get.back();
+        },
+      ),
+    );
+  }
+
   void getCustomerId() async {
     customerId = (await SecureStorage.getUserData())?.id;
   }
@@ -101,7 +126,8 @@ class InvoiceScreen extends StatelessWidget {
                             .firstWhereOrNull(
                               (element) => element.id == invoice.customer,
                             );
-                        print('Customer: ${customer?.toJson()}');
+
+                        print("[DEBUG]=>${invoice.currency}");
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
@@ -120,18 +146,17 @@ class InvoiceScreen extends StatelessWidget {
                               createdAt: invoice.issueDate.toString(),
                               dueDate: invoice.dueDate.toString(),
                               pendingAmount: invoice.pendingAmount?.toString(),
-                              // onDelete:
-                              //     () => _showDeleteInvoiceDialog(
-                              //   context,
-                              //   salesInvoiceController,
-                              //   invoice.id!,
-                              //   dealId,
-                              // ),
+                              onDelete:
+                                  () => _showDeleteInvoiceDialog(
+                                context,
+                                salesInvoiceController,
+                                invoice.id!,
+                                customer!.id!,
+                              ),
                               onEdit:
                                   () => Get.to(
-                                    () => SalesInvoiceCreatePage(
-                                      salesInvoice: invoice,
-                                      isFromEdit: true,
+                                    () => SalesInvoiceEditPage(
+                                      invoice: invoice,
                                       dealId: customer!.id!,
                                     ),
                                   ),

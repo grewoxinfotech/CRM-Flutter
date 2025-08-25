@@ -1,6 +1,8 @@
 import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/system/country/model/country_model.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/controllers/customer_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -17,6 +19,7 @@ class CustomerOverviewCard extends StatelessWidget {
   final String? lastName;
   final String? email;
   final String? phone;
+  final String? phonCodePrefix;
   final String? address;
   final String? companyName;
   final String? totalOrders;
@@ -25,7 +28,7 @@ class CustomerOverviewCard extends StatelessWidget {
   final GestureTapCallback? onEdit;
   final GestureTapCallback? onDelete;
 
-  const CustomerOverviewCard({
+   CustomerOverviewCard({
     super.key,
     this.id,
     this.firstName,
@@ -38,11 +41,32 @@ class CustomerOverviewCard extends StatelessWidget {
     this.totalSpent,
     this.createdAt,
     this.onEdit,
-    this.onDelete,
+    this.onDelete, this.phonCodePrefix,
   });
+
+  CustomerController? customerController;
+  Rxn<CountryModel> country = Rxn();
+  void initializeController (){
+    if(!Get.isRegistered<CustomerController>()){
+      customerController = Get.put(CustomerController());
+    }else{
+      customerController = Get.find<CustomerController>();
+    }
+  }
+
+  Future<void> getCountryById(String id) async {
+    try {
+      country.value = await customerController!.getCountryById(id);
+    } catch (e) {
+      print("Error fetching country: $e");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    initializeController();
+    getCountryById(phonCodePrefix!);
     final AccessController accessController = Get.find<AccessController>();
 
     Color textPrimary = Get.theme.colorScheme.onPrimary;
@@ -138,7 +162,7 @@ class CustomerOverviewCard extends StatelessWidget {
                 ),
                 divider,
                 infoItem(ICRes.mailSVG, email ?? ''),
-                infoItem(ICRes.call, phone ?? ''),
+                Obx(()=> infoItem(ICRes.call, "${country.value?.phoneCode ?? '-'} $phone" ?? '')),
                 infoItem(ICRes.location, address ?? ''),
               ],
             ),

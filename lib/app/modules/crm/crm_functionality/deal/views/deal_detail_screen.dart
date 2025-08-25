@@ -412,17 +412,15 @@ class DealDetailScreen extends StatelessWidget {
                     ),
                 onEdit:
                     () => Get.to(
-                      () => SalesInvoiceCreatePage(
-                        salesInvoice: invoice,
-                        isFromEdit: true,
+                      () => SalesInvoiceEditPage(
+                        invoice: invoice,
                         dealId: dealId,
                       ),
                     ),
                 onTap:
                     () => Get.to(
-                      () => SalesInvoiceCreatePage(
-                        salesInvoice: invoice,
-                        isFromEdit: true,
+                          () => SalesInvoiceEditPage(
+                        invoice: invoice,
                         dealId: dealId,
                       ),
                     ),

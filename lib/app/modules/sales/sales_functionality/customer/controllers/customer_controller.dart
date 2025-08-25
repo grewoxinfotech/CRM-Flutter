@@ -5,12 +5,20 @@ import 'package:get/get.dart';
 import '../../../../../care/constants/url_res.dart';
 import '../../../../../data/network/sales/customer/model/customer_model.dart';
 import '../../../../../data/network/sales/customer/service/customer_service.dart';
+import '../../../../../data/network/system/country/controller/country_controller.dart';
+import '../../../../../data/network/system/country/model/country_model.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 
 class CustomerController extends PaginatedController<CustomerData> {
   final CustomerService _service = CustomerService();
   final String url = UrlRes.customers;
   var error = ''.obs;
+
+  Rxn<CountryModel> selectedCountryCode = Rxn();
+  RxList<CountryModel> countryCodes = <CountryModel>[].obs;
+  final CountryController countryController = Get.put(CountryController());
+
+
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
   }
@@ -30,6 +38,33 @@ class CustomerController extends PaginatedController<CustomerData> {
   void onInit() {
     super.onInit();
     loadInitial();
+    loadCountries();
+  }
+
+  Future<void> loadCountries() async {
+    await countryController.getCountries();
+    countryCodes.assignAll(countryController.countryModel);
+    if (countryCodes.isNotEmpty) {
+      selectedCountryCode.value = countryCodes.first;
+    }
+  }
+
+  Future<CountryModel> getCountryById(String id) async {
+    try {
+      final existingCountry = countryCodes.firstWhereOrNull((item) => item.id == id);
+      if (existingCountry != null) {
+        return existingCountry;
+      } else {
+        final country = await countryController.getCountryById(id);
+        if (country != null) {
+          countryCodes.add(country);
+        }
+        return country!;
+      }
+    } catch (e) {
+      print("Create customer error: $e");
+      return CountryModel(id: "", countryName: "", countryCode: "", phoneCode: "", createdAt: DateTime.now() , updatedAt: DateTime.now());
+    }
   }
 
   Future<CustomerData?> getCustomerById(String id) async {

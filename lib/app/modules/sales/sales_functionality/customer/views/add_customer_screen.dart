@@ -1,5 +1,7 @@
 import 'package:crm_flutter/app/care/utils/validation.dart';
 import 'package:crm_flutter/app/data/network/sales/customer/model/customer_model.dart';
+import 'package:crm_flutter/app/data/network/system/country/controller/country_controller.dart';
+import 'package:crm_flutter/app/data/network/system/country/model/country_model.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,7 @@ class AddCustomerScreen extends StatefulWidget {
 
 class _AddCustomerScreenState extends State<AddCustomerScreen> {
   final CustomerController controller = Get.find();
+  final CountryController countryController = Get.put(CountryController());
 
   final _formKey = GlobalKey<FormState>();
   bool sameAsBilling = false;
@@ -54,8 +57,14 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
 
   String status = "active";
   bool isLoading = false;
-  String? selectedCountryCode = '+91';
-  final List<String> countryCodes = ['+91', '+1', '+44', '+61', '+81'];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
 
   String? requiredFieldValidator(
     String? value, {
@@ -76,9 +85,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       name: nameController.text.trim(),
       contact: contactController.text.trim(),
       email: emailController.text.trim(),
-      taxNumber: "9412344442",
-      // phonecode: "xddKn7uiW3NrDEW0kfBJ8t5",
-      phonecode: selectedCountryCode.toString(),
+      taxNumber: taxNumberController.text.trim(),
+      phonecode: controller.selectedCountryCode.value?.id.toString(),
       billingAddress: Address(
         street: billingStreetController.text.trim(),
         city: billingCityController.text.trim(),
@@ -189,26 +197,28 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
               // ),
               Row(
                 children: [
-                  Expanded(
-                    flex: 2, // smaller space for dropdown
-                    child: CrmDropdownField<String>(
-                      title: 'Code',
-                      isRequired: true,
-                      value: selectedCountryCode,
-                      items:
-                          countryCodes
-                              .map(
-                                (code) => DropdownMenuItem<String>(
-                                  value: code,
-                                  child: Text(code),
-                                ),
-                              )
-                              .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCountryCode = value;
-                        });
-                      },
+                  Obx(
+                    ()=> Expanded(
+                      flex: 2, // smaller space for dropdown
+                      child: CrmDropdownField<CountryModel>(
+                        title: 'Code',
+                        isRequired: true,
+                        value: controller.selectedCountryCode.value,
+                        items:
+                            controller.countryCodes
+                                .map(
+                                  (country) => DropdownMenuItem<CountryModel>(
+                                    value: country,
+                                    child: Text(country.phoneCode),
+                                  ),
+                                )
+                                .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            controller.selectedCountryCode.value = value;
+                          });
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),

@@ -96,6 +96,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
       firstName: c.name ?? "-",
       phone: c.contact ?? "-",
       email: c.email ?? "-",
+      phonCodePrefix: c.phonecode,
       companyName: c.company ?? "-",
       address: Address.formatAddress(customer!.billingAddress),
       onDelete:

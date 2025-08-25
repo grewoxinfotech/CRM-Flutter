@@ -37,10 +37,9 @@ class CurrencyController extends GetxController {
     try {
       isLoading.value = true;
       final data = await currencyService.getCurrencies();
-
       // Case-insensitive comparison
       final currency = data.firstWhereOrNull(
-        (c) => c.id.toLowerCase() == currencyId.toLowerCase(),
+        (c) => c.id.toLowerCase() == currencyId.toLowerCase().trim(),
       );
 
       if (currency == null) {

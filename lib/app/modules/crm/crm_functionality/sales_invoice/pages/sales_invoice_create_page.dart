@@ -316,6 +316,9 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
       (p0) => p0!.stockQuantity! > 0,
     );
 
+    double availableStock = (createController.selectedProducts[index]?.stockQuantity!.toDouble() ?? 0) -
+        (int.tryParse(createController.quantityControllers[index].text.trim()) ?? 0).toDouble();
+
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -385,10 +388,10 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
               createController.selectedProducts[index] != null) ...[
             const SizedBox(height: 8),
             Text(
-              'Available Stock: ${createController.selectedProducts[index]!.stockQuantity}',
+              'Available Stock: ${availableStock.toStringAsFixed(0)}',
               style: TextStyle(
                 color:
-                    createController.selectedProducts[index]!.stockQuantity! <
+                    availableStock <
                             10
                         ? Colors.red
                         : Colors.green,
@@ -572,6 +575,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                 name: e.name,
                 id: e.productId,
                 stockQuantity: e.quantity,
+                hsnSac: e.hsnSac,
               ),
             )
             .toList(),
@@ -1120,8 +1124,8 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
           total: total,
           // amount: _calculateItemTotal(i),
           amount: 10,
-          // hsnSac: createController.selectedProducts[i]!.hsnSac!,
-          hsnSac: "",
+          hsnSac: createController.selectedProducts[i]!.hsnSac!,
+          // hsnSac: "",
           discount: double.parse(
             createController.itemDiscountControllers[i].text,
           ),

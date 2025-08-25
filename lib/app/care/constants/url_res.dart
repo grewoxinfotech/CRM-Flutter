@@ -43,6 +43,8 @@ class UrlRes {
 
   static const String currencies = "$baseURL/currencies";
 
+  static const String countries = "$baseURL/countries";
+
   static const String creditNotes = "$baseURL/sales-creditnote";
 
   static const String employees = "$baseURL/employees";
