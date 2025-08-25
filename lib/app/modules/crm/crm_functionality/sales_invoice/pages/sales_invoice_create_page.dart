@@ -19,10 +19,16 @@ import '../../../../../data/network/sales_invoice/model/sales_invoice_model.dart
 import '../../../../../data/network/system/currency/service/currency_service.dart';
 
 class SalesInvoiceCreatePage extends StatefulWidget {
+  final SalesInvoice? salesInvoice;
   final String dealId;
+  final bool isFromEdit;
 
-  const SalesInvoiceCreatePage({Key? key, required this.dealId})
-    : super(key: key);
+  const SalesInvoiceCreatePage({
+    Key? key,
+    required this.dealId,
+    this.isFromEdit = false,
+    this.salesInvoice,
+  }) : super(key: key);
 
   @override
   State<SalesInvoiceCreatePage> createState() => _SalesInvoiceCreatePageState();
@@ -191,72 +197,6 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
     return requestedQuantity <= product.stockQuantity!;
     ;
   }
-
-  // Widget _buildCustomerField() {
-  //   if (createController.isLoadingCustomers.value) {
-  //     return const Center(child: CircularProgressIndicator());
-  //   }
-  //
-  //   return Obx(
-  //     () => Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         CrmDropdownField<String>(
-  //           title: 'Customer',
-  //           value:
-  //               createController.selectedCustomerId.isNotEmpty
-  //                   ? createController.selectedCustomerId
-  //                   : null,
-  //           items:
-  //               createController.customers
-  //                   .map(
-  //                     (customer) => DropdownMenuItem(
-  //                       value: customer.id,
-  //                       child: Text('${customer.name} (${customer.contact})'),
-  //                     ),
-  //                   )
-  //                   .toList(),
-  //           onChanged: (customerId) {
-  //             if (customerId != null) {
-  //               setState(() {
-  //                 createController.selectedCustomerId = customerId;
-  //                 // Auto-fill GSTIN when customer is selected
-  //                 final selectedCustomer = createController.customers
-  //                     .firstWhere(
-  //                       (c) => c.id == customerId,
-  //                       orElse:
-  //                           () => SalesCustomer(
-  //                             id: '',
-  //                             name: '',
-  //                             contact: '',
-  //                             phonecode: '',
-  //                             clientId: '',
-  //                             createdBy: '',
-  //                             createdAt: DateTime.now(),
-  //                             updatedAt: DateTime.now(),
-  //                           ),
-  //                     );
-  //                 // Enable GST if customer has tax number
-  //                 createController.isGstEnabled.value =
-  //                     selectedCustomer.taxNumber?.isNotEmpty ?? false;
-  //                 createController.gstinController.text =
-  //                     selectedCustomer.taxNumber ?? '';
-  //               });
-  //             }
-  //           },
-  //           isRequired: true,
-  //         ),
-  //         if (createController.selectedCustomerId.isNotEmpty) ...[
-  //           const SizedBox(height: 8),
-  //           Text(
-  //             'Contact: ${createController.customers.firstWhere((c) => c.id == createController.selectedCustomerId).contact}',
-  //             style: const TextStyle(fontSize: 12, color: Colors.grey),
-  //           ),
-  //         ],
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildCustomerField() {
     return Obx(() {
@@ -602,15 +542,97 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<SalesInvoiceController>();
+    if (widget.isFromEdit && widget.salesInvoice != null) {
+      final invoice = widget.salesInvoice!;
+      print('Edit Invoice: ${invoice.toJson()}');
+      // Customer
+      createController.selectedCustomerId.value = invoice.customer ?? '';
+
+      // Currency
+      createController.getCurrencyById(invoice.currency!);
+
+      // createController.currencyIcon.value = invoice.currencyIcon!;
+      // createController.currencyCode.value = invoice.currencyCode!;
+
+      // GST Enabled
+
+      createController.isGstEnabled.value = (invoice.tax ?? 0) > 0;
+
+      // if (invoice.items.isNotEmpty) {
+      //   createController.selectedProducts.assignAll(
+      //     invoice.items.map((e) => e.productId).toList(),
+      //   );
+      // }
+
+      // Products
+      createController.selectedProducts.assignAll(
+        invoice.items
+            .map(
+              (e) => Data(
+                name: e.name,
+                id: e.productId,
+                stockQuantity: e.quantity,
+              ),
+            )
+            .toList(),
+      );
+      // createController.getProductsByIds(
+      //   invoice.items.map((e) => e.productId).toList(),
+      // );
+      // final products = invoice.items.map((e) => e.productId).toList();
+      // createController.selectedProducts.assignAll(products);
+
+      // Quantity Controllers
+      createController.quantityControllers.assignAll(
+        invoice.items.map(
+          (e) => TextEditingController(text: e.quantity.toString()),
+        ),
+      );
+
+      // Unit Price Controllers
+      createController.unitPriceControllers.assignAll(
+        invoice.items.map(
+          (e) => TextEditingController(text: e.unitPrice.toString()),
+        ),
+      );
+
+      // Item Discount Controllers
+      createController.itemDiscountControllers.assignAll(
+        invoice.items.map(
+          (e) => TextEditingController(text: e.discount.toString()),
+        ),
+      );
+
+      // Item Discount Types
+      createController.itemDiscountTypes.assignAll(
+        invoice.items.map((e) => e.discountType ?? 'percentage'),
+      );
+
+      // Item GST Controllers
+      createController.itemGstControllers.assignAll(
+        invoice.items.map((e) => TextEditingController(text: e.tax.toString())),
+      );
+
+      // GST Controller
+      createController.gstinController.text = invoice.gstin?.toString() ?? '0';
+
+      // Payment status
+      createController.paymentStatus.value = invoice.paymentStatus ?? '';
+
+      // Subtotal, Discount, Total
+      // createController.subtotalController.text = invoice.subTotal?.toString() ?? '0';
+      // createController.discountController.text = invoice.discount?.toString() ?? '0';
+      // createController.totalController.text = invoice.total?.toString() ?? '0';
+    }
 
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) async {
         if (didPop) {
-          // Refresh the invoice list when popping back
-          if (mounted) {
-            await controller.fetchInvoicesForDeal(widget.dealId);
-          }
+          // // Refresh the invoice list when popping back
+          // if (mounted) {
+          //   await controller.fetchInvoicesForDeal(widget.dealId);
+          // }
         }
       },
       child: Scaffold(
@@ -647,6 +669,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                       CrmDropdownField<String>(
                         title: 'Currency',
                         value: _getCurrencyValue(),
+                        enabled: widget.isFromEdit ? false : true,
                         items:
                             createController.isLoadingCurrencies.value &&
                                     createController.currenciesLoaded.value
@@ -887,12 +910,18 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
                   () => CrmButton(
                     width: Get.width - 40,
                     title:
-                        controller.isLoading.value
+                        widget.isFromEdit
+                            ? controller.isLoading.value
+                                ? 'Updating...'
+                                : 'Update Invoice'
+                            : controller.isLoading.value
                             ? 'Creating...'
                             : 'Create Invoice',
                     onTap: () {
                       controller.isLoading.value = true;
-                      _createInvoice();
+                      widget.isFromEdit
+                          ? _updateInvoice(widget.salesInvoice!.id!)
+                          : _createInvoice();
                     },
                   ),
                 ),
@@ -1000,24 +1029,6 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
         );
       });
 
-      // final items = List.generate(
-      //   createController.selectedProducts.length,
-      //   (i) => {
-      //     'product_id': createController.selectedProducts[i]!.id,
-      //     'quantity': int.parse(createController.quantityControllers[i].text),
-      //     'unit_price': double.parse(createController.unitPriceControllers[i].text),
-      //     'tax': createController.isGstEnabled.value ? double.parse(createController.itemGstControllers[i].text) : 0,
-      //     'tax_amount': _calculateItemGst(i),
-      //     'discount': double.parse(createController.itemDiscountControllers[i].text),
-      //     'discount_type': createController.itemDiscountTypes[i],
-      //     'discount_amount': _calculateItemDiscount(i),
-      //     'hsn_sac': createController.selectedProducts[i]!.hsnSac,
-      //     'amount': _calculateItemTotal(i),
-      //     'subtotal': _calculateItemSubtotal(i),
-      //     'tax_name': "",
-      //   },
-      // );
-
       final data = SalesInvoice(
         customer: createController.selectedCustomerId.value,
         issueDate: createController.issueDate.value,
@@ -1038,28 +1049,11 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
         items: items,
       );
 
-      // final data = {
-      //   'customer': createController.selectedCustomerId,
-      //   'gstin': createController.isGstEnabled.value ? createController.gstinController.text : '',
-      //   'section': 'sales-invoice',
-      //   'issueDate': DateFormat('yyyy-MM-dd').format(createController.issueDate.value),
-      //   'dueDate': DateFormat('yyyy-MM-dd').format(createController.dueDate.value),
-      //   'currency': createController.currency.value,
-      //   'currency_code': createController.currency.valueCode,
-      //   'currency_icon': createController.currencyIcon.value,
-      //   'items': items,
-      //   'subtotal': _calculateSubtotal(),
-      //   'tax': _calculateTotalGst(),
-      //   'discount': _calculateTotalDiscount(),
-      //   'total': _calculateTotal(),
-      //   'payment_status': createController.paymentStatus.value,
-      // };
-
       try {
         final success = await controller.createInvoice(data, widget.dealId);
         if (success) {
           // Refresh invoices list
-          await controller.fetchInvoicesForDeal(widget.dealId);
+          // await controller.fetchInvoicesForDeal(widget.dealId);
 
           Get.back();
         }
@@ -1067,6 +1061,125 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Error',
           message: 'Failed to create invoice: ${e.toString()}',
+          contentType: ContentType.failure,
+        );
+      }
+    }
+  }
+
+  Future<void> _updateInvoice(String invoiceId) async {
+    if (createController.formKey.currentState?.validate() ?? false) {
+      if (createController.selectedCustomerId.isEmpty) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Error',
+          message: 'Please select a customer',
+          contentType: ContentType.failure,
+        );
+        return;
+      }
+
+      // Validate all products are selected
+      for (int i = 0; i < createController.selectedProducts.length; i++) {
+        if (createController.selectedProducts[i] == null) {
+          CrmSnackBar.showAwesomeSnackbar(
+            title: 'Error',
+            message: 'Please select product_service ${i + 1}',
+            contentType: ContentType.failure,
+          );
+          return;
+        }
+      }
+
+      // Validate stock quantities
+      for (int i = 0; i < createController.selectedProducts.length; i++) {
+        final quantity = int.parse(
+          createController.quantityControllers[i].text,
+        );
+        if (!_validateStockQuantity(
+          createController.selectedProducts[i]!,
+          quantity,
+        )) {
+          CrmSnackBar.showAwesomeSnackbar(
+            title: 'Error',
+            message:
+                'Insufficient stock for ${createController.selectedProducts[i]!.name}. Available: ${createController.selectedProducts[i]!.stockQuantity}',
+            contentType: ContentType.failure,
+          );
+          return;
+        }
+      }
+
+      final controller = Get.find<SalesInvoiceController>();
+      final subtotal = _calculateSubtotal();
+      final total = _calculateTotal();
+
+      final items = List.generate(createController.selectedProducts.length, (
+        i,
+      ) {
+        return SalesInvoiceItem(
+          total: total,
+          // amount: _calculateItemTotal(i),
+          amount: 10,
+          // hsnSac: createController.selectedProducts[i]!.hsnSac!,
+          hsnSac: "",
+          discount: double.parse(
+            createController.itemDiscountControllers[i].text,
+          ),
+          quantity: int.parse(createController.quantityControllers[i].text),
+          subtotal: _calculateItemSubtotal(i),
+          productId: createController.selectedProducts[i]!.id!,
+          taxAmount: _calculateItemGst(i),
+          unitPrice: double.parse(
+            createController.unitPriceControllers[i].text,
+          ),
+          discountType: createController.itemDiscountTypes[i],
+          discountAmount: _calculateItemDiscount(i),
+          taxName: "",
+          tax:
+              createController.isGstEnabled.value
+                  ? double.parse(createController.itemGstControllers[i].text)
+                  : 0,
+        );
+      });
+
+      final data = SalesInvoice(
+        id: invoiceId, // Add this if your model supports it
+        customer: createController.selectedCustomerId.value,
+        issueDate: createController.issueDate.value,
+        dueDate: createController.dueDate.value,
+        discount: _calculateTotalDiscount(),
+        tax: _calculateTotalGst(),
+        subtotal: subtotal,
+        total: total,
+        paymentStatus: createController.paymentStatus.value,
+        currency: createController.currency.value,
+        gstin:
+            createController.isGstEnabled.value
+                ? createController.gstinController.text
+                : '',
+        section: 'sales-invoice',
+        currencyCode: createController.currencyCode.value,
+        currencyIcon: createController.currencyIcon.value,
+        items: items,
+        amount: 10,
+      );
+
+      try {
+        // Convert SalesInvoice to Map<String, dynamic>
+        final invoiceMap = data.toJson();
+
+        final success = await controller.updateInvoice(invoiceId, invoiceMap);
+        // Get.back();
+
+        if (success) {
+          // Optionally refresh the invoices list if needed
+          // await controller.fetchInvoicesForDeal(widget.dealId);
+          Get.back();
+        }
+      } catch (e) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Error',
+          message: 'Failed to update invoice: ${e.toString()}',
           contentType: ContentType.failure,
         );
       }

@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/hrm/employee/employee_model.dart';
+import 'package:crm_flutter/app/data/network/user/all_users/model/all_users_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -32,7 +33,7 @@ class AddBranchScreen extends StatelessWidget {
     final branch = BranchData(
       branchName: controller.branchNameController.text,
       branchAddress: controller.branchAddressController.text,
-      branchManager: "7dzE4fFaAfNtBUNDxW0xmci",
+      branchManager: controller.selectedManager.value!.id,
       // branchManager: selectedManager!.id,
     );
     print("[DEBUG]=> ${branch.toJson()}");
@@ -41,11 +42,11 @@ class AddBranchScreen extends StatelessWidget {
 
     controller.isLoading.value = false;
     if (success) Get.back();
-    CrmSnackBar.showAwesomeSnackbar(
-      title: success ? "Success" : "Error",
-      message: success ? "Branch added successfully" : "Failed to add branch",
-      contentType: success ? ContentType.success : ContentType.failure,
-    );
+    // CrmSnackBar.showAwesomeSnackbar(
+    //   title: success ? "Success" : "Error",
+    //   message: success ? "Branch added successfully" : "Failed to add branch",
+    //   contentType: success ? ContentType.success : ContentType.failure,
+    // );
   }
 
   void _update() async {
@@ -55,7 +56,7 @@ class AddBranchScreen extends StatelessWidget {
     final branchData = BranchData(
       branchName: controller.branchNameController.text,
       branchAddress: controller.branchAddressController.text,
-      branchManager: "7dzE4fFaAfNtBUNDxW0xmci",
+      branchManager: controller.selectedManager.value!.id,
       // branchManager: selectedManager!.id,
     );
     print("[DEBUG]=> ${branchData.toJson()}");
@@ -64,20 +65,27 @@ class AddBranchScreen extends StatelessWidget {
 
     controller.isLoading.value = false;
     if (success) Get.back();
-    CrmSnackBar.showAwesomeSnackbar(
-      title: success ? "Success" : "Error",
-      message: success ? "Branch Updated successfully" : "Failed to add branch",
-      contentType: success ? ContentType.success : ContentType.failure,
-    );
+    // CrmSnackBar.showAwesomeSnackbar(
+    //   title: success ? "Success" : "Error",
+    //   message: success ? "Branch Updated successfully" : "Failed to add branch",
+    //   contentType: success ? ContentType.success : ContentType.failure,
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isFromEdit) {
-      controller.selectedManager.value = branch!.branchManager!;
-      controller.branchNameController.text = branch!.branchName!;
-      controller.branchAddressController.text = branch!.branchAddress!;
+    if (isFromEdit && branch != null) {
+      // Load manager and preselect
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await controller.getManagerById(branch!.branchManager!);
+        controller.selectedManager.value = controller.managers.firstWhereOrNull(
+          (m) => m.id == branch!.branchManager,
+        );
+      });
+      controller.branchNameController.text = branch!.branchName ?? '';
+      controller.branchAddressController.text = branch!.branchAddress ?? '';
     }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Add Branch')),
       body: Padding(
@@ -100,19 +108,28 @@ class AddBranchScreen extends StatelessWidget {
 
               /// Branch Manager (Dropdown)
               Obx(
-                () => CrmDropdownField<String>(
+                () => CrmDropdownField<User>(
                   title: 'Branch Manager',
                   value: controller.selectedManager.value,
-                  items: const [
-                    DropdownMenuItem<String>(
-                      value: "7dzE4fFaAfNtBUNDxW0xmci",
-                      child: Text("Manager A"),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: "8aaE5fFaZxNtBUNDyW9xyzi",
-                      child: Text("Manager B"),
-                    ),
-                  ],
+                  // items: const [
+                  //   DropdownMenuItem<String>(
+                  //     value: "7dzE4fFaAfNtBUNDxW0xmci",
+                  //     child: Text("Manager A"),
+                  //   ),
+                  //   DropdownMenuItem<String>(
+                  //     value: "8aaE5fFaZxNtBUNDyW9xyzi",
+                  //     child: Text("Manager B"),
+                  //   ),
+                  // ],
+                  items:
+                      controller.managers
+                          .map(
+                            (manager) => DropdownMenuItem<User>(
+                              value: manager,
+                              child: Text(manager.username),
+                            ),
+                          )
+                          .toList(),
                   onChanged: (manager) {
                     controller.selectedManager.value = manager;
                   },

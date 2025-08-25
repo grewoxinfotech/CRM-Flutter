@@ -1,10 +1,13 @@
 import 'package:crm_flutter/app/care/pagination/controller/pagination_controller.dart';
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../care/constants/url_res.dart';
 import '../../../../data/network/hrm/hrm_system/branch/branch_model.dart';
 import '../../../../data/network/hrm/hrm_system/branch/branch_service.dart';
+import '../../../../data/network/user/all_users/model/all_users_model.dart';
+import '../../../users/controllers/users_controller.dart';
 
 class BranchController extends PaginatedController<BranchData> {
   final BranchService _service = BranchService();
@@ -16,8 +19,10 @@ class BranchController extends PaginatedController<BranchData> {
   final TextEditingController branchNameController = TextEditingController();
   final TextEditingController branchAddressController = TextEditingController();
 
+  final RxList<User> managers = <User>[].obs;
+  final UsersController usersController = Get.put(UsersController());
   // EmployeeData? selectedManager;
-  RxString selectedManager = "".obs;
+  Rxn<User> selectedManager = Rxn<User>();
 
   @override
   Future<List<BranchData>> fetchItems(int page) async {
@@ -34,12 +39,49 @@ class BranchController extends PaginatedController<BranchData> {
   void onInit() {
     super.onInit();
     loadInitial();
-    selectedManager.value = "7dzE4fFaAfNtBUNDxW0xmci";
+    loadManagers();
   }
 
   void resetForm() {
     branchNameController.clear();
     branchAddressController.clear();
+  }
+
+  /// Load all managers for the current client
+  Future<void> loadManagers() async {
+    try {
+      final userData = await SecureStorage.getUserData();
+      final clientId = userData?.id;
+      if (clientId == null || clientId.isEmpty) {
+        print("No client ID found for the current user.");
+        return;
+      }
+
+      final clientUsers = await usersController.getUsersByClientId(clientId);
+      managers.assignAll(clientUsers);
+
+      print("Managers loaded: ${managers.length}");
+
+      if (managers.isNotEmpty && selectedManager.value == null) {
+        selectedManager.value = managers.first;
+      }
+    } catch (e, stackTrace) {
+      print("Error loading managers: $e");
+      print(stackTrace);
+    }
+  }
+
+  /// Load a specific manager by ID if not already in the list
+  Future<User?> getManagerById(String id) async {
+    try {
+      final user = await usersController.getUserById(id);
+      if (user != null && !managers.any((m) => m.id == user.id)) {
+        managers.add(user);
+      }
+      return user;
+    } catch (e) {
+      print("Error loading manager by ID: $e");
+    }
   }
 
   /// Get single branch by ID

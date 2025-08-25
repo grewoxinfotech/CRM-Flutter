@@ -1,11 +1,15 @@
+import 'package:crm_flutter/app/data/network/user/all_users/model/all_users_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../data/network/hrm/hrm_system/branch/branch_model.dart';
+import '../controllers/branch_controller.dart';
 
 class BranchCard extends StatelessWidget {
   final BranchData branch;
+  Rxn<User> manager = Rxn<User>();
 
-  const BranchCard({Key? key, required this.branch}) : super(key: key);
+  BranchCard({Key? key, required this.branch}) : super(key: key);
 
   String formatBranchCode(String? code) {
     if (code != null && code.isNotEmpty) {
@@ -17,6 +21,10 @@ class BranchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<BranchController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      manager.value = await controller.getManagerById(branch.branchManager!);
+    });
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       elevation: 3,
@@ -90,12 +98,14 @@ class BranchCard extends StatelessWidget {
                   // Branch Manager
                   if (branch.branchManager != null &&
                       branch.branchManager!.isNotEmpty)
-                    Text(
-                      'Manager: ${branch.branchManager!}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.green[700],
-                        fontWeight: FontWeight.w600,
+                    Obx(
+                      () => Text(
+                        'Manager: ${manager.value?.username} ',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.green[700],
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                 ],

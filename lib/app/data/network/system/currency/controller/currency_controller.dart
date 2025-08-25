@@ -33,6 +33,37 @@ class CurrencyController extends GetxController {
     }
   }
 
+  Future<CurrencyModel?> getCurrencyById(String currencyId) async {
+    try {
+      isLoading.value = true;
+      final data = await currencyService.getCurrencies();
+
+      // Case-insensitive comparison
+      final currency = data.firstWhereOrNull(
+        (c) => c.id.toLowerCase() == currencyId.toLowerCase(),
+      );
+
+      if (currency == null) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Not Found',
+          message: 'Currency with ID "$currencyId" not found.',
+          contentType: ContentType.warning,
+        );
+      }
+
+      return currency;
+    } catch (e) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Error',
+        message: 'Failed to fetch currency: ${e.toString()}',
+        contentType: ContentType.failure,
+      );
+      return null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   /// Get Currency name by ID or name
   String getCurrencyName(String currencyIdOrCode) {
     if (currencyModel.isEmpty) {

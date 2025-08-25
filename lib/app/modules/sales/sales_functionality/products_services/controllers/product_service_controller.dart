@@ -223,6 +223,26 @@ class ProductsServicesController extends PaginatedController<Data> {
     }
   }
 
+  // Future<Data> getProductById(String productId) async {
+  //   try {
+  //     isLoading.value = true;
+  //     final existingProduct = items.firstWhereOrNull((item) => item.id == productId);
+  //     if (existingProduct != null) {
+  //       return existingProduct;
+  //     }
+  //     final response = await _service.getProductById(productId);
+  //     if (response != null) {
+  //       return response;
+  //     } else {
+  //       return Data();
+  //     }
+  //   } catch (e) {
+  //     return Data();
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
   String? requiredValidator(String? value, String message) {
     if (value == null || value.trim().isEmpty) return message;
     return null;
@@ -385,6 +405,16 @@ class ProductsServicesController extends PaginatedController<Data> {
 
   Future<Data?> getProductById(String id) async {
     try {
+      await refreshProducts();
+      final exists = items.any((item) => item.id == id);
+      print("[DEBUG]=> Exists: ${items.length}");
+      print(
+        "[DEBUG]=> Exists: ${items.map((element) => element.id).join(", ")}",
+      );
+      if (exists) {
+        print("[DEBUG]=> Item exists");
+        return items.firstWhere((item) => item.id == id);
+      }
       final response = await _service.getProductById(id);
       print("[DEBUG]=> ${response?.toJson()}");
       if (response != null) {

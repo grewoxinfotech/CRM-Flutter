@@ -139,12 +139,13 @@ class SalesInvoiceService {
   /// Update an existing invoice
   Future<bool> updateSalesInvoice(String id, Map<String, dynamic> data) async {
     try {
+      print("[DEBUG]=>data ---- ${data}");
       final response = await http.put(
         Uri.parse("$url/$id"),
         headers: await headers(),
         body: json.encode(data),
       );
-
+      print("[DEBUG]=>response ---- ${response.body}");
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
@@ -162,19 +163,19 @@ class SalesInvoiceService {
           return false;
         }
       } else {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: "Error",
-          message: "Failed to update invoice. Status: ${response.statusCode}",
-          contentType: ContentType.failure,
-        );
+        // CrmSnackBar.showAwesomeSnackbar(
+        //   title: "Error",
+        //   message: "Failed to update invoice. Status: ${response.statusCode}",
+        //   contentType: ContentType.failure,
+        // );
         return false;
       }
     } catch (e) {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: "Error",
-        message: "Error updating invoice: ${e.toString()}",
-        contentType: ContentType.failure,
-      );
+      // CrmSnackBar.showAwesomeSnackbar(
+      //   title: "Error",
+      //   message: "Error updating invoice: ${e.toString()}",
+      //   contentType: ContentType.failure,
+      // );
       return false;
     }
   }

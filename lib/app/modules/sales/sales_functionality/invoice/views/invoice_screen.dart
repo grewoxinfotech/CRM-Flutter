@@ -101,6 +101,7 @@ class InvoiceScreen extends StatelessWidget {
                             .firstWhereOrNull(
                               (element) => element.id == invoice.customer,
                             );
+                        print('Customer: ${customer?.toJson()}');
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
@@ -126,13 +127,14 @@ class InvoiceScreen extends StatelessWidget {
                               //   invoice.id!,
                               //   dealId,
                               // ),
-                              // onEdit:
-                              //     () => Get.to(
-                              //       () => SalesInvoiceEditPage(
-                              //     invoice: invoice,
-                              //     dealId: dealId,
-                              //   ),
-                              // ),
+                              onEdit:
+                                  () => Get.to(
+                                    () => SalesInvoiceCreatePage(
+                                      salesInvoice: invoice,
+                                      isFromEdit: true,
+                                      dealId: customer!.id!,
+                                    ),
+                                  ),
                               onTap:
                                   () => Get.to(
                                     () => InvoiceDetailScreen(

@@ -1,3 +1,5 @@
+import 'package:crm_flutter/app/data/network/system/currency/controller/currency_controller.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:collection/collection.dart';
@@ -39,6 +41,7 @@ class SalesInvoiceCreateController extends GetxController {
   var currency = 'AHNTpSNJHMypuNF6iPcMLrz'.obs;
   var currencyCode = 'INR'.obs;
   var currencyIcon = '₹'.obs;
+  final CurrencyController currencyController = Get.put(CurrencyController());
 
   var itemDiscountTypes = ['percentage'].obs;
   var isGstEnabled = false.obs;
@@ -46,6 +49,9 @@ class SalesInvoiceCreateController extends GetxController {
   var products = <Data?>[].obs;
   var selectedProducts = <Data?>[].obs;
   var isLoadingProducts = false.obs;
+  final ProductsServicesController proController = Get.put(
+    ProductsServicesController(),
+  );
 
   var currencies = <CurrencyModel>[].obs;
   var isLoadingCurrencies = false.obs;
@@ -75,6 +81,24 @@ class SalesInvoiceCreateController extends GetxController {
     _loadProducts();
     _loadCustomers();
     loadCurrencies();
+  }
+
+  Future<void> getProductsByIds(List<String> productIds) async {
+    for (final id in productIds) {
+      final data = await proController.getProductById(id);
+      if (data != null) {
+        selectedProducts.add(data);
+      }
+    }
+  }
+
+  Future<void> getCurrencyById(String currencyId) async {
+    final data = await currencyController.getCurrencyById(currencyId);
+    if (data != null) {
+      currencyCode.value = data.currencyCode;
+      currencyIcon.value = data.currencyIcon;
+      currency.value = data.id;
+    }
   }
 
   Future<void> loadCurrencies() async {

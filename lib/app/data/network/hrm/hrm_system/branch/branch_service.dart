@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 import 'branch_model.dart';
 
 class BranchService {
@@ -61,16 +63,48 @@ class BranchService {
   }
 
   /// Create new branch
+  // Future<bool> createBranch(BranchData branch) async {
+  //   try {
+  //     print("[DEBUG]=> $baseUrl ---- ${branch.toJson()}");
+  //     final response = await http.post(
+  //       Uri.parse(baseUrl),
+  //       headers: await headers(),
+  //       body: jsonEncode(branch.toJson()),
+  //     );
+  //     if()
+  //     print("[DEBUG]=> $baseUrl ---- ${response.body}");
+  //     return response.statusCode == 201 || response.statusCode == 200;
+  //   } catch (e) {
+  //     print("Create branch exception: $e");
+  //     return false;
+  //   }
+  // }
+
   Future<bool> createBranch(BranchData branch) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${branch.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(branch.toJson()),
       );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
-      return response.statusCode == 201 || response.statusCode == 200;
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: "Success",
+          message: responseData["message"] ?? "Branch created successfully",
+          contentType: ContentType.success,
+        );
+        return true;
+      } else {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: "Error",
+          message: responseData["message"] ?? "Failed to create branch",
+          contentType: ContentType.failure,
+        );
+        return false;
+      }
     } catch (e) {
       print("Create branch exception: $e");
       return false;
@@ -78,6 +112,20 @@ class BranchService {
   }
 
   /// Update branch
+  // Future<bool> updateBranch(String id, BranchData branch) async {
+  //   try {
+  //     final response = await http.put(
+  //       Uri.parse("$baseUrl/$id"),
+  //       headers: await headers(),
+  //       body: jsonEncode(branch.toJson()),
+  //     );
+  //
+  //     return response.statusCode == 200;
+  //   } catch (e) {
+  //     print("Update branch exception: $e");
+  //     return false;
+  //   }
+  // }
   Future<bool> updateBranch(String id, BranchData branch) async {
     try {
       final response = await http.put(
@@ -86,9 +134,30 @@ class BranchService {
         body: jsonEncode(branch.toJson()),
       );
 
-      return response.statusCode == 200;
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: "Success",
+          message: responseData["message"] ?? "Branch updated successfully",
+          contentType: ContentType.success,
+        );
+        return true;
+      } else {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: "Error",
+          message: responseData["message"] ?? "Failed to update branch",
+          contentType: ContentType.failure,
+        );
+        return false;
+      }
     } catch (e) {
       print("Update branch exception: $e");
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Exception",
+        message: "Something went wrong while updating the branch",
+        contentType: ContentType.failure,
+      );
       return false;
     }
   }
