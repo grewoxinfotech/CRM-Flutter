@@ -202,12 +202,14 @@ class DealDetailScreen extends StatelessWidget {
       createdAt: deal.createdAt.toString(),
       updatedAt: deal.updatedAt.toString(),
       onDelete:
-          () => CrmDeleteDialog(
-            entityType: deal.dealTitle.toString(),
-            onConfirm: () {
-              dealController.deleteDeal(deal.id.toString());
-              Get.back();
-            },
+          () => Get.dialog(
+            CrmDeleteDialog(
+              entityType: deal.dealTitle.toString(),
+              onConfirm: () {
+                dealController.deleteDeal(deal.id.toString());
+                Get.back();
+              },
+            ),
           ),
       onEdit: () => _handleEdit(deal, dealController),
     );
@@ -419,7 +421,7 @@ class DealDetailScreen extends StatelessWidget {
                     ),
                 onTap:
                     () => Get.to(
-                          () => SalesInvoiceEditPage(
+                      () => SalesInvoiceEditPage(
                         invoice: invoice,
                         dealId: dealId,
                       ),

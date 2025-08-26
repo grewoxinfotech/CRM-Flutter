@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/bindings/product_service_binding.dart';
@@ -7,6 +8,9 @@ import 'package:crm_flutter/app/modules/sales/sales_functionality/products_servi
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
+import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 
 class ProductsServicesScreen extends StatelessWidget {
   ProductsServicesScreen({Key? key}) : super(key: key);
@@ -18,6 +22,25 @@ class ProductsServicesScreen extends StatelessWidget {
     final ProductsServicesController controller = Get.find();
     ProductServicesBinding().dependencies();
 
+    void _deleteProduct(String id, String name) {
+      Get.dialog(
+        CrmDeleteDialog(
+          entityType: name,
+          onConfirm: () async {
+            final success = await controller.deleteProduct(id);
+            if (success) {
+              Get.back();
+              CrmSnackBar.showAwesomeSnackbar(
+                title: "Success",
+                message: "Product deleted successfully",
+                contentType: ContentType.success,
+              );
+            }
+          },
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text("Products & Services")),
       floatingActionButton:
@@ -28,6 +51,7 @@ class ProductsServicesScreen extends StatelessWidget {
               ? FloatingActionButton(
                 onPressed: () {
                   // Navigate to add product_service screen
+                  controller.resetForm();
                   Get.to(
                     () => AddProductScreen(),
                     binding: ProductServicesBinding(),
@@ -74,7 +98,56 @@ class ProductsServicesScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
                         final product = controller.items[index];
-                        return ProductCard(product: product);
+                        return Stack(
+                          children: [
+                            ProductCard(product: product),
+
+                            Positioned(
+                              right: 8,
+                              bottom: 8,
+                              child: Row(
+                                children: [
+                                  // Uncomment when edit screen ready
+                                  if (accessController.can(
+                                    AccessModule.productServices,
+                                    AccessAction.update,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(() {
+                                          controller.resetForm();
+                                          return AddProductScreen(
+                                            isFromEdit: true,
+                                            product: product,
+                                          );
+                                        }, binding: ProductServicesBinding());
+                                      },
+                                    ),
+                                  if (accessController.can(
+                                    AccessModule.productServices,
+                                    AccessAction.delete,
+                                  ))
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        _deleteProduct(
+                                          product.id ?? '',
+                                          product.name ?? 'Product',
+                                        );
+                                      },
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
                       } else if (controller.isPaging.value) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),

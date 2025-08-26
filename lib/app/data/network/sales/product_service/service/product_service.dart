@@ -116,6 +116,7 @@
 // }
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:http/http.dart' as http;
@@ -185,8 +186,32 @@ class ProductsServicesService {
     }
   }
 
+  // Future<bool> createProduct(Data product) async {
+  //   // Get the current logged-in user's ID
+  //   final userId = (await SecureStorage.getUserData())?.id;
+  //
+  //   if (userId == null) {
+  //     print("Error: No user ID found. Cannot create product.");
+  //     return false;
+  //   }
+  //
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse("$baseUrl/$userId"),
+  //       headers: await headers(),
+  //       body: jsonEncode(product.toJson()),
+  //     );
+  //
+  //     print("[DEBUG]=> $baseUrl ---- ${product.name} ----- $baseUrl/$userId");
+  //
+  //     return response.statusCode == 201 || response.statusCode == 200;
+  //   } catch (e) {
+  //     print("Create product exception: ${e.toString()}");
+  //     return false;
+  //   }
+  // }
+
   Future<bool> createProduct(Data product) async {
-    // Get the current logged-in user's ID
     final userId = (await SecureStorage.getUserData())?.id;
 
     if (userId == null) {
@@ -195,30 +220,126 @@ class ProductsServicesService {
     }
 
     try {
-      final response = await http.post(
-        Uri.parse("$baseUrl/$userId"),
-        headers: await headers(),
-        body: jsonEncode(product.toJson()),
-      );
+      final url = Uri.parse("$baseUrl/$userId");
+      final request = http.MultipartRequest('POST', url);
 
-      print("[DEBUG]=> $baseUrl ---- ${product.name} ----- $baseUrl/$userId");
+      final reqHeaders = await headers();
+      reqHeaders.remove('Content-Type');
+      request.headers.addAll(reqHeaders);
 
-      return response.statusCode == 201 || response.statusCode == 200;
+      // Add fields
+      request.fields.addAll({
+        'name': product.name ?? '',
+        'category': product.category ?? '',
+        'buying_price': (product.buyingPrice ?? 0).toString(),
+        'selling_price': (product.sellingPrice ?? 0).toString(),
+        'currency': product.currency ?? '',
+        'sku': product.sku ?? '',
+        'tax_name': product.taxName ?? '',
+        'tax_percentage': (product.taxPercentage ?? 0).toString(),
+        'hsn_sac': product.hsnSac ?? '',
+        'description': product.description ?? '',
+        'stock_quantity': (product.stockQuantity ?? 0).toString(),
+        'min_stock_level': (product.minStockLevel ?? 0).toString(),
+        'max_stock_level': (product.maxStockLevel ?? 0).toString(),
+        'reorder_quantity': (product.reorderQuantity ?? 0).toString(),
+        'stock_status': product.stockStatus ?? '',
+        'created_by': userId,
+      });
+
+      // Add image if available
+      if (product.image != null && product.image!.isNotEmpty) {
+        final imageFile = File(product.image!);
+        if (await imageFile.exists()) {
+          request.files.add(
+            await http.MultipartFile.fromPath('image', imageFile.path),
+          );
+        }
+      }
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      print("[DEBUG]=> Response: ${response.statusCode} - ${response.body}");
+
+      return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
-      print("Create product exception: ${e.toString()}");
+      print("Create product exception: $e");
       return false;
     }
   }
 
+  // Future<bool> updateProduct(String id, Data product) async {
+  //   try {
+  //     print("[DEBUG]=> product id ${id}");
+  //     print("[DEBUG]=> product url $baseUrl/$id");
+  //     final url = Uri.parse("$baseUrl/$id");
+  //     final response = await http.put(
+  //       url,
+  //       headers: await headers(),
+  //       body: jsonEncode(product.toJson()),
+  //     );
+  //     return response.statusCode == 200;
+  //   } catch (e) {
+  //     print("Update product exception: $e");
+  //     return false;
+  //   }
+  // }
+
   Future<bool> updateProduct(String id, Data product) async {
     try {
-      final url = Uri.parse("$baseUrl$id");
-      final response = await http.put(
-        url,
-        headers: await headers(),
-        body: jsonEncode(product.toJson()),
-      );
-      return response.statusCode == 200;
+      print("[DEBUG]=> product id $id");
+      print("[DEBUG]=> product url $baseUrl/$id");
+
+      final url = Uri.parse("$baseUrl/$id");
+      final request = http.MultipartRequest('PUT', url);
+
+      // Add headers (excluding Content-Type, as multipart handles it automatically)
+      final reqHeaders = await headers();
+      reqHeaders.remove('Content-Type');
+      request.headers.addAll(reqHeaders);
+
+      // Add fields (all product fields except image)
+      request.fields['name'] = product.name ?? '';
+      request.fields['category'] = product.category ?? '';
+      request.fields['buying_price'] = (product.buyingPrice ?? 0).toString();
+      request.fields['selling_price'] = (product.sellingPrice ?? 0).toString();
+      request.fields['currency'] = product.currency ?? '';
+      request.fields['sku'] = product.sku ?? '';
+      request.fields['tax_name'] = product.taxName ?? '';
+      request.fields['tax_percentage'] =
+          (product.taxPercentage ?? 0).toString();
+      request.fields['hsn_sac'] = product.hsnSac ?? '';
+      request.fields['description'] = product.description ?? '';
+      request.fields['stock_quantity'] =
+          (product.stockQuantity ?? 0).toString();
+      request.fields['min_stock_level'] =
+          (product.minStockLevel ?? 0).toString();
+      request.fields['max_stock_level'] =
+          (product.maxStockLevel ?? 0).toString();
+      request.fields['reorder_quantity'] =
+          (product.reorderQuantity ?? 0).toString();
+      request.fields['stock_status'] = product.stockStatus ?? '';
+      request.fields['updated_by'] = product.createdBy ?? '';
+
+      // // Add image only if provided
+      if (product.image != null && product.image!.isNotEmpty) {
+        final imageFile = File(product.image!);
+        if (await imageFile.exists()) {
+          request.files.add(
+            await http.MultipartFile.fromPath('image', imageFile.path),
+          );
+        }
+      }
+
+      // Send the request
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      print("[DEBUG]=> update response code: ${response.statusCode}");
+      print("[DEBUG]=> update response body: ${response.body}");
+
+      return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
       print("Update product exception: $e");
       return false;
@@ -227,7 +348,7 @@ class ProductsServicesService {
 
   Future<bool> deleteProduct(String id) async {
     try {
-      final url = Uri.parse("$baseUrl$id");
+      final url = Uri.parse("$baseUrl/$id");
       final response = await http.delete(url, headers: await headers());
       return response.statusCode == 200 || response.statusCode == 204;
     } catch (e) {

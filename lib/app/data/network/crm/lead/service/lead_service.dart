@@ -145,12 +145,21 @@ class LeadService {
   }
 
   /// 3. Create a new lead
-  Future<http.Response> createLead(Map<String, dynamic> data) async {
-    return await http.post(
+  Future<bool> createLead(LeadModel data) async {
+    final response = await http.post(
       Uri.parse(url),
       headers: await headers(),
       body: jsonEncode(data),
     );
+
+    print("[DEBUG]=> response =--------- ${response.body}");
+    return (response.statusCode == 200 || response.statusCode == 201);
+
+    // return await http.post(
+    //   Uri.parse(url),
+    //   headers: await headers(),
+    //   body: jsonEncode(data),
+    // );
   }
 
   /// 4. Update a lead by ID

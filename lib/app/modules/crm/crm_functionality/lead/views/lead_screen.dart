@@ -17,21 +17,23 @@ import 'package:crm_flutter/app/widgets/date_time/format_date.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'lead_add_screen.dart';
+
 class LeadScreen extends StatelessWidget {
   const LeadScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-      final accessController = Get.find<AccessController>();
+    final accessController = Get.find<AccessController>();
 
     // Initialize required controllers
     Get.put(UsersController());
     Get.put(RolesService());
     Get.put(RoleController());
-    
+
     // Initialize the LabelController first
     Get.put(LabelController());
-    
+
     // Then initialize the LeadController which depends on LabelController
     Get.lazyPut<LeadController>(() => LeadController());
     final controller = Get.find<LeadController>();
@@ -44,13 +46,13 @@ class LeadScreen extends StatelessWidget {
         centerTitle: false,
         backgroundColor: Colors.transparent,
       ),
-      // floatingActionButton: CrmButton(
-      //   title: "Add Lead",
-      //   onTap: () async {
-      //     await Get.to(() => LeadAddScreen());
-      //     controller.refreshData();
-      //   },
-      // ),
+      floatingActionButton: CrmButton(
+        title: "Add Lead",
+        onTap: () async {
+          await Get.to(() => LeadCreateScreen());
+          controller.refreshData();
+        },
+      ),
       body: FutureBuilder(
         future: controller.refreshData(),
         builder: (context, snapshot) {

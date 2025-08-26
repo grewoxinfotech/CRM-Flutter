@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/controller/label_controller.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/model/label_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/model/pipeline_model.dart';
@@ -42,7 +43,7 @@ class LeadController extends GetxController {
   final leads = <LeadModel>[].obs;
   final stages = <StageModel>[].obs;
   final pipelines = <PipelineModel>[].obs;
-  final currency = <CurrencyModel>[].obs;
+  // final currency = <CurrencyModel>[].obs;
   final labels = <LabelModel>[].obs;
   final users = <User>[].obs;
 
@@ -77,6 +78,15 @@ class LeadController extends GetxController {
   final isUpdating = false.obs;
   final isDeleting = false.obs;
   final isError = ''.obs;
+
+  RxString userId = ''.obs;
+
+  RxString currency = 'AHNTpSNJHMypuNF6iPcMLrz'.obs;
+  RxString currencyCode = 'INR'.obs;
+  RxString currencyIcon = '₹'.obs;
+  var currencies = <CurrencyModel>[].obs;
+  var isLoadingCurrencies = false.obs;
+  var currenciesLoaded = false.obs;
 
   // Getters for dropdown options with label names
 
@@ -136,7 +146,7 @@ class LeadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    getCurrentUser();
     // Initialize controllers
     activityController = Get.put(ActivityController());
     stageController = Get.put(StageController());
@@ -156,6 +166,61 @@ class LeadController extends GetxController {
 
     _initializeData();
     refreshData();
+    loadCurrencies();
+  }
+
+  Future<void> getCurrentUser() async {
+    final user = await SecureStorage.getUserData();
+    if (user != null) {
+      userId.value = user.id!;
+    }
+  }
+
+  Future<void> loadCurrencies() async {
+    try {
+      final currencyList = await _currencyService.getCurrencies();
+      currencies.assignAll(currencyList);
+      currenciesLoaded.value = true;
+
+      if (currencyList.isNotEmpty) {
+        final selectedCurrency = currencyList.firstWhereOrNull(
+          (c) => c.id == currency.value,
+        );
+
+        if (selectedCurrency != null) {
+          currencyCode.value = selectedCurrency.currencyCode;
+          currencyIcon.value = selectedCurrency.currencyIcon;
+        } else {
+          currency.value = currencyList.first.id;
+          currencyCode.value = currencyList.first.currencyCode;
+          currencyIcon.value = currencyList.first.currencyIcon;
+        }
+      }
+    } catch (e) {
+      if (currenciesLoaded.value) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Error',
+          message: 'Failed to load currencies: ${e.toString()}',
+          contentType: ContentType.failure,
+        );
+      }
+    } finally {
+      isLoadingCurrencies.value = false;
+    }
+  }
+
+  void updateCurrencyDetails(String currencyId) {
+    if (currencies.isNotEmpty) {
+      final selectedCurrency = currencies.firstWhereOrNull(
+        (c) => c.id == currencyId,
+      );
+
+      if (selectedCurrency != null) {
+        currency.value = currencyId;
+        currencyCode.value = selectedCurrency.currencyCode;
+        currencyIcon.value = selectedCurrency.currencyIcon;
+      }
+    }
   }
 
   Future<void> _initializeData() async {
@@ -207,8 +272,9 @@ class LeadController extends GetxController {
   Future<bool> createLead(LeadModel lead) async {
     try {
       isCreating(true);
-      final response = await _leadService.createLead(lead.toJson());
-      if (response.statusCode == 200) {
+      final response = await _leadService.createLead(lead);
+
+      if (response) {
         await fetchLeads();
         _showSuccessSnackbar('Lead created successfully');
         return true;

@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../data/network/sales/product_service/model/product_model.dart';
-
 
 class ProductCard extends StatelessWidget {
   final Data product;
@@ -38,6 +39,29 @@ class ProductCard extends StatelessWidget {
     }
   }
 
+  // Helper: Decide if image is URL or local file
+  Widget _buildProductImage(String? imagePath) {
+    if (imagePath == null || imagePath.isEmpty) {
+      return Container(
+        width: 60,
+        height: 60,
+        color: Colors.grey[300],
+        child: Icon(Icons.image_not_supported, color: Colors.grey[600]),
+      );
+    }
+
+    if (imagePath.startsWith('http')) {
+      return Image.network(imagePath, width: 60, height: 60, fit: BoxFit.cover);
+    } else {
+      return Image.file(
+        File(imagePath),
+        width: 60,
+        height: 60,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final stockData = getStockStatusData(product.stockStatus);
@@ -51,24 +75,29 @@ class ProductCard extends StatelessWidget {
         child: Row(
           children: [
             // Product Image or Placeholder
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(8),
+            //   child:
+            //       product.image != null && product.image!.isNotEmpty
+            //           ? Image.network(
+            //             product.image!,
+            //             width: 60,
+            //             height: 60,
+            //             fit: BoxFit.cover,
+            //           )
+            //           : Container(
+            //             width: 60,
+            //             height: 60,
+            //             color: Colors.grey[300],
+            //             child: Icon(
+            //               Icons.image_not_supported,
+            //               color: Colors.grey[600],
+            //             ),
+            //           ),
+            // ),
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: product.image != null && product.image!.isNotEmpty
-                  ? Image.network(
-                product.image!,
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
-              )
-                  : Container(
-                width: 60,
-                height: 60,
-                color: Colors.grey[300],
-                child: Icon(
-                  Icons.image_not_supported,
-                  color: Colors.grey[600],
-                ),
-              ),
+              child: _buildProductImage(product.image),
             ),
             const SizedBox(width: 12),
 
@@ -94,7 +123,9 @@ class ProductCard extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: stockData["bgColor"],
                           borderRadius: BorderRadius.circular(8),
@@ -146,19 +177,19 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
 
-                  // Optional Category
-                  if (product.category != null && product.category!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: Text(
-                        'Category: ${product.category}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey[700],
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                    ),
+                  // // Optional Category
+                  // if (product.category != null && product.category!.isNotEmpty)
+                  //   Padding(
+                  //     padding: const EdgeInsets.only(top: 6),
+                  //     child: Text(
+                  //       'Category: ${product.category}',
+                  //       style: TextStyle(
+                  //         fontSize: 13,
+                  //         color: Colors.grey[700],
+                  //         fontStyle: FontStyle.normal,
+                  //       ),
+                  //     ),
+                  //   ),
                 ],
               ),
             ),

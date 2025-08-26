@@ -1,19 +1,116 @@
 import 'dart:io';
+import 'package:crm_flutter/app/data/network/sales/product_service/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../../widgets/button/crm_button.dart';
 import '../../../../../widgets/common/inputs/crm_dropdown_field.dart';
 import '../../../../../widgets/common/inputs/crm_text_field.dart';
 
 class AddProductScreen extends StatelessWidget {
+  Data? product;
+  final bool isFromEdit;
   final controller = Get.find<ProductsServicesController>();
 
-  AddProductScreen({Key? key}) : super(key: key);
+  AddProductScreen({Key? key, this.isFromEdit = false, this.product})
+    : super(key: key);
+
+  // Widget _buildImagePicker() {
+  //   return GetBuilder<ProductsServicesController>(
+  //     builder: (_) {
+  //       return Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           const Text(
+  //             'Product Image',
+  //             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+  //           ),
+  //           const SizedBox(height: 8),
+  //           controller.selectedImage == null
+  //               ? GestureDetector(
+  //                 onTap: controller.pickImage,
+  //                 child: _imageBox(
+  //                   Icon(
+  //                     Icons.add_a_photo,
+  //                     color: Get.theme.colorScheme.primary,
+  //                   ),
+  //                 ),
+  //               )
+  //               : Stack(
+  //                 children: [
+  //                   ClipRRect(
+  //                     borderRadius: BorderRadius.circular(8),
+  //                     child: Image.file(
+  //                       File(controller.selectedImage!.path),
+  //                       width: 100,
+  //                       height: 100,
+  //                       fit: BoxFit.cover,
+  //                     ),
+  //                   ),
+  //                   Positioned(
+  //                     right: -10,
+  //                     top: -10,
+  //                     child: IconButton(
+  //                       icon: const Icon(
+  //                         Icons.cancel,
+  //                         color: Colors.redAccent,
+  //                         size: 24,
+  //                       ),
+  //                       onPressed: controller.removeImage,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget _buildImagePicker() {
     return GetBuilder<ProductsServicesController>(
       builder: (_) {
+        Widget imageWidget;
+
+        if (controller.selectedImage != null) {
+          // New image picked locally
+          imageWidget = ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.file(
+              File(controller.selectedImage!.path),
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          );
+        } else if (isFromEdit &&
+            product?.image != null &&
+            product!.image!.isNotEmpty) {
+          // Existing image from server (URL)
+          imageWidget = ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(
+              product!.image!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              errorBuilder:
+                  (_, __, ___) => _imageBox(
+                    const Icon(Icons.broken_image, color: Colors.grey),
+                  ),
+            ),
+          );
+        } else {
+          // No image
+          imageWidget = GestureDetector(
+            onTap: controller.pickImage,
+            child: _imageBox(
+              Icon(Icons.add_a_photo, color: Get.theme.colorScheme.primary),
+            ),
+          );
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -22,41 +119,35 @@ class AddProductScreen extends StatelessWidget {
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 8),
-            controller.selectedImage == null
-                ? GestureDetector(
-                  onTap: controller.pickImage,
-                  child: _imageBox(
-                    Icon(
-                      Icons.add_a_photo,
-                      color: Get.theme.colorScheme.primary,
+            Stack(
+              children: [
+                imageWidget,
+                if (controller.selectedImage != null ||
+                    (isFromEdit &&
+                        product?.image != null &&
+                        product!.image!.isNotEmpty))
+                  Positioned(
+                    right: -10,
+                    top: -10,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.cancel,
+                        color: Colors.redAccent,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        controller.removeImage();
+                        if (isFromEdit) {
+                          product?.image =
+                              ''; // or null, depending on your model
+                        }
+                        (Get.context as Element)
+                            .markNeedsBuild(); // or call setState if using StatefulWidget
+                      },
                     ),
                   ),
-                )
-                : Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        File(controller.selectedImage!.path),
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      right: -10,
-                      top: -10,
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.cancel,
-                          color: Colors.redAccent,
-                          size: 24,
-                        ),
-                        onPressed: controller.removeImage,
-                      ),
-                    ),
-                  ],
-                ),
+              ],
+            ),
           ],
         );
       },
@@ -74,10 +165,53 @@ class AddProductScreen extends StatelessWidget {
     child: Center(child: child),
   );
 
+  String? _getCurrencyValue() {
+    if (controller.isLoadingCurrencies.value) return null;
+
+    // If using API currencies, check if current currency exists in the list
+    if (controller.currencies.isNotEmpty) {
+      bool currencyExists = controller.currencies.any(
+        (c) => c.id == controller.currency.value,
+      );
+      if (currencyExists) {
+        return controller.currency.value;
+      } else {
+        // If currency doesn't exist in API list, return first available currency
+        return controller.currencies.first.id;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isFromEdit && product != null) {
+      controller.nameController.text = product!.name!;
+      controller.buyingPriceController.text = product!.buyingPrice!.toString();
+      controller.sellingPriceController.text =
+          product!.sellingPrice!.toString();
+      controller.skuController.text = product?.sku.toString() ?? '';
+      controller.descriptionController.text = product!.description!;
+      controller.taxNameController.text = product!.taxName!;
+      controller.taxPercentageController.text =
+          product!.taxPercentage!.toString();
+      controller.hsnSacController.text = product!.hsnSac!;
+      controller.stockQuantityController.text =
+          product!.stockQuantity!.toString();
+      controller.minStockLevelController.text =
+          product!.minStockLevel!.toString();
+      controller.maxStockLevelController.text =
+          product!.maxStockLevel!.toString();
+      controller.reorderQuantityController.text =
+          product!.reorderQuantity!.toString();
+      controller.selectedCategoryId = product!.category!;
+      controller.currency.value = product!.currency!;
+      controller.selectedStockStatus = product!.stockStatus!;
+      // if (product!.image != null) {
+      //   controller.selectedImage = XFile(product!.image!);
+      // }
+    }
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Product')),
+      appBar: AppBar(title: Text(isFromEdit ? 'Edit Product' : 'Add Product')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -238,25 +372,92 @@ class AddProductScreen extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: 20),
-                CrmDropdownField<String>(
-                  title: 'Currency',
-                  value: controller.selectedCurrencyCode,
-                  items:
-                      controller.currencies
-                          .map(
-                            (cur) => DropdownMenuItem(
-                              value: cur['code'],
-                              child: Text('${cur['symbol']} (${cur['name']})'),
-                            ),
-                          )
-                          .toList(),
-                  onChanged: (v) => controller.selectedCurrencyCode = v,
-                  isRequired: true,
-                  validator:
-                      (v) => controller.requiredValidator(
-                        v,
-                        'Please select currency',
-                      ),
+                // CrmDropdownField<String>(
+                //   title: 'Currency',
+                //   value: controller.selectedCurrencyCode,
+                //   items:
+                //       controller.currencies
+                //           .map(
+                //             (cur) => DropdownMenuItem(
+                //               value: cur['code'],
+                //               child: Text('${cur['symbol']} (${cur['name']})'),
+                //             ),
+                //           )
+                //           .toList(),
+                //   onChanged: (v) => controller.selectedCurrencyCode = v,
+                //   isRequired: true,
+                //   validator:
+                //       (v) => controller.requiredValidator(
+                //         v,
+                //         'Please select currency',
+                //       ),
+                // ),
+                Obx(
+                  () => CrmDropdownField<String>(
+                    title: 'Currency',
+                    value: _getCurrencyValue(),
+                    items:
+                        controller.isLoadingCurrencies.value &&
+                                controller.currenciesLoaded.value
+                            ? [
+                              DropdownMenuItem(
+                                value: controller.currency.value,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 16,
+                                      width: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text('Loading currencies...'),
+                                  ],
+                                ),
+                              ),
+                            ]
+                            : controller.currencies.isNotEmpty
+                            ? controller.currencies
+                                .map(
+                                  (currency) => DropdownMenuItem(
+                                    value: currency.id,
+                                    child: Text(
+                                      '${currency.currencyName} (${currency.currencyIcon})',
+                                    ),
+                                  ),
+                                )
+                                .toList()
+                            : [
+                              DropdownMenuItem(
+                                value: 'AHNTpSNJHMypuNF6iPcMLrz',
+                                child: Text('INR (₹)'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'BHNTpSNJHMypuNF6iPcMLr2',
+                                child: Text('USD (\$)'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'CHNTpSNJHMypuNF6iPcMLr3',
+                                child: Text('EUR (€)'),
+                              ),
+                            ],
+                    onChanged: (value) {
+                      // Don't process changes during loading
+                      if (value != null &&
+                          !(controller.isLoadingCurrencies.value &&
+                              controller.currenciesLoaded.value)) {
+                        controller.updateCurrencyDetails(value);
+                      }
+                    },
+                    onMenuOpened: () {
+                      // Load currencies if they haven't been loaded yet or if we're not currently loading
+                      if (!controller.isLoadingCurrencies.value) {
+                        controller.loadCurrencies();
+                      }
+                    },
+                    isRequired: true,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 CrmDropdownField<String>(
@@ -288,8 +489,13 @@ class AddProductScreen extends StatelessWidget {
                           ? Center(child: const CircularProgressIndicator())
                           : CrmButton(
                             width: Get.width - 40,
-                            title: 'Add Product',
-                            onTap: controller.submitProduct,
+                            title:
+                                isFromEdit ? 'Update Product ' : 'Add Product',
+                            onTap: () {
+                              isFromEdit
+                                  ? controller.submitProductUpdate(product!.id!)
+                                  : controller.submitProduct();
+                            },
                           ),
                 ),
               ],

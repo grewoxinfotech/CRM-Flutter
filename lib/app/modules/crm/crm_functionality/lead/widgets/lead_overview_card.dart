@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../../../access/controller/access_controller.dart';
+import '../controllers/lead_controller.dart';
 
 class LeadOverviewCard extends StatelessWidget {
   final String? id;
@@ -77,9 +78,22 @@ class LeadOverviewCard extends StatelessWidget {
     this.onEdit,
   });
 
+  String? _getCurrencyValue(LeadController leadController, String currencyId) {
+    if (leadController.isLoadingCurrencies.value) return null;
+
+    // If using API currencies, check if current currency exists in the list
+    if (leadController.currencies.isNotEmpty) {
+      final currencyExists = leadController.currencies.firstWhereOrNull(
+        (c) => c.id == currencyId,
+      );
+      return currencyExists?.currencyCode;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final accessController = Get.find<AccessController>();
+    final LeadController leadController = Get.put(LeadController());
 
     Color textPrimary = Get.theme.colorScheme.onPrimary;
     Color textSecondary = Get.theme.colorScheme.onSecondary;
@@ -251,7 +265,8 @@ class LeadOverviewCard extends StatelessWidget {
               children: [
                 tile(
                   "Currency",
-                  currency.toString(),
+                  _getCurrencyValue(leadController, currency.toString()) ??
+                      'USD',
                   Colors.green,
                   FontAwesomeIcons.instagram,
                 ),
@@ -312,32 +327,32 @@ class LeadOverviewCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (accessController.can(AccessModule.lead, AccessAction.update))
-              Expanded(
-                child: CrmButton(
-                  title: "Edit",
-                  onTap: onEdit,
-                  backgroundColor: Get.theme.colorScheme.surface,
-                  titleTextStyle: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.green,
+                Expanded(
+                  child: CrmButton(
+                    title: "Edit",
+                    onTap: onEdit,
+                    backgroundColor: Get.theme.colorScheme.surface,
+                    titleTextStyle: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.green,
+                    ),
                   ),
                 ),
-              ),
               AppSpacing.horizontalSmall,
               if (accessController.can(AccessModule.lead, AccessAction.delete))
-              Expanded(
-                child: CrmButton(
-                  title: "Delete",
-                  backgroundColor: Get.theme.colorScheme.surface,
-                  titleTextStyle: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Get.theme.colorScheme.error,
+                Expanded(
+                  child: CrmButton(
+                    title: "Delete",
+                    backgroundColor: Get.theme.colorScheme.surface,
+                    titleTextStyle: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: Get.theme.colorScheme.error,
+                    ),
+                    onTap: onDelete,
                   ),
-                  onTap: onDelete,
                 ),
-              ),
             ],
           ),
         ],

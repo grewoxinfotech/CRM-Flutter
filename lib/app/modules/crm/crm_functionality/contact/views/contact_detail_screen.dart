@@ -270,14 +270,17 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
       createdBy: contact.createdBy.toString(),
       createdAt: contact.createdAt.toString(),
       onDelete:
-          () => CrmDeleteDialog(
-            // entityType: contact.dealTitle.toString(),
-            //  onConfirm: () {
-            //    contactController.deleteContact(contact.id.toString());
-            //    Get.back();
-            //  },
+          () => Get.dialog(
+            CrmDeleteDialog(
+              entityType:
+                  '${contact.firstName.toString()} ${contact.lastName.toString()}',
+              onConfirm: () {
+                controller.deleteContact(contact.id.toString());
+                Get.back();
+              },
+            ),
           ),
-      //onEdit: () => _handleEdit(deal, dealController),
+      // onEdit: () => _handleEdit(deal, dealController),
     );
   }
 

@@ -64,9 +64,9 @@ class LeadDetailScreen extends StatelessWidget {
     this.isContactScreen = false,
     this.isCompanyScreen = false,
   });
+
   @override
   Widget build(BuildContext context) {
-
     final tabBarController = Get.put(TabBarController());
     final leadController = Get.find<LeadController>();
     final usersController = Get.find<UsersController>();
@@ -291,11 +291,14 @@ class LeadDetailScreen extends StatelessWidget {
         createdAt: lead.createdAt.toString(),
         updatedAt: lead.updatedAt.toString(),
         onDelete:
-            () => CrmDeleteDialog(
-              onConfirm: () {
-                leadController.deleteLead(lead.id.toString());
-                Get.back();
-              },
+            () => Get.dialog(
+              CrmDeleteDialog(
+                entityType: "lead",
+                onConfirm: () {
+                  leadController.deleteLead(lead.id.toString());
+                  Get.back();
+                },
+              ),
             ),
         onEdit: () => _handleEdit(lead, leadController),
       );
@@ -340,15 +343,15 @@ class LeadDetailScreen extends StatelessWidget {
             },
           );
         }),
-        if(accessController.can(AccessModule.lead, AccessAction.create))
-        Positioned(
-          right: AppPadding.medium,
-          bottom: AppPadding.medium,
-          child: FloatingActionButton(
-            onPressed: () => _uploadFile(context, leadId),
-            child: const Icon(Icons.upload_file, color: Colors.white),
+        if (accessController.can(AccessModule.lead, AccessAction.create))
+          Positioned(
+            right: AppPadding.medium,
+            bottom: AppPadding.medium,
+            child: FloatingActionButton(
+              onPressed: () => _uploadFile(context, leadId),
+              child: const Icon(Icons.upload_file, color: Colors.white),
+            ),
           ),
-        ),
       ],
     );
   }

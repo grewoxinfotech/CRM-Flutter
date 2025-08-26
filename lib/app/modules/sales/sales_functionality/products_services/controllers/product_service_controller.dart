@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/pagination/controller/pagination_controller.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/label/model/label_model.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/label/service/label_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,8 @@ import '../../../../../care/constants/url_res.dart';
 import '../../../../../data/network/crm/crm_system/label/controller/label_controller.dart';
 import '../../../../../data/network/sales/product_service/model/product_model.dart';
 import '../../../../../data/network/sales/product_service/service/product_service.dart';
+import '../../../../../data/network/system/currency/model/currency_model.dart';
+import '../../../../../data/network/system/currency/service/currency_service.dart';
 //
 // class ProductsServicesController extends PaginatedController<Data> {
 //   final ProductsServicesService _service = ProductsServicesService();
@@ -142,6 +146,8 @@ import '../../../../../data/network/sales/product_service/service/product_servic
 
 class ProductsServicesController extends PaginatedController<Data> {
   final ProductsServicesService _service = ProductsServicesService();
+  final LabelService _labelService = LabelService();
+  final _currencyService = CurrencyService();
   late final LabelController labelController;
 
   final String url = UrlRes.products;
@@ -163,13 +169,26 @@ class ProductsServicesController extends PaginatedController<Data> {
   final reorderQuantityController = TextEditingController(text: '0');
 
   // Dropdown values
-  final currencies = [
-    {'code': 'q6xe5PwPo74hw2hkumFyBvb', 'symbol': '₹', 'name': 'INR'},
-  ];
+  // final currencies = [
+  //   {'code': 'q6xe5PwPo74hw2hkumFyBvb', 'symbol': '₹', 'name': 'INR'},
+  // ];
   final stockStatuses = ['in_stock', 'low_stock', 'out_of_stock'];
   String? selectedCategoryId;
-  String? selectedCurrencyCode;
+  // String? selectedCurrencyCode;
   String? selectedStockStatus;
+
+  RxString currency = 'AHNTpSNJHMypuNF6iPcMLrz'.obs;
+  RxString currencyCode = 'INR'.obs;
+  RxString currencyIcon = '₹'.obs;
+  var currencies = <CurrencyModel>[].obs;
+  var isLoadingCurrencies = false.obs;
+  var currenciesLoaded = false.obs;
+
+  // RxList labels = <LabelModel>[].obs;
+  // RxString labelName = ''.obs;
+  // RxString selectedCategoryId = ''.obs;
+  // var isLoadingLabel = false.obs;
+  // var labelsLoaded = false.obs;
 
   // Image
   final ImagePicker picker = ImagePicker();
@@ -204,12 +223,59 @@ class ProductsServicesController extends PaginatedController<Data> {
     }
 
     // Defaults
-    selectedCategoryId =
-        categoryOptions.isNotEmpty ? categoryOptions.first['id'] : null;
-    selectedCurrencyCode = currencies.first['code'];
+
+    // selectedCurrencyCode = currencies.first;
     selectedStockStatus = stockStatuses.first;
 
     loadInitial();
+    loadCurrencies();
+  }
+
+  Future<void> loadCurrencies() async {
+    try {
+      final currencyList = await _currencyService.getCurrencies();
+      currencies.assignAll(currencyList);
+      currenciesLoaded.value = true;
+
+      if (currencyList.isNotEmpty) {
+        final selectedCurrency = currencyList.firstWhereOrNull(
+          (c) => c.id == currency.value,
+        );
+
+        if (selectedCurrency != null) {
+          currencyCode.value = selectedCurrency.currencyCode;
+          currencyIcon.value = selectedCurrency.currencyIcon;
+        } else {
+          currency.value = currencyList.first.id;
+          currencyCode.value = currencyList.first.currencyCode;
+          currencyIcon.value = currencyList.first.currencyIcon;
+        }
+      }
+    } catch (e) {
+      if (currenciesLoaded.value) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Error',
+          message: 'Failed to load currencies: ${e.toString()}',
+          contentType: ContentType.failure,
+        );
+      }
+    } finally {
+      isLoadingCurrencies.value = false;
+    }
+  }
+
+  void updateCurrencyDetails(String currencyId) {
+    if (currencies.isNotEmpty) {
+      final selectedCurrency = currencies.firstWhereOrNull(
+        (c) => c.id == currencyId,
+      );
+
+      if (selectedCurrency != null) {
+        currency.value = currencyId;
+        currencyCode.value = selectedCurrency.currencyCode;
+        currencyIcon.value = selectedCurrency.currencyIcon;
+      }
+    }
   }
 
   Future<void> refreshProducts() async {
@@ -222,26 +288,6 @@ class ProductsServicesController extends PaginatedController<Data> {
       isLoading.value = false;
     }
   }
-
-  // Future<Data> getProductById(String productId) async {
-  //   try {
-  //     isLoading.value = true;
-  //     final existingProduct = items.firstWhereOrNull((item) => item.id == productId);
-  //     if (existingProduct != null) {
-  //       return existingProduct;
-  //     }
-  //     final response = await _service.getProductById(productId);
-  //     if (response != null) {
-  //       return response;
-  //     } else {
-  //       return Data();
-  //     }
-  //   } catch (e) {
-  //     return Data();
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
 
   String? requiredValidator(String? value, String message) {
     if (value == null || value.trim().isEmpty) return message;
@@ -262,6 +308,29 @@ class ProductsServicesController extends PaginatedController<Data> {
   void removeImage() {
     selectedImage = null;
     update();
+  }
+
+  void resetForm() {
+    nameController.clear();
+    buyingPriceController.clear();
+    sellingPriceController.clear();
+    skuController.clear();
+    descriptionController.clear();
+    taxNameController.clear();
+    taxPercentageController.clear();
+    hsnSacController.clear();
+    stockQuantityController.clear();
+    minStockLevelController.clear();
+    maxStockLevelController.clear();
+    reorderQuantityController.clear();
+
+    selectedCategoryId = null;
+    currency.value = '';
+    selectedStockStatus = stockStatuses.first;
+    selectedCategoryId =
+        categoryOptions.isNotEmpty ? categoryOptions.first['id'] : null;
+    // If you are using an image picker
+    selectedImage = null;
   }
 
   bool validateStockLevels() {
@@ -316,7 +385,7 @@ class ProductsServicesController extends PaginatedController<Data> {
       category: selectedCategoryId ?? '',
       buyingPrice: int.tryParse(buyingPriceController.text) ?? 0,
       sellingPrice: int.tryParse(sellingPriceController.text) ?? 0,
-      currency: selectedCurrencyCode ?? '',
+      currency: currency.value ?? '',
       sku: skuController.text.trim(),
       taxName: taxNameController.text.trim(),
       taxPercentage: int.tryParse(taxPercentageController.text) ?? 0,
@@ -340,6 +409,47 @@ class ProductsServicesController extends PaginatedController<Data> {
           success
               ? "Product added successfully"
               : "Failed to add product service",
+      contentType: success ? ContentType.success : ContentType.failure,
+    );
+
+    if (success) Get.back();
+  }
+
+  Future<void> submitProductUpdate(String id) async {
+    if (!formKey.currentState!.validate()) return;
+    if (!validateStockLevels()) return;
+
+    isLoading.value = true;
+
+    final product = Data(
+      id: id, // make sure your Data model has an 'id' field
+      name: nameController.text.trim(),
+      category: selectedCategoryId ?? '',
+      buyingPrice: int.tryParse(buyingPriceController.text) ?? 0,
+      sellingPrice: int.tryParse(sellingPriceController.text) ?? 0,
+      currency: currency.value ?? '',
+      sku: skuController.text.trim(),
+      taxName: taxNameController.text.trim(),
+      taxPercentage: int.tryParse(taxPercentageController.text) ?? 0,
+      hsnSac: hsnSacController.text.trim(),
+      description: descriptionController.text.trim(),
+      stockQuantity: int.tryParse(stockQuantityController.text) ?? 0,
+      minStockLevel: int.tryParse(minStockLevelController.text) ?? 0,
+      maxStockLevel: int.tryParse(maxStockLevelController.text) ?? 0,
+      reorderQuantity: int.tryParse(reorderQuantityController.text) ?? 0,
+      stockStatus: selectedStockStatus ?? '',
+      createdBy: 'grewox', // you can omit/change for update if API ignores it
+      image: selectedImage?.path,
+    );
+
+    final success = await updateProduct(id, product);
+    print("[DEBUG]=> Response : $success"); // implement API call
+    isLoading.value = false;
+
+    CrmSnackBar.showAwesomeSnackbar(
+      title: success ? "Success" : "Error",
+      message:
+          success ? "Product updated successfully" : "Failed to update product",
       contentType: success ? ContentType.success : ContentType.failure,
     );
 
