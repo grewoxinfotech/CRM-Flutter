@@ -5,11 +5,13 @@ import 'package:crm_flutter/app/data/network/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/controller/pipeline_controller.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/stage/controller/stage_controller.dart';
+import 'package:crm_flutter/app/data/network/sales/product_service/model/product_model.dart';
 import 'package:crm_flutter/app/data/network/system/country/controller/country_controller.dart';
 import 'package:crm_flutter/app/data/network/system/currency/model/currency_model.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/contact/controller/contact_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/controllers/lead_controller.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
 import 'package:crm_flutter/app/modules/users/controllers/users_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
@@ -36,6 +38,7 @@ class DealEditScreen extends StatefulWidget {
 
 class _DealCreateScreenState extends State<DealEditScreen> {
   final RxList<String> selectedMembers = <String>[].obs;
+  final RxList<Data> selectedProducts = <Data>[].obs;
   bool isLoading = false;
 
   @override
@@ -45,72 +48,6 @@ class _DealCreateScreenState extends State<DealEditScreen> {
     Get.lazyPut(() => StageController());
     Get.lazyPut(() => LeadController());
     Get.lazyPut(() => UsersController());
-    final pipelineController = Get.find<PipelineController>();
-    final stageController = Get.find<StageController>();
-    final DealController dealController = Get.find<DealController>();
-    final CountryController countryController = Get.put(CountryController());
-
-    // if (dealData!.dealTitle != null) {
-    //   dealController.dealTitle.text = dealData!.dealTitle!;
-    // }
-
-    // // Load pipelines and select first as default
-    // pipelineController.getPipelines().then((_) {
-    //   if (pipelineController.pipelines.isNotEmpty) {
-    //     dealController.selectedPipelineId.value = dealData!.pipeline!;
-    //     stageController.getStagesByPipeline(
-    //       dealController.selectedPipelineId.value!,
-    //     );
-    //   }
-    // });
-    // //
-    // // Load stages and select first as default
-    // stageController.getStages().then((_) {
-    //   if (stageController.stages.isNotEmpty) {
-    //     dealController.selectedStageId.value = dealData!.stage!;
-    //   }
-    // });
-    //
-    // final CurrencyModel? currency = dealController.currencies.firstWhereOrNull(
-    //   (c) => c.id == dealData!.currency,
-    // );
-    //
-    // if (currency != null) {
-    //   dealController.currency.value = currency.id;
-    // }
-    //
-    // if (dealController.sourceOptions.isNotEmpty) {
-    //   dealController.selectedSource.value = dealData!.source!;
-    // }
-    // //
-    // if (dealController.categoryOptions.isNotEmpty) {
-    //   dealController.selectedCategory.value = dealData!.category!;
-    // }
-    // dealController.dealValue.text = dealData!.value!.toString();
-    // final endDate = DateTime.tryParse(dealData!.closedDate!.toIso8601String());
-    // if (endDate != null) {
-    //   dealController.selectedEndDate.value = endDate;
-    //   dealController.endDateController.text = DateFormat(
-    //     'yyyy-MM-dd',
-    //   ).format(endDate);
-    // }
-
-    //
-    // if (leadController.statusOptions.isNotEmpty) {
-    //   final pendingStatus = leadController.statusOptions.firstWhereOrNull(
-    //     (element) => element['name'] == "Pending",
-    //   );-
-    //
-    //   print("Status: ${pendingStatus}");
-    //
-    //   if (pendingStatus != null) {
-    //     leadController.selectedStatus.value = pendingStatus['id'] ?? '';
-    //   }
-    // }
-
-    // if (stageController.stages.isEmpty) {
-    //   stageController.getStages();
-    // }
   }
 
   Future<void> _pickDate(
@@ -163,6 +100,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
         Get.find<PipelineController>();
     final StageController stageController = Get.find<StageController>();
     final UsersController usersController = Get.find<UsersController>();
+    final ProductsServicesController productsController = Get.put(ProductsServicesController());
     final ContactController contactController = Get.put(ContactController());
 
     return Scaffold(
@@ -235,7 +173,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Lead Value
+                    // Deal Value
                     Row(
                       children: [
                         Expanded(
@@ -322,27 +260,6 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Interest Level
-                    // Obx(
-                    //   () => CrmDropdownField<String>(
-                    //     title: "Interest Level",
-                    //     value: dealController.selectedInterestLevel.value,
-                    //     items:
-                    //         ['low', 'medium', 'high'].map((level) {
-                    //           return DropdownMenuItem(
-                    //             value: level,
-                    //             child: Text(level.capitalizeFirst!),
-                    //           );
-                    //         }).toList(),
-                    //     onChanged: (value) {
-                    //       if (value != null) {
-                    //         leadController.selectedInterestLevel.value = value;
-                    //       }
-                    //     },
-                    //     hintText: "Select interest level",
-                    //   ),
-                    // ),
-                    const SizedBox(height: 16),
 
                     // Source
                     Obx(
@@ -426,6 +343,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -605,6 +523,137 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                       ],
                     ),
                     SizedBox(height: 16),
+
+              /// Product Selection
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Products",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey.shade300),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 3,
+                          spreadRadius: 0,
+                          offset: Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Obx(
+                              () => selectedProducts.isEmpty
+                              ? Container(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade50,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: Colors.grey.shade200),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.shopping_bag_outlined,
+                                  size: 32,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  "No products selected",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                              : Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade50,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: Colors.grey.shade200),
+                            ),
+                            child: Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: selectedProducts.map((product) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: Get.theme.primaryColor.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: Get.theme.primaryColor.withOpacity(0.3),
+                                    ),
+                                  ),
+                                  child: Chip(
+                                    materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                    avatar: CircleAvatar(
+                                      backgroundColor: Get.theme.primaryColor,
+                                      child: Icon(
+                                        Icons.shopping_bag,
+                                        color: Colors.white,
+                                        size: 14,
+                                      ),
+                                    ),
+                                    label: Text(
+                                      product.name ?? "Product ${product.id}",
+                                      style: TextStyle(
+                                        color: Get.theme.primaryColor.withOpacity(0.8),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                    deleteIconColor: Get.theme.primaryColor,
+                                    onDeleted: () {
+                                      selectedProducts.remove(product);
+                                    },
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.add_shopping_cart, size: 18),
+                          label: Text("Add Product"),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Get.theme.primaryColor,
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            _showProductSelection(context, productsController, selectedProducts);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -651,78 +700,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                                 contactController: contactController,
                               ),
                     ),
-                    // // Team Members
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Text(
-                    //       "Team Members",
-                    //       style: TextStyle(
-                    //         fontSize: 16,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 8),
-                    //     Container(
-                    //       padding: EdgeInsets.all(12),
-                    //       decoration: BoxDecoration(
-                    //         color: Colors.white,
-                    //         borderRadius: BorderRadius.circular(8),
-                    //         border: Border.all(color: Colors.grey.shade300),
-                    //       ),
-                    //       child: Column(
-                    //         crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //         children: [
-                    //           Obx(
-                    //             () =>
-                    //                 selectedMembers.isEmpty
-                    //                     ? Center(
-                    //                       child: Padding(
-                    //                         padding: EdgeInsets.symmetric(
-                    //                           vertical: 16,
-                    //                         ),
-                    //                         child: Text(
-                    //                           "No team members selected",
-                    //                           style: TextStyle(
-                    //                             color: Colors.grey.shade600,
-                    //                             fontStyle: FontStyle.italic,
-                    //                           ),
-                    //                         ),
-                    //                       ),
-                    //                     )
-                    //                     : Wrap(
-                    //                       spacing: 8,
-                    //                       runSpacing: 8,
-                    //                       children:
-                    //                           selectedMembers.map((memberId) {
-                    //                             final user = usersController
-                    //                                 .getUserById(memberId);
-                    //                             return Chip(
-                    //                               label: Text(
-                    //                                 user?.username ?? memberId,
-                    //                               ),
-                    //                               onDeleted:
-                    //                                   () => selectedMembers
-                    //                                       .remove(memberId),
-                    //                             );
-                    //                           }).toList(),
-                    //                     ),
-                    //           ),
-                    //           const SizedBox(height: 16),
-                    //           ElevatedButton.icon(
-                    //             icon: Icon(Icons.person_add, size: 18),
-                    //             label: Text("Add Team Member"),
-                    //             onPressed:
-                    //                 () => _showTeamMemberSelection(
-                    //                   context,
-                    //                   usersController,
-                    //                 ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
+
                     const SizedBox(height: 24),
 
                     // Create Button
@@ -730,13 +708,12 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                       () => CrmButton(
                         width: Get.width - 40,
                         title:
-                            dealController.isCreating.value
+                            dealController.isLoading.value
                                 ? "Updating..."
                                 : "Update Deal",
-                        onTap:
-                            dealController.isCreating.value
-                                ? null
-                                : () => _createLead(dealController),
+                        onTap: () {
+                          _updateDeal(dealController);
+                        },
                       ),
                     ),
                   ],
@@ -997,6 +974,223 @@ class _DealCreateScreenState extends State<DealEditScreen> {
     );
   }
 
+  void _showProductSelection(
+      BuildContext context,
+      ProductsServicesController productsController,
+      RxList<Data> selectedProducts, // product IDs
+      ) {
+    final searchController = TextEditingController();
+    final RxList<Data> filteredProducts = RxList<Data>([...productsController.items]);
+
+    // Function to filter products
+    void filterProducts(String query) {
+      if (query.isEmpty) {
+        filteredProducts.value = [...productsController.items];
+      } else {
+        filteredProducts.value = productsController.items
+            .where(
+              (product) =>
+          product.name!.toLowerCase().contains(query.toLowerCase())
+        )
+            .toList();
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Container(
+            width: double.maxFinite,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Header
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: Get.theme.primaryColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Select Products",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Search bar
+                Padding(
+                  padding: EdgeInsets.all(12),
+                  child: TextField(
+                    controller: searchController,
+                    onChanged: filterProducts,
+                    decoration: InputDecoration(
+                      hintText: "Search products...",
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Get.theme.primaryColor.withOpacity(0.7),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 0),
+                    ),
+                  ),
+                ),
+
+                Divider(height: 1),
+
+                // Products list
+                Obx(
+                      () => Flexible(
+                    child: filteredProducts.isEmpty
+                        ? Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          "No products found",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    )
+                        : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: filteredProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = filteredProducts[index];
+
+                        return Obx(() {
+                          final isSelected = selectedProducts.contains(product);
+
+                          return Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? Get.theme.primaryColor.withOpacity(0.1)
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isSelected
+                                    ? Get.theme.primaryColor.withOpacity(0.5)
+                                    : Colors.grey.shade300,
+                                width: isSelected ? 1.5 : 1,
+                              ),
+                            ),
+                            child: ListTile(
+                              dense: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              leading: CircleAvatar(
+                                backgroundColor: isSelected
+                                    ? Get.theme.primaryColor
+                                    : Colors.grey.shade300,
+                                child: Icon(
+                                  Icons.shopping_bag,
+                                  color: isSelected ? Colors.white : Colors.black87,
+                                ),
+                              ),
+                              title: Text(
+                                product.name ?? '',
+                                style: TextStyle(
+                                  fontWeight:
+                                  isSelected ? FontWeight.bold : FontWeight.normal,
+                                ),
+                              ),
+                              subtitle: Text(
+                                "Stock: ${product.stockQuantity}",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              trailing: isSelected
+                                  ? Icon(Icons.check_circle,
+                                  color: Get.theme.primaryColor)
+                                  : Icon(Icons.circle_outlined,
+                                  color: Colors.grey.shade400),
+                              onTap: () {
+                                if (isSelected) {
+                                  selectedProducts.remove(product);
+                                } else {
+                                  if (!selectedProducts.contains(product)) {
+                                    selectedProducts.add(product);
+                                  }
+                                }
+                              },
+                            ),
+                          );
+                        });
+                      },
+                    ),
+                  ),
+                ),
+
+                Divider(height: 1),
+
+                // Actions
+                Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        child: Text(
+                          "CANCEL",
+                          style: TextStyle(color: Colors.grey.shade700),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Get.theme.primaryColor,
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        child: Text(
+                          "DONE",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
   Future<void> _createContact(DealController dealController) async {
     try {
       final ContactService _contactService = ContactService();
@@ -1055,8 +1249,8 @@ class _DealCreateScreenState extends State<DealEditScreen> {
     }
   }
 
-  Future<void> _createLead(DealController dealController) async {
-    dealController.isCreating(true);
+  Future<void> _updateDeal(DealController dealController) async {
+
     try {
       if (dealController.isSelectFromExisting.value) {
         await _createContact(dealController);
@@ -1064,46 +1258,81 @@ class _DealCreateScreenState extends State<DealEditScreen> {
           return;
         }
       }
+      final user = await SecureStorage.getUserData();
+      final userId = user?.id ?? "";
 
       final newDeal = DealModel(
         category: dealController.selectedCategory.value,
         closedDate: dealController.selectedEndDate.value,
-        companyId: dealController.selectedCompany.value,
-        contactId: dealController.selectedContact.value,
+        companyId: dealController.selectedCompany.isEmpty ? null : dealController.selectedCompany.value,
+        contactId: dealController.selectedContact.isEmpty ? null : dealController.selectedContact.value,
         currency: dealController.currency.value,
         dealTitle: dealController.dealTitle.text,
+        dealMembers:
+        selectedMembers
+            .map((element) => DealMember(memberId: element))
+            .toList(),
         pipeline: dealController.selectedPipelineId.value,
+        products: selectedProducts.map((element) => Data(
+          id: element.id,
+          relatedId: element.relatedId,
+          name: element.name,
+          currency: element.currency,
+          buyingPrice: element.buyingPrice,
+          sellingPrice: element.sellingPrice,
+          profitMargin: element.profitMargin,
+          profitPercentage: element.profitPercentage,
+          category: element.category,
+          sku: element.sku,
+          hsnSac: element.hsnSac,
+          description: element.description,
+          taxName: element.taxName,
+          taxPercentage: element.taxPercentage,
+          image: element.image,
+          stockQuantity: element.stockQuantity,
+          minStockLevel: element.minStockLevel,
+          maxStockLevel: element.maxStockLevel,
+          reorderQuantity: element.reorderQuantity,
+          stockStatus: element.stockStatus,
+          lastStockUpdate: element.lastStockUpdate,
+          totalInvestment: element.totalInvestment,
+          potentialRevenue: element.potentialRevenue,
+          potentialProfit: element.potentialProfit,
+          clientId: element.clientId,
+          createdBy: element.createdBy,
+          updatedBy: element.updatedBy,
+          createdAt: element.createdAt,
+          updatedAt: element.updatedAt,
+          key: element.key,
+        )).toList(),
         source: dealController.selectedSource.value,
         stage: dealController.selectedStageId.value,
         value: int.tryParse(dealController.dealValue.text) ?? 0,
-        // status: dealController.selectedStatus.value,
-        //
-        // interestLevel: leadController.selectedInterestLevel.value,
-        dealMembers:
-            selectedMembers
-                .map((element) => DealMember(memberId: element))
-                .toList(),
+        status: widget.deal.status,
+        files: widget.deal.files,
+        clientId: userId,
       );
       print("[DEBUG]=> data ${newDeal.toJson()}");
 
-      final success = await dealController.createDeal(newDeal);
+      final success = await dealController.updateDeal(widget.deal.id!,newDeal);
 
       if (success) {
-        // CrmSnackBar.showAwesomeSnackbar(
-        //   title: 'Success',
-        //   message: 'Lead created successfully',
-        //   contentType: ContentType.success,
-        // );
-        Get.back(result: newDeal);
+        print("[DEBUG]=> success");
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Success',
+          message: 'Deal updated successfully',
+          contentType: ContentType.success,
+        );
+        Get.back();
       } else {
-        // CrmSnackBar.showAwesomeSnackbar(
-        //   title: 'Error',
-        //   message: 'Failed to create lead',
-        //   contentType: ContentType.failure,
-        // );
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Error',
+          message: 'Failed to update deal',
+          contentType: ContentType.failure,
+        );
       }
-    } finally {
-      dealController.isCreating(false);
+    } catch (e) {
+
     }
   }
 

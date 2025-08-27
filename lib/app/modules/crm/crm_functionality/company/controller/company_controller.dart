@@ -27,7 +27,8 @@ class CompanyController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchCompanies();
+
+      fetchCompanies();
   }
 
   Future<void> refreshData() async {
@@ -58,6 +59,7 @@ class CompanyController extends GetxController {
         message: 'Failed to load companies: ${e.toString()}',
         contentType: ContentType.failure,
       );
+      print("[DEBUG]=>:${e.toString()}");
     } finally {
       isLoading.value = false;
     }

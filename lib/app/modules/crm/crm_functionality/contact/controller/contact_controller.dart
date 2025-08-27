@@ -87,6 +87,7 @@ class ContactController extends GetxController {
       if (existingContact != null) return existingContact;
 
       final fetchedContact = await _service.getContactById(id);
+
       if (fetchedContact != null) {
         contacts.add(fetchedContact);
       }

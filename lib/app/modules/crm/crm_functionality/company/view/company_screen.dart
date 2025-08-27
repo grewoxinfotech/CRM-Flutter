@@ -6,6 +6,7 @@ import '../../../../../widgets/button/crm_back_button.dart';
 import '../../deal/views/deal_add_screen.dart';
 import '../controller/company_controller.dart';
 import '../widget/company_card.dart';
+import 'company_detail_screen.dart';
 
 class CompanyScreen extends StatelessWidget {
   CompanyScreen({super.key});
@@ -49,7 +50,11 @@ class CompanyScreen extends StatelessWidget {
           itemCount: companyController.companies.length,
           itemBuilder: (context, index) {
             final company = companyController.companies[index];
-            return CompanyCard(company: company);
+            return GestureDetector(
+              onTap: (){
+                Get.to(()=>CompanyDetailScreen(id: company.id!));
+              },
+                child: CompanyCard(company: company));
           },
         );
       }),

@@ -39,7 +39,7 @@ class ContactService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return ContactModel.fromJson(data);
+      return ContactModel.fromJson(data['data']);
     }
     return null;
   }

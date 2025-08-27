@@ -72,12 +72,18 @@ class DealService {
   }
 
   /// 4. Update Deal by ID
-  Future<http.Response> updateDeal(String id, Map<String, dynamic> data) async {
-    return await http.put(
+  Future<bool> updateDeal(String id, DealModel data) async {
+    final response = await http.put(
       Uri.parse("$url/$id"),
       headers: await headers(),
       body: jsonEncode(data),
     );
+    return (response.statusCode == 200 || response.statusCode == 201);
+    // return await http.put(
+    //   Uri.parse("$url/$id"),
+    //   headers: await headers(),
+    //   body: jsonEncode(data),
+    // );
   }
 
   /// 5. Delete Deal by ID

@@ -1,4 +1,5 @@
-import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/model/pipeline_model.dart'; 
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/model/pipeline_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/service/pipeline_service.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
@@ -19,12 +20,19 @@ class PipelineController extends GetxController {
     try {
       isLoading.value = true;
       final data = await pipelineService.getPipelines();
-      if (data != null && data.isNotEmpty) {
-        final pipelinesList = data.map((e) => PipelineModel.fromJson(e)).toList();
-        pipelines.assignAll(pipelinesList);
-      } else {
-        pipelines.clear();
+      final user = await SecureStorage.getUserData();
+      if (user != null) {
+        final userId = user.id;
+        if (data != null && data.isNotEmpty) {
+          final pipelinesList = data.map((e) => PipelineModel.fromJson(e)).toList();
+          final userPipelines = pipelinesList.where((pipeline) => pipeline.clientId == userId).toList();
+          pipelines.clear();
+          pipelines.assignAll(userPipelines);
+        } else {
+          pipelines.clear();
+        }
       }
+
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',

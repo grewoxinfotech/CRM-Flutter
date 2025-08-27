@@ -1,6 +1,8 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/crm/contact/medel/contact_medel.dart';
 import 'package:crm_flutter/app/data/network/crm/deal/model/deal_model.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/contact/controller/contact_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/bindings.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/controllers/deal_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/widget/deal_invoice_card.dart';
@@ -31,6 +33,7 @@ import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
 import 'package:crm_flutter/app/data/network/sales_invoice/controller/sales_invoice_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_icon_button.dart';
 import 'package:crm_flutter/app/widgets/leads_and_deal/follow_up_card.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../care/constants/access_res.dart';
 import '../../../../access/controller/access_controller.dart';
@@ -162,6 +165,13 @@ class DealDetailScreen extends StatelessWidget {
     String statusName,
     String pipelineName,
   ) {
+    final ContactController contactController = Get.put(ContactController());
+    // final contactData = contactController.getContactById(deal.id!).then((contact){
+    //   if (contact != null) {
+    //     return contact;
+    //   }
+    // });
+
     // Get deal members information
     final memberIds = deal.dealMembers.map((m) => m.memberId).toList();
     final members = dealController.getDealMembers(memberIds);
@@ -169,40 +179,41 @@ class DealDetailScreen extends StatelessWidget {
         members.isNotEmpty
             ? members.map((user) => user.username).join(", ")
             : "No members";
-
-    return DealOverviewCard(
-      color: Colors.blue,
-      id: deal.id.toString(),
-      dealTitle: deal.dealTitle.toString(),
-      currency: deal.currency.toString(),
-      value: deal.value.toString(),
-      pipeline: pipelineName,
-      stage: dealController.getStageName(deal.stage ?? ''),
-      status: statusName,
-      label: deal.label.toString(),
-      closedDate: deal.closedDate.toString(),
-      firstName: deal.firstName.toString(),
-      lastName: deal.lastName.toString(),
-      email: deal.email.toString(),
-      phone: deal.phone.toString(),
-      source: sourceName,
-      companyName: deal.companyName.toString(),
-      website: deal.website.toString(),
-      address: deal.address.toString(),
-      products: deal.products.toString(),
-      files: deal.files.toString(),
-      assignedTo: memberNames,
-      // Use member names instead of assignedTo
-      clientId: deal.clientId.toString(),
-      isWon: deal.isWon.toString(),
-      companyId: deal.companyId.toString(),
-      contactId: deal.contactId.toString(),
-      createdBy: deal.createdBy.toString(),
-      updatedBy: deal.updatedBy.toString(),
-      createdAt: deal.createdAt.toString(),
-      updatedAt: deal.updatedAt.toString(),
-      onDelete:
-          () => Get.dialog(
+    return FutureBuilder<ContactModel?>(
+      future: contactController.getContactById(deal.contactId ?? ''),
+      builder: (context, snapshot) {
+        final contact = snapshot.data;
+        return DealOverviewCard(
+          color: Colors.blue,
+          id: deal.id.toString(),
+          dealTitle: deal.dealTitle.toString(),
+          currency: deal.currency.toString(),
+          value: deal.value.toString(),
+          pipeline: pipelineName,
+          stage: dealController.getStageName(deal.stage ?? ''),
+          status: statusName,
+          label: deal.label.toString(),
+          closedDate: deal.closedDate.toString(),
+          firstName: deal.firstName.toString(),
+          lastName: deal.lastName.toString(),
+          email: contact?.email ?? "-",
+          phone: contact?.phone ?? "-",
+          source: sourceName,
+          companyName: deal.companyName.toString(),
+          website: deal.website.toString(),
+          address: contact?.address ?? "-",
+          products: deal.products.toString(),
+          files: deal.files.toString(),
+          assignedTo: memberNames,
+          clientId: deal.clientId.toString(),
+          isWon: deal.isWon.toString(),
+          companyId: deal.companyId.toString(),
+          contactId: deal.contactId.toString(),
+          createdBy: deal.createdBy.toString(),
+          updatedBy: deal.updatedBy.toString(),
+          createdAt: deal.createdAt.toString(),
+          updatedAt: deal.updatedAt.toString(),
+          onDelete: () => Get.dialog(
             CrmDeleteDialog(
               entityType: deal.dealTitle.toString(),
               onConfirm: () {
@@ -211,8 +222,11 @@ class DealDetailScreen extends StatelessWidget {
               },
             ),
           ),
-      onEdit: () => _handleEdit(deal, dealController),
+          onEdit: () => _handleEdit(deal, dealController),
+        );
+      },
     );
+
   }
 
   Widget _buildFilesTab(
@@ -593,12 +607,20 @@ class DealDetailScreen extends StatelessWidget {
     dealController.companyName.text = deal.companyName ?? '';
     dealController.address.text = deal.address ?? '';
 
-    dealController.selectedPipeline.value = deal.pipeline ?? '';
+    // dealController.selectedPipeline.value = deal.pipeline ?? '';
+    dealController.selectedPipelineId.value = deal.pipeline ?? '';
     dealController.selectedSource.value = deal.source ?? '';
     dealController.selectedStatus.value = deal.status ?? '';
-    dealController.selectedStage.value = deal.stage ?? '';
+    dealController.selectedStageId.value = deal.stage ?? '';
+    dealController.selectedCategory.value = deal.category ?? '';
 
-    await Get.to(() => DealEditScreen(deal: deal));
+    final closeDate = deal.closedDate;
+    if (closeDate != null) {
+      dealController.endDateController.text = DateFormat('yyyy-MM-dd').format(closeDate);
+      dealController.selectedEndDate.value = closeDate;
+    }
+
+     Get.to(() => DealEditScreen(deal: deal));
     await dealController.getDealById(id);
     await dealController.refreshData();
   }

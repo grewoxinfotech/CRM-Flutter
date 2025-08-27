@@ -1,3 +1,5 @@
+import 'package:crm_flutter/app/data/network/sales/product_service/model/product_model.dart';
+
 class DealModel {
   final String? id;
   final String? dealTitle;
@@ -17,7 +19,7 @@ class DealModel {
   final String? companyName;
   final String? website;
   final String? address;
-  final List<Product>? products;
+  final List<Data>? products;
   final List<FileModel>? files;
   final String? assignedTo;
   final String? clientId;
@@ -113,7 +115,7 @@ class DealModel {
       address: json['address'] ?? '',
       products:
           (json['products']?['products'] as List<dynamic>? ?? [])
-              .map((e) => Product.fromJson(e))
+              .map((e) => Data.fromJson(e))
               .toList(),
       files:
           (json['files'] as List<dynamic>? ?? [])

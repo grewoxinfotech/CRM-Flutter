@@ -627,35 +627,36 @@ class DealController extends GetxController {
     }
   }
 
-  Future<void> updateDeal(String dealId) async {
+  Future<bool> updateDeal(String dealId,DealModel data) async {
     try {
       isLoading.value = true;
 
-      final data = {
-        'dealTitle': dealTitle.text,
-        'value': int.tryParse(dealValue.text) ?? 0,
-        'pipeline': selectedPipeline.value,
-        'stage': selectedStage.value,
-        'closedDate': closeDate.text,
-        'source': selectedSource.value,
-        'status': selectedStatus.value,
-        'products': products.text,
-        'firstName': firstName.text,
-        'lastName': lastName.text,
-        'email': email.text,
-        'phone': phoneNumber.text,
-        'companyName': companyName.text,
-        'address': address.text,
-      };
+      // final data = {
+      //   'dealTitle': dealTitle.text,
+      //   'value': int.tryParse(dealValue.text) ?? 0,
+      //   'pipeline': selectedPipeline.value,
+      //   'stage': selectedStage.value,
+      //   'closedDate': closeDate.text,
+      //   'source': selectedSource.value,
+      //   'status': selectedStatus.value,
+      //   'products': products.text,
+      //   'firstName': firstName.text,
+      //   'lastName': lastName.text,
+      //   'email': email.text,
+      //   'phone': phoneNumber.text,
+      //   'companyName': companyName.text,
+      //   'address': address.text,
+      // };
 
       final response = await dealService.updateDeal(dealId, data);
-      if (response != null) {
+      if (response) {
         await refreshData();
         Get.back();
-        Get.snackbar('Success', 'Deal updated successfully');
+        return true;
       }
+      return false;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to update deal: $e');
+      return false;
     } finally {
       isLoading.value = false;
     }

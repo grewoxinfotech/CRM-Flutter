@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/stage/model/stage_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/stage/service/stage_service.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
@@ -38,8 +39,15 @@ class StageController extends GetxController {
           }
           
           if (stagesData != null && stagesData.isNotEmpty) {
-            final stagesList = stagesData.map((stage) => StageModel.fromJson(stage)).toList();
-          stages.assignAll(stagesList);
+            final user = await SecureStorage.getUserData();
+            if (user != null) {
+              final userId = user.id;
+              final stagesList = stagesData.map((stage) => StageModel.fromJson(stage)).toList();
+              final filteredStages = stagesList.where((stage) => stage.clientId == userId).toList();
+              stages.clear();
+              stages.assignAll(filteredStages);
+            }
+
           } else {
             stages.clear();
           }
