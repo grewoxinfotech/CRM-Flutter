@@ -8,8 +8,6 @@ import '../../../../../data/network/crm/company/service/company_service.dart';
 import '../../../../../data/network/crm/contact/medel/contact_medel.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 
-
-
 class ContactController extends GetxController {
   final ContactService _service = ContactService();
   final companyService = CompanyService();
@@ -146,7 +144,7 @@ class ContactController extends GetxController {
       // Call the updated addContact() which returns a boolean
       final success = await _service.addContact(newContact);
 
-      if (success) {
+      if (success != null) {
         await fetchContacts(); // Refresh the list
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Success',

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
+import 'package:crm_flutter/app/data/network/crm/deal/model/deal_model.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:http/http.dart' as http;
 
@@ -51,12 +52,23 @@ class DealService {
   }
 
   /// 3. Create Deal
-  Future<http.Response> createDeal(Map<String, dynamic> data) async {
-    return await http.post(
+  // Future<http.Response> createDeal(DealModel data) async {
+  //   return await http.post(
+  //     Uri.parse(url),
+  //     headers: await headers(),
+  //     body: jsonEncode(data),
+  //   );
+  // }
+
+  Future<bool> createDeal(DealModel data) async {
+    final response = await http.post(
       Uri.parse(url),
       headers: await headers(),
       body: jsonEncode(data),
     );
+
+    print("[DEBUG]=> response =--------- ${response.body}");
+    return (response.statusCode == 200 || response.statusCode == 201);
   }
 
   /// 4. Update Deal by ID
@@ -77,7 +89,8 @@ class DealService {
     final data = jsonDecode(response.body);
     CrmSnackBar.showAwesomeSnackbar(
       title: "Message",
-      message: data['message'] is String ? data['message'] : "Operation completed",
+      message:
+          data['message'] is String ? data['message'] : "Operation completed",
       contentType: ContentType.success,
     );
     return data['success'];

@@ -7,6 +7,7 @@ class DealModel {
   final String? stage;
   final String? status;
   final String? label;
+  final String? category;
   final DateTime? closedDate;
   final String? firstName;
   final String? lastName;
@@ -38,6 +39,7 @@ class DealModel {
     this.stage,
     this.status,
     this.label,
+    this.category,
     this.closedDate,
     this.firstName,
     this.lastName,
@@ -66,17 +68,21 @@ class DealModel {
       // Handle different possible structures of deal_members
       if (json['deal_members'] != null) {
         // Case 1: deal_members is a map with a deal_members array inside
-        if (json['deal_members'] is Map && json['deal_members']['deal_members'] != null) {
-        return (json['deal_members']['deal_members'] as List<dynamic>)
-            .map((memberId) => DealMember(memberId: memberId))
-            .toList();
+        if (json['deal_members'] is Map &&
+            json['deal_members']['deal_members'] != null) {
+          return (json['deal_members']['deal_members'] as List<dynamic>)
+              .map((memberId) => DealMember(memberId: memberId))
+              .toList();
         }
         // Case 2: deal_members is directly an array
         else if (json['deal_members'] is List) {
           return (json['deal_members'] as List<dynamic>)
-              .map((member) => member is String 
-                  ? DealMember(memberId: member)
-                  : DealMember.fromJson(member))
+              .map(
+                (member) =>
+                    member is String
+                        ? DealMember(memberId: member)
+                        : DealMember.fromJson(member),
+              )
               .toList();
         }
       }
@@ -92,7 +98,11 @@ class DealModel {
       stage: json['stage'] ?? '',
       status: json['status'] ?? '',
       label: json['label'] ?? '',
-      closedDate: json['closedDate'] != null ? DateTime.parse(json['closedDate']) : null,
+      category: json['category'] ?? '',
+      closedDate:
+          json['closedDate'] != null
+              ? DateTime.parse(json['closedDate'])
+              : null,
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
       email: json['email'] ?? '',
@@ -101,10 +111,12 @@ class DealModel {
       companyName: json['company_name'] ?? '',
       website: json['website'] ?? '',
       address: json['address'] ?? '',
-      products: (json['products']?['products'] as List<dynamic>? ?? [])
+      products:
+          (json['products']?['products'] as List<dynamic>? ?? [])
               .map((e) => Product.fromJson(e))
               .toList(),
-      files: (json['files'] as List<dynamic>? ?? [])
+      files:
+          (json['files'] as List<dynamic>? ?? [])
               .map((e) => FileModel.fromJson(e))
               .toList(),
       assignedTo: json['assigned_to'] ?? '',
@@ -114,8 +126,10 @@ class DealModel {
       contactId: json['contact_id'] ?? '',
       createdBy: json['created_by'] ?? '',
       updatedBy: json['updated_by'] ?? '',
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       dealMembers: parseDealMembers(),
     );
   }
@@ -130,6 +144,7 @@ class DealModel {
       'stage': stage,
       'status': status,
       'label': label,
+      'category': category,
       'closedDate': closedDate?.toIso8601String(),
       'firstName': firstName,
       'lastName': lastName,
@@ -160,17 +175,15 @@ class DealMember {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  DealMember({
-    required this.memberId,
-    this.createdAt,
-    this.updatedAt,
-  });
+  DealMember({required this.memberId, this.createdAt, this.updatedAt});
 
   factory DealMember.fromJson(Map<String, dynamic> json) {
     return DealMember(
       memberId: json['memberId'] ?? '',
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
   }
 

@@ -166,6 +166,7 @@ class LeadController extends GetxController {
 
     _initializeData();
     refreshData();
+
     loadCurrencies();
   }
 

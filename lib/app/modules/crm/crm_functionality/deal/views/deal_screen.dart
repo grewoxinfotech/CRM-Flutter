@@ -14,8 +14,6 @@ import 'package:get/get.dart';
 import '../../../../access/controller/access_controller.dart';
 
 class DealScreen extends StatelessWidget {
-
-
   DealScreen({super.key});
 
   @override
@@ -33,11 +31,15 @@ class DealScreen extends StatelessWidget {
       ),
 
       floatingActionButton:
-      accessController.can(AccessModule.deal, AccessAction.create) ?
-      CrmButton(
-        title: "Add Deal",
-        onTap: () => Get.to(DealAddScreen()),
-      ):null,
+          accessController.can(AccessModule.deal, AccessAction.create)
+              ? CrmButton(
+                title: "Add Deal",
+                onTap: () {
+                  dealController.resetForm();
+                  Get.to(DealCreateScreen());
+                },
+              )
+              : null,
       body: FutureBuilder(
         future: dealController.getDeals(),
         builder: (context, snapshot) {
@@ -96,9 +98,11 @@ class DealScreen extends StatelessWidget {
                       createdAt: formatDate(data.createdAt.toString()),
                       updatedAt: formatDate(data.updatedAt.toString()),
                       color: Get.theme.colorScheme.error,
-                      onTap: () => (data.id != null)
-                          ? Get.to(() => DealDetailScreen(id: data.id!))
-                          : Get.snackbar('Error', 'deal ID is missing'),
+                      onTap:
+                          () =>
+                              (data.id != null)
+                                  ? Get.to(() => DealDetailScreen(id: data.id!))
+                                  : Get.snackbar('Error', 'deal ID is missing'),
                       onEdit: () {},
                       onDelete: () {},
                     );

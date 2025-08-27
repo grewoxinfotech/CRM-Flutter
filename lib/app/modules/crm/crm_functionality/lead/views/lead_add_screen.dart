@@ -30,14 +30,77 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
     super.initState();
     final pipelineController = Get.find<PipelineController>();
     final stageController = Get.find<StageController>();
+    final LeadController leadController = Get.find<LeadController>();
 
-    // Load pipelines and stages initially
-    if (pipelineController.pipelines.isEmpty) {
-      pipelineController.getPipelines();
+    // // Load pipelines and stages initially
+    // if (pipelineController.pipelines.isEmpty) {
+    //   pipelineController.getPipelines().then((_) {
+    //     if (pipelineController.pipelines.isNotEmpty) {
+    //       leadController.selectedPipelineId.value =
+    //           pipelineController.pipelines.first.id!;
+    //       stageController.getStagesByPipeline(
+    //         pipelineController.pipelines.first.id!,
+    //       );
+    //     }
+    //   });
+    // } else {
+    //   leadController.selectedPipelineId.value =
+    //       pipelineController.pipelines.first.id!;
+    //   stageController.getStagesByPipeline(
+    //     pipelineController.pipelines.first.id!,
+    //   );
+    // }
+
+    // Load pipelines and select first as default
+    pipelineController.getPipelines().then((_) {
+      if (pipelineController.pipelines.isNotEmpty) {
+        leadController.selectedPipelineId.value =
+            pipelineController.pipelines.first.id!;
+        stageController.getStagesByPipeline(
+          leadController.selectedPipelineId.value!,
+        );
+      }
+    });
+
+    // Load stages and select first as default
+    stageController.getStages().then((_) {
+      if (stageController.stages.isNotEmpty) {
+        leadController.selectedStageId.value = stageController.stages.first.id!;
+      }
+    });
+
+    // Set defaults for static dropdowns
+
+    leadController.selectedInterestLevel.value =
+        leadController.interestLevelOptions.first; // First option
+
+    // For dynamic options (source, category, status)
+    // leadController.sourceOptions = ;
+    if (leadController.sourceOptions.isNotEmpty) {
+      leadController.selectedSource.value =
+          leadController.sourceOptions.first['id']!;
     }
-    if (stageController.stages.isEmpty) {
-      stageController.getStages();
+
+    if (leadController.categoryOptions.isNotEmpty) {
+      leadController.selectedCategory.value =
+          leadController.categoryOptions.first['id'];
     }
+
+    if (leadController.statusOptions.isNotEmpty) {
+      final pendingStatus = leadController.statusOptions.firstWhereOrNull(
+        (element) => element['name'] == "Pending",
+      );
+
+      print("Status: ${pendingStatus}");
+
+      if (pendingStatus != null) {
+        leadController.selectedStatus.value = pendingStatus['id'] ?? '';
+      }
+    }
+
+    // if (stageController.stages.isEmpty) {
+    //   stageController.getStages();
+    // }
   }
 
   String? _getCurrencyValue(LeadController leadController) {
@@ -87,10 +150,7 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
                     Obx(
                       () => CrmDropdownField<String>(
                         title: "Pipeline",
-                        value:
-                            leadController.selectedPipelineId.value != null
-                                ? null
-                                : leadController.selectedPipelineId.value,
+                        value: leadController.selectedPipelineId.value,
                         items:
                             pipelineController.pipelines.map((pipeline) {
                               return DropdownMenuItem(
@@ -105,7 +165,6 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
                             leadController.selectedStageId.value = '';
                           }
                         },
-                        hintText: "Select pipeline",
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -226,10 +285,7 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
                     Obx(
                       () => CrmDropdownField<String>(
                         title: "Interest Level",
-                        value:
-                            leadController.selectedInterestLevel.value != null
-                                ? null
-                                : leadController.selectedInterestLevel.value,
+                        value: leadController.selectedInterestLevel.value,
                         items:
                             ['low', 'medium', 'high'].map((level) {
                               return DropdownMenuItem(
@@ -251,10 +307,7 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
                     Obx(
                       () => CrmDropdownField<String>(
                         title: "Source",
-                        value:
-                            leadController.selectedSource.value != null
-                                ? null
-                                : leadController.selectedSource.value,
+                        value: leadController.selectedSource.value,
                         items:
                             leadController.sourceOptions.isEmpty
                                 ? [
@@ -286,10 +339,7 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
                     Obx(
                       () => CrmDropdownField<String>(
                         title: "Category",
-                        value:
-                            leadController.selectedCategory.value != null
-                                ? null
-                                : leadController.selectedCategory.value,
+                        value: leadController.selectedCategory.value,
                         items:
                             leadController.categoryOptions.isEmpty
                                 ? [
@@ -321,41 +371,38 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
                     const SizedBox(height: 16),
 
                     // Status
-                    Obx(
-                      () => CrmDropdownField<String>(
-                        title: "Status",
-                        value:
-                            leadController.selectedStatus.value != null
-                                ? null
-                                : leadController.selectedStatus.value,
-                        items:
-                            leadController.statusOptions.isEmpty
-                                ? [
-                                  DropdownMenuItem(
-                                    value: '',
-                                    child: Text('No statuses available'),
-                                  ),
-                                ]
-                                : leadController.statusOptions.map((status) {
-                                  return DropdownMenuItem(
-                                    value: status['id'],
-                                    child: Text(
-                                      (status['name'] ?? '').capitalizeFirst!,
-                                    ),
-                                  );
-                                }).toList(),
-                        onChanged:
-                            leadController.statusOptions.isEmpty
-                                ? (_) {}
-                                : (value) {
-                                  if (value != null) {
-                                    leadController.selectedStatus.value = value;
-                                  }
-                                },
-                        hintText: "Select status",
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                    // Obx(
+                    //   () => CrmDropdownField<String>(
+                    //     title: "Status",
+                    //     value: leadController.selectedStatus.value,
+                    //     items:
+                    //         leadController.statusOptions.isEmpty
+                    //             ? [
+                    //               DropdownMenuItem(
+                    //                 value: '',
+                    //                 child: Text('No statuses available'),
+                    //               ),
+                    //             ]
+                    //             : leadController.statusOptions.map((status) {
+                    //               return DropdownMenuItem(
+                    //                 value: status['id'],
+                    //                 child: Text(
+                    //                   (status['name'] ?? '').capitalizeFirst!,
+                    //                 ),
+                    //               );
+                    //             }).toList(),
+                    //     onChanged:
+                    //         leadController.statusOptions.isEmpty
+                    //             ? (_) {}
+                    //             : (value) {
+                    //               if (value != null) {
+                    //                 leadController.selectedStatus.value = value;
+                    //               }
+                    //             },
+                    //     hintText: "Select status",
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 16),
 
                     // Team Members
                     Column(

@@ -1,39 +1,159 @@
-import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
+import 'package:crm_flutter/app/data/network/crm/contact/services/contact_services.dart';
+import 'package:crm_flutter/app/data/network/crm/deal/model/deal_model.dart';
+import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/pipeline/controller/pipeline_controller.dart';
+import 'package:crm_flutter/app/data/network/crm/crm_system/stage/controller/stage_controller.dart';
+import 'package:crm_flutter/app/data/network/system/country/controller/country_controller.dart';
+import 'package:crm_flutter/app/data/network/system/currency/model/currency_model.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/contact/controller/contact_controller.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/controllers/lead_controller.dart';
+import 'package:crm_flutter/app/modules/users/controllers/users_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_dropdown_field.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:intl/intl.dart';
+
+import '../../../../../care/utils/validation.dart';
+import '../../../../../data/network/crm/contact/medel/contact_medel.dart';
+import '../../../../../data/network/system/country/model/country_model.dart';
+import '../../../../../data/network/user/all_users/model/all_users_model.dart';
 
 class DealEditScreen extends StatefulWidget {
-  final String dealId;
-  DealEditScreen({required this.dealId});
+  final DealModel deal;
 
+  const DealEditScreen({super.key, required this.deal});
   @override
-  State<DealEditScreen> createState() => _DealEditScreenState();
+  State<DealEditScreen> createState() => _DealCreateScreenState();
 }
 
-class _DealEditScreenState extends State<DealEditScreen> {
+class _DealCreateScreenState extends State<DealEditScreen> {
+  final RxList<String> selectedMembers = <String>[].obs;
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    final dealController = Get.find<DealController>();
+    Get.lazyPut(() => PipelineController());
+    Get.lazyPut(() => StageController());
+    Get.lazyPut(() => LeadController());
+    Get.lazyPut(() => UsersController());
     final pipelineController = Get.find<PipelineController>();
+    final stageController = Get.find<StageController>();
+    final DealController dealController = Get.find<DealController>();
+    final CountryController countryController = Get.put(CountryController());
 
-    // Load all required data first
-    Future.wait([
-      if (pipelineController.pipelines.isEmpty) dealController.getPipelines(),
-      if (dealController.labels.isEmpty) dealController.getLabels(),
-      if (dealController.stages.isEmpty) dealController.getStages(),
-    ]).then((_) {
-      // Then load deal data
-      dealController.editDeal(widget.dealId);
-    });
+    // if (dealData!.dealTitle != null) {
+    //   dealController.dealTitle.text = dealData!.dealTitle!;
+    // }
+
+    // // Load pipelines and select first as default
+    // pipelineController.getPipelines().then((_) {
+    //   if (pipelineController.pipelines.isNotEmpty) {
+    //     dealController.selectedPipelineId.value = dealData!.pipeline!;
+    //     stageController.getStagesByPipeline(
+    //       dealController.selectedPipelineId.value!,
+    //     );
+    //   }
+    // });
+    // //
+    // // Load stages and select first as default
+    // stageController.getStages().then((_) {
+    //   if (stageController.stages.isNotEmpty) {
+    //     dealController.selectedStageId.value = dealData!.stage!;
+    //   }
+    // });
+    //
+    // final CurrencyModel? currency = dealController.currencies.firstWhereOrNull(
+    //   (c) => c.id == dealData!.currency,
+    // );
+    //
+    // if (currency != null) {
+    //   dealController.currency.value = currency.id;
+    // }
+    //
+    // if (dealController.sourceOptions.isNotEmpty) {
+    //   dealController.selectedSource.value = dealData!.source!;
+    // }
+    // //
+    // if (dealController.categoryOptions.isNotEmpty) {
+    //   dealController.selectedCategory.value = dealData!.category!;
+    // }
+    // dealController.dealValue.text = dealData!.value!.toString();
+    // final endDate = DateTime.tryParse(dealData!.closedDate!.toIso8601String());
+    // if (endDate != null) {
+    //   dealController.selectedEndDate.value = endDate;
+    //   dealController.endDateController.text = DateFormat(
+    //     'yyyy-MM-dd',
+    //   ).format(endDate);
+    // }
+
+    //
+    // if (leadController.statusOptions.isNotEmpty) {
+    //   final pendingStatus = leadController.statusOptions.firstWhereOrNull(
+    //     (element) => element['name'] == "Pending",
+    //   );-
+    //
+    //   print("Status: ${pendingStatus}");
+    //
+    //   if (pendingStatus != null) {
+    //     leadController.selectedStatus.value = pendingStatus['id'] ?? '';
+    //   }
+    // }
+
+    // if (stageController.stages.isEmpty) {
+    //   stageController.getStages();
+    // }
+  }
+
+  Future<void> _pickDate(
+    BuildContext context,
+    DealController dealController,
+  ) async {
+    final initialDate = dealController.selectedEndDate.value ?? DateTime.now();
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      dealController.selectedEndDate.value = picked;
+      dealController.endDateController.text = DateFormat(
+        'dd-MM-yyyy',
+      ).format(picked);
+    }
+  }
+
+  String? _getCurrencyValue(DealController dealController) {
+    if (dealController.isLoadingCurrencies.value) return null;
+
+    // If using API currencies, check if current currency exists in the list
+    if (dealController.currencies.isNotEmpty) {
+      final currencyExists = dealController.currencies.firstWhereOrNull(
+        (c) => c.id == widget.deal.currency,
+      );
+      if (currencyExists != null) {
+        return currencyExists.id;
+      } else {
+        // If currency doesn't exist in API list, return first available currency
+        return dealController.currencies.first.id;
+      }
+    }
+  }
+
+  String? requiredValidator(String? value, String message) {
+    if (value == null || value.trim().isEmpty) return message;
+    return null;
   }
 
   @override
@@ -41,133 +161,1106 @@ class _DealEditScreenState extends State<DealEditScreen> {
     final DealController dealController = Get.find<DealController>();
     final PipelineController pipelineController =
         Get.find<PipelineController>();
+    final StageController stageController = Get.find<StageController>();
+    final UsersController usersController = Get.find<UsersController>();
+    final ContactController contactController = Get.put(ContactController());
 
-    return WillPopScope(
-      onWillPop: () async {
-        // Refresh data before popping
-        await dealController.refreshData();
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(title: Text("Edit Deal"), leading: CrmBackButton()),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CrmTextField(
-                title: 'Deal Title',
-                controller: dealController.dealTitle,
-                hintText: 'Enter deal title',
+    return Scaffold(
+      appBar: AppBar(title: Text("Edit Deal"), leading: CrmBackButton()),
+      body:
+          isLoading
+              ? Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Lead Title
+                    CrmTextField(
+                      title: 'Deal Title',
+                      controller: dealController.dealTitle,
+                      hintText: 'Enter Deal title',
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Pipeline
+                    Obx(
+                      () => CrmDropdownField<String>(
+                        title: "Pipeline",
+                        value: dealController.selectedPipelineId.value,
+                        items:
+                            pipelineController.pipelines.map((pipeline) {
+                              return DropdownMenuItem(
+                                value: pipeline.id,
+                                child: Text(pipeline.pipelineName ?? ''),
+                              );
+                            }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            dealController.selectedPipelineId.value = value;
+                            stageController.getStagesByPipeline(value);
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Stage
+                    Obx(
+                      () => CrmDropdownField<String>(
+                        title: "Stage",
+                        value: dealController.selectedStageId.value,
+                        items:
+                            stageController.stages
+                                .where(
+                                  (stage) =>
+                                      (stage.stageType).toLowerCase() ==
+                                          "deal" &&
+                                      stage.isDefault == true,
+                                )
+                                .map((stage) {
+                                  return DropdownMenuItem(
+                                    value: stage.id,
+                                    child: Text(stage.stageName ?? ''),
+                                  );
+                                })
+                                .toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            dealController.selectedStageId.value = value;
+                          }
+                        },
+                        hintText: "Select stage",
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Lead Value
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Obx(
+                            () => CrmDropdownField<String>(
+                              title: 'Currency',
+                              value: _getCurrencyValue(dealController),
+                              items:
+                                  dealController.isLoadingCurrencies.value &&
+                                          dealController.currenciesLoaded.value
+                                      ? [
+                                        DropdownMenuItem(
+                                          value: dealController.currency.value,
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                height: 16,
+                                                width: 16,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                    ),
+                                              ),
+                                              SizedBox(width: 8),
+                                              Text('Loading currencies...'),
+                                            ],
+                                          ),
+                                        ),
+                                      ]
+                                      : dealController.currencies.isNotEmpty
+                                      ? dealController.currencies
+                                          .map(
+                                            (currency) => DropdownMenuItem(
+                                              value: currency.id,
+                                              child: Text(
+                                                '${currency.currencyCode} (${currency.currencyIcon})',
+                                              ),
+                                            ),
+                                          )
+                                          .toList()
+                                      : [
+                                        DropdownMenuItem(
+                                          value: 'AHNTpSNJHMypuNF6iPcMLrz',
+                                          child: Text('INR (₹)'),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: 'BHNTpSNJHMypuNF6iPcMLr2',
+                                          child: Text('USD (\$)'),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: 'CHNTpSNJHMypuNF6iPcMLr3',
+                                          child: Text('EUR (€)'),
+                                        ),
+                                      ],
+                              onChanged: (value) {
+                                // Don't process changes during loading
+                                if (value != null &&
+                                    !(dealController
+                                            .isLoadingCurrencies
+                                            .value &&
+                                        dealController
+                                            .currenciesLoaded
+                                            .value)) {
+                                  dealController.updateCurrencyDetails(value);
+                                }
+                              },
+
+                              isRequired: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          flex: 2,
+                          child: CrmTextField(
+                            title: 'Deal Value',
+                            controller: dealController.dealValue,
+                            hintText: 'Enter Deal value',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Interest Level
+                    // Obx(
+                    //   () => CrmDropdownField<String>(
+                    //     title: "Interest Level",
+                    //     value: dealController.selectedInterestLevel.value,
+                    //     items:
+                    //         ['low', 'medium', 'high'].map((level) {
+                    //           return DropdownMenuItem(
+                    //             value: level,
+                    //             child: Text(level.capitalizeFirst!),
+                    //           );
+                    //         }).toList(),
+                    //     onChanged: (value) {
+                    //       if (value != null) {
+                    //         leadController.selectedInterestLevel.value = value;
+                    //       }
+                    //     },
+                    //     hintText: "Select interest level",
+                    //   ),
+                    // ),
+                    const SizedBox(height: 16),
+
+                    // Source
+                    Obx(
+                      () => CrmDropdownField<String>(
+                        title: "Source",
+                        value: dealController.selectedSource.value,
+                        items:
+                            dealController.sourceOptions.isEmpty
+                                ? [
+                                  DropdownMenuItem(
+                                    value: '',
+                                    child: Text('No sources available'),
+                                  ),
+                                ]
+                                : dealController.sourceOptions.map((source) {
+                                  return DropdownMenuItem(
+                                    value: source['id'],
+                                    child: Text(source['name'] ?? ''),
+                                  );
+                                }).toList(),
+                        onChanged:
+                            dealController.sourceOptions.isEmpty
+                                ? (_) {}
+                                : (value) {
+                                  if (value != null) {
+                                    dealController.selectedSource.value = value;
+                                  }
+                                },
+                        hintText: "Select source",
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Category
+                    Obx(
+                      () => CrmDropdownField<String>(
+                        title: "Category",
+                        value: dealController.selectedCategory.value,
+                        items:
+                            dealController.categoryOptions.isEmpty
+                                ? [
+                                  DropdownMenuItem(
+                                    value: '',
+                                    child: Text('No categories available'),
+                                  ),
+                                ]
+                                : dealController.categoryOptions.map((
+                                  category,
+                                ) {
+                                  return DropdownMenuItem(
+                                    value: category['id'],
+                                    child: Text(category['name'] ?? ''),
+                                  );
+                                }).toList(),
+                        onChanged:
+                            dealController.categoryOptions.isEmpty
+                                ? (_) {}
+                                : (value) {
+                                  if (value != null) {
+                                    dealController.selectedCategory.value =
+                                        value;
+                                  }
+                                },
+                        hintText: "Select category",
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    GestureDetector(
+                      onTap: () => _pickDate(context, dealController),
+                      child: AbsorbPointer(
+                        child: CrmTextField(
+                          controller: dealController.endDateController,
+                          title: 'Expected Close  Date',
+                          isRequired: true,
+                          suffixIcon: const Icon(Icons.calendar_today),
+                          validator:
+                              (value) =>
+                                  requiredValidator(value, 'Date is required'),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Team Members",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Container(
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 3,
+                                spreadRadius: 0,
+                                offset: Offset(0, 1),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Obx(
+                                () =>
+                                    selectedMembers.isEmpty
+                                        ? Container(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 16,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade50,
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey.shade200,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Icon(
+                                                Icons.person_outline,
+                                                size: 32,
+                                                color: Colors.grey,
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                "No team members selected",
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade600,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                        : Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade50,
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey.shade200,
+                                            ),
+                                          ),
+                                          child: Wrap(
+                                            spacing: 8,
+                                            runSpacing: 8,
+                                            children:
+                                                selectedMembers.map((memberId) {
+                                                  final user = usersController
+                                                      .getUserById(memberId);
+                                                  return Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Get
+                                                          .theme
+                                                          .primaryColor
+                                                          .withOpacity(0.1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            20,
+                                                          ),
+                                                      border: Border.all(
+                                                        color: Get
+                                                            .theme
+                                                            .primaryColor
+                                                            .withOpacity(0.3),
+                                                      ),
+                                                    ),
+                                                    child: Chip(
+                                                      materialTapTargetSize:
+                                                          MaterialTapTargetSize
+                                                              .shrinkWrap,
+                                                      avatar: CircleAvatar(
+                                                        backgroundColor:
+                                                            Get
+                                                                .theme
+                                                                .primaryColor,
+                                                        child: Text(
+                                                          (user?.username
+                                                                      .substring(
+                                                                        0,
+                                                                        1,
+                                                                      ) ??
+                                                                  'U')
+                                                              .toUpperCase(),
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      label: Text(
+                                                        user?.username ??
+                                                            memberId,
+                                                        style: TextStyle(
+                                                          color: Get
+                                                              .theme
+                                                              .primaryColor
+                                                              .withOpacity(0.8),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      elevation: 0,
+                                                      deleteIconColor:
+                                                          Get
+                                                              .theme
+                                                              .primaryColor,
+                                                      onDeleted: () {
+                                                        selectedMembers.remove(
+                                                          memberId,
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                          ),
+                                        ),
+                              ),
+                              SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                icon: Icon(Icons.person_add, size: 18),
+                                label: Text("Add Team Member"),
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Get.theme.primaryColor,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _showTeamMemberSelection(
+                                    context,
+                                    usersController,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Select Existing',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Obx(
+                          () => Switch(
+                            value: dealController.isSelectFromExisting.value,
+                            onChanged: (newValue) {
+                              dealController.isSelectFromExisting.value =
+                                  newValue;
+                            },
+                            activeColor: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Create New',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+
+                    Obx(
+                      () =>
+                          dealController.isSelectFromExisting.value
+                              ? _buildContactDetailField(
+                                dealController: dealController,
+                                contactController: contactController,
+                              )
+                              : _buildCompanyAndContactDropdowns(
+                                dealController: dealController,
+                                contactController: contactController,
+                              ),
+                    ),
+                    // // Team Members
+                    // Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     Text(
+                    //       "Team Members",
+                    //       style: TextStyle(
+                    //         fontSize: 16,
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //     const SizedBox(height: 8),
+                    //     Container(
+                    //       padding: EdgeInsets.all(12),
+                    //       decoration: BoxDecoration(
+                    //         color: Colors.white,
+                    //         borderRadius: BorderRadius.circular(8),
+                    //         border: Border.all(color: Colors.grey.shade300),
+                    //       ),
+                    //       child: Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //         children: [
+                    //           Obx(
+                    //             () =>
+                    //                 selectedMembers.isEmpty
+                    //                     ? Center(
+                    //                       child: Padding(
+                    //                         padding: EdgeInsets.symmetric(
+                    //                           vertical: 16,
+                    //                         ),
+                    //                         child: Text(
+                    //                           "No team members selected",
+                    //                           style: TextStyle(
+                    //                             color: Colors.grey.shade600,
+                    //                             fontStyle: FontStyle.italic,
+                    //                           ),
+                    //                         ),
+                    //                       ),
+                    //                     )
+                    //                     : Wrap(
+                    //                       spacing: 8,
+                    //                       runSpacing: 8,
+                    //                       children:
+                    //                           selectedMembers.map((memberId) {
+                    //                             final user = usersController
+                    //                                 .getUserById(memberId);
+                    //                             return Chip(
+                    //                               label: Text(
+                    //                                 user?.username ?? memberId,
+                    //                               ),
+                    //                               onDeleted:
+                    //                                   () => selectedMembers
+                    //                                       .remove(memberId),
+                    //                             );
+                    //                           }).toList(),
+                    //                     ),
+                    //           ),
+                    //           const SizedBox(height: 16),
+                    //           ElevatedButton.icon(
+                    //             icon: Icon(Icons.person_add, size: 18),
+                    //             label: Text("Add Team Member"),
+                    //             onPressed:
+                    //                 () => _showTeamMemberSelection(
+                    //                   context,
+                    //                   usersController,
+                    //                 ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    const SizedBox(height: 24),
+
+                    // Create Button
+                    Obx(
+                      () => CrmButton(
+                        width: Get.width - 40,
+                        title:
+                            dealController.isCreating.value
+                                ? "Updating..."
+                                : "Update Deal",
+                        onTap:
+                            dealController.isCreating.value
+                                ? null
+                                : () => _createLead(dealController),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
-              Obx(
-                () => CrmDropdownField<String>(
-                  title: "Pipeline",
-                  value:
-                      dealController.selectedPipelineId.value.isEmpty
-                          ? null
-                          : dealController.selectedPipelineId.value,
+    );
+  }
+
+  void _showTeamMemberSelection(
+    BuildContext context,
+    UsersController usersController,
+  ) {
+    // Create a search controller and filtered users list
+    final searchController = TextEditingController();
+    final RxList<User> filteredUsers = RxList<User>([...usersController.users]);
+
+    // Function to filter users based on search text
+    void filterUsers(String query) {
+      if (query.isEmpty) {
+        filteredUsers.value = [...usersController.users];
+      } else {
+        filteredUsers.value =
+            usersController.users
+                .where(
+                  (user) =>
+                      user.username.toLowerCase().contains(
+                        query.toLowerCase(),
+                      ) ||
+                      user.email.toLowerCase().contains(query.toLowerCase()),
+                )
+                .toList();
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Container(
+            width: double.maxFinite,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Header
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: Get.theme.primaryColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Select Team Members",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Search bar
+                Padding(
+                  padding: EdgeInsets.all(12),
+                  child: TextField(
+                    controller: searchController,
+                    onChanged: filterUsers,
+                    decoration: InputDecoration(
+                      hintText: "Search members...",
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Get.theme.primaryColor.withOpacity(0.7),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 0),
+                    ),
+                  ),
+                ),
+
+                Divider(height: 1),
+
+                // Members list
+                Obx(
+                  () => Flexible(
+                    child:
+                        filteredUsers.isEmpty
+                            ? Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "No members found",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                            )
+                            : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: filteredUsers.length,
+                              itemBuilder: (context, index) {
+                                final user = filteredUsers[index];
+
+                                return Obx(() {
+                                  final isSelected = selectedMembers.contains(
+                                    user.id,
+                                  );
+
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          isSelected
+                                              ? Get.theme.primaryColor
+                                                  .withOpacity(0.1)
+                                              : Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color:
+                                            isSelected
+                                                ? Get.theme.primaryColor
+                                                    .withOpacity(0.5)
+                                                : Colors.grey.shade300,
+                                        width: isSelected ? 1.5 : 1,
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      dense: true,
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 4,
+                                      ),
+                                      leading: CircleAvatar(
+                                        backgroundColor:
+                                            isSelected
+                                                ? Get.theme.primaryColor
+                                                : Colors.grey.shade300,
+                                        child: Text(
+                                          user.username
+                                              .substring(0, 1)
+                                              .toUpperCase(),
+                                          style: TextStyle(
+                                            color:
+                                                isSelected
+                                                    ? Colors.white
+                                                    : Colors.black87,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      title: Text(
+                                        user.username,
+                                        style: TextStyle(
+                                          fontWeight:
+                                              isSelected
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        user.email,
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      trailing:
+                                          isSelected
+                                              ? Icon(
+                                                Icons.check_circle,
+                                                color: Get.theme.primaryColor,
+                                              )
+                                              : Icon(
+                                                Icons.circle_outlined,
+                                                color: Colors.grey.shade400,
+                                              ),
+                                      onTap: () {
+                                        if (isSelected) {
+                                          selectedMembers.remove(user.id);
+                                        } else {
+                                          // Prevent duplicates
+                                          if (!selectedMembers.contains(
+                                            user.id,
+                                          )) {
+                                            selectedMembers.add(user.id);
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  );
+                                });
+                              },
+                            ),
+                  ),
+                ),
+
+                Divider(height: 1),
+
+                // Actions
+                Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                        ),
+                        child: Text(
+                          "CANCEL",
+                          style: TextStyle(color: Colors.grey.shade700),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Get.theme.primaryColor,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                        ),
+                        child: Text(
+                          "DONE",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _createContact(DealController dealController) async {
+    try {
+      final ContactService _contactService = ContactService();
+      // Create the contact model with only required fields
+      final user = await SecureStorage.getUserData();
+      final newContact = ContactModel(
+        firstName: dealController.firstName.text.trim(),
+        lastName: dealController.lastName.text.trim(),
+        contactOwner: user?.id ?? "",
+        email:
+            dealController.email.text.trim().isNotEmpty
+                ? dealController.email.text.trim()
+                : null,
+        phoneCode: dealController.selectedCountryCode.value!.phoneCode,
+        phone:
+            dealController.phoneNumber.text.trim().isNotEmpty
+                ? dealController.phoneNumber.text.trim()
+                : null,
+        address:
+            dealController.address.text.trim().isNotEmpty
+                ? dealController.address.text.trim()
+                : null,
+      );
+
+      dealController.isLoading.value = true;
+
+      // Call the service to add the contact
+      final ContactModel? success = await _contactService.addContact(
+        newContact,
+      );
+      print("[DEBUG]=> success ${success!.toJson()}");
+      dealController.selectedContact.value = success!.id!;
+
+      if (success != null) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Success',
+          message: 'Contact created successfully',
+          contentType: ContentType.success,
+        );
+        // Close the screen
+      } else {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Error',
+          message: 'Failed to create contact',
+          contentType: ContentType.failure,
+        );
+      }
+    } catch (e) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Error',
+        message: 'An unexpected error occurred: ${e.toString()}',
+        contentType: ContentType.failure,
+      );
+    } finally {
+      dealController.isLoading.value = false;
+    }
+  }
+
+  Future<void> _createLead(DealController dealController) async {
+    dealController.isCreating(true);
+    try {
+      if (dealController.isSelectFromExisting.value) {
+        await _createContact(dealController);
+        if (dealController.selectedContact.isEmpty) {
+          return;
+        }
+      }
+
+      final newDeal = DealModel(
+        category: dealController.selectedCategory.value,
+        closedDate: dealController.selectedEndDate.value,
+        companyId: dealController.selectedCompany.value,
+        contactId: dealController.selectedContact.value,
+        currency: dealController.currency.value,
+        dealTitle: dealController.dealTitle.text,
+        pipeline: dealController.selectedPipelineId.value,
+        source: dealController.selectedSource.value,
+        stage: dealController.selectedStageId.value,
+        value: int.tryParse(dealController.dealValue.text) ?? 0,
+        // status: dealController.selectedStatus.value,
+        //
+        // interestLevel: leadController.selectedInterestLevel.value,
+        dealMembers:
+            selectedMembers
+                .map((element) => DealMember(memberId: element))
+                .toList(),
+      );
+      print("[DEBUG]=> data ${newDeal.toJson()}");
+
+      final success = await dealController.createDeal(newDeal);
+
+      if (success) {
+        // CrmSnackBar.showAwesomeSnackbar(
+        //   title: 'Success',
+        //   message: 'Lead created successfully',
+        //   contentType: ContentType.success,
+        // );
+        Get.back(result: newDeal);
+      } else {
+        // CrmSnackBar.showAwesomeSnackbar(
+        //   title: 'Error',
+        //   message: 'Failed to create lead',
+        //   contentType: ContentType.failure,
+        // );
+      }
+    } finally {
+      dealController.isCreating(false);
+    }
+  }
+
+  Widget _buildCompanyAndContactDropdowns({
+    required DealController dealController,
+    required ContactController contactController,
+  }) {
+    return Column(
+      children: [
+        Obx(
+          () => CrmDropdownField<String>(
+            title: "Company Name",
+            value: dealController.selectedCompany.value,
+            items:
+                dealController.companies.map((company) {
+                  return DropdownMenuItem(
+                    value: company.id,
+                    child: Text(company.companyName ?? ''),
+                  );
+                }).toList(),
+            onChanged: (value) {
+              if (value != null) {
+                dealController.selectedCompany.value = value;
+
+                // Check selected contact
+                final selectedContact = contactController.contacts
+                    .firstWhereOrNull(
+                      (c) => c.id == dealController.selectedContact.value,
+                    );
+
+                // If selected contact's company is different, clear contact
+                if (selectedContact != null &&
+                    selectedContact.companyId != value) {
+                  dealController.selectedContact.value = '';
+                }
+              }
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
+        Obx(
+          () => CrmDropdownField<String>(
+            title: "Contact Name",
+            value: dealController.selectedContact.value,
+            items:
+                contactController.contacts.map((contact) {
+                  return DropdownMenuItem(
+                    value: contact.id,
+                    child: Text(
+                      '${contact.firstName} ${contact.lastName} (${contact.companyId ?? 'No Company'})',
+                    ),
+                  );
+                }).toList(),
+            onChanged: (value) {
+              if (value != null) {
+                dealController.selectedContact.value = value;
+
+                // Find contact object
+                final contact = contactController.contacts.firstWhereOrNull(
+                  (c) => c.id == value,
+                );
+
+                if (contact != null) {
+                  if (contact.companyId != null &&
+                      contact.companyId!.isNotEmpty) {
+                    // If contact has a company and selectedCompany is different, update company
+                    if (dealController.selectedCompany.value !=
+                        contact.companyId) {
+                      dealController.selectedCompany.value = contact.companyId!;
+                    }
+                  } else {
+                    // If contact has no company, clear company selection
+                    dealController.selectedCompany.value = '';
+                  }
+                }
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContactDetailField({
+    required DealController dealController,
+    required ContactController contactController,
+  }) {
+    final CountryController countryController = Get.put(CountryController());
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CrmTextField(
+          title: "First Name",
+          controller: dealController.firstName,
+          hintText: "Enter first name",
+        ),
+        const SizedBox(height: 12),
+        CrmTextField(
+          title: "Last Name",
+          controller: dealController.lastName,
+          hintText: "Enter last name",
+        ),
+        const SizedBox(height: 12),
+        CrmTextField(
+          title: "Email",
+          controller: dealController.email,
+          hintText: "Enter email",
+          keyboardType: TextInputType.emailAddress,
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Obx(
+              () => Expanded(
+                flex: 2, // smaller space for dropdown
+                child: CrmDropdownField<CountryModel>(
+                  title: 'Code',
+                  isRequired: true,
+                  value: dealController.selectedCountryCode.value,
                   items:
-                      pipelineController.pipelines
+                      countryController.countryModel
                           .map(
-                            (pipeline) => DropdownMenuItem(
-                              value: pipeline.id,
-                              child: Text(pipeline.pipelineName ?? ''),
+                            (country) => DropdownMenuItem<CountryModel>(
+                              value: country,
+                              child: Text(country.phoneCode),
                             ),
                           )
                           .toList(),
                   onChanged: (value) {
-                    if (value != null) {
-                      final selectedPipeline = pipelineController.pipelines
-                          .firstWhereOrNull((p) => p.id == value);
-                      if (selectedPipeline != null) {
-                        dealController.updatePipeline(
-                          selectedPipeline.pipelineName ?? '',
-                          value,
-                        );
-                      }
-                    }
+                    setState(() {
+                      dealController.selectedCountryCode.value = value;
+                    });
                   },
-                  isRequired: true,
-                  hintText: "Select pipeline",
                 ),
               ),
-              const SizedBox(height: 16),
-              CrmTextField(
-                title: 'Deal Value',
-                controller: dealController.dealValue,
-                hintText: 'Enter deal value',
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 16),
-              CrmTextField(
-                title: 'First Name',
-                controller: dealController.firstName,
-                hintText: 'Enter first name',
-              ),
-              const SizedBox(height: 16),
-              CrmTextField(
-                title: 'Last Name',
-                controller: dealController.lastName,
-                hintText: 'Enter last name',
-              ),
-              const SizedBox(height: 16),
-              CrmTextField(
-                title: 'Email',
-                controller: dealController.email,
-                hintText: 'Enter email',
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 16),
-              CrmTextField(
-                title: 'Phone',
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 5,
+              child: CrmTextField(
                 controller: dealController.phoneNumber,
-                hintText: 'Enter phone number',
+                title: 'Contact',
+                isRequired: true,
                 keyboardType: TextInputType.phone,
+                validator: (value) => phoneValidation(value),
               ),
-              const SizedBox(height: 16),
-              CrmTextField(
-                title: 'Company',
-                controller: dealController.companyName,
-                hintText: 'Enter company name',
-              ),
-              const SizedBox(height: 16),
-              CrmTextField(
-                title: 'Address',
-                controller: dealController.address,
-                hintText: 'Enter address',
-                maxLines: 3,
-              ),
-              const SizedBox(height: 16),
-              Obx(
-                () => CrmButton(
-                  width: Get.width - 40,
-                  title:
-                      dealController.isLoading.value
-                          ? "Updating..."
-                          : "Update Deal",
-                  onTap:
-                      dealController.isLoading.value
-                          ? null
-                          : () async {
-                            try {
-                              await dealController.updateDeal(widget.dealId);
-                            } catch (e) {
-                              CrmSnackBar.showAwesomeSnackbar(
-                                title: 'Error',
-                                message:
-                                    'Failed to update deal: ${e.toString()}',
-                                contentType: ContentType.failure,
-                              );
-                            }
-                          },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
+        const SizedBox(height: 12),
+        CrmTextField(
+          title: "Address",
+          controller: dealController.address,
+          hintText: "Enter address",
+          maxLines: 2,
+        ),
+      ],
     );
   }
 }

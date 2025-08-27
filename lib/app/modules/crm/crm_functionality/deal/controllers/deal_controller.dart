@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'package:crm_flutter/app/data/network/crm/company/model/company_model.dart';
+import 'package:crm_flutter/app/data/network/crm/company/service/company_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/activity/controller/activity_controller.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/company/controller/company_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/data/network/crm/deal/model/deal_model.dart';
@@ -18,6 +21,11 @@ import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../data/network/crm/crm_system/label/controller/label_controller.dart';
+import '../../../../../data/network/system/country/model/country_model.dart';
+import '../../../../../data/network/system/currency/model/currency_model.dart';
+import '../../../../../data/network/system/currency/service/currency_service.dart';
+
 class DealController extends GetxController {
   final RxBool isLoading = false.obs;
 
@@ -28,6 +36,8 @@ class DealController extends GetxController {
   final LabelService labelService = LabelService();
   final AllUsersService allUsersService = AllUsersService();
   final NoteService noteService = NoteService();
+  final CurrencyService _currencyService = CurrencyService();
+  final CompanyService _companyService = CompanyService();
 
   // Controllers
   late final ActivityController activityController;
@@ -36,6 +46,7 @@ class DealController extends GetxController {
   final RxList<DealModel> deal = <DealModel>[].obs;
   final RxList<StageModel> stages = <StageModel>[].obs;
   final RxList<PipelineModel> pipelines = <PipelineModel>[].obs;
+  final RxList<Data> companies = <Data>[].obs;
   final RxList<LabelModel> labels = <LabelModel>[].obs;
   final RxList<User> users = <User>[].obs;
   final RxList<NoteModel> notes = <NoteModel>[].obs;
@@ -48,6 +59,7 @@ class DealController extends GetxController {
   final closeDate = TextEditingController();
   final source = TextEditingController();
   final status = TextEditingController();
+  final endDateController = TextEditingController();
   final products = TextEditingController();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
@@ -58,25 +70,199 @@ class DealController extends GetxController {
   final noteTitleController = TextEditingController();
   final noteDescriptionController = TextEditingController();
 
+  late final LabelController labelController;
+  final CompanyController companyController = Get.put(CompanyController());
+
   // Dropdown Selections
   final selectedPipeline = ''.obs;
   final selectedPipelineId = ''.obs;
   final selectedSource = ''.obs;
+  final selectedCategory = ''.obs;
+  final selectedEndDate = Rxn<DateTime>();
+  final selectedCompany = ''.obs;
+  final selectedContact = ''.obs;
   final selectedStage = ''.obs;
   final selectedStageId = ''.obs;
   final selectedStatus = ''.obs;
+  Rxn<CountryModel> selectedCountryCode = Rxn<CountryModel>();
+
+  final isCreating = false.obs;
+
+  RxString currency = 'AHNTpSNJHMypuNF6iPcMLrz'.obs;
+  RxString currencyCode = 'INR'.obs;
+  RxString currencyIcon = '₹'.obs;
+  var currencies = <CurrencyModel>[].obs;
+  var isLoadingCurrencies = false.obs;
+  var currenciesLoaded = false.obs;
+
+  final isSelectFromExisting = false.obs;
 
   // Dropdown Options - Show names in UI
-  List<String> get sourceOptions =>
-      labelService.getSources(labels).map((e) => e.id ?? '').toList();
-  List<String> get statusOptions =>
-      labelService.getStatuses(labels).map((e) => e.id ?? '').toList();
+  // List<String> get sourceOptions =>
+  //     labelService.getSources(labels).map((e) => e.id ?? '').toList();
+  // List<String> get statusOptions =>
+  //     labelService.getStatuses(labels).map((e) => e.id ?? '').toList();
+
+  Future<void> loadCompanies() async {
+    try {
+      // Optional: set a loading indicator here
+      await companyController.fetchCompanies();
+      companies.assignAll(companyController.companies);
+      if (companies.isNotEmpty) {
+        selectedCompany.value = companies.value.first.id!;
+      }
+    } catch (e) {
+      // Handle error gracefully, maybe show a snackbar or log it
+      print("Error loading companies: $e");
+    } finally {
+      // Optional: stop loading indicator here
+    }
+  }
+
+  List<Map<String, String>> get sourceOptions {
+    try {
+      if (labelController == null) return [];
+      final sources = labelController.getSources();
+      return sources
+          .map((label) => {'id': label.id, 'name': label.name})
+          .toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // Get category options from labels
+  List<Map<String, String>> get categoryOptions {
+    try {
+      if (labelController == null) return [];
+      final categories = labelController.getCategories();
+      return categories
+          .map((label) => {'id': label.id, 'name': label.name})
+          .toList();
+    } catch (e) {
+      return [];
+    }
+  }
 
   @override
   void onInit() {
     super.onInit();
     activityController = Get.put(ActivityController());
+    // Initialize LabelController first to avoid late initialization error
+    try {
+      if (!Get.isRegistered<LabelController>()) {
+        labelController = Get.put(LabelController());
+      } else {
+        labelController = Get.find<LabelController>();
+      }
+    } catch (e) {
+      // Fallback if there's an issue with LabelController
+      labelController = Get.put(LabelController());
+    }
+
     refreshData();
+    loadCurrencies();
+    loadCompanies();
+  }
+
+  Future<bool> createDeal(DealModel deal) async {
+    try {
+      isCreating(true);
+      final response = await dealService.createDeal(deal);
+
+      if (response) {
+        await getDeals();
+        _showSuccessSnackbar('Lead created successfully');
+        return true;
+      }
+      return false;
+    } catch (e) {
+      _showErrorSnackbar('Failed to create lead', e);
+      return false;
+    } finally {
+      isCreating(false);
+    }
+  }
+
+  // Helper methods for showing snackbars
+  void _showSuccessSnackbar(String message) {
+    // Defer showing snackbar to avoid build-time errors
+    Future.microtask(() {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Success',
+        message: message,
+        contentType: ContentType.success,
+      );
+    });
+  }
+
+  void _showErrorSnackbar(String message, dynamic error) {
+    // Defer showing snackbar to avoid build-time errors
+    Future.microtask(() {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: 'Error',
+        message: '$message: ${error.toString()}',
+        contentType: ContentType.failure,
+      );
+    });
+  }
+
+  Future<void> loadCurrencies() async {
+    try {
+      final currencyList = await _currencyService.getCurrencies();
+      currencies.assignAll(currencyList);
+      currenciesLoaded.value = true;
+
+      if (currencyList.isNotEmpty) {
+        final selectedCurrency = currencyList.firstWhereOrNull(
+          (c) => c.id == currency.value,
+        );
+
+        if (selectedCurrency != null) {
+          currencyCode.value = selectedCurrency.currencyCode;
+          currencyIcon.value = selectedCurrency.currencyIcon;
+        } else {
+          currency.value = currencyList.first.id;
+          currencyCode.value = currencyList.first.currencyCode;
+          currencyIcon.value = currencyList.first.currencyIcon;
+        }
+      }
+    } catch (e) {
+      if (currenciesLoaded.value) {
+        CrmSnackBar.showAwesomeSnackbar(
+          title: 'Error',
+          message: 'Failed to load currencies: ${e.toString()}',
+          contentType: ContentType.failure,
+        );
+      }
+    } finally {
+      isLoadingCurrencies.value = false;
+    }
+  }
+
+  void updateCurrencyDetails(String currencyId) {
+    if (currencies.isNotEmpty) {
+      final selectedCurrency = currencies.firstWhereOrNull(
+        (c) => c.id == currencyId,
+      );
+
+      if (selectedCurrency != null) {
+        currency.value = currencyId;
+        currencyCode.value = selectedCurrency.currencyCode;
+        currencyIcon.value = selectedCurrency.currencyIcon;
+      }
+    }
+  }
+
+  Future<void> resetForm() async {
+    dealTitle.clear();
+    selectedCompany.value = '';
+    selectedContact.value = '';
+    firstName.clear();
+    lastName.clear();
+    email.clear();
+    phoneNumber.clear();
+    address.clear();
   }
 
   Future<void> refreshData() async {
@@ -305,7 +491,7 @@ class DealController extends GetxController {
     selectedPipeline.value = '';
     selectedPipelineId.value = '';
     selectedStage.value = '';
-    selectedStageId.value = '';
+    // selectedStageId.value = '';
   }
 
   String getLabelId(String idOrName, String type) {

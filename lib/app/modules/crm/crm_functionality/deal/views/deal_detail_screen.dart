@@ -598,7 +598,7 @@ class DealDetailScreen extends StatelessWidget {
     dealController.selectedStatus.value = deal.status ?? '';
     dealController.selectedStage.value = deal.stage ?? '';
 
-    await Get.to(() => DealEditScreen(dealId: deal.id.toString()));
+    await Get.to(() => DealEditScreen(deal: deal));
     await dealController.getDealById(id);
     await dealController.refreshData();
   }

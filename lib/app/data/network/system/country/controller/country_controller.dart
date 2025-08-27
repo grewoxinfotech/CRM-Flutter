@@ -9,6 +9,12 @@ class CountryController extends GetxController {
   final RxList<CountryModel> countryModel = <CountryModel>[].obs;
   final RxBool isLoading = false.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    getCountries();
+  }
+
   Future<void> getCountries() async {
     try {
       isLoading.value = true;
@@ -38,7 +44,7 @@ class CountryController extends GetxController {
       final data = await countryService.getCountries();
       // Case-insensitive comparison
       final country = data.firstWhereOrNull(
-            (c) => c.id.toLowerCase() == countryId.toLowerCase().trim(),
+        (c) => c.id.toLowerCase() == countryId.toLowerCase().trim(),
       );
       print("CountryData:----$country");
 
@@ -72,12 +78,12 @@ class CountryController extends GetxController {
 
     // First try to find by ID
     final countryById = countryModel.firstWhereOrNull(
-          (c) => c.id.equalsIgnoreCase(countryIdOrCode),
+      (c) => c.id.equalsIgnoreCase(countryIdOrCode),
     );
 
     // Then try to find by country code
     final countryByCode = countryModel.firstWhereOrNull(
-          (c) => c.countryCode.equalsIgnoreCase(countryIdOrCode),
+      (c) => c.countryCode.equalsIgnoreCase(countryIdOrCode),
     );
 
     // Return the most appropriate name

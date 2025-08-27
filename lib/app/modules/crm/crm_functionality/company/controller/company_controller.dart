@@ -9,7 +9,7 @@ import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 class CompanyController extends GetxController {
   final CompanyService _service = CompanyService();
 
-  var companies = <Data>[].obs;
+  RxList<Data> companies = <Data>[].obs;
   var isLoading = false.obs;
   var error = ''.obs;
 
