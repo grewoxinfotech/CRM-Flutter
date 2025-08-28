@@ -86,7 +86,7 @@ class UrlRes {
 
   static const String debitnotes = "$baseURL/bill-debits";
 
-  static const String verifySignup = "$baseURL/verify-signup";
+  static const String verifySignup = "$baseURL/auth/verify-signup";
 
   //sales_functionality-APIs
   // static const String sales = "$baseURL/products";

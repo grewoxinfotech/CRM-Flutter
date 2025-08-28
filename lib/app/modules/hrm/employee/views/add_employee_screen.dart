@@ -1,413 +1,124 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/care/utils/validation.dart';
 import 'package:crm_flutter/app/data/network/hrm/employee/employee_model.dart';
-import 'package:crm_flutter/app/data/network/hrm/employee/employee_service.dart';
+import 'package:crm_flutter/app/modules/hrm/branch/controllers/branch_controller.dart';
+import 'package:crm_flutter/app/modules/hrm/department/controllers/department_controller.dart';
+import 'package:crm_flutter/app/modules/hrm/designation/controllers/designation_controller.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../data/network/system/country/controller/country_controller.dart';
+import '../../../../data/network/system/country/model/country_model.dart';
 
 import '../../../../widgets/button/crm_button.dart';
 import '../../../../widgets/common/inputs/crm_dropdown_field.dart';
 import '../../../../widgets/common/inputs/crm_text_field.dart';
-
-// class AddEmployeeController extends GetxController {
-//   final formKey = GlobalKey<FormState>();
-//
-//   // Controllers
-//   final firstNameController = TextEditingController();
-//   final lastNameController = TextEditingController();
-//   final usernameController = TextEditingController();
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
-//   final phoneController = TextEditingController();
-//   final addressController = TextEditingController();
-//   final salaryController = TextEditingController();
-//   final accountHolderController = TextEditingController();
-//   final accountNumberController = TextEditingController();
-//   final bankNameController = TextEditingController();
-//   final ifscController = TextEditingController();
-//   final bankLocationController = TextEditingController();
-//
-//   // Dropdowns
-//   final gender = RxnString();
-//   final phoneCode = RxnString();
-//   final branch = RxnString();
-//   final department = RxnString();
-//   final designation = RxnString();
-//   final currency = RxnString();
-//
-//   String? selectedCountryCode = '+91';
-//   final List<String> countryCodes = ['+91', '+1', '+44', '+61', '+81'];
-//
-//   @override
-//   void onInit() {
-//     // TODO: implement onInit
-//     super.onInit();
-//     assignInitialData();
-//   }
-//
-//   void assignInitialData(EmployeeModel employee) {
-//     firstNameController.text = employee.firstName ?? "";
-//     lastNameController.text = employee.lastName ?? "";
-//     usernameController.text = employee.username ?? "";
-//     emailController.text = employee.email ?? "";
-//     passwordController.text = employee.password ?? "";
-//     phoneCodeController.text = employee.phoneCode ?? "";
-//     phoneController.text = employee.phone ?? "";
-//     addressController.text = employee.address ?? "";
-//
-//     // Dropdowns
-//     gender.value = employee.gender ?? "";
-//     branch.value = employee.branch ?? "";
-//     department.value = employee.department ?? "";
-//     designation.value = employee.designation ?? "";
-//     currency.value = employee.currency ?? "";
-//
-//     // Date picker
-//     if (employee.joiningDate != null && employee.joiningDate!.isNotEmpty) {
-//       try {
-//         selectedJoiningDate.value = DateTime.parse(employee.joiningDate!);
-//         joiningDateController.text = employee.joiningDate!;
-//       } catch (_) {
-//         selectedJoiningDate.value = DateTime.now();
-//         joiningDateController.text = "";
-//       }
-//     }
-//
-//     // Salary
-//     salaryController.text = employee.salary?.toString() ?? "";
-//
-//     // Bank details
-//     accountHolderController.text = employee.accountHolder ?? "";
-//     accountNumberController.text = employee.accountNumber ?? "";
-//     bankNameController.text = employee.bankName ?? "";
-//     ifscController.text = employee.ifsc ?? "";
-//     bankLocationController.text = employee.bankLocation ?? "";
-//   }
-//
-//   // Date
-//   final joiningDate = Rxn<DateTime>();
-//
-//   Future<void> pickJoiningDate(BuildContext context) async {
-//     final date = await showDatePicker(
-//       context: context,
-//       initialDate: DateTime.now(),
-//       firstDate: DateTime(1990),
-//       lastDate: DateTime(2100),
-//     );
-//     if (date != null) joiningDate.value = date;
-//   }
-//
-//   Future<void> submit() async {
-//     if (!formKey.currentState!.validate()) return;
-//
-//     if (joiningDate.value == null) {
-//       Get.snackbar("Error", "Please select Joining Date");
-//       return;
-//     }
-//     if (gender.value == null) {
-//       Get.snackbar("Error", "Please select Gender");
-//       return;
-//     }
-//     if (branch.value == null ||
-//         department.value == null ||
-//         designation.value == null ||
-//         currency.value == null) {
-//       Get.snackbar("Error", "Please fill all dropdowns");
-//       return;
-//     }
-//
-//     final payload = {
-//       "firstName": firstNameController.text.trim(),
-//       "lastName": lastNameController.text.trim(),
-//       "username": usernameController.text.trim(),
-//       "email": emailController.text.trim(),
-//       "password": passwordController.text.trim(),
-//       "phoneCode": selectedCountryCode,
-//       "phone": phoneController.text.trim(),
-//       "address": addressController.text.trim(),
-//       "gender": gender.value,
-//       "joiningDate": joiningDate.value?.toIso8601String(),
-//       "branch": branch.value,
-//       "department": department.value,
-//       "designation": designation.value,
-//       "currency": currency.value,
-//       "salary": double.tryParse(salaryController.text.trim()) ?? 0.0,
-//       "accountholder": accountHolderController.text.trim(),
-//       "accountnumber": accountNumberController.text.trim(),
-//       "bankname": bankNameController.text.trim(),
-//       "ifsc": ifscController.text.trim(),
-//       "banklocation": bankLocationController.text.trim(),
-//     };
-//
-//     // TODO: call EmployeeService.createEmployee(payload);
-//   }
-//
-//   // Reusable Validators
-//   String? requiredValidator(String? v, String? fieldName) =>
-//       (v == null || v.trim().isEmpty) ? "$fieldName Required" : null;
-//
-//   String? emailValidator(String? v) =>
-//       (v != null && v.isEmail) ? null : "Enter valid email";
-//
-//   String? phoneValidator(String? v) {
-//     if (v == null || v.isEmpty) return "Required";
-//     if (!GetUtils.isNumericOnly(v)) return "Invalid phone";
-//     if (v.length < 7 || v.length > 15) return "Phone length invalid";
-//     return null;
-//   }
-//
-//   String? salaryValidator(String? v) {
-//     if (v == null || v.isEmpty) return "Required";
-//     final s = double.tryParse(v);
-//     if (s == null || s <= 0) return "Enter valid salary";
-//     return null;
-//   }
-//
-//   String? ifscValidator(String? v) {
-//     if (v == null || v.isEmpty) return "Required";
-//     final regex = RegExp(r'^[A-Za-z]{4}\d{7}$'); // Basic IFSC pattern
-//     return regex.hasMatch(v) ? null : "Invalid IFSC code";
-//   }
-//
-//   String? accountNumberValidator(String? v) {
-//     if (v == null || v.isEmpty) return "Required";
-//     if (!GetUtils.isNumericOnly(v)) return "Account must be numeric";
-//     return null;
-//   }
-// }
-class AddEmployeeController extends GetxController {
-  final formKey = GlobalKey<FormState>();
-  final EmployeeService _service = EmployeeService();
-
-  // Controllers
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final usernameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final phoneController = TextEditingController();
-  final addressController = TextEditingController();
-  final salaryController = TextEditingController();
-  final accountHolderController = TextEditingController();
-  final accountNumberController = TextEditingController();
-  final bankNameController = TextEditingController();
-  final ifscController = TextEditingController();
-  final bankLocationController = TextEditingController();
-  final otpController = TextEditingController();
-  final joiningDateController = TextEditingController(); // 👈 Missing earlier
-
-  // Dropdowns / Rx
-  final gender = RxnString();
-  final phoneCode = RxnString();
-  final branch = RxnString();
-  final department = RxnString();
-  final designation = RxnString();
-  final currency = RxnString();
-
-  RxBool isLoading = false.obs;
-
-  // Country codes
-  String? selectedCountryCode = '+91';
-  final List<String> countryCodes = ['+91', '+1', '+44', '+61', '+81'];
-
-  // Date
-  final joiningDate = Rxn<DateTime>();
-
-  @override
-  void onInit() {
-    super.onInit();
-    // Example: pass an employee if editing
-    assignInitialData(dummyEmployee);
-  }
-
-  /// Assign data to controllers when editing an employee
-  void assignInitialData(EmployeeData employee) {
-    firstNameController.text = employee.firstName ?? "";
-    lastNameController.text = employee.lastName ?? "";
-    usernameController.text = employee.username ?? "";
-    emailController.text = employee.email ?? "";
-    passwordController.text = employee.password ?? "";
-    phoneController.text = employee.phone ?? "";
-    addressController.text = employee.address ?? "";
-
-    // Dropdowns
-    gender.value = employee.gender;
-    branch.value = employee.branch;
-    department.value = employee.department;
-    designation.value = employee.designation;
-    currency.value = employee.currency;
-    phoneCode.value = employee.phoneCode;
-
-    // Joining date
-    if (employee.joiningDate != null) {
-      try {
-        final parsed = employee.joiningDate!;
-        joiningDate.value = parsed;
-        joiningDateController.text = DateFormat("yyyy-MM-dd").format(parsed);
-      } catch (_) {
-        joiningDate.value = null;
-        joiningDateController.clear();
-      }
-    }
-
-    // Salary
-    salaryController.text = employee.salary.toString() ?? "";
-
-    // Bank details
-    accountHolderController.text = employee.accountholder ?? "";
-    accountNumberController.text = employee.accountnumber ?? "";
-    bankNameController.text = employee.bankname ?? "";
-    ifscController.text = employee.ifsc ?? "";
-    bankLocationController.text = employee.banklocation ?? "";
-  }
-
-  Future<void> pickJoiningDate(BuildContext context) async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1990),
-      lastDate: DateTime(2100),
-    );
-    if (date != null) {
-      joiningDate.value = date;
-      joiningDateController.text = DateFormat("yyyy-MM-dd").format(date);
-    }
-  }
-
-  Future<void> submit() async {
-    if (!formKey.currentState!.validate()) return;
-
-    if (joiningDate.value == null) {
-      Get.snackbar("Error", "Please select Joining Date");
-      return;
-    }
-
-    // final payload = {
-    //   "firstName": firstNameController.text.trim(),
-    //   "lastName": lastNameController.text.trim(),
-    //   "username": usernameController.text.trim(),
-    //   "email": emailController.text.trim(),
-    //   "password": passwordController.text.trim(),
-    //   "phoneCode": phoneCode.value ?? selectedCountryCode,
-    //   "phone": phoneController.text.trim(),
-    //   "address": addressController.text.trim(),
-    //   "gender": gender.value,
-    //   "joiningDate": joiningDate.value?.toIso8601String(),
-    //   "branch": branch.value,
-    //   "department": department.value,
-    //   "designation": designation.value,
-    //   "currency": currency.value,
-    //   "salary": double.tryParse(salaryController.text.trim()) ?? 0.0,
-    //   "accountholder": accountHolderController.text.trim(),
-    //   "accountnumber": accountNumberController.text.trim(),
-    //   "bankname": bankNameController.text.trim(),
-    //   "ifsc": ifscController.text.trim(),
-    //   "banklocation": bankLocationController.text.trim(),
-    // };
-
-    final employee = EmployeeData(
-      firstName: firstNameController.text.trim(),
-      lastName: lastNameController.text.trim(),
-      username: usernameController.text.trim(),
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
-      phoneCode: phoneCode.value ?? selectedCountryCode!,
-      phone: phoneController.text.trim(),
-      address: addressController.text.trim(),
-      gender: gender.value,
-      joiningDate:
-          joiningDate
-              .value, // already DateTime (if your model expects DateTime)
-      branch: branch.value ?? "",
-      department: department.value ?? "",
-      designation: designation.value ?? "",
-      currency: currency.value ?? "",
-      salary: salaryController.text.trim() ?? "",
-      accountholder: accountHolderController.text.trim(),
-      accountnumber: accountNumberController.text.trim(),
-      bankname: bankNameController.text.trim(),
-      ifsc: ifscController.text.trim(),
-      banklocation: bankLocationController.text.trim(),
-    );
-
-    try {
-      final token = await _service.createEmployee(employee);
-      if (token != null) {
-        Get.dialog(
-          PopScope(
-            canPop: false,
-            child: Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      "Enter OTP",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    CrmTextField(
-                      title: "OTP",
-                      isRequired: true,
-                      keyboardType: TextInputType.number,
-                      controller: otpController,
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () => Get.back(), // close dialog
-                          child: const Text("Cancel"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final success = await _service.verifyOtp(
-                              otpController.text.trim(),
-                              token,
-                            );
-                            if (success) Get.back();
-                          },
-                          child: const Text("Submit"),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-        // Get.back();
-      }
-
-      print("[DEBUG]=> success : $token");
-    } catch (e) {}
-
-    // TODO: call EmployeeService.createEmployee(payload);
-  }
-
-  String? requiredValidator(String? v, String? fieldName) =>
-      (v == null || v.trim().isEmpty) ? "$fieldName Required" : null;
-}
+import '../controllers/add_employee_controller.dart';
 
 class AddEmployeeScreen extends StatelessWidget {
-  const AddEmployeeScreen({super.key});
+  final EmployeeData? employeeData;
+  final bool isFromEdit;
+
+  const AddEmployeeScreen({
+    super.key,
+    this.employeeData,
+    this.isFromEdit = false,
+  });
+
+  String? _getCurrencyValue(AddEmployeeController controller) {
+    if (controller.isLoadingCurrencies.value) return null;
+
+    // If using API currencies, check if current currency exists in the list
+    if (controller.currencies.isNotEmpty) {
+      bool currencyExists = controller.currencies.any(
+        (c) => c.id == controller.currency.value,
+      );
+      if (currencyExists) {
+        return controller.currency.value;
+      } else {
+        // If currency doesn't exist in API list, return first available currency
+        return controller.currencies.first.id;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AddEmployeeController());
+    final countryController = Get.put(CountryController());
+    final branchController = Get.put(BranchController());
+    final designationController = Get.put(DesignationController());
+    final departmentController = Get.put(DepartmentController());
+
+    if (isFromEdit && employeeData != null) {
+      // Text controllers
+      controller.firstNameController.text = employeeData!.firstName ?? '';
+      controller.lastNameController.text = employeeData!.lastName ?? '';
+      controller.usernameController.text = employeeData!.username ?? '';
+      controller.emailController.text = employeeData!.email ?? '';
+      controller.passwordController.text = employeeData!.password ?? '';
+      controller.phoneController.text = employeeData!.phone ?? '';
+      controller.addressController.text = employeeData!.address ?? '';
+      controller.salaryController.text = employeeData!.salary?.toString() ?? '';
+      controller.accountHolderController.text =
+          employeeData!.accountholder ?? '';
+      controller.accountNumberController.text =
+          employeeData!.accountnumber ?? '';
+      controller.bankNameController.text = employeeData!.bankname ?? '';
+      controller.ifscController.text = employeeData!.ifsc ?? '';
+      controller.bankLocationController.text = employeeData!.banklocation ?? '';
+      // print("[DEBUG]=> password ${employeeData!.password}");
+
+      // Reactive fields
+      controller.joiningDate.value = employeeData!.joiningDate;
+      controller.gender.value = employeeData!.gender;
+
+      // 🔹 Branch (only if exists in list)
+      if (employeeData!.branch != null &&
+          branchController.items.any((b) => b.id == employeeData!.branch)) {
+        controller.branch.value = employeeData!.branch;
+      }
+
+      // 🔹 Designation (check validity)
+      if (employeeData!.designation != null &&
+          designationController.items.any(
+            (d) => d.id == employeeData!.designation,
+          )) {
+        controller.designation.value = employeeData!.designation;
+      }
+
+      // 🔹 Department (check validity)
+      if (employeeData!.department != null &&
+          departmentController.items.any(
+            (d) => d.id == employeeData!.department,
+          )) {
+        controller.department.value = employeeData!.department;
+      }
+
+      // 🔹 Currency (check validity)
+      if (employeeData!.currency != null &&
+          controller.currencies.any((c) => c.id == employeeData!.currency)) {
+        controller.currency.value = employeeData!.currency!;
+      }
+
+      // 🔹 Phone Code (safe fallback to India)
+      if (employeeData!.phoneCode != null) {
+        final match = countryController.countryModel.firstWhereOrNull(
+          (c) => c.phoneCode == employeeData!.phoneCode,
+        );
+        if (match != null) {
+          controller.selectedCountryCode.value = match;
+        }
+      }
+    }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Add Employee")),
+      appBar: AppBar(
+        title: Text(isFromEdit ? "Edit Employee" : "Add Employee"),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -422,6 +133,7 @@ class AddEmployeeScreen extends StatelessWidget {
                   Expanded(
                     child: CrmTextField(
                       title: "First Name",
+                      hintText: "First Name",
                       controller: controller.firstNameController,
                       validator:
                           (value) =>
@@ -433,6 +145,7 @@ class AddEmployeeScreen extends StatelessWidget {
                   Expanded(
                     child: CrmTextField(
                       title: "Last Name",
+                      hintText: "Last Name",
                       controller: controller.lastNameController,
                     ),
                   ),
@@ -443,6 +156,7 @@ class AddEmployeeScreen extends StatelessWidget {
               /// Username
               CrmTextField(
                 title: "Username",
+                hintText: "Username",
                 controller: controller.usernameController,
                 validator:
                     (value) => controller.requiredValidator(value, "Username"),
@@ -453,6 +167,7 @@ class AddEmployeeScreen extends StatelessWidget {
               /// Email
               CrmTextField(
                 title: "Email",
+                hintText: "Enter Email",
                 controller: controller.emailController,
                 validator: (value) => emailValidation(value),
                 isRequired: true,
@@ -460,45 +175,71 @@ class AddEmployeeScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.medium),
 
               /// Password
-              CrmTextField(
-                title: "Password",
-                controller: controller.passwordController,
-                obscureText: true,
-                validator:
-                    (value) => controller.requiredValidator(value, "Password"),
-                isRequired: true,
-              ),
-              SizedBox(height: AppSpacing.medium),
+              // CrmTextField(
+              //   title: "Password",
+              //   hintText: "Enter Password",
+              //   controller: controller.passwordController,
+              //   obscureText: true,
+              //   validator:
+              //       (value) => controller.requiredValidator(value, "Password"),
+              //   isRequired: true,
+              // ),
+              // SizedBox(height: AppSpacing.medium),
 
               /// Phone + Code
               Row(
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: CrmDropdownField<String>(
-                      title: 'Code',
-                      value: controller.selectedCountryCode,
-                      items:
-                          controller.countryCodes
-                              .map(
-                                (code) => DropdownMenuItem<String>(
-                                  value: code,
-                                  child: Text(code),
-                                ),
-                              )
-                              .toList(),
-                      onChanged: (value) {
-                        controller.selectedCountryCode = value;
-                      },
-                    ),
-                  ),
+                  Obx(() {
+                    final countries = countryController.countryModel;
+
+                    if (countries.isEmpty) {
+                      return const Expanded(
+                        flex: 2,
+                        child: Text("No countries available"),
+                      );
+                    }
+
+                    // Pick safe default
+                    final defaultIndia = countries.firstWhereOrNull(
+                      (c) => (c.countryName).toLowerCase() == "india",
+                    );
+
+                    final selected =
+                        controller.selectedCountryCode.value ??
+                        defaultIndia ??
+                        countries.first;
+
+                    return Expanded(
+                      flex: 2,
+                      child: CrmDropdownField<CountryModel>(
+                        title: 'Code',
+                        isRequired: true,
+                        value: selected,
+                        items:
+                            countries
+                                .map(
+                                  (country) => DropdownMenuItem<CountryModel>(
+                                    value: country,
+                                    child: Text(country.phoneCode),
+                                  ),
+                                )
+                                .toList(),
+                        onChanged: (value) {
+                          controller.selectedCountryCode.value = value;
+                        },
+                      ),
+                    );
+                  }),
                   const SizedBox(width: 8),
                   Expanded(
                     flex: 5,
                     child: CrmTextField(
                       controller: controller.phoneController,
                       title: 'Contact',
+                      hintText: 'Enter Contact',
+                      isRequired: true,
                       keyboardType: TextInputType.phone,
+                      validator: (value) => phoneValidation(value),
                     ),
                   ),
                 ],
@@ -508,6 +249,7 @@ class AddEmployeeScreen extends StatelessWidget {
               /// Address
               CrmTextField(
                 title: "Address",
+                hintText: "Enter Address",
                 controller: controller.addressController,
               ),
               SizedBox(height: AppSpacing.medium),
@@ -521,6 +263,8 @@ class AddEmployeeScreen extends StatelessWidget {
                         onTap: () => controller.pickJoiningDate(context),
                         child: CrmTextField(
                           title: "Joining Date",
+                          hintText: "Select Joining Date",
+
                           controller: TextEditingController(
                             text:
                                 controller.joiningDate.value == null
@@ -539,6 +283,7 @@ class AddEmployeeScreen extends StatelessWidget {
                     child: Obx(
                       () => CrmDropdownField<String>(
                         title: "Gender",
+                        hintText: "Select Gender",
                         value: controller.gender.value,
                         items: const [
                           DropdownMenuItem(value: "male", child: Text("Male")),
@@ -559,45 +304,210 @@ class AddEmployeeScreen extends StatelessWidget {
               ),
               SizedBox(height: AppSpacing.medium),
 
-              /// Salary + Currency
               Row(
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Obx(
                       () => CrmDropdownField<String>(
                         title: 'Currency',
-                        value: controller.currency.value,
-                        items: const [
-                          DropdownMenuItem(value: "INR", child: Text("INR")),
-                          DropdownMenuItem(value: "USD", child: Text("USD")),
-                        ],
-                        onChanged: (v) => controller.currency.value = v,
+                        value: _getCurrencyValue(controller),
+                        items:
+                            controller.isLoadingCurrencies.value &&
+                                    controller.currenciesLoaded.value
+                                ? [
+                                  DropdownMenuItem(
+                                    value: controller.currency.value,
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 16,
+                                          width: 16,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text('Loading currencies...'),
+                                      ],
+                                    ),
+                                  ),
+                                ]
+                                : controller.currencies.isNotEmpty
+                                ? controller.currencies
+                                    .map(
+                                      (currency) => DropdownMenuItem(
+                                        value: currency.id,
+                                        child: Text(
+                                          '${currency.currencyCode} (${currency.currencyIcon})',
+                                        ),
+                                      ),
+                                    )
+                                    .toList()
+                                : [
+                                  DropdownMenuItem(
+                                    value: 'AHNTpSNJHMypuNF6iPcMLrz',
+                                    child: Text('INR (₹)'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'BHNTpSNJHMypuNF6iPcMLr2',
+                                    child: Text('USD (\$)'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'CHNTpSNJHMypuNF6iPcMLr3',
+                                    child: Text('EUR (€)'),
+                                  ),
+                                ],
+                        onChanged: (value) {
+                          // Don't process changes during loading
+                          if (value != null &&
+                              !(controller.isLoadingCurrencies.value &&
+                                  controller.currenciesLoaded.value)) {
+                            controller.updateCurrencyDetails(value);
+                          }
+                        },
+
+                        isRequired: true,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 12),
                   Expanded(
-                    flex: 5,
+                    flex: 2,
                     child: CrmTextField(
-                      controller: controller.salaryController,
                       title: 'Salary',
+                      controller: controller.salaryController,
+                      hintText: 'Enter Salary',
                       keyboardType: TextInputType.number,
                     ),
                   ),
                 ],
               ),
               SizedBox(height: AppSpacing.medium),
+              Obx(() {
+                //   if (controller.isLoading.value) {
+                //   return const Center(child: CircularProgressIndicator());
+                // }
+
+                // If no branches loaded yet
+                if (branchController.items.isEmpty) {
+                  return const Text("No branches available");
+                }
+
+                return CrmDropdownField<String>(
+                  title: 'Branch',
+                  hintText: 'Select Branch',
+                  value:
+                      controller.branch.value ??
+                      branchController.items.first.id,
+                  items:
+                      branchController.items
+                          .map(
+                            (branch) => DropdownMenuItem<String>(
+                              value: branch.id!,
+                              child: Text(branch.branchName ?? ''),
+                            ),
+                          )
+                          .toList(),
+                  onChanged: (branchId) {
+                    controller.branch.value = branchId!;
+                  },
+                );
+              }),
+
+              SizedBox(height: AppSpacing.medium),
+              Obx(() {
+                // if (controller.isLoading.value) {
+                //   return const Center(child: CircularProgressIndicator());
+                // }
+
+                final designationItems =
+                    designationController.items
+                        .where((d) => d.branch == controller.branch.value)
+                        .toList();
+
+                if (designationItems.isEmpty) {
+                  return const Text("No Designation available");
+                }
+
+                final currentValue = controller.designation.value;
+                final safeValue =
+                    designationItems.any((d) => d.id == currentValue)
+                        ? currentValue
+                        : designationItems.first.id;
+
+                return CrmDropdownField<String>(
+                  title: 'Designation',
+                  hintText: 'Select Designation',
+                  value: safeValue,
+                  items:
+                      designationItems
+                          .map(
+                            (designation) => DropdownMenuItem<String>(
+                              value: designation.id!,
+                              child: Text(designation.designationName ?? ''),
+                            ),
+                          )
+                          .toList(),
+                  onChanged: (designationId) {
+                    controller.designation.value = designationId!;
+                  },
+                );
+              }),
+
+              SizedBox(height: AppSpacing.medium),
+              Obx(() {
+                // if (controller.isLoading.value) {
+                //   return const Center(child: CircularProgressIndicator());
+                // }
+
+                final departmentItems =
+                    departmentController.items
+                        .where((d) => d.branch == controller.branch.value)
+                        .toList();
+
+                if (departmentItems.isEmpty) {
+                  return const Text("No Department available");
+                }
+
+                final currentValue = controller.department.value;
+                final safeValue =
+                    departmentItems.any((d) => d.id == currentValue)
+                        ? currentValue
+                        : departmentItems.first.id;
+
+                return CrmDropdownField<String>(
+                  title: 'Department',
+                  hintText: 'Select Department',
+                  value: safeValue,
+                  items:
+                      departmentItems
+                          .map(
+                            (department) => DropdownMenuItem<String>(
+                              value: department.id!,
+                              child: Text(department.departmentName ?? ''),
+                            ),
+                          )
+                          .toList(),
+                  onChanged: (departmentId) {
+                    controller.department.value = departmentId!;
+                  },
+                );
+              }),
+
+              SizedBox(height: AppSpacing.medium),
 
               /// Bank Info
               CrmTextField(
                 title: "Account Holder",
+                hintText: "Account Holder",
                 controller: controller.accountHolderController,
               ),
               SizedBox(height: AppSpacing.medium),
 
               CrmTextField(
                 title: "Account Number",
+                hintText: "Account Number",
                 controller: controller.accountNumberController,
                 keyboardType: TextInputType.number,
               ),
@@ -605,18 +515,21 @@ class AddEmployeeScreen extends StatelessWidget {
 
               CrmTextField(
                 title: "Bank Name",
+                hintText: "Bank Name",
                 controller: controller.bankNameController,
               ),
               SizedBox(height: AppSpacing.medium),
 
               CrmTextField(
                 title: "IFSC Code",
+                hintText: "IFSC Code",
                 controller: controller.ifscController,
               ),
               SizedBox(height: AppSpacing.medium),
 
               CrmTextField(
                 title: "Bank Location",
+                hintText: "Bank Location",
                 controller: controller.bankLocationController,
               ),
 
@@ -624,9 +537,17 @@ class AddEmployeeScreen extends StatelessWidget {
               Obx(
                 () => CrmButton(
                   width: double.infinity,
-                  title: controller.isLoading.value ? "Submiting..." : "Submit",
+                  title:
+                      isFromEdit
+                          ? controller.isLoading.value
+                              ? "Updating..."
+                              : "Update"
+                          : controller.isLoading.value
+                          ? "Submitting..."
+                          : "Submit",
                   onTap: () {
                     controller.isLoading.value = true;
+                    isFromEdit ? controller.editEmployee(employeeData!.id!):
                     controller.submit();
                   },
                 ),
@@ -638,26 +559,3 @@ class AddEmployeeScreen extends StatelessWidget {
     );
   }
 }
-
-final dummyEmployee = EmployeeData(
-  firstName: "Tejas",
-  lastName: "Sojitra",
-  username: "grewoxlala",
-  email: "tejassojitra075@gmail.com",
-  password: "hgdskjgd45",
-  phoneCode: "+91",
-  phone: "9638634790",
-  address: "123 Main Street, Surat, Gujarat",
-  gender: "male",
-  joiningDate: DateTime.parse("2025-08-26T18:30:00.000Z"), // ✅ DateTime object
-  branch: "MWd9r3x14Va3vlVwtgbQYSh",
-  department: "aOQii2POUo5IkqvF0nI4z3j",
-  designation: "ZDErSEqeRISxyNXoNLDiSPl",
-  currency: "q6xe5PwPo74hw2hkumFyBvb",
-  salary: "30000", // ✅ double (use 30000 if int)
-  accountholder: "Tejas Sojitra",
-  accountnumber: "32313",
-  bankname: "Jessamine Cain",
-  ifsc: "21312321",
-  banklocation: "Mumbai Branch",
-);

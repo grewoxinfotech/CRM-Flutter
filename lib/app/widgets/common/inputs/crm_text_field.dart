@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class CrmTextField extends StatelessWidget {
@@ -19,6 +20,7 @@ class CrmTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onTap;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CrmTextField({
     super.key,
@@ -37,7 +39,7 @@ class CrmTextField extends StatelessWidget {
     this.focusNode,
     this.textInputAction,
     this.onChanged,
-    this.onTap,
+    this.onTap, this.inputFormatters,
   });
 
   @override
@@ -68,6 +70,7 @@ class CrmTextField extends StatelessWidget {
         ),
         AppSpacing.verticalSmall,
         TextFormField(
+          inputFormatters: inputFormatters,
           controller: controller,
           validator: validator,
           obscureText: obscureText,

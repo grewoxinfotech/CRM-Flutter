@@ -1,10 +1,12 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/care/utils/format.dart';
+import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../care/constants/access_res.dart';
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../controllers/employee_controller.dart';
@@ -17,6 +19,7 @@ class EmployeeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.lazyPut<EmployeeController>(() => EmployeeController());
+    final AccessController accessController = Get.find<AccessController>();
     final EmployeeController controller = Get.find();
 
     void _deleteEmployee(String id, String name) {
@@ -87,26 +90,73 @@ class EmployeeScreen extends StatelessWidget {
                         final employee = controller.items[index];
                         return Padding(
                           padding: const EdgeInsets.all(AppSpacing.small),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: EmployeeCard(
-                              id: employee.id,
-                              firstName: employee.firstName,
-                              lastName: employee.lastName,
-                              email: employee.email,
-                              phone: employee.phone,
-                              address: employee.address,
-                              branch: employee.branch,
-                              employeeId: employee.employeeId,
-                              username: employee.username,
-                              department: employee.department,
-                              designation: employee.designation,
-                              joiningDate: formatDateString(
-                                employee.joiningDate?.toIso8601String(),
+                          child: Stack(
+                            children: [
+                              EmployeeCard(
+                                id: employee.id,
+                                firstName: employee.firstName,
+                                lastName: employee.lastName,
+                                email: employee.email,
+                                phone: employee.phone,
+                                address: employee.address,
+                                branch: employee.branch,
+                                employeeId: employee.employeeId,
+                                username: employee.username,
+                                department: employee.department,
+                                designation: employee.designation,
+                                joiningDate: formatDateString(
+                                  employee.joiningDate?.toIso8601String(),
+                                ),
+                                phoneCode: employee.phoneCode,
+                                salary: employee.salary,
                               ),
-                              phoneCode: employee.phoneCode,
-                              salary: employee.salary,
-                            ),
+                              // Uncomment if you want Edit
+
+                                Positioned(
+                                  right: 8,
+                                  bottom: 8,
+                                  child: Row(
+                                    children: [
+                                      if (accessController.can(
+                                        AccessModule.employee,
+                                        AccessAction.update,
+                                      ))
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.blue,
+                                        ),
+                                        onPressed: () {
+                                          Get.to(
+                                                () => AddEmployeeScreen(
+                                              employeeData: employee,
+                                              isFromEdit: true,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      if (accessController.can(
+                                        AccessModule.employee,
+                                        AccessAction.delete,
+                                      ))
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          _deleteEmployee(
+                                            employee.id ?? '',
+                                            "${employee.firstName} ${employee.lastName}" ??
+                                                'Designation',
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                            ],
                           ),
                         );
                       } else if (controller.isPaging.value) {
