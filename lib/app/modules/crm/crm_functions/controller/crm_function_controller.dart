@@ -85,12 +85,12 @@ class CrmFunctionController extends GetxController {
           accessController.can(AccessModule.lead, AccessAction.create) ||
           accessController.can(AccessModule.lead, AccessAction.update) ||
           accessController.can(AccessModule.lead, AccessAction.delete))
-      FunctionModel(
-        title: 'Leads',
-        iconPath: ICRes.leads,
-        color: const Color(0xffFFBD21),
-        screenBuilder: LeadScreen(),
-      ),
+        FunctionModel(
+          title: 'Leads',
+          iconPath: ICRes.leads,
+          color: const Color(0xffFFBD21),
+          screenBuilder: LeadScreen(),
+        ),
       if (accessController.can(AccessModule.deal, AccessAction.view) ||
           accessController.can(AccessModule.deal, AccessAction.create) ||
           accessController.can(AccessModule.deal, AccessAction.update) ||
@@ -120,19 +120,19 @@ class CrmFunctionController extends GetxController {
           accessController.can(AccessModule.task, AccessAction.create) ||
           accessController.can(AccessModule.task, AccessAction.update) ||
           accessController.can(AccessModule.task, AccessAction.delete))
-      FunctionModel(
-        title: 'Tasks',
-        iconPath: ICRes.task,
-        color: const Color(0xffad5c00),
-        screenBuilder: TaskScreen(),
-      ),
+        FunctionModel(
+          title: 'Tasks',
+          iconPath: ICRes.task,
+          color: const Color(0xffad5c00),
+          screenBuilder: TaskScreen(),
+        ),
 
-      FunctionModel(
-        title: 'Contract',
-        iconPath: ICRes.contract,
-        color: const Color(0xff3400AD),
-        count: 66,
-      ),
+      // FunctionModel(
+      //   title: 'Contract',
+      //   iconPath: ICRes.contract,
+      //   color: const Color(0xff3400AD),
+      //   count: 66,
+      // ),
     ];
   }
 }

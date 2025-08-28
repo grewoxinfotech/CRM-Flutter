@@ -32,7 +32,10 @@ class ContactScreen extends StatelessWidget {
       ),
       floatingActionButton: CrmButton(
         title: "Add Contact",
-        onTap: () => Get.to(ContactAddScreen()),
+        onTap: () {
+          contactController.resetForm();
+          Get.to(ContactAddScreen());
+        },
       ),
       body: Obx(() {
         if (contactController.isLoading.value) {

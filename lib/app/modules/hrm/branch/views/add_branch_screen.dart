@@ -87,7 +87,7 @@ class AddBranchScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Branch')),
+      appBar: AppBar(title: Text(isFromEdit ? 'Edit Branch' : 'Add Branch')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(

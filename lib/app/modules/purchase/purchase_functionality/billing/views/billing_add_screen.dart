@@ -28,108 +28,6 @@ class BillingCreatePage extends StatefulWidget {
 
 class _BillingCreatePageState extends State<BillingCreatePage> {
   final bilController = Get.put(BillCreateController());
-  // final bilController.formKey = GlobalKey<FormState>();
-  // final _productService = ProductsServicesService();
-  // final _vendorService = VendorService();
-  // final bilController.currency.valueService = CurrencyService();
-  // String? userId;
-  //
-  // late String bilController.selectedVendorId;
-  // late List<VendorData> bilController.vendors.value = [];
-  // bool bilController.isLoadingCustomers.value = false;
-  //
-  // late TextEditingController bilController.gstinController.value;
-  // late List<TextEditingController> bilController.quantityControllers.value;
-  // late List<TextEditingController> bilController.unitPriceControllers.value;
-  // late List<TextEditingController> bilController.itemDiscountControllers.value;
-  // late List<TextEditingController> bilController.itemGstControllers.value;
-  // late TextEditingController _taxController;
-  // late TextEditingController bilController.discountController.value;
-  // late TextEditingController _additionalNotesController;
-  // late DateTime bilController.billDate.value;
-  // late DateTime _dueDate;
-  // late String bilController.paymentStatus.value;
-  // late String bilController.currency.value;
-  // late String bilController.currency.valueCode;
-  // late String bilController.currency.valueIcon;
-  // late List<String> bilController.itemDiscountTypes.value;
-  // bool bilController.isGstEnabled.value = false;
-  //
-  // List<Data?> bilController.products.value = [];
-  // List<Data?> bilController.selectedProducts.value = [];
-  // bool bilController.isLoadingProducts.value = false;
-  //
-  // List<CurrencyModel> bilController.currencies.value = [];
-  // bool bilController.isLoadingCurrencies.value = false;
-  // bool bilController.currenciesLoaded.value = false;
-  //
-  // // Standard GST rates for reference
-  // final List<double> bilController.gstRates.value = [0, 5, 12, 18, 28];
-
-  // void initState() {
-  //   super.initState();
-  //   _initializeControllers();
-  //   getUserData();
-  //   // Load data in the background without blocking UI
-  //   _loadDataInBackground();
-  // }
-
-  // Future<void> getUserData() async {
-  //   userId = (await SecureStorage.getUserData())?.id;
-  // }
-
-  // void _loadDataInBackground() {
-  //   // Start loading data in parallel without waiting
-  //   _loadProducts();
-  //   _loadCustomers();
-  //   _loadCurrencies();
-  //
-  //   // Don't load currencies immediately - will load when dropdown is opened
-  //   // This improves initial page load time
-  // }
-
-  // Future<void> _loadProducts() async {
-  //   setState(() => bilController.isLoadingProducts.value = true);
-  //   try {
-  //     final products = await _productService.getProducts();
-  //     setState(() {
-  //       bilController.products.value = products;
-  //     });
-  //   } catch (e) {
-  //     CrmSnackBar.showAwesomeSnackbar(
-  //       title: 'Error',
-  //       message: 'Failed to load products: ${e.toString()}',
-  //       contentType: ContentType.failure,
-  //     );
-  //   } finally {
-  //     setState(() => bilController.isLoadingProducts.value = false);
-  //   }
-  // }
-
-  // Future<void> _loadCustomers() async {
-  //   setState(() => bilController.isLoadingCustomers.value = true);
-  //   try {
-  //     final vendors = await _vendorService.getAllVendors();
-  //     setState(() {
-  //       bilController.vendors.value = vendors;
-  //       // Set first customer as default if available
-  //       if (vendors.isNotEmpty) {
-  //         bilController.selectedVendorId = vendors.first.id!;
-  //         // Enable GST if customer has tax number
-  //         bilController.isGstEnabled.value = vendors.first.taxNumber?.isNotEmpty ?? false;
-  //         bilController.gstinController.value.text = vendors.first.taxNumber ?? '';
-  //       }
-  //     });
-  //   } catch (e) {
-  //     CrmSnackBar.showAwesomeSnackbar(
-  //       title: 'Error',
-  //       message: 'Failed to load customers: ${e.toString()}',
-  //       contentType: ContentType.failure,
-  //     );
-  //   } finally {
-  //     setState(() => bilController.isLoadingCustomers.value = false);
-  //   }
-  // }
 
   Widget _buildVendorField() {
     return Obx(() {
@@ -196,29 +94,6 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
     });
   }
 
-  // void _initializeControllers() {
-  //   bilController.gstinController.value = TextEditingController();
-  //   bilController.quantityControllers.value = [TextEditingController(text: '1')];
-  //   bilController.unitPriceControllers.value = [TextEditingController(text: '0')];
-  //   bilController.itemDiscountControllers.value = [TextEditingController(text: '0')];
-  //   bilController.itemGstControllers.value = [TextEditingController(text: '0')];
-  //   _taxController = TextEditingController(text: '0');
-  //   bilController.discountController.value = TextEditingController(text: '0');
-  //   _additionalNotesController = TextEditingController();
-  //   bilController.billDate.value = DateTime.now();
-  //   _dueDate = DateTime.now().add(const Duration(days: 7));
-  //   bilController.paymentStatus.value = 'unpaid';
-  //
-  //   // Default currency (will be updated from API when loaded)
-  //   bilController.currency.value = 'AHNTpSNJHMypuNF6iPcMLrz';
-  //   bilController.currency.valueCode = 'INR';
-  //   bilController.currency.valueIcon = '₹';
-  //
-  //   bilController.itemDiscountTypes.value = ['percentage'];
-  //   bilController.selectedProducts.value = [];
-  //   bilController.selectedVendorId = '';
-  // }
-
   void _addProductItem() {
     setState(() {
       bilController.selectedProducts.add(null);
@@ -265,54 +140,6 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
       }
     }
   }
-
-  // Future<void> _loadCurrencies() async {
-  //   // Prevent multiple simultaneous API calls
-  //   if (bilController.isLoadingCurrencies.value) return;
-  //
-  //   // Set loading flag
-  //   setState(() => bilController.isLoadingCurrencies.value = true);
-  //
-  //   try {
-  //     final currencies = await bilController.ge();
-  //     if (mounted) {
-  //       setState(() {
-  //         bilController.currencies.value = currencies;
-  //         bilController.currenciesLoaded.value = true;
-  //
-  //         // Update currency details if we have currencies in the list
-  //         if (currencies.isNotEmpty) {
-  //           final selectedCurrency = currencies.firstWhereOrNull(
-  //             (c) => c.id == bilController.currency.value,
-  //           );
-  //           if (selectedCurrency != null) {
-  //             bilController.currencyCode.value = selectedCurrency.currencyCode;
-  //             bilController.currencyIcon.value = selectedCurrency.currencyIcon;
-  //           } else {
-  //             // If the selected currency is not found, use the first available currency
-  //             bilController.currency.value = currencies.first.id;
-  //             bilController.currencyCode.value = currencies.first.currencyCode;
-  //             bilController.currencyIcon.value = currencies.first.currencyIcon;
-  //           }
-  //         }
-  //       });
-  //     }
-  //   } catch (e) {
-  //     // Only show error if we're not in initial loading
-  //     if (mounted && bilController.currenciesLoaded.value) {
-  //       CrmSnackBar.showAwesomeSnackbar(
-  //         title: 'Error',
-  //         message: 'Failed to load currencies: ${e.toString()}',
-  //         contentType: ContentType.failure,
-  //       );
-  //     }
-  //   } finally {
-  //     // Clear loading flag if component is still mounted
-  //     if (mounted) {
-  //       setState(() => bilController.isLoadingCurrencies.value = false);
-  //     }
-  //   }
-  // }
 
   void _removeProductItem(int index) {
     if (bilController.selectedProducts.length > 1) {
@@ -708,14 +535,7 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (didPop) async {
-        if (didPop) {
-          // Refresh the invoice list when popping back
-          // if (mounted) {
-          //   await controller.fetchInvoicesForDeal(widget.dealId);
-          // }
-        }
-      },
+      onPopInvoked: (didPop) async {},
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Create Bill'),
@@ -733,18 +553,6 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildVendorField(),
-
-                // if (bilController.isGstEnabled.value) ...[
-                //   const SizedBox(height: 16),
-                //   CrmTextField(
-                //     controller: bilController.gstinController.value,
-                //     title: 'GSTIN',
-                //     hintText: 'Vendor GST number',
-                //     readOnly: true,
-                //     // Make field non-editable
-                //     enabled: false, // Visually show it's disabled
-                //   ),
-                // ],
                 const SizedBox(height: 16),
                 Stack(
                   children: [
@@ -871,18 +679,6 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
                         },
                       ),
                     ),
-                    // const SizedBox(width: 16),
-                    // Expanded(
-                    //   child: _buildDateField(
-                    //     title: 'Due Date',
-                    //     date: _dueDate,
-                    //     onChanged: (date) {
-                    //       if (date != null) {
-                    //         setState(() => _dueDate = date);
-                    //       }
-                    //     },
-                    //   ),
-                    // ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -992,9 +788,7 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
                             ? 'Creating...'
                             : 'Create Bill',
                     onTap: () {
-                      controller.isLoading.value = true;
                       _createBill();
-                      controller.isLoading.value = false;
                     },
                   ),
                 ),
@@ -1007,6 +801,8 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
   }
 
   Future<void> _createBill() async {
+    final controller = Get.find<BillingController>();
+    controller.isLoading.value = true;
     if (bilController.formKey.currentState?.validate() ?? false) {
       if (bilController.selectedVendorId.isEmpty) {
         CrmSnackBar.showAwesomeSnackbar(
@@ -1089,23 +885,19 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
         discount: _calculateTotalDiscount(),
         total: _calculateTotal(),
         billStatus: bilController.paymentStatus.value,
-        currency: "q6xe5PwPo74hw2hkumFyBvb",
+        currency: bilController.currency.value,
         currencyCode: bilController.currencyCode.value,
         currencyIcon: bilController.currencyIcon.value,
         items: items,
       );
 
       try {
-        // print("[DEBUG] Creating invoice: ${data.toJson()}");
-        // print("[DEBUG] Creating invoice: ${bilController.userId.value}");
         final success = await controller.createBill(
           data,
           bilController.userId.value,
         );
-        // print("[DEBUG] Bill created: $success");
+
         if (success) {
-          // Refresh invoices list
-          // await controller.fetchInvoicesForDeal(widget.dealId);
           CrmSnackBar.showAwesomeSnackbar(
             title: 'Success',
             message: 'Invoice created successfully!',
@@ -1120,6 +912,8 @@ class _BillingCreatePageState extends State<BillingCreatePage> {
           message: 'Failed to create invoice: ${e.toString()}',
           contentType: ContentType.failure,
         );
+      } finally {
+        controller.isLoading.value = false;
       }
     }
   }

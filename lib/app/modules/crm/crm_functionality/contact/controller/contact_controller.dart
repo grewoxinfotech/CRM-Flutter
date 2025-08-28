@@ -1,11 +1,15 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/data/network/crm/contact/services/contact_services.dart';
+import 'package:crm_flutter/app/data/network/system/country/controller/country_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../../../data/network/crm/company/model/company_model.dart';
 import '../../../../../data/network/crm/company/service/company_service.dart';
 import '../../../../../data/network/crm/contact/medel/contact_medel.dart';
+import '../../../../../data/network/crm/crm_system/label/controller/label_controller.dart';
+import '../../../../../data/network/system/country/model/country_model.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 
 class ContactController extends GetxController {
@@ -23,20 +27,72 @@ class ContactController extends GetxController {
   final TextEditingController email = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController website = TextEditingController();
-  final TextEditingController companyId = TextEditingController();
-  final TextEditingController companyName = TextEditingController();
-  final TextEditingController contactSource = TextEditingController();
   final TextEditingController address = TextEditingController();
   final TextEditingController city = TextEditingController();
   final TextEditingController state = TextEditingController();
   final TextEditingController country = TextEditingController();
   final TextEditingController description = TextEditingController();
 
+  final LabelController labelController = Get.put(LabelController());
+  final countryController = Get.put(CountryController());
+
+  RxString selectedCompanyId = ''.obs;
+  RxString selectedSource = ''.obs;
+  Rxn<CountryModel> selectedCountryCode = Rxn<CountryModel>();
+
   @override
   void onInit() {
     super.onInit();
+
     refreshData();
     fetchContacts();
+  }
+
+  void resetForm() {
+    firstName.clear();
+    lastName.clear();
+    contactOwner.clear();
+    email.clear();
+    phone.clear();
+    website.clear();
+    address.clear();
+    city.clear();
+    state.clear();
+    country.clear();
+    description.clear();
+
+    // Reset reactive values
+    if (contacts.isNotEmpty) {
+      selectedCompanyId.value = companies.first.id!;
+    } else {
+      selectedCompanyId.value = '';
+    }
+    if (sourceOptions.isNotEmpty) {
+      selectedSource.value = sourceOptions.first['id']!;
+    } else {
+      selectedSource.value = '';
+    }
+
+    if (countryController.countryModel.isNotEmpty) {
+      selectedCountryCode.value = countryController.countryModel
+          .firstWhereOrNull(
+            (element) => (element.countryName).toLowerCase() == "india",
+          );
+    } else {
+      selectedCountryCode.value = null;
+    }
+  }
+
+  List<Map<String, String>> get sourceOptions {
+    try {
+      if (labelController == null) return [];
+      final sources = labelController.getSources();
+      return sources
+          .map((label) => {'id': label.id, 'name': label.name})
+          .toList();
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<void> refreshData() async {
@@ -118,26 +174,30 @@ class ContactController extends GetxController {
 
   Future<void> createContact() async {
     try {
+      final user = await SecureStorage.getUserData();
+      final userId = user?.id;
       // Create the contact model from form fields
       final newContact = ContactModel(
-        firstName: firstName.text.trim(),
-        lastName: lastName.text.trim(),
-        contactOwner: contactOwner.toString(),
-        email: email.text.trim().isNotEmpty ? email.text.trim() : null,
-        phone: phone.text.trim().isNotEmpty ? phone.text.trim() : null,
-        website: website.text.trim().isNotEmpty ? website.text.trim() : null,
-        companyId:
-            companyId.text.trim().isNotEmpty ? companyId.text.trim() : null,
-        contactSource:
-            contactSource.text.trim().isNotEmpty
-                ? contactSource.text.trim()
-                : null,
         address: address.text.trim().isNotEmpty ? address.text.trim() : null,
         city: city.text.trim().isNotEmpty ? city.text.trim() : null,
-        state: state.text.trim().isNotEmpty ? state.text.trim() : null,
+        clientId: userId ?? '',
+        companyId:
+            selectedCompanyId.value.isNotEmpty ? selectedCompanyId.value : null,
+        contactOwner: userId ?? '',
+        contactSource:
+            selectedSource.value.trim().isNotEmpty
+                ? selectedSource.value.trim()
+                : null,
         country: country.text.trim().isNotEmpty ? country.text.trim() : null,
         description:
             description.text.trim().isNotEmpty ? description.text.trim() : null,
+        email: email.text.trim().isNotEmpty ? email.text.trim() : null,
+        firstName: firstName.text.trim(),
+        lastName: lastName.text.trim(),
+        phone: phone.text.trim().isNotEmpty ? phone.text.trim() : null,
+        phoneCode: selectedCountryCode.value?.id,
+        state: state.text.trim().isNotEmpty ? state.text.trim() : null,
+        website: website.text.trim().isNotEmpty ? website.text.trim() : null,
       );
 
       isLoading.value = true;
@@ -171,13 +231,102 @@ class ContactController extends GetxController {
     }
   }
 
-  Future<void> editContact(String id, ContactModel updatedContact) async {
+  // Future<void> editContact(String id) async {
+  //   try {
+  //     final user = await SecureStorage.getUserData();
+  //     final userId = user?.id;
+  //     // Create the contact model from form fields
+  //     final updatedContact = ContactModel(
+  //       address: address.text.trim().isNotEmpty ? address.text.trim() : null,
+  //       city: city.text.trim().isNotEmpty ? city.text.trim() : null,
+  //       clientId: userId ?? '',
+  //       companyId:
+  //           selectedCompanyId.value.isNotEmpty ? selectedCompanyId.value : null,
+  //       contactOwner: userId ?? '',
+  //       contactSource:
+  //           selectedSource.value.trim().isNotEmpty
+  //               ? selectedSource.value.trim()
+  //               : null,
+  //       country: country.text.trim().isNotEmpty ? country.text.trim() : null,
+  //       description:
+  //           description.text.trim().isNotEmpty ? description.text.trim() : null,
+  //       email: email.text.trim().isNotEmpty ? email.text.trim() : null,
+  //       firstName: firstName.text.trim(),
+  //       lastName: lastName.text.trim(),
+  //       phone: phone.text.trim().isNotEmpty ? phone.text.trim() : null,
+  //       phoneCode: selectedCountryCode.value?.id,
+  //       state: state.text.trim().isNotEmpty ? state.text.trim() : null,
+  //       website: website.text.trim().isNotEmpty ? website.text.trim() : null,
+  //     );
+  //     print("[DEBUG]=> Contact ${updatedContact.toJson()}");
+  //     isLoading.value = true;
+  //
+  //     final success = await _service.updateContact(id, updatedContact);
+  //     if (success) {
+  //       final index = contacts.indexWhere((c) => c.id == id);
+  //       if (index != -1) contacts[index] = updatedContact;
+  //
+  //       CrmSnackBar.showAwesomeSnackbar(
+  //         title: 'Success',
+  //         message: 'Contact updated successfully',
+  //         contentType: ContentType.success,
+  //       );
+  //     } else {
+  //       CrmSnackBar.showAwesomeSnackbar(
+  //         title: 'Error',
+  //         message: 'Failed to update contact',
+  //         contentType: ContentType.success,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     CrmSnackBar.showAwesomeSnackbar(
+  //       title: 'Error',
+  //       message: 'Failed to update contact  ${e.toString()}',
+  //       contentType: ContentType.success,
+  //     );
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+  Future<void> editContact(String id) async {
     try {
+      final user = await SecureStorage.getUserData();
+      final userId = user?.id ?? '';
+
+      // ✅ Build updated contact from form fields
+      final updatedContact = ContactModel(
+        clientId: userId,
+        contactOwner: userId,
+        firstName: firstName.text.trim(),
+        lastName: lastName.text.trim(),
+        email: email.text.trim().isNotEmpty ? email.text.trim() : null,
+        phone: phone.text.trim().isNotEmpty ? phone.text.trim() : null,
+        phoneCode: selectedCountryCode.value?.id,
+        website: website.text.trim().isNotEmpty ? website.text.trim() : null,
+        address: address.text.trim().isNotEmpty ? address.text.trim() : null,
+        city: city.text.trim().isNotEmpty ? city.text.trim() : null,
+        state: state.text.trim().isNotEmpty ? state.text.trim() : null,
+        country: country.text.trim().isNotEmpty ? country.text.trim() : null,
+        description:
+            description.text.trim().isNotEmpty ? description.text.trim() : null,
+        companyId:
+            selectedCompanyId.value.isNotEmpty ? selectedCompanyId.value : null,
+        contactSource:
+            selectedSource.value.isNotEmpty ? selectedSource.value : null,
+      );
+
+      isLoading.value = true;
+
       final success = await _service.updateContact(id, updatedContact);
+
       if (success) {
         final index = contacts.indexWhere((c) => c.id == id);
-        if (index != -1) contacts[index] = updatedContact;
-
+        if (index != -1) {
+          contacts[index] = updatedContact;
+          // ✅ keep the same id since you're editing an existing one
+        }
+        Get.back();
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Success',
           message: 'Contact updated successfully',
@@ -187,15 +336,17 @@ class ContactController extends GetxController {
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Error',
           message: 'Failed to update contact',
-          contentType: ContentType.success,
+          contentType: ContentType.failure, // ✅ should be failure
         );
       }
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: 'Error',
-        message: 'Failed to update contact  ${e.toString()}',
-        contentType: ContentType.success,
+        message: 'Failed to update contact: ${e.toString()}',
+        contentType: ContentType.failure, // ✅ should be failure
       );
+    } finally {
+      isLoading.value = false;
     }
   }
 

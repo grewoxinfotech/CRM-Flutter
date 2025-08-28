@@ -28,9 +28,8 @@ class CustomerScreen extends StatelessWidget {
               ? FloatingActionButton(
                 onPressed: () {
                   // Navigate to add product_service screen
-                  Get.to(
-                    () => AddCustomerScreen(customers: controller.items.length),
-                  );
+
+                  Get.to(() => AddCustomerScreen());
                 },
                 child: const Icon(Icons.add, color: Colors.white),
               )

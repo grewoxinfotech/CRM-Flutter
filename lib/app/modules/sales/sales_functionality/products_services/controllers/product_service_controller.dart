@@ -517,16 +517,12 @@ class ProductsServicesController extends PaginatedController<Data> {
     try {
       await refreshProducts();
       final exists = items.any((item) => item.id == id);
-      print("[DEBUG]=> Exists: ${items.length}");
-      print(
-        "[DEBUG]=> Exists: ${items.map((element) => element.id).join(", ")}",
-      );
+
       if (exists) {
-        print("[DEBUG]=> Item exists");
         return items.firstWhere((item) => item.id == id);
       }
       final response = await _service.getProductById(id);
-      print("[DEBUG]=> ${response?.toJson()}");
+
       if (response != null) {
         return response;
       }

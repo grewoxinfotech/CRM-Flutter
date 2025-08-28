@@ -70,16 +70,13 @@ class BillingController extends PaginatedController<BillingData> {
     }
   }
 
-  Future<bool> updateBill(String id, Map<String, dynamic> updatedBill) async {
+  Future<bool> updateBill(String id, BillingData updatedBill) async {
     try {
-      final success = await _service.updateBill(
-        id,
-        BillingData.fromJson(updatedBill),
-      );
+      final success = await _service.updateBill(id, updatedBill);
       if (success) {
         int index = items.indexWhere((item) => item.id == id);
         if (index != -1) {
-          items[index] = BillingData.fromJson(updatedBill);
+          items[index] = updatedBill;
           items.refresh();
         }
       }
@@ -108,7 +105,6 @@ class BillingController extends PaginatedController<BillingData> {
     final controller = Get.find<ProductsServicesController>();
     for (int i = 0; i < items.length; i++) {
       final product = await controller.getProductById(items[i].productId!);
-      print("[DEBUG]=>  ---- ${product?.toJson()} ");
       if (product != null) {
         products.add(product);
       }

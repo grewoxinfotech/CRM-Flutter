@@ -242,7 +242,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
                     children: [
                       Obx(() {
                         controller.getProduct(widget.bill.items!);
-                        print("[DEBUG]=> ${controller.products.length}");
+
                         final product = controller.products.firstWhereOrNull(
                           (element) => element.id == item.productId,
                         );

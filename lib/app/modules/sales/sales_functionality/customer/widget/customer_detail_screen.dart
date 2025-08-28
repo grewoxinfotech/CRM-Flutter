@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/views/add_customer_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/widget/address_detail_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/widget/customer_overview_card.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
@@ -25,14 +26,15 @@ class CustomerDetailScreen extends StatefulWidget {
 class _CustomerDetailScreenState extends State<CustomerDetailScreen>
     with SingleTickerProviderStateMixin {
   final customerController = Get.put(CustomerController());
-  CustomerData? customer;
+  // Use Rxn<CustomerData> to hold the reactive customer
+  Rxn<CustomerData> customer = Rxn<CustomerData>();
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    customer = widget.customer;
+    customer.value = widget.customer;
     _loadCustomer();
   }
 
@@ -42,7 +44,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
     );
     if (mounted) {
       setState(() {
-        customer = updated;
+        customer.value = updated;
       });
     }
   }
@@ -54,7 +56,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(customer?.name ?? "Customer Detail"),
+        title: Text(customer.value?.name ?? "Customer Detail"),
         bottom: CrmTabBar(
           items: [
             TabBarModel(iconPath: ICRes.attach, label: "Overview"),
@@ -75,9 +77,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
         }
 
         List<Widget> widgets = [
-          _buildOverviewTab(customer!),
-          _buildAddressTab(customer!.billingAddress, "Billing"),
-          _buildShippingTab(customer!.shippingAddress, "Shipping"),
+          _buildOverviewTab(customer.value!),
+          _buildAddressTab(customer.value!.billingAddress, "Billing"),
+          _buildShippingTab(customer.value!.shippingAddress, "Shipping"),
         ];
 
         return PageView.builder(
@@ -98,7 +100,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
       email: c.email ?? "-",
       phonCodePrefix: c.phonecode,
       companyName: c.company ?? "-",
-      address: Address.formatAddress(customer!.billingAddress),
+      address: Address.formatAddress(customer.value!.billingAddress),
       onDelete:
           () => Get.dialog(
             CrmDeleteDialog(
@@ -114,6 +116,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
                 }
               },
               entityType: c.name,
+            ),
+          ),
+      onEdit:
+          () => Get.to(
+            () => AddCustomerScreen(
+              isFromEdit: true,
+              customerData: customer.value,
             ),
           ),
     );

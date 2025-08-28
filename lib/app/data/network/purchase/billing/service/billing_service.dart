@@ -83,11 +83,15 @@ class BillingService {
   /// Update an existing bill
   Future<bool> updateBill(String id, BillingData bill) async {
     try {
+      print("[DEBUG]=> $baseUrl/$id ---- ${bill.toJson()}");
       final response = await http.put(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
         body: jsonEncode(bill.toJson()),
       );
+
+      print("[DEBUG]=> $baseUrl/$id ---- ${response.body}");
+      print("[DEBUG]=> $baseUrl/$id ---- ${response.statusCode}");
       return response.statusCode == 200;
     } catch (e) {
       print("Update bill exception: $e");

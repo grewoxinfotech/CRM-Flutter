@@ -44,3 +44,24 @@ String? requiredField(String? value, String fieldName) {
   }
   return null;
 }
+
+//url validator
+String? urlValidation(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return null; // ✅ Not required field, so return valid if empty
+  }
+
+  // ✅ Basic regex for URL validation
+  final urlPattern =
+      r'^(https?:\/\/)?' // optional http/https
+      r'([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}' // domain
+      r'(:\d+)?' // optional port
+      r'(\/.*)?$'; // optional path/query
+  final regExp = RegExp(urlPattern);
+
+  if (!regExp.hasMatch(value.trim())) {
+    return "Enter a valid URL";
+  }
+
+  return null;
+}

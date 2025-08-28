@@ -1,6 +1,5 @@
 import 'package:crm_flutter/app/care/utils/validation.dart';
 import 'package:crm_flutter/app/data/network/sales/customer/model/customer_model.dart';
-import 'package:crm_flutter/app/data/network/system/country/controller/country_controller.dart';
 import 'package:crm_flutter/app/data/network/system/country/model/country_model.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:flutter/material.dart';
@@ -9,197 +8,62 @@ import '../../../../../widgets/common/inputs/crm_dropdown_field.dart';
 import '../../../../../widgets/common/inputs/crm_text_field.dart';
 import '../controllers/customer_controller.dart';
 
-class AddCustomerScreen extends StatefulWidget {
-  final int? customers;
-  const AddCustomerScreen({super.key, this.customers});
+class AddCustomerScreen extends StatelessWidget {
+  final CustomerData? customerData;
+  final bool isFromEdit;
 
-  @override
-  State<AddCustomerScreen> createState() => _AddCustomerScreenState();
-}
+  AddCustomerScreen({super.key, this.customerData, this.isFromEdit = false});
 
-class _AddCustomerScreenState extends State<AddCustomerScreen> {
-  final CustomerController controller = Get.find();
-  final CountryController countryController = Get.put(CountryController());
-
-  final _formKey = GlobalKey<FormState>();
-  bool sameAsBilling = false;
-
-  final TextEditingController customerNumberController =
-      TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController contactController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController taxNumberController = TextEditingController();
-  final TextEditingController alternateNumberController =
-      TextEditingController();
-  final TextEditingController textNumberController = TextEditingController();
-  final TextEditingController companyController = TextEditingController();
-  final TextEditingController phoneCodeController = TextEditingController();
-  final TextEditingController notesController = TextEditingController();
-
-  // Billing
-  final TextEditingController billingStreetController = TextEditingController();
-  final TextEditingController billingCityController = TextEditingController();
-  final TextEditingController billingStateController = TextEditingController();
-  final TextEditingController billingCountryController =
-      TextEditingController();
-  final TextEditingController billingPostalController = TextEditingController();
-
-  // Shipping
-  final TextEditingController shippingStreetController =
-      TextEditingController();
-  final TextEditingController shippingCityController = TextEditingController();
-  final TextEditingController shippingStateController = TextEditingController();
-  final TextEditingController shippingCountryController =
-      TextEditingController();
-  final TextEditingController shippingPostalController =
-      TextEditingController();
-
-  String status = "active";
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-
-
-  String? requiredFieldValidator(
-    String? value, {
-    String fieldName = 'This field',
-  }) {
-    if (value == null || value.trim().isEmpty) {
-      return '$fieldName is required';
-    }
-    return null;
-  }
-
-  void _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() => isLoading = true);
-
-    final customer = CustomerData(
-      name: nameController.text.trim(),
-      contact: contactController.text.trim(),
-      email: emailController.text.trim(),
-      taxNumber: taxNumberController.text.trim(),
-      phonecode: controller.selectedCountryCode.value?.id.toString(),
-      billingAddress: Address(
-        street: billingStreetController.text.trim(),
-        city: billingCityController.text.trim(),
-        state: billingStateController.text.trim(),
-        country: billingCountryController.text.trim(),
-        postalCode: billingPostalController.text.trim(),
-      ),
-      shippingAddress: Address(
-        street: shippingStreetController.text.trim(),
-        city: shippingCityController.text.trim(),
-        state: shippingStateController.text.trim(),
-        country: shippingCountryController.text.trim(),
-        postalCode: shippingPostalController.text.trim(),
-      ),
-      notes: notesController.text.trim(),
-    );
-
-    bool success = await controller.createCustomer(customer);
-
-    setState(() => isLoading = false);
-
-    if (success) {
-      Get.back();
-      Get.snackbar(
-        'Success',
-        'Customer added successfully',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } else {
-      Get.snackbar(
-        'Error',
-        'Failed to add customer',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent,
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    customerNumberController.dispose();
-    nameController.dispose();
-    contactController.dispose();
-    emailController.dispose();
-    taxNumberController.dispose();
-    alternateNumberController.dispose();
-    textNumberController.dispose();
-    companyController.dispose();
-    phoneCodeController.dispose();
-    notesController.dispose();
-    billingStreetController.dispose();
-    billingCityController.dispose();
-    billingStateController.dispose();
-    billingCountryController.dispose();
-    billingPostalController.dispose();
-    shippingStreetController.dispose();
-    shippingCityController.dispose();
-    shippingStateController.dispose();
-    shippingCountryController.dispose();
-    shippingPostalController.dispose();
-    super.dispose();
-  }
+  final CustomerController controller = Get.put(CustomerController());
 
   @override
   Widget build(BuildContext context) {
+    // Prefill form if editing
+    if (isFromEdit && customerData != null) {
+      controller.initCustomerData(customerData);
+    }
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Customer')),
+      appBar: AppBar(
+        title: Text(isFromEdit ? 'Edit Customer' : 'Add Customer'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
-          key: _formKey,
+          key: controller.formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             children: [
-              // CrmTextField(
-              //   controller: customerNumberController,
-              //   title: 'Customer Number',
-              //   isRequired: true,
-              // ),
               Row(
                 children: [
                   Expanded(
                     child: CrmTextField(
-                      controller: nameController,
+                      controller: controller.nameController,
                       title: 'Name',
                       isRequired: true,
+                      hintText: 'Enter Customer Name',
                       validator:
-                          (value) =>
-                              requiredFieldValidator(value, fieldName: 'Name'),
+                          (value) => controller.requiredFieldValidator(
+                            value,
+                            fieldName: 'Name',
+                          ),
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: CrmTextField(
-                      controller: taxNumberController,
-
+                      controller: controller.taxNumberController,
                       title: 'Tax Number',
+                      hintText: 'Enter Tax Number',
                     ),
                   ),
                 ],
               ),
-              // CrmTextField(
-              //   controller: contactController,
-              //   title: 'Contact',
-              //   isRequired: true,
-              //   keyboardType: TextInputType.phone,
-              //   validator: (value) => phoneValidation(value),
-              // ),
               Row(
                 children: [
                   Obx(
-                    ()=> Expanded(
-                      flex: 2, // smaller space for dropdown
+                    () => Expanded(
+                      flex: 2,
                       child: CrmDropdownField<CountryModel>(
                         title: 'Code',
                         isRequired: true,
@@ -214,19 +78,18 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                                 )
                                 .toList(),
                         onChanged: (value) {
-                          setState(() {
-                            controller.selectedCountryCode.value = value;
-                          });
+                          controller.selectedCountryCode.value = value;
                         },
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Expanded(
                     flex: 5,
                     child: CrmTextField(
-                      controller: contactController,
+                      controller: controller.contactController,
                       title: 'Contact',
+                      hintText: 'Enter Contact',
                       isRequired: true,
                       keyboardType: TextInputType.phone,
                       validator: (value) => phoneValidation(value),
@@ -234,52 +97,40 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   ),
                 ],
               ),
-
               CrmTextField(
-                controller: emailController,
+                controller: controller.emailController,
                 title: 'Email',
-                keyboardType: TextInputType.emailAddress,
+                hintText: 'Enter Email',
                 isRequired: true,
+                keyboardType: TextInputType.emailAddress,
                 validator: (value) => emailValidation(value),
               ),
-
-              // CrmTextField(
-              //   controller: alternateNumberController,
-              //   title: 'Alternate Number',
-              // ),
-              // CrmTextField(
-              //   controller: textNumberController,
-              //   title: 'Text Number',
-              // ),
-              // CrmTextField(controller: companyController, title: 'Company'),
-              // CrmTextField(
-              //   controller: phoneCodeController,
-              //   title: 'Phone Code',
-              // ),
               const SizedBox(height: 16),
               const Text(
                 "Billing Address",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-
               CrmTextField(
-                controller: billingStreetController,
+                controller: controller.billingStreetController,
                 title: 'Street',
+                hintText: 'Enter Street',
               ),
               Row(
                 children: [
                   Expanded(
                     child: CrmTextField(
-                      controller: billingCityController,
+                      controller: controller.billingCityController,
                       title: 'City',
+                      hintText: 'Enter City',
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: CrmTextField(
-                      controller: billingStateController,
+                      controller: controller.billingStateController,
                       title: 'State',
+                      hintText: 'Enter State',
                     ),
                   ),
                 ],
@@ -288,79 +139,79 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 children: [
                   Expanded(
                     child: CrmTextField(
-                      controller: billingCountryController,
+                      controller: controller.billingCountryController,
                       title: 'Country',
+                      hintText: 'Enter Country',
                     ),
                   ),
                   SizedBox(width: 16),
-
                   Expanded(
                     child: CrmTextField(
-                      controller: billingPostalController,
+                      controller: controller.billingPostalController,
                       title: 'Postal Code',
+                      hintText: 'Enter Postal Code',
                     ),
                   ),
                 ],
               ),
-
-              // ✅ Checkbox to copy billing to shipping
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Checkbox(
-                    value: sameAsBilling,
-                    onChanged: (value) {
-                      setState(() {
-                        sameAsBilling = value!;
-                        if (sameAsBilling) {
-                          shippingStreetController.text =
-                              billingStreetController.text;
-                          shippingCityController.text =
-                              billingCityController.text;
-                          shippingStateController.text =
-                              billingStateController.text;
-                          shippingCountryController.text =
-                              billingCountryController.text;
-                          shippingPostalController.text =
-                              billingPostalController.text;
+              Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Checkbox(
+                      value: controller.sameAsBilling.value,
+                      onChanged: (value) {
+                        controller.sameAsBilling.value = value ?? false;
+                        if (controller.sameAsBilling.value) {
+                          controller.shippingStreetController.text =
+                              controller.billingStreetController.text;
+                          controller.shippingCityController.text =
+                              controller.billingCityController.text;
+                          controller.shippingStateController.text =
+                              controller.billingStateController.text;
+                          controller.shippingCountryController.text =
+                              controller.billingCountryController.text;
+                          controller.shippingPostalController.text =
+                              controller.billingPostalController.text;
                         } else {
-                          shippingStreetController.clear();
-                          shippingCityController.clear();
-                          shippingStateController.clear();
-                          shippingCountryController.clear();
-                          shippingPostalController.clear();
+                          controller.shippingStreetController.clear();
+                          controller.shippingCityController.clear();
+                          controller.shippingStateController.clear();
+                          controller.shippingCountryController.clear();
+                          controller.shippingPostalController.clear();
                         }
-                      });
-                    },
-                  ),
-                  const Text("Same as Billing Address"),
-                ],
+                      },
+                    ),
+                    const Text("Same as Billing Address"),
+                  ],
+                ),
               ),
-
               const SizedBox(height: 16),
               const Text(
                 "Shipping Address",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-
               CrmTextField(
-                controller: shippingStreetController,
+                controller: controller.shippingStreetController,
                 title: 'Street',
+                hintText: 'Enter Street',
               ),
               Row(
                 children: [
                   Expanded(
                     child: CrmTextField(
-                      controller: shippingCityController,
+                      controller: controller.shippingCityController,
                       title: 'City',
+                      hintText: 'Enter City',
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: CrmTextField(
-                      controller: shippingStateController,
+                      controller: controller.shippingStateController,
                       title: 'State',
+                      hintText: 'Enter State',
                     ),
                   ),
                 ],
@@ -369,30 +220,43 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 children: [
                   Expanded(
                     child: CrmTextField(
-                      controller: shippingCountryController,
+                      controller: controller.shippingCountryController,
                       title: 'Country',
+                      hintText: 'Enter Country',
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: CrmTextField(
-                      controller: shippingPostalController,
+                      controller: controller.shippingPostalController,
                       title: 'Postal Code',
+                      hintText: 'Enter Postal Code',
                     ),
                   ),
                 ],
               ),
-
               CrmTextField(
-                controller: notesController,
+                controller: controller.notesController,
                 title: 'Notes',
+                hintText: 'Enter Notes',
                 maxLines: 3,
+                keyboardType: TextInputType.multiline,
               ),
-
               const SizedBox(height: 24),
-              isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : CrmButton(onTap: _submit, title: 'Add Customer'),
+              Obx(
+                () =>
+                    controller.isLoading.value
+                        ? const Center(child: CircularProgressIndicator())
+                        : CrmButton(
+                          onTap: () {
+                            isFromEdit
+                                ? controller.edit(customerData!.id!)
+                                : controller.submit();
+                          },
+                          title:
+                              isFromEdit ? "Update Customer" : "Add Customer",
+                        ),
+              ),
             ],
           ),
         ),

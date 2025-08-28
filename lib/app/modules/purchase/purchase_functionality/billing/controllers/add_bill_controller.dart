@@ -75,7 +75,7 @@ class BillCreateController extends GetxController {
   }
 
   void _loadDataInBackground() {
-    _loadProducts();
+    loadProducts();
     _loadVendors();
     loadCurrencies();
     getUserData();
@@ -135,7 +135,7 @@ class BillCreateController extends GetxController {
     }
   }
 
-  Future<void> _loadProducts() async {
+  Future<void> loadProducts() async {
     isLoadingProducts.value = true;
     try {
       final productList = await _productService.getProducts();

@@ -81,10 +81,10 @@ class ContactService {
       final response = await http.put(
         Uri.parse("${UrlRes.contacts}/$id"),
         headers: headers,
-        //body: json.encode(contact.toJson()),
+        body: json.encode(contact.toJson()),
       );
-
-      return response.statusCode == 200;
+      print("[DEBUG] => ${response.body}");
+      return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
       throw Exception('Failed to update contact: $e');
     }

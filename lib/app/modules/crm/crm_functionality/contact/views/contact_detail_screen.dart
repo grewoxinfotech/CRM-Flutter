@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/data/network/crm/lead/model/lead_model.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/contact/views/contact_add_screen.dart';
 
 import 'package:crm_flutter/app/modules/users/controllers/users_controller.dart';
 import 'package:flutter/material.dart';
@@ -280,7 +281,10 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
               },
             ),
           ),
-      // onEdit: () => _handleEdit(deal, dealController),
+      onEdit:
+          () => Get.to(
+            () => ContactAddScreen(isFromEdit: true, contactModel: contact),
+          ),
     );
   }
 
