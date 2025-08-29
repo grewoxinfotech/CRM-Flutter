@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/modules/users/view/profile_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
@@ -54,14 +55,19 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: Get.theme.colorScheme.onPrimary,
                 ),
                 AppSpacing.horizontalMedium,
-                const CircleAvatar(
-                  radius: 15,
-                  child: Text(
-                    "G",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => ProfileScreen());
+                  },
+                  child: const CircleAvatar(
+                    radius: 15,
+                    child: Text(
+                      "G",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
