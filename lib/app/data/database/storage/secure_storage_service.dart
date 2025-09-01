@@ -13,6 +13,10 @@ class SecureStorage {
   static const String _keyLoggedIn = 'isLogin';
   static const String _keyUserData = 'user';
   static const String _keyClientId = 'clientId';
+  static const String _keyAttendance = 'attendance';
+  static const String _keyLastPunchDate = 'lastPunchDate';
+  static const String _keyPunchInDone = 'punchInDone';
+  static const String _keyPunchOutDone = 'punchOutDone';
 
   // Token
   static Future<void> saveToken(String token) async {
@@ -54,6 +58,58 @@ class SecureStorage {
     if (clientId != null) return clientId;
     final userData = await getUserData();
     return userData?.clientId;
+  }
+
+  // Attendance
+  static Future<void> saveAttendance(String attendance) async {
+    await _storage.write(key: _keyAttendance, value: attendance);
+  }
+
+  static Future<String?> getAttendance() async {
+    return _storage.read(key: _keyAttendance);
+  }
+
+  static Future<void> deleteAttendance() async {
+    await _storage.delete(key: _keyAttendance);
+  }
+
+  // 🔹 Save last punch date (yyyy-MM-dd)
+  static Future<void> saveLastPunchDate(DateTime date) async {
+    final formatted = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    await _storage.write(key: _keyLastPunchDate, value: formatted);
+  }
+
+  static Future<String?> getLastPunchDate() async {
+    return _storage.read(key: _keyLastPunchDate);
+  }
+
+  static Future<void> deleteLastPunchDate() async {
+    await _storage.delete(key: _keyLastPunchDate);
+  }
+
+  // 🔹 Save Punch In/Out status
+  static Future<void> savePunchInDone(bool value) async {
+    await _storage.write(key: _keyPunchInDone, value: value.toString());
+  }
+
+  static Future<bool> getPunchInDone() async {
+    final value = await _storage.read(key: _keyPunchInDone);
+    return value?.toLowerCase() == 'true';
+  }
+
+  static Future<void> savePunchOutDone(bool value) async {
+    await _storage.write(key: _keyPunchOutDone, value: value.toString());
+  }
+
+  static Future<bool> getPunchOutDone() async {
+    final value = await _storage.read(key: _keyPunchOutDone);
+    return value?.toLowerCase() == 'true';
+  }
+
+  static Future<void> resetPunchStatus() async {
+    await savePunchInDone(false);
+    await savePunchOutDone(false);
+    await deleteLastPunchDate();
   }
 
   // Username

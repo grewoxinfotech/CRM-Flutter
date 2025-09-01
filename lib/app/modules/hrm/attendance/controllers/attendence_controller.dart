@@ -106,10 +106,11 @@ class AttendanceControllerHRM extends PaginatedController<AttendanceData> {
   Future<bool> createAttendance(AttendanceData attendance) async {
     try {
       final success = await _service.createAttendance(attendance);
-      if (success) {
+      if (success!=null) {
         await loadInitial();
+        return true;
       }
-      return success;
+      return false;
     } catch (e) {
       print("Create attendance error: $e");
       return false;
