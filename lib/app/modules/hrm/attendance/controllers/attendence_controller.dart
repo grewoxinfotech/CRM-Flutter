@@ -12,6 +12,7 @@ class AttendanceControllerHRM extends PaginatedController<AttendanceData> {
   final AttendanceService _service = AttendanceService();
   final String url = UrlRes.attendance;
   var error = ''.obs;
+  RxString selectedRange = "Month".obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -76,19 +77,21 @@ class AttendanceControllerHRM extends PaginatedController<AttendanceData> {
     return employee!;
   }
 
-  List<AttendanceData> getAttendanceForEmployee(
+  Future<List<AttendanceData>> getAttendanceForEmployee(
     String employeeId,
     DateTime start,
     DateTime end,
-  ) {
+  ) async {
     try {
+      await loadInitial();
+      print("Start: $items");
       // Filter from items already loaded
       return items.where((a) {
         final attDate = DateTime.tryParse(
           a.date ?? "",
         ); // adjust field if different
         if (attDate == null) return false;
-
+        print("Date: $attDate");
         return a.employee == employeeId &&
             attDate.isAfter(start.subtract(const Duration(days: 1))) &&
             attDate.isBefore(end.add(const Duration(days: 1)));

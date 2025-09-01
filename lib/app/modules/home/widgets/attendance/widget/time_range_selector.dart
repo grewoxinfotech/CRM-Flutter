@@ -7,7 +7,7 @@ class TimeRangeSelector extends StatelessWidget {
   TimeRangeSelector({super.key, required this.onSelected});
 
   final List<String> items = ["Week", "Month", "Year"];
-  final RxString selectedItem = "Week".obs;
+  final RxString selectedItem = "Month".obs;
 
   @override
   Widget build(BuildContext context) {
