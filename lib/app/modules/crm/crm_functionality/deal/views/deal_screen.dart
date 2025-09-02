@@ -63,15 +63,25 @@ class DealScreen extends StatelessWidget {
             if (deals.isEmpty) {
               return const Center(child: Text("No deals available."));
             } else {
-              return Obx(
-                () => ViewScreen(
+              return Obx(() {
+                return ViewScreen(
                   itemCount: deals.length,
                   itemBuilder: (context, i) {
                     final data = deals[i];
+
+                    final source = dealController.sourceOptions
+                        .firstWhereOrNull(
+                          (element) => element['id'] == data.source,
+                        );
+
+                    final currency = dealController.currencies.firstWhereOrNull(
+                      (element) => element.id == data.currency,
+                    );
+
                     return DealCard(
                       id: data.id.toString(),
                       dealTitle: data.dealTitle.toString(),
-                      currency: data.currency.toString(),
+                      currency: currency != null ? currency.currencyIcon : '',
                       value: data.value.toString(),
                       pipeline: data.pipeline.toString(),
                       stage: data.stage.toString(),
@@ -82,7 +92,7 @@ class DealScreen extends StatelessWidget {
                       lastName: data.lastName.toString(),
                       email: data.email.toString(),
                       phone: data.phone.toString(),
-                      source: data.source.toString(),
+                      source: source != null ? source['name'] ?? '' : '',
                       companyName: data.companyName.toString(),
                       website: data.website.toString(),
                       address: data.address.toString(),
@@ -107,8 +117,8 @@ class DealScreen extends StatelessWidget {
                       onDelete: () {},
                     );
                   },
-                ),
-              );
+                );
+              });
             }
           } else {
             return const Center(child: Text("Something went wrong."));

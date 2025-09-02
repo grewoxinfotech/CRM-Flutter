@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/graf_progress.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/widget/time_range_selector.dart';
@@ -46,7 +47,7 @@ class AttendanceWidget extends StatelessWidget {
                   children: [
                     GrafProgress(
                       percentage:
-                      controller.attendancePercentage.value.toDouble(),
+                          controller.attendancePercentage.value.toDouble(),
                       width: 140,
                     ),
                     AppSpacing.verticalSmall,
@@ -66,34 +67,44 @@ class AttendanceWidget extends StatelessWidget {
                   children: [
                     CrmButton(
                       title: "Punch In",
-                      onTap: controller.isPunchInDisabled.value
-                          ? null
-                          : () => controller.punchIn(),
+                      onTap:
+                          controller.isPunchInDisabled.value
+                              ? null
+                              : () => controller.punchIn(),
                       width: 110,
                       height: 40,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Get.theme.colorScheme.primary.withAlpha(75),
-                          blurRadius: 10,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
+                      backgroundColor:
+                          controller.isPunchInDisabled.value
+                              ? Colors.grey
+                              : ColorRes.primary,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Get.theme.colorScheme.primary.withAlpha(75),
+                      //     blurRadius: 10,
+                      //     offset: const Offset(0, 6),
+                      //   ),
+                      // ],
                     ),
                     AppSpacing.verticalMedium,
                     CrmButton(
                       title: "Punch Out",
-                      onTap: controller.isPunchOutDisabled.value
-                          ? null
-                          : () => controller.punchOut(),
+                      onTap:
+                          controller.isPunchOutDisabled.value
+                              ? null
+                              : () => controller.punchOut(),
                       width: 110,
                       height: 40,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Get.theme.colorScheme.primary.withAlpha(75),
-                          blurRadius: 10,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
+                      backgroundColor:
+                          controller.isPunchOutDisabled.value
+                              ? Colors.grey
+                              : ColorRes.primary,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Get.theme.colorScheme.primary.withAlpha(75),
+                      //     blurRadius: 10,
+                      //     offset: const Offset(0, 6),
+                      //   ),
+                      // ],
                     ),
                   ],
                 ),
@@ -138,23 +149,69 @@ class AttendanceController extends GetxController {
     _checkButtonStatus();
   }
 
-  Future<void> _checkButtonStatus() async {
-    final now = DateTime.now();
-    final storedDate = await SecureStorage.getLastPunchDate();
+  // Future<void> _checkButtonStatus() async {
+  //   final now = DateTime.now();
+  //   final storedDate = await SecureStorage.getLastPunchDate();
+  //
+  //   if (storedDate != null) {
+  //     final punchDate = DateTime.parse(storedDate);
+  //     if (punchDate.year == now.year &&
+  //         punchDate.month == now.month &&
+  //         punchDate.day == now.day) {
+  //       isPunchInDisabled.value = true;
+  //       isPunchOutDisabled.value = false; // allow punch out
+  //     } else {
+  //       isPunchInDisabled.value = false;
+  //       isPunchOutDisabled.value = true;
+  //     }
+  //   } else {
+  //     isPunchInDisabled.value = false;
+  //     isPunchOutDisabled.value = true;
+  //   }
+  // }
 
-    if (storedDate != null) {
-      final punchDate = DateTime.parse(storedDate);
-      if (punchDate.year == now.year &&
-          punchDate.month == now.month &&
-          punchDate.day == now.day) {
+  Future<void> _checkButtonStatus() async {
+    try {
+      final user = await SecureStorage.getUserData();
+      if (user == null || user.id == null) {
         isPunchInDisabled.value = true;
-        isPunchOutDisabled.value = false; // allow punch out
-      } else {
+        isPunchOutDisabled.value = true;
+        return;
+      }
+
+      final employeeId = user.id!;
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      // Get today's attendance from API
+      final records = await _hrmController.getAttendanceForEmployee(
+        employeeId,
+        today,
+        today,
+      );
+
+      if (records.isEmpty) {
+        // No record for today → allow Punch In
         isPunchInDisabled.value = false;
         isPunchOutDisabled.value = true;
+      } else {
+        final todayRecord = records.first;
+        if (todayRecord.endTime == null) {
+          // Punched in but not yet out
+          isPunchInDisabled.value = true;
+          isPunchOutDisabled.value = false;
+
+          // Save to storage for punchOut usage
+          await SecureStorage.saveAttendance(todayRecord.id ?? '');
+        } else {
+          // Already punched out
+          isPunchInDisabled.value = true;
+          isPunchOutDisabled.value = true;
+        }
       }
-    } else {
-      isPunchInDisabled.value = false;
+    } catch (e) {
+      print("Check Button Status Error: $e");
+      isPunchInDisabled.value = true;
       isPunchOutDisabled.value = true;
     }
   }
@@ -212,6 +269,44 @@ class AttendanceController extends GetxController {
         "${dt.second.toString().padLeft(2, '0')}";
   }
 
+  // Future<void> punchIn() async {
+  //   try {
+  //     final user = await SecureStorage.getUserData();
+  //     if (user == null || user.id == null) throw "User not found";
+  //
+  //     final employeeId = user.id!;
+  //     final now = DateTime.now();
+  //     final data = AttendanceData(
+  //       employee: employeeId,
+  //       date: now.toIso8601String().split('T')[0],
+  //       startTime: formatTimeForBackend(now),
+  //       endTime: null,
+  //     );
+  //
+  //     final response = await _attendanceService.createAttendance(data);
+  //     if (response != null) {
+  //       await SecureStorage.saveAttendance(response.id ?? '');
+  //       await SecureStorage.saveLastPunchDate(now);
+  //
+  //       CrmSnackBar.showAwesomeSnackbar(
+  //         title: "Success",
+  //         message: "Punched in successfully at ${DateFormat.Hm().format(now)}",
+  //         contentType: ContentType.success,
+  //       );
+  //
+  //       isPunchInDisabled.value = true;
+  //       isPunchOutDisabled.value = false;
+  //       await getAttendanceById(employeeId, range: selectedRange.value);
+  //       print("Punch in successful for $employeeId at $now");
+  //       return;
+  //     }
+  //
+  //     throw "Failed to punch in: No response from server";
+  //   } catch (e) {
+  //     print("Punch In Error: $e");
+  //   }
+  // }
+
   Future<void> punchIn() async {
     try {
       final user = await SecureStorage.getUserData();
@@ -219,6 +314,18 @@ class AttendanceController extends GetxController {
 
       final employeeId = user.id!;
       final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      // Double-check with server if already punched in
+      final records = await _hrmController.getAttendanceForEmployee(
+        employeeId,
+        today,
+        today,
+      );
+      if (records.isNotEmpty && records.first.endTime == null) {
+        throw "Already punched in today";
+      }
+
       final data = AttendanceData(
         employee: employeeId,
         date: now.toIso8601String().split('T')[0],
@@ -227,74 +334,125 @@ class AttendanceController extends GetxController {
       );
 
       final response = await _attendanceService.createAttendance(data);
-      if (response != null) {
-        await SecureStorage.saveAttendance(response.id ?? '');
-        await SecureStorage.saveLastPunchDate(now);
+      if (response == null) throw "Failed to punch in";
 
-        CrmSnackBar.showAwesomeSnackbar(
-          title: "Success",
-          message: "Punched in successfully at ${DateFormat.Hm().format(now)}",
-          contentType: ContentType.success,
-        );
+      await SecureStorage.saveAttendance(response.id ?? '');
+      final attendance = await SecureStorage.getAttendance();
+      print("attendance: ${attendance}");
 
-        isPunchInDisabled.value = true;
-        isPunchOutDisabled.value = false;
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Success",
+        message: "Punched in at ${DateFormat.Hm().format(now)}",
+        contentType: ContentType.success,
+      );
 
-        await getAttendanceById(employeeId, range: selectedRange.value);
-        print("Punch in successful for $employeeId at $now");
-        return;
-      }
-
-      throw "Failed to punch in: No response from server";
+      await _checkButtonStatus();
+      await getAttendanceById(employeeId, range: selectedRange.value);
     } catch (e) {
-      print("Punch In Error: $e");
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: e.toString(),
+        contentType: ContentType.failure,
+      );
     }
   }
+
+  // Future<void> punchOut() async {
+  //   try {
+  //     final user = await SecureStorage.getUserData();
+  //     final attendanceId = await SecureStorage.getAttendance();
+  //     print("Attendance ID: $attendanceId");
+  //     final attendance = await _attendanceService.getAttendanceById(
+  //       attendanceId ?? '',
+  //     );
+  //     if (user == null || user.id == null) throw "User not found";
+  //
+  //     final employeeId = user.id!;
+  //     final now = DateTime.now();
+  //     final endTime = formatTimeForBackend(now);
+  //
+  //     if (attendance == null) throw "No active attendance found";
+  //
+  //     final data = AttendanceData(
+  //       id: attendance.id,
+  //       employee: employeeId,
+  //       date: attendance.date,
+  //       startTime: attendance.startTime,
+  //       endTime: endTime,
+  //     );
+  //
+  //     final response = await _attendanceService.updateAttendance(
+  //       data.id!,
+  //       data,
+  //     );
+  //
+  //     if (!response) {
+  //       throw "Failed to punch out";
+  //     }
+  //
+  //     CrmSnackBar.showAwesomeSnackbar(
+  //       title: "Success",
+  //       message: "Punched out successfully at ${DateFormat.Hm().format(now)}",
+  //       contentType: ContentType.success,
+  //     );
+  //
+  //     isPunchOutDisabled.value = true;
+  //
+  //     await getAttendanceById(employeeId, range: selectedRange.value);
+  //     print("Punch out successful for $employeeId at $endTime");
+  //   } catch (e) {
+  //     print("Punch Out Error: $e");
+  //   }
+  // }
 
   Future<void> punchOut() async {
     try {
       final user = await SecureStorage.getUserData();
-      final attendanceId = await SecureStorage.getAttendance();
-      print("Attendance ID: $attendanceId");
-      final attendance =
-      await _attendanceService.getAttendanceById(attendanceId ?? '');
       if (user == null || user.id == null) throw "User not found";
 
       final employeeId = user.id!;
       final now = DateTime.now();
-      final endTime = formatTimeForBackend(now);
+      final today = DateTime(now.year, now.month, now.day);
 
-      if (attendance == null) throw "No active attendance found";
+      // Fetch today’s active attendance
+      final records = await _hrmController.getAttendanceForEmployee(
+        employeeId,
+        today,
+        today,
+      );
+      if (records.isEmpty || records.first.endTime != null) {
+        throw "No active attendance found for today";
+      }
 
-      final data = AttendanceData(
+      final attendance = records.first;
+      final updated = AttendanceData(
         id: attendance.id,
         employee: employeeId,
         date: attendance.date,
         startTime: attendance.startTime,
-        endTime: endTime,
+        endTime: formatTimeForBackend(now),
       );
 
       final response = await _attendanceService.updateAttendance(
-        data.id!,
-        data,
+        updated.id!,
+        updated,
       );
-
-      if (!response) {
-        throw "Failed to punch out";
-      }
+      if (!response) throw "Failed to punch out";
 
       CrmSnackBar.showAwesomeSnackbar(
         title: "Success",
-        message: "Punched out successfully at ${DateFormat.Hm().format(now)}",
+        message: "Punched out at ${DateFormat.Hm().format(now)}",
         contentType: ContentType.success,
       );
 
-      isPunchOutDisabled.value = true;
-
+      await _checkButtonStatus();
       await getAttendanceById(employeeId, range: selectedRange.value);
-      print("Punch out successful for $employeeId at $endTime");
     } catch (e) {
-      print("Punch Out Error: $e");
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: e.toString(),
+        contentType: ContentType.failure,
+      );
     }
   }
 }

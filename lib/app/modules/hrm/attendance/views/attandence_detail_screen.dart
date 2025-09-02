@@ -28,6 +28,35 @@ class AttendanceDetailController extends GetxController {
           attDate.day == date.day;
     });
   }
+
+  double hoursOfWorking(DateTime date) {
+    // Find today’s attendance record
+    final record = allAttendance.firstWhereOrNull((a) {
+      final attDate = DateTime.tryParse(a.date ?? '');
+      return attDate != null &&
+          attDate.year == date.year &&
+          attDate.month == date.month &&
+          attDate.day == date.day;
+    });
+
+    if (record == null || record.startTime == null || record.endTime == null) {
+      return 0.0; // No record or still punched in
+    }
+
+    try {
+      // Combine date + time
+      final start = DateTime.tryParse("${record.date}T${record.startTime}");
+      final end = DateTime.tryParse("${record.date}T${record.endTime}");
+
+      if (start == null || end == null) return 0.0;
+
+      final duration = end.difference(start);
+      return duration.inMinutes / 60.0; // ✅ Convert minutes to fractional hours
+    } catch (e) {
+      print("Error parsing time: $e");
+      return 0.0;
+    }
+  }
 }
 
 class AttendanceDetailScreen extends StatelessWidget {
@@ -153,6 +182,7 @@ class AttendanceDetailScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final day = days[index];
                     final present = controller.isPresent(day);
+                    final workingHours = controller.hoursOfWorking(day);
                     final isToday = DateUtils.isSameDay(day, DateTime.now());
 
                     return Card(
@@ -169,7 +199,13 @@ class AttendanceDetailScreen extends StatelessWidget {
                         title: Text(
                           DateFormat('dd MMM yyyy (EEEE)').format(day),
                         ),
-                        subtitle: Text(present ? "Present" : "Absent"),
+                        trailing: Text(present ? '$workingHours Hours' : ''),
+                        subtitle: Text(
+                          present ? "Present" : "Absent",
+                          style: TextStyle(
+                            color: present ? Colors.green : Colors.red,
+                          ),
+                        ),
                       ),
                     );
                   },

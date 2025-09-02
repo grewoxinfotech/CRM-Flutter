@@ -26,12 +26,10 @@ class DepartmentService {
           'search': search,
         },
       );
-      print("[DEBUG]=>API Called: ${uri}");
 
       final token = await headers();
       print("[DEBUG]=>Token: ${token}");
       final response = await http.get(uri, headers: token);
-      print("[DEBUG]=>API Called: ${response.body}");
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

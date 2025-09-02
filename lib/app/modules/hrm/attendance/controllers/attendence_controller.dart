@@ -28,9 +28,8 @@ class AttendanceControllerHRM extends PaginatedController<AttendanceData> {
   @override
   Future<List<AttendanceData>> fetchItems(int page) async {
     try {
-      print("[DEBUG]=>API Called: $url");
       final response = await _service.fetchAttendance(page: page);
-      print("[DEBUG]=>Response Controller : ${response}");
+
       return response;
     } catch (e) {
       print("Exception in fetchItems: $e");
@@ -84,14 +83,14 @@ class AttendanceControllerHRM extends PaginatedController<AttendanceData> {
   ) async {
     try {
       await loadInitial();
-      print("Start: $items");
+
       // Filter from items already loaded
       return items.where((a) {
         final attDate = DateTime.tryParse(
           a.date ?? "",
         ); // adjust field if different
         if (attDate == null) return false;
-        print("Date: $attDate");
+
         return a.employee == employeeId &&
             attDate.isAfter(start.subtract(const Duration(days: 1))) &&
             attDate.isBefore(end.add(const Duration(days: 1)));
@@ -106,7 +105,7 @@ class AttendanceControllerHRM extends PaginatedController<AttendanceData> {
   Future<bool> createAttendance(AttendanceData attendance) async {
     try {
       final success = await _service.createAttendance(attendance);
-      if (success!=null) {
+      if (success != null) {
         await loadInitial();
         return true;
       }

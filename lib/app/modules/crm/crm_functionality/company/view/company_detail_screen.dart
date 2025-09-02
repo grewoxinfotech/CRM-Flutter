@@ -174,6 +174,9 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
       itemCount: deals.length,
       itemBuilder: (context, index) {
         final deal = deals[index];
+        final source = dealController.sourceOptions.firstWhereOrNull(
+          (element) => element['id'] == deal.source,
+        );
         return DealCard(
           id: deal.id.toString(),
           dealTitle: deal.dealTitle.toString(),
@@ -188,7 +191,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
           lastName: deal.lastName.toString(),
           email: deal.email.toString(),
           phone: deal.phone.toString(),
-          source: deal.source.toString(),
+          source: source != null ? source['name'] ?? '' : '',
           companyName: deal.companyName.toString(),
           website: deal.website.toString(),
           address: deal.address.toString(),

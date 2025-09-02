@@ -14,7 +14,7 @@ class EmployeeController extends PaginatedController<EmployeeData> {
   Future<List<EmployeeData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchEmployees(page: page);
-      print("[DEBUG]=>contrololere : ${response}");
+
       return response;
     } catch (e) {
       print("Exception in fetchItems: $e");

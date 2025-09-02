@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../data/network/crm/crm_system/label/controller/label_controller.dart';
+import '../../../../../data/network/crm/crm_system/stage/controller/stage_controller.dart';
 import '../../../../../data/network/system/country/model/country_model.dart';
 import '../../../../../data/network/system/currency/model/currency_model.dart';
 import '../../../../../data/network/system/currency/service/currency_service.dart';
@@ -71,6 +72,7 @@ class DealController extends GetxController {
   final noteDescriptionController = TextEditingController();
 
   late final LabelController labelController;
+  final StageController stageController = Get.put(StageController());
   final CompanyController companyController = Get.put(CompanyController());
 
   // Dropdown Selections
@@ -143,6 +145,18 @@ class DealController extends GetxController {
       return [];
     }
   }
+
+  // List<Map<String, String>> get stageOptions {
+  //   try {
+  //     if (labelController == null) return [];
+  //     final stages = stageController.getStages();
+  //     return stages
+  //         .map((stage) => {'id': stage.id, 'name': stage.name})
+  //         .toList();
+  //   } catch (e) {
+  //     return [];
+  //   }
+  // }
 
   @override
   void onInit() {
@@ -627,7 +641,7 @@ class DealController extends GetxController {
     }
   }
 
-  Future<bool> updateDeal(String dealId,DealModel data) async {
+  Future<bool> updateDeal(String dealId, DealModel data) async {
     try {
       isLoading.value = true;
 

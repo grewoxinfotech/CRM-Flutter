@@ -19,7 +19,6 @@ class AttendanceService {
     String search = '',
   }) async {
     try {
-      print("[DEBUG]=>API Called: $baseUrl");
       final uri = Uri.parse(baseUrl).replace(
         queryParameters: {
           'page': page.toString(),
@@ -27,10 +26,9 @@ class AttendanceService {
           'search': search,
         },
       );
-      print("[DEBUG]=>API Called: $uri");
 
       final response = await http.get(uri, headers: await headers());
-      print("[DEBUG]=>API Called: ${response.body}");
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final List<dynamic> attendances = data["data"];
@@ -49,7 +47,6 @@ class AttendanceService {
   /// Get single attendance by ID
   Future<AttendanceData?> getAttendanceById(String id) async {
     try {
-      print("[DEBUG]=>API Called: $baseUrl/$id");
       final response = await http.get(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
@@ -59,8 +56,9 @@ class AttendanceService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print("Get attendance by ID: $data");
-        return AttendanceData.fromJson(data["data"]);
+        final Map<String, dynamic> result = data["data"];
+        print("Get attendance by ID: $result");
+        return AttendanceData.fromJson(result);
       }
     } catch (e) {
       print("Get attendance by ID exception: $e");
@@ -78,12 +76,11 @@ class AttendanceService {
         body: jsonEncode(attendance.toJson()),
       );
       print("[DEBUG]=> $baseUrl ---- ${response.body}");
-      if(response.statusCode == 201 || response.statusCode == 200){
+      if (response.statusCode == 201 || response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return AttendanceData.fromJson(data["data"]);
       }
       return AttendanceData();
-
     } catch (e) {
       print("Create attendance exception: $e");
       return AttendanceData();

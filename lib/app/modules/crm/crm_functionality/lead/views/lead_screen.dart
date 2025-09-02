@@ -46,9 +46,9 @@ class LeadScreen extends StatelessWidget {
         centerTitle: false,
         backgroundColor: Colors.transparent,
       ),
-      floatingActionButton: CrmButton(
-        title: "Add Lead",
-        onTap: () async {
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add_rounded, color: Colors.white),
+        onPressed: () async {
           await Get.to(() => LeadCreateScreen());
           controller.refreshData();
         },
@@ -81,15 +81,32 @@ class LeadScreen extends StatelessWidget {
                 itemCount: controller.leads.length,
                 itemBuilder: (context, i) {
                   final data = controller.leads[i];
+                  final status = controller.statusOptions.firstWhereOrNull(
+                    (element) => element['id'] == data.status,
+                  );
+
+                  final currency = controller.currencies.firstWhereOrNull(
+                    (element) => element.id == data.currency,
+                  );
+
+                  final source = controller.sourceOptions.firstWhereOrNull(
+                    (element) => element['id'] == data.source,
+                  );
+
+                  final category = controller.categoryOptions.firstWhereOrNull(
+                    (element) => element['id'] == data.category,
+                  );
+
                   return LeadCard(
                     id: data.id ?? '',
                     color: Colors.green,
                     inquiryId: data.inquiryId ?? '',
                     leadTitle: data.leadTitle ?? '',
-                    // leadStage: controller.getStageName(data.leadStage ?? ''),
-                    // pipeline: controller.getPipelineName(data.pipeline ?? ''),
-                    currency: data.currency ?? '',
+                    leadStage: controller.getStageName(data.leadStage ?? ''),
+                    pipeline: controller.getPipelineName(data.pipeline ?? ''),
+                    currency: currency != null ? currency.currencyIcon : '',
                     leadValue: data.leadValue?.toString() ?? '',
+                    source: source != null ? source['name'] ?? '' : '',
                     // companyName: controller.getCompanyDisplayName(data),
                     // firstName: data.firstName ?? '',
                     // lastName: data.lastName ?? '',
@@ -101,11 +118,11 @@ class LeadScreen extends StatelessWidget {
                         data.leadMembers?.leadMembers?.isNotEmpty == true
                             ? data.leadMembers!.leadMembers!.length.toString()
                             : '',
-                    // source: controller.getSourceName(data.source ?? ''),
-                    // category: controller.getCategoryName(data.category ?? ''),
+                    category: category != null ? category['name'] ?? '' : '',
                     // files: data.files.isNotEmpty ? data.files.length.toString() : '',
                     // Use the status directly from the API instead of trying to map it
-                    status: data.status ?? '',
+                    status:
+                        status != null ? status['name']!.capitalize ?? '' : '',
 
                     interestLevel: data.interestLevel ?? '',
                     leadScore: data.leadScore?.toString() ?? '',

@@ -64,7 +64,6 @@ class EmployeeService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print("[DEBUG]=> Employee Response: $data");
 
         final List<dynamic> employees = data["message"]["data"];
         return employees.map((json) => EmployeeData.fromJson(json)).toList();
