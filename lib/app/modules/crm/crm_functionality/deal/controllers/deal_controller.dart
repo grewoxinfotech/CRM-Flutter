@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../data/network/crm/crm_system/label/controller/label_controller.dart';
+import '../../../../../data/network/crm/crm_system/pipeline/controller/pipeline_controller.dart';
 import '../../../../../data/network/crm/crm_system/stage/controller/stage_controller.dart';
 import '../../../../../data/network/system/country/model/country_model.dart';
 import '../../../../../data/network/system/currency/model/currency_model.dart';
@@ -74,6 +75,7 @@ class DealController extends GetxController {
   late final LabelController labelController;
   final StageController stageController = Get.put(StageController());
   final CompanyController companyController = Get.put(CompanyController());
+  final PipelineController pipelineController = Get.put(PipelineController());
 
   // Dropdown Selections
   final selectedPipeline = ''.obs;
@@ -145,6 +147,8 @@ class DealController extends GetxController {
       return [];
     }
   }
+
+
 
   // List<Map<String, String>> get stageOptions {
   //   try {
@@ -399,27 +403,31 @@ class DealController extends GetxController {
   }
 
   // Get pipeline name by ID or name
+  // String getPipelineName(String pipelineIdOrName) {
+  //   try {
+  //     if (pipelineIdOrName.isEmpty) return 'Unknown Pipeline';
+  //
+  //     // First try to find by ID
+  //     final pipelineById = pipelines.firstWhereOrNull(
+  //       (p) => p.id == pipelineIdOrName,
+  //     );
+  //     if (pipelineById != null) {
+  //       return pipelineById.pipelineName ?? 'Unknown Pipeline';
+  //     }
+  //
+  //     // If not found by ID, try to find by name
+  //     final pipelineByName = pipelines.firstWhereOrNull(
+  //       (p) => p.pipelineName == pipelineIdOrName,
+  //     );
+  //     return pipelineByName?.pipelineName ?? 'Unknown Pipeline';
+  //   } catch (e) {
+  //     print('Error getting pipeline name: $e');
+  //     return 'Unknown Pipeline';
+  //   }
+  // }
+
   String getPipelineName(String pipelineIdOrName) {
-    try {
-      if (pipelineIdOrName.isEmpty) return 'Unknown Pipeline';
-
-      // First try to find by ID
-      final pipelineById = pipelines.firstWhereOrNull(
-        (p) => p.id == pipelineIdOrName,
-      );
-      if (pipelineById != null) {
-        return pipelineById.pipelineName ?? 'Unknown Pipeline';
-      }
-
-      // If not found by ID, try to find by name
-      final pipelineByName = pipelines.firstWhereOrNull(
-        (p) => p.pipelineName == pipelineIdOrName,
-      );
-      return pipelineByName?.pipelineName ?? 'Unknown Pipeline';
-    } catch (e) {
-      print('Error getting pipeline name: $e');
-      return 'Unknown Pipeline';
-    }
+    return pipelineController.getPipelineName(pipelineIdOrName);
   }
 
   String getSourceName(String id) {

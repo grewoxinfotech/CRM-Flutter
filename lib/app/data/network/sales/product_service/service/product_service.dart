@@ -336,8 +336,8 @@ class ProductsServicesService {
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
 
-      print("[DEBUG]=> update response code: ${response.statusCode}");
-      print("[DEBUG]=> update response body: ${response.body}");
+      // print("[DEBUG]=> update response code: ${response.statusCode}");
+      // print("[DEBUG]=> update response body: ${response.body}");
 
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {

@@ -5,11 +5,15 @@ import 'package:crm_flutter/app/modules/sales/sales_functionality/products_servi
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/add_product_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/widget/productcard.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../care/constants/color_res.dart';
+import '../../../../../care/constants/ic_res.dart';
 import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
+import '../../../../../widgets/common/display/crm_ic.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 
 class ProductsServicesScreen extends StatelessWidget {
@@ -44,22 +48,22 @@ class ProductsServicesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Products & Services")),
       floatingActionButton:
-          accessController.can(
-                AccessModule.productServices,
-                AccessAction.create,
-              )
-              ? FloatingActionButton(
-                onPressed: () {
-                  // Navigate to add product_service screen
-                  controller.resetForm();
-                  Get.to(
-                    () => AddProductScreen(),
-                    binding: ProductServicesBinding(),
-                  );
-                },
-                child: const Icon(Icons.add),
-              )
-              : null,
+      accessController.can(
+        AccessModule.productServices,
+        AccessAction.create,
+      )
+          ? FloatingActionButton(
+        onPressed: () {
+          // Navigate to add product_service screen
+          controller.resetForm();
+          Get.to(
+                () => AddProductScreen(),
+            binding: ProductServicesBinding(),
+          );
+        },
+        child: const Icon(Icons.add),
+      )
+          : null,
       body: FutureBuilder(
         future: controller.loadInitial(), // Load initial data
         builder: (context, snapshot) {
@@ -93,7 +97,7 @@ class ProductsServicesScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
@@ -103,7 +107,7 @@ class ProductsServicesScreen extends StatelessWidget {
                             ProductCard(product: product),
 
                             Positioned(
-                              right: 8,
+                              right: 26,
                               bottom: 8,
                               child: Row(
                                 children: [
@@ -112,37 +116,61 @@ class ProductsServicesScreen extends StatelessWidget {
                                     AccessModule.productServices,
                                     AccessAction.update,
                                   ))
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: Colors.blue,
-                                      ),
-                                      onPressed: () {
-                                        Get.to(() {
-                                          controller.resetForm();
-                                          return AddProductScreen(
-                                            isFromEdit: true,
-                                            product: product,
-                                          );
-                                        }, binding: ProductServicesBinding());
-                                      },
+                                    CrmIc(
+                                        iconPath: ICRes.edit,
+                                        color: ColorRes.success,
+                                        onTap: () {
+                                          Get.to(() {
+                                            controller.resetForm();
+                                            return AddProductScreen(
+                                              isFromEdit: true,
+                                              product: product,
+                                            );
+                                          }, binding: ProductServicesBinding());
+                                        },
                                     ),
+                                  // IconButton(
+                                  //   icon: const Icon(
+                                  //     Icons.edit,
+                                  //     color: Colors.blue,
+                                  //   ),
+                                  //   onPressed: () {
+                                  //     Get.to(() {
+                                  //       controller.resetForm();
+                                  //       return AddProductScreen(
+                                  //         isFromEdit: true,
+                                  //         product: product,
+                                  //       );
+                                  //     }, binding: ProductServicesBinding());
+                                  //   },
+                                  // ),
+                                  const SizedBox(width: 16),
                                   if (accessController.can(
                                     AccessModule.productServices,
                                     AccessAction.delete,
                                   ))
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed: () {
+                                    CrmIc(
+                                      iconPath: ICRes.delete,
+                                      color: ColorRes.error,
+                                      onTap: () {
                                         _deleteProduct(
                                           product.id ?? '',
                                           product.name ?? 'Product',
                                         );
                                       },
                                     ),
+                                    // IconButton(
+                                    //   icon: const Icon(
+                                    //     Icons.delete,
+                                    //     color: Colors.red,
+                                    //   ),
+                                    //   onPressed: () {
+                                    //     _deleteProduct(
+                                    //       product.id ?? '',
+                                    //       product.name ?? 'Product',
+                                    //     );
+                                    //   },
+                                    // ),
                                 ],
                               ),
                             ),

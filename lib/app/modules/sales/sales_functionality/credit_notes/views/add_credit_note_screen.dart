@@ -1,5 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/data/network/sales_invoice/model/sales_invoice_model.dart';
+import 'package:crm_flutter/app/data/network/system/currency/controller/currency_controller.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/controllers/customer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../data/network/sales/credit_notes/model/credit_notes_model.dart';
@@ -98,6 +100,10 @@ class _AddCreditNoteScreenState extends State<AddCreditNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(()=>CustomerController());
+    Get.lazyPut(()=>CurrencyController());
+    final CustomerController customerController = Get.find();
+    final CurrencyController _currencyController = Get.find();
     return Scaffold(
       appBar: AppBar(title: const Text('Add Credit Note')),
       body: Padding(
@@ -128,14 +134,15 @@ class _AddCreditNoteScreenState extends State<AddCreditNoteScreen> {
                             ),
                           )
                           .toList(),
-                  onChanged: (invoice) {
+                  onChanged: (invoice) async{
                     if (invoice != null) {
-                      setState(() {
+                      final customer = await customerController.getCustomerById(invoice.customer);
+                      final currency = await _currencyController.getCurrencyById(invoice.currency);
                         selectedInvoice = invoice;
-                        customerNameController.text = invoice.customer ?? '';
-                        currencyController.text = invoice.currency ?? '';
+                        customerNameController.text = customer?.name ?? '';
+                        currencyController.text = currency?.currencyName ?? '';
                         amountController.text = invoice.total?.toString() ?? '';
-                      });
+                    setState(() {});
                     }
                   },
                   isRequired: true,

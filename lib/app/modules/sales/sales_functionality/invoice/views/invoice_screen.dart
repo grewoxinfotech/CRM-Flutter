@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/data/network/sales/customer/model/customer_model.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/sales_invoice/pages/sales_invoice_edit_page.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -117,7 +118,7 @@ class InvoiceScreen extends StatelessWidget {
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
 
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: invoices.length,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
@@ -128,47 +129,39 @@ class InvoiceScreen extends StatelessWidget {
                             );
 
                         print("[DEBUG]=>${invoice.currency}");
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            // onTap:
-                            //     () =>
-                            //         Get.to(InvoiceDetailScreen(invoice: invoice)),
-                            child: InvoiceCard(
-                              id: invoice.id,
-                              leadTitle: invoice.salesInvoiceNumber,
-                              firstName: salesInvoiceController.getCustomerName(
-                                invoice.customer!,
-                              ),
-                              leadValue: invoice.total.toString(),
-                              currency: invoice.currency,
-                              status: invoice.paymentStatus,
-                              createdAt: invoice.issueDate.toString(),
-                              dueDate: invoice.dueDate.toString(),
-                              pendingAmount: invoice.pendingAmount?.toString(),
-                              onDelete:
-                                  () => _showDeleteInvoiceDialog(
-                                context,
-                                salesInvoiceController,
-                                invoice.id!,
-                                customer!.id!,
-                              ),
-                              onEdit:
-                                  () => Get.to(
-                                    () => SalesInvoiceEditPage(
-                                      invoice: invoice,
-                                      dealId: customer!.id!,
-                                    ),
-                                  ),
-                              onTap:
-                                  () => Get.to(
-                                    () => InvoiceDetailScreen(
-                                      invoice: invoice,
-                                      customer: customer,
-                                    ),
-                                  ),
-                            ),
+                        return InvoiceCard(
+                          id: invoice.id,
+                          leadTitle: invoice.salesInvoiceNumber,
+                          firstName: salesInvoiceController.getCustomerName(
+                            invoice.customer!,
                           ),
+                          leadValue: invoice.total.toString(),
+                          currency: invoice.currency,
+                          status: invoice.paymentStatus,
+                          createdAt: invoice.issueDate.toString(),
+                          dueDate: invoice.dueDate.toString(),
+                          pendingAmount: invoice.pendingAmount?.toString(),
+                          onDelete:
+                              () => _showDeleteInvoiceDialog(
+                            context,
+                            salesInvoiceController,
+                            invoice.id!,
+                            customer!.id!,
+                          ),
+                          onEdit:
+                              () => Get.to(
+                                () => SalesInvoiceEditPage(
+                                  invoice: invoice,
+                                  dealId: customer!.id!,
+                                ),
+                              ),
+                          onTap:
+                              () => Get.to(
+                                () => InvoiceDetailScreen(
+                                  invoice: invoice,
+                                  customer: customer,
+                                ),
+                              ),
                         );
                       } else if (controller.isPaging.value) {
                         return const Padding(

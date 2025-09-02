@@ -1,9 +1,13 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/access_res.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../care/constants/color_res.dart';
+import '../../../../../care/constants/ic_res.dart';
 import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../../../../access/controller/access_controller.dart';
@@ -84,7 +88,7 @@ class CreditNoteScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
@@ -93,7 +97,7 @@ class CreditNoteScreen extends StatelessWidget {
                           children: [
                             CreditNoteCard(creditNote: creditNote),
                             Positioned(
-                              right: 8,
+                              right: 26,
                               bottom: 8,
                               child: Row(
                                 children: [
@@ -105,14 +109,12 @@ class CreditNoteScreen extends StatelessWidget {
                                   // ),
                                   if (accessController.can(
                                     AccessModule.creditNotes,
-                                    AccessAction.create,
+                                    AccessAction.delete,
                                   ))
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed: () {
+                                    CrmIc(
+                                      iconPath: ICRes.delete,
+                                      color: ColorRes.error,
+                                      onTap: () {
                                         _deleteCreditNote(
                                           creditNote.id ?? '',
                                           creditNote.id ?? 'Credit Note',

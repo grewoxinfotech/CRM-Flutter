@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../care/constants/size_manager.dart';
 import '../../../../../data/network/sales/product_service/model/product_model.dart';
 
 class ProductCard extends StatelessWidget {
@@ -66,132 +68,138 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final stockData = getStockStatusData(product.stockStatus);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
+    return GestureDetector(
+
+      child: CrmCard(
+        padding: const EdgeInsets.all(AppPadding.medium),
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+        borderRadius: BorderRadius.circular(AppRadius.large),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image or Placeholder
-            // ClipRRect(
-            //   borderRadius: BorderRadius.circular(8),
-            //   child:
-            //       product.image != null && product.image!.isNotEmpty
-            //           ? Image.network(
-            //             product.image!,
-            //             width: 60,
-            //             height: 60,
-            //             fit: BoxFit.cover,
-            //           )
-            //           : Container(
-            //             width: 60,
-            //             height: 60,
-            //             color: Colors.grey[300],
-            //             child: Icon(
-            //               Icons.image_not_supported,
-            //               color: Colors.grey[600],
-            //             ),
-            //           ),
-            // ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: _buildProductImage(product.image),
-            ),
-            const SizedBox(width: 12),
-
-            // Product Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Product Name + Stock Status Badge
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Product Image or Placeholder
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(8),
+                //   child:
+                //       product.image != null && product.image!.isNotEmpty
+                //           ? Image.network(
+                //             product.image!,
+                //             width: 60,
+                //             height: 60,
+                //             fit: BoxFit.cover,
+                //           )
+                //           : Container(
+                //             width: 60,
+                //             height: 60,
+                //             color: Colors.grey[300],
+                //             child: Icon(
+                //               Icons.image_not_supported,
+                //               color: Colors.grey[600],
+                //             ),
+                //           ),
+                // ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: _buildProductImage(product.image),
+                ),
+                const SizedBox(width: 12),
+            
+                // Product Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          product.name ?? 'Unnamed Product',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                      // Product Name + Stock Status Badge
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              product.name ?? 'Unnamed Product',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: stockData["bgColor"],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          stockData["label"],
-                          style: TextStyle(
-                            color: stockData["textColor"],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: stockData["bgColor"],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              stockData["label"],
+                              style: TextStyle(
+                                color: stockData["textColor"],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  // Prices Row (Buy & Sell)
-                  Row(
-                    children: [
+            
+                      const SizedBox(height: 6),
+            
+                      // Prices Row (Buy & Sell)
+                      Row(
+                        children: [
+                          Text(
+                            "Buy: ₹${product.buyingPrice ?? 'N/A'}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Text(
+                            "Sell: ₹${product.sellingPrice ?? 'N/A'}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+            
+                      const SizedBox(height: 6),
+            
+                      // Stock Quantity
                       Text(
-                        "Buy: ₹${product.buyingPrice ?? 'N/A'}",
+                        "Stock Qty: ${product.stockQuantity ?? '0'}",
                         style: const TextStyle(
                           fontSize: 14,
-                          color: Colors.black87,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(width: 20),
-                      Text(
-                        "Sell: ₹${product.sellingPrice ?? 'N/A'}",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+            
+                      // // Optional Category
+                      // if (product.category != null && product.category!.isNotEmpty)
+                      //   Padding(
+                      //     padding: const EdgeInsets.only(top: 6),
+                      //     child: Text(
+                      //       'Category: ${product.category}',
+                      //       style: TextStyle(
+                      //         fontSize: 13,
+                      //         color: Colors.grey[700],
+                      //         fontStyle: FontStyle.normal,
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                   ),
-
-                  const SizedBox(height: 6),
-
-                  // Stock Quantity
-                  Text(
-                    "Stock Qty: ${product.stockQuantity ?? '0'}",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-
-                  // // Optional Category
-                  // if (product.category != null && product.category!.isNotEmpty)
-                  //   Padding(
-                  //     padding: const EdgeInsets.only(top: 6),
-                  //     child: Text(
-                  //       'Category: ${product.category}',
-                  //       style: TextStyle(
-                  //         fontSize: 13,
-                  //         color: Colors.grey[700],
-                  //         fontStyle: FontStyle.normal,
-                  //       ),
-                  //     ),
-                  //   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

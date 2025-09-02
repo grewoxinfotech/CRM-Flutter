@@ -1,7 +1,11 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/care/utils/format.dart';
 import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -83,81 +87,76 @@ class EmployeeScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
                         final employee = controller.items[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(AppSpacing.small),
-                          child: Stack(
-                            children: [
-                              EmployeeCard(
-                                id: employee.id,
-                                firstName: employee.firstName,
-                                lastName: employee.lastName,
-                                email: employee.email,
-                                phone: employee.phone,
-                                address: employee.address,
-                                branch: employee.branch,
-                                employeeId: employee.employeeId,
-                                username: employee.username,
-                                department: employee.department,
-                                designation: employee.designation,
-                                joiningDate: formatDateString(
-                                  employee.joiningDate?.toIso8601String(),
-                                ),
-                                phoneCode: employee.phoneCode,
-                                salary: employee.salary,
+                        return Stack(
+                          children: [
+                            EmployeeCard(
+                              id: employee.id,
+                              firstName: employee.firstName,
+                              lastName: employee.lastName,
+                              email: employee.email,
+                              phone: employee.phone,
+                              address: employee.address,
+                              branch: employee.branch,
+                              employeeId: employee.employeeId,
+                              username: employee.username,
+                              department: employee.department,
+                              designation: employee.designation,
+                              joiningDate: formatDateString(
+                                employee.joiningDate?.toIso8601String(),
                               ),
-                              // Uncomment if you want Edit
+                              phoneCode: employee.phoneCode,
+                              salary: employee.salary,
+                            ),
+                            // Uncomment if you want Edit
 
-                                Positioned(
-                                  right: 8,
-                                  bottom: 8,
-                                  child: Row(
-                                    children: [
-                                      if (accessController.can(
-                                        AccessModule.employee,
-                                        AccessAction.update,
-                                      ))
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.edit,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          Get.to(
-                                                () => AddEmployeeScreen(
-                                              employeeData: employee,
-                                              isFromEdit: true,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      if (accessController.can(
-                                        AccessModule.employee,
-                                        AccessAction.delete,
-                                      ))
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          _deleteEmployee(
-                                            employee.id ?? '',
-                                            "${employee.firstName} ${employee.lastName}" ??
-                                                'Designation',
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                              Positioned(
+                                right: 26,
+                                bottom: 8,
+                                child: Row(
+                                  children: [
+                                    if (accessController.can(
+                                      AccessModule.employee,
+                                      AccessAction.update,
+                                    ))
+                                    CrmIc(
+                                      iconPath: ICRes.edit,
+                      color: ColorRes.success,
+
+                                      onTap: () {
+                                        Get.to(
+                                              () => AddEmployeeScreen(
+                                            employeeData: employee,
+                                            isFromEdit: true,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(width: 16,),
+                                    if (accessController.can(
+                                      AccessModule.employee,
+                                      AccessAction.delete,
+                                    ))
+                                      CrmIc(
+                                        iconPath: ICRes.delete,
+                                        color: ColorRes.error,
+                                      onTap: () {
+                                        _deleteEmployee(
+                                          employee.id ?? '',
+                                          "${employee.firstName} ${employee.lastName}" ??
+                                              'Designation',
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
+                              ),
 
-                            ],
-                          ),
+                          ],
                         );
                       } else if (controller.isPaging.value) {
                         return const Padding(

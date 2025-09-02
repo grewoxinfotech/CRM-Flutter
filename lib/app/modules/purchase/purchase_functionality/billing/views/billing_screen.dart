@@ -1,8 +1,12 @@
 import 'package:crm_flutter/app/care/constants/access_res.dart';
+import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/utils/format.dart';
 import 'package:crm_flutter/app/data/network/sales/customer/model/customer_model.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/bill_detail_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_edit_screen.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -86,7 +90,7 @@ class BillingScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
@@ -110,24 +114,21 @@ class BillingScreen extends StatelessWidget {
                         // );
                         return Stack(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: BillingCard(
-                                id: billing.id,
-                                billNumber: billing.billNumber ?? "Billing",
-                                totalAmount: billing.total.toString(),
-                                currency: billing.currency,
-                                status: billing.status,
-                                dueDate: formatDateString(
-                                  billing.createdAt.toString(),
-                                ),
-                                onTap: () {
-                                  Get.to(() => BillDetailScreen(bill: billing));
-                                },
+                            BillingCard(
+                              id: billing.id,
+                              billNumber: billing.billNumber ?? "Billing",
+                              totalAmount: billing.total.toString(),
+                              currency: billing.currency,
+                              status: billing.status,
+                              dueDate: formatDateString(
+                                billing.createdAt.toString(),
                               ),
+                              onTap: () {
+                                Get.to(() => BillDetailScreen(bill: billing));
+                              },
                             ),
                             Positioned(
-                              right: 8,
+                              right: 26,
                               bottom: 8,
                               child: Row(
                                 children: [
@@ -137,12 +138,10 @@ class BillingScreen extends StatelessWidget {
                                     AccessAction.update,
                                   ))
                                     if (billing.status?.toLowerCase() != 'paid')
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.edit,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
+                                      CrmIc(
+                                        iconPath: ICRes.edit,
+                                        color: ColorRes.success,
+                                        onTap: () {
                                           Get.to(
                                             () => BillingEditPage(
                                               billingData: billing,

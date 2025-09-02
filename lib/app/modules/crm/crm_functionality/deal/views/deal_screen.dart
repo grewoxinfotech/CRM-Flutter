@@ -69,6 +69,7 @@ class DealScreen extends StatelessWidget {
                   itemBuilder: (context, i) {
                     final data = deals[i];
 
+
                     final source = dealController.sourceOptions
                         .firstWhereOrNull(
                           (element) => element['id'] == data.source,
@@ -78,13 +79,16 @@ class DealScreen extends StatelessWidget {
                       (element) => element.id == data.currency,
                     );
 
+                    final category = dealController.categoryOptions.firstWhereOrNull((element) => element['id']==data.category,);
+
                     return DealCard(
                       id: data.id.toString(),
                       dealTitle: data.dealTitle.toString(),
                       currency: currency != null ? currency.currencyIcon : '',
                       value: data.value.toString(),
-                      pipeline: data.pipeline.toString(),
-                      stage: data.stage.toString(),
+                      pipeline: dealController.getPipelineName(data.pipeline ?? ''),
+                      stage: dealController.getStageName(data.stage ?? ''),
+                      category: category!=null ? category['name'] ?? '' : '',
                       status: data.status.toString(),
                       label: data.label.toString(),
                       closedDate: data.closedDate.toString(),

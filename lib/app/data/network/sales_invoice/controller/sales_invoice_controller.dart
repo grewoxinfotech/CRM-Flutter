@@ -107,7 +107,17 @@ class SalesInvoiceController extends GetxController {
   Future<SalesInvoice?> getInvoiceById(String id) async {
     try {
       isLoading.value = true;
-      return await salesInvoiceService.getSalesInvoiceById(id);
+      final existingInvoice = invoices.firstWhereOrNull((invoice) => invoice.id == id);
+      if (existingInvoice != null) {
+        return existingInvoice;
+      }else{
+        final invoice = await salesInvoiceService.getSalesInvoiceById(id);
+        if (invoice != null) {
+          invoices.add(invoice);
+          return invoice;
+        }
+      }
+
     } finally {
       isLoading.value = false;
     }

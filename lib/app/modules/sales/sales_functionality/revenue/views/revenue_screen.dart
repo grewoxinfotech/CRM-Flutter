@@ -85,6 +85,7 @@
 //     );
 //   }
 // }
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -165,7 +166,7 @@ class RevenueScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount:
                         controller.items.length + 2, // +2 for grid + spacing
                     itemBuilder: (context, index) {
@@ -207,9 +208,7 @@ class RevenueScreen extends StatelessWidget {
                       } else if (index > 0 &&
                           index <= controller.items.length) {
                         final revenue = controller.items[index - 1];
-                        return GestureDetector(
-                          child: RevenueCard(revenue: revenue),
-                        );
+                        return RevenueCard(revenue: revenue);
                       } else if (controller.isPaging.value) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),

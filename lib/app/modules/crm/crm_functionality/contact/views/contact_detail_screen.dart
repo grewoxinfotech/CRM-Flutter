@@ -310,32 +310,91 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          // return ViewScreen(
+          //   itemCount: leads.length,
+          //   itemBuilder: (context, index) {
+          //     final lead = leads[index];
+          //     return LeadCard(
+          //       id: lead.id ?? '',
+          //       color: Colors.green,
+          //       inquiryId: lead.inquiryId ?? '',
+          //       leadTitle: lead.leadTitle ?? '',
+          //       currency: lead.currency ?? '',
+          //       leadValue: lead.leadValue?.toString() ?? '',
+          //       leadMembers:
+          //           lead.leadMembers?.leadMembers?.isNotEmpty == true
+          //               ? lead.leadMembers!.leadMembers!.length.toString()
+          //               : '',
+          //       status: lead.status ?? '',
+          //
+          //       interestLevel: lead.interestLevel ?? '',
+          //       leadScore: lead.leadScore?.toString() ?? '',
+          //       isConverted: lead.isConverted?.toString() ?? '',
+          //       clientId: lead.clientId ?? '',
+          //       createdBy: lead.createdBy ?? '',
+          //       updatedBy: lead.updatedBy ?? '',
+          //       createdAt: formatDate(lead.createdAt?.toString() ?? ''),
+          //       updatedAt: formatDate(lead.updatedAt?.toString() ?? ''),
+          //       onTap: () => _navigateToDetail(lead, leadController),
+          //     );
+          //   },
+          // );
           return ViewScreen(
             itemCount: leads.length,
-            itemBuilder: (context, index) {
-              final lead = leads[index];
-              return LeadCard(
-                id: lead.id ?? '',
-                color: Colors.green,
-                inquiryId: lead.inquiryId ?? '',
-                leadTitle: lead.leadTitle ?? '',
-                currency: lead.currency ?? '',
-                leadValue: lead.leadValue?.toString() ?? '',
-                leadMembers:
-                    lead.leadMembers?.leadMembers?.isNotEmpty == true
-                        ? lead.leadMembers!.leadMembers!.length.toString()
-                        : '',
-                status: lead.status ?? '',
+            itemBuilder: (context, i) {
+              final data = leads[i];
+              final status = leadController.statusOptions.firstWhereOrNull(
+                    (element) => element['id'] == data.status,
+              );
 
-                interestLevel: lead.interestLevel ?? '',
-                leadScore: lead.leadScore?.toString() ?? '',
-                isConverted: lead.isConverted?.toString() ?? '',
-                clientId: lead.clientId ?? '',
-                createdBy: lead.createdBy ?? '',
-                updatedBy: lead.updatedBy ?? '',
-                createdAt: formatDate(lead.createdAt?.toString() ?? ''),
-                updatedAt: formatDate(lead.updatedAt?.toString() ?? ''),
-                onTap: () => _navigateToDetail(lead, leadController),
+              final currency = leadController.currencies.firstWhereOrNull(
+                    (element) => element.id == data.currency,
+              );
+
+              final source = leadController.sourceOptions.firstWhereOrNull(
+                    (element) => element['id'] == data.source,
+              );
+
+              final category = leadController.categoryOptions.firstWhereOrNull(
+                    (element) => element['id'] == data.category,
+              );
+
+              return LeadCard(
+                id: data.id ?? '',
+                color: Colors.green,
+                inquiryId: data.inquiryId ?? '',
+                leadTitle: data.leadTitle ?? '',
+                leadStage: leadController.getStageName(data.leadStage ?? ''),
+                pipeline: leadController.getPipelineName(data.pipeline ?? ''),
+                currency: currency != null ? currency.currencyIcon : '',
+                leadValue: data.leadValue?.toString() ?? '',
+                source: source != null ? source['name'] ?? '' : '',
+                // companyName: controller.getCompanyDisplayName(data),
+                // firstName: data.firstName ?? '',
+                // lastName: data.lastName ?? '',
+                // phoneCode: data.phoneCode ?? '',
+                // telephone: data.telephone ?? '',
+                // email: data.email ?? '',
+                // address: data.address ?? '',
+                leadMembers:
+                data.leadMembers?.leadMembers?.isNotEmpty == true
+                    ? data.leadMembers!.leadMembers!.length.toString()
+                    : '',
+                category: category != null ? category['name'] ?? '' : '',
+                // files: data.files.isNotEmpty ? data.files.length.toString() : '',
+                // Use the status directly from the API instead of trying to map it
+                status:
+                status != null ? status['name']!.capitalize ?? '' : '',
+
+                interestLevel: data.interestLevel ?? '',
+                leadScore: data.leadScore?.toString() ?? '',
+                isConverted: data.isConverted?.toString() ?? '',
+                clientId: data.clientId ?? '',
+                createdBy: data.createdBy ?? '',
+                updatedBy: data.updatedBy ?? '',
+                createdAt: formatDate(data.createdAt?.toString() ?? ''),
+                updatedAt: formatDate(data.updatedAt?.toString() ?? ''),
+                onTap: () => _navigateToDetail(data, leadController),
               );
             },
           );
@@ -366,45 +425,104 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          // return ViewScreen(
+          //   itemCount: deals.length,
+          //   itemBuilder: (context, index) {
+          //     final deal = deals[index];
+          //     return DealCard(
+          //       id: deal.id.toString(),
+          //       dealTitle: deal.dealTitle.toString(),
+          //       currency: deal.currency.toString(),
+          //       value: deal.value.toString(),
+          //       pipeline: deal.pipeline.toString(),
+          //       stage: deal.stage.toString(),
+          //       status: deal.status.toString(),
+          //       label: deal.label.toString(),
+          //       closedDate: deal.closedDate.toString(),
+          //       firstName: deal.firstName.toString(),
+          //       lastName: deal.lastName.toString(),
+          //       email: deal.email.toString(),
+          //       phone: deal.phone.toString(),
+          //       source: deal.source.toString(),
+          //       companyName: deal.companyName.toString(),
+          //       website: deal.website.toString(),
+          //       address: deal.address.toString(),
+          //       products: deal.products.toString(),
+          //       files: deal.files.toString(),
+          //       assignedTo: deal.assignedTo.toString(),
+          //       clientId: deal.clientId.toString(),
+          //       isWon: deal.isWon.toString(),
+          //       companyId: deal.companyId.toString(),
+          //       contactId: deal.contactId.toString(),
+          //       createdBy: formatDate(deal.createdBy.toString()),
+          //       updatedBy: formatDate(deal.updatedBy.toString()),
+          //       createdAt: formatDate(deal.createdAt.toString()),
+          //       updatedAt: formatDate(deal.updatedAt.toString()),
+          //       color: Get.theme.colorScheme.error,
+          //       onTap:
+          //           () =>
+          //               (deal.id != null)
+          //                   ? Get.to(() => DealDetailScreen(id: deal.id!))
+          //                   : Get.snackbar('Error', 'deal ID is missing'),
+          //       onEdit: () {},
+          //       onDelete: () {},
+          //     );
+          //   },
+          // );
+
           return ViewScreen(
             itemCount: deals.length,
-            itemBuilder: (context, index) {
-              final deal = deals[index];
+            itemBuilder: (context, i) {
+              final data = deals[i];
+
+
+              final source = dealController.sourceOptions
+                  .firstWhereOrNull(
+                    (element) => element['id'] == data.source,
+              );
+
+              final currency = dealController.currencies.firstWhereOrNull(
+                    (element) => element.id == data.currency,
+              );
+
+              final category = dealController.categoryOptions.firstWhereOrNull((element) => element['id']==data.category,);
+
               return DealCard(
-                id: deal.id.toString(),
-                dealTitle: deal.dealTitle.toString(),
-                currency: deal.currency.toString(),
-                value: deal.value.toString(),
-                pipeline: deal.pipeline.toString(),
-                stage: deal.stage.toString(),
-                status: deal.status.toString(),
-                label: deal.label.toString(),
-                closedDate: deal.closedDate.toString(),
-                firstName: deal.firstName.toString(),
-                lastName: deal.lastName.toString(),
-                email: deal.email.toString(),
-                phone: deal.phone.toString(),
-                source: deal.source.toString(),
-                companyName: deal.companyName.toString(),
-                website: deal.website.toString(),
-                address: deal.address.toString(),
-                products: deal.products.toString(),
-                files: deal.files.toString(),
-                assignedTo: deal.assignedTo.toString(),
-                clientId: deal.clientId.toString(),
-                isWon: deal.isWon.toString(),
-                companyId: deal.companyId.toString(),
-                contactId: deal.contactId.toString(),
-                createdBy: formatDate(deal.createdBy.toString()),
-                updatedBy: formatDate(deal.updatedBy.toString()),
-                createdAt: formatDate(deal.createdAt.toString()),
-                updatedAt: formatDate(deal.updatedAt.toString()),
+                id: data.id.toString(),
+                dealTitle: data.dealTitle.toString(),
+                currency: currency != null ? currency.currencyIcon : '',
+                value: data.value.toString(),
+                pipeline: dealController.getPipelineName(data.pipeline ?? ''),
+                stage: dealController.getStageName(data.stage ?? ''),
+                category: category!=null ? category['name'] ?? '' : '',
+                status: data.status.toString(),
+                label: data.label.toString(),
+                closedDate: data.closedDate.toString(),
+                firstName: data.firstName.toString(),
+                lastName: data.lastName.toString(),
+                email: data.email.toString(),
+                phone: data.phone.toString(),
+                source: source != null ? source['name'] ?? '' : '',
+                companyName: data.companyName.toString(),
+                website: data.website.toString(),
+                address: data.address.toString(),
+                products: data.products.toString(),
+                files: data.files.toString(),
+                assignedTo: data.assignedTo.toString(),
+                clientId: data.clientId.toString(),
+                isWon: data.isWon.toString(),
+                companyId: data.companyId.toString(),
+                contactId: data.contactId.toString(),
+                createdBy: formatDate(data.createdBy.toString()),
+                updatedBy: formatDate(data.updatedBy.toString()),
+                createdAt: formatDate(data.createdAt.toString()),
+                updatedAt: formatDate(data.updatedAt.toString()),
                 color: Get.theme.colorScheme.error,
                 onTap:
                     () =>
-                        (deal.id != null)
-                            ? Get.to(() => DealDetailScreen(id: deal.id!))
-                            : Get.snackbar('Error', 'deal ID is missing'),
+                (data.id != null)
+                    ? Get.to(() => DealDetailScreen(id: data.id!))
+                    : Get.snackbar('Error', 'deal ID is missing'),
                 onEdit: () {},
                 onDelete: () {},
               );

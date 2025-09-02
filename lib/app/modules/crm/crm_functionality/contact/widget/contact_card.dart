@@ -1,6 +1,8 @@
+import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import '../../../../../care/constants/size_manager.dart';
 import '../../../../../data/network/crm/contact/medel/contact_medel.dart';
 import '../controller/contact_controller.dart';
 import '../views/contact_detail_screen.dart';
@@ -20,84 +22,84 @@ class ContactCard extends StatelessWidget {
             ).format(DateTime.parse(contact.createdAt!))
             : 'N/A';
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: InkWell(
-        //onTap: () => onTap?.call(contact) ?? ContactDetailScreen(),
-        onTap: () {
-          if (onTap != null) {
-            onTap!(contact);
-          } else {
-            Get.to(() => ContactDetailScreen(id: contact.id));
-          }
-        },
+    return GestureDetector(
+      onTap: () {
+        if (onTap != null) {
+          onTap!(contact);
+        } else {
+          Get.to(() => ContactDetailScreen(id: contact.id));
+        }
+      },
+      child: CrmCard(
+        padding: const EdgeInsets.all(AppPadding.medium),
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+        borderRadius: BorderRadius.circular(AppRadius.large),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.blueAccent,
+                  child: Text(
+                    (contact.firstName != null && contact.firstName!.isNotEmpty)
+                        ? contact.firstName![0].toUpperCase()
+                        : '?',
 
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.blueAccent,
-                child: Text(
-                  (contact.firstName != null && contact.firstName!.isNotEmpty)
-                      ? contact.firstName![0].toUpperCase()
-                      : '?',
-
-                  style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${contact.firstName} ${contact.lastName}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      if (contact.phone != null && contact.phone!.isNotEmpty)
+                        _buildInfoRow('Phone', contact.phone!),
+                      if (contact.email != null && contact.email!.isNotEmpty)
+                        _buildInfoRow('Email', contact.email!),
+                      if (contact.companyId != null &&
+                          contact.companyId!.isNotEmpty)
+                        _buildInfoRow(
+                          'Company',
+                          Get.find<ContactController>().getCompanyNameById(
+                                contact.companyId,
+                              ) ??
+                              contact.companyId!,
+                        ),
+                    ],
+                  ),
+                ),
+                Column(
                   children: [
-                    Text(
-                      '${contact.firstName} ${contact.lastName}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 4),
-                    if (contact.phone != null && contact.phone!.isNotEmpty)
-                      _buildInfoRow('Phone', contact.phone!),
-                    if (contact.email != null && contact.email!.isNotEmpty)
-                      _buildInfoRow('Email', contact.email!),
-                    if (contact.companyId != null &&
-                        contact.companyId!.isNotEmpty)
-                      _buildInfoRow(
-                        'Company',
-                        Get.find<ContactController>().getCompanyNameById(
-                              contact.companyId,
-                            ) ??
-                            contact.companyId!,
+                    Text(formattedDate, style: const TextStyle(fontSize: 12)),
+                    if (contact.contactSource != null &&
+                        contact.contactSource!.isNotEmpty)
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          contact.contactSource!,
+                          style: const TextStyle(fontSize: 10),
+                        ),
                       ),
                   ],
                 ),
-              ),
-              Column(
-                children: [
-                  Text(formattedDate, style: const TextStyle(fontSize: 12)),
-                  if (contact.contactSource != null &&
-                      contact.contactSource!.isNotEmpty)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        contact.contactSource!,
-                        style: const TextStyle(fontSize: 10),
-                      ),
-                    ),
-                ],
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );

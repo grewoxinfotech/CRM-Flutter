@@ -6,6 +6,7 @@ import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/widge
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/controllers/product_service_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/views/add_product_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/products_services/widget/productcard.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -67,18 +68,12 @@ class CustomerScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
                         final customer = controller.items[index];
-                        return GestureDetector(
-                          onTap:
-                              () => Get.to(
-                                () => CustomerDetailScreen(customer: customer),
-                              ),
-                          child: CustomerCard(customer: customer),
-                        );
+                        return CustomerCard(customer: customer);
                       } else if (controller.isPaging.value) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),

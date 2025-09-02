@@ -14,8 +14,8 @@ class CurrencyService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        print('Currency API Response: ${response.statusCode}'); // Debug status
-        print('Response Body: ${response.body}');
+        // print('Currency API Response: ${response.statusCode}'); // Debug status
+        // print('Response Body: ${response.body}');
         if (responseData['success'] == true) {
           List<dynamic> currencyList = [];
 

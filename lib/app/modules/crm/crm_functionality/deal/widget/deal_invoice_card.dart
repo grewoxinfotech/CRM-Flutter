@@ -103,17 +103,10 @@ class DealInvoiceCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppPadding.medium,
-                    vertical: AppPadding.small,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: _getStatusColor(status).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: _getStatusColor(status).withOpacity(0.3),
-                      width: 1,
-                    ),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     status?.toUpperCase() ?? "UNPAID",

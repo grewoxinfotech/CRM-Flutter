@@ -242,120 +242,129 @@ class EmployeeCard extends StatelessWidget {
       onTap: onTap,
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.medium),
-        margin: const EdgeInsets.symmetric(
-          horizontal: AppMargin.small,
-          vertical: AppMargin.small,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+        borderRadius: BorderRadius.circular(AppRadius.large),
+        child: Column(
           children: [
-            // --- Profile Picture or Initials ---
-            CircleAvatar(
-              radius: 28,
-              backgroundColor: ColorRes.primary.withOpacity(0.2),
-              backgroundImage:
-                  (profilePic != null && profilePic!.isNotEmpty)
-                      ? NetworkImage(profilePic!)
-                      : null,
-              child:
-                  (profilePic == null || profilePic!.isEmpty)
-                      ? Text(
-                        (firstName?.substring(0, 1) ?? "?") +
-                            (lastName?.substring(0, 1) ?? ""),
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: ColorRes.primary,
-                        ),
-                      )
-                      : null,
-            ),
-            const SizedBox(width: 12),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // --- Profile Picture or Initials ---
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: ColorRes.primary.withOpacity(0.2),
+                  backgroundImage:
+                      (profilePic != null && profilePic!.isNotEmpty)
+                          ? NetworkImage(profilePic!)
+                          : null,
+                  child:
+                      (profilePic == null || profilePic!.isEmpty)
+                          ? Text(
+                            (firstName?.substring(0, 1) ?? "?") +
+                                (lastName?.substring(0, 1) ?? ""),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: ColorRes.primary,
+                            ),
+                          )
+                          : null,
+                ),
+                const SizedBox(width: 12),
 
-            // --- Employee Details ---
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name + Designation
-                  Text(
-                    "${firstName ?? ''} ${lastName ?? ''}".trim(),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: textPrimary,
-                    ),
-                  ),
-                  if (designation != null && designation!.isNotEmpty)
-                    Text(
-                      designation!,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: textSecondary,
-                      ),
-                    ),
-                  if (department != null && department!.isNotEmpty)
-                    Text(
-                      department!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: textSecondary.withOpacity(0.8),
-                      ),
-                    ),
-                  const SizedBox(height: 6),
-
-                  // Contact Info
-                  if (email != null)
-                    Text(
-                      email!,
-                      style: TextStyle(fontSize: 13, color: textSecondary),
-                    ),
-                  if (phone != null)
-                    Text(
-                      "${phoneCode ?? ''} $phone",
-                      style: TextStyle(fontSize: 13, color: textSecondary),
-                    ),
-                  if (address != null)
-                    Text(
-                      address!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 12, color: textSecondary),
-                    ),
-                  const SizedBox(height: 6),
-
-                  // Joining date & Salary
-                  Row(
+                // --- Employee Details ---
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (joiningDate != null)
+                      // Name + Designation
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "${firstName ?? ''} ${lastName ?? ''}".trim(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: textPrimary,
+                              ),
+                            ),
+                          ),
+                          if (salary != null)
+                            Text(
+                              "₹ $salary",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.teal,
+                              ),
+                            ),
+                        ],
+                      ),
+                      if (designation != null && designation!.isNotEmpty)
                         Text(
-                          "Joined: $joiningDate",
-                          style: TextStyle(fontSize: 12, color: textSecondary),
-                        ),
-                      const Spacer(),
-                      if (salary != null)
-                        Text(
-                          "₹$salary",
+                          designation!,
                           style: TextStyle(
                             fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: ColorRes.success,
+                            fontWeight: FontWeight.w500,
+                            color: textSecondary,
                           ),
                         ),
+                      if (department != null && department!.isNotEmpty)
+                        Text(
+                          department!,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: textSecondary.withOpacity(0.8),
+                          ),
+                        ),
+                      const SizedBox(height: 6),
+
+                      // Contact Info
+                      if (email != null)
+                        Text(
+                          email!,
+                          style: TextStyle(fontSize: 13, color: textSecondary),
+                        ),
+                      if (phone != null)
+                        Text(
+                          "${phoneCode ?? ''} $phone",
+                          style: TextStyle(fontSize: 13, color: textSecondary),
+                        ),
+                      if (address != null)
+                        Text(
+                          address!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 12, color: textSecondary),
+                        ),
+                      const SizedBox(height: 6),
+
+                      // Joining date & Salary
+                      Row(
+                        children: [
+                          if (joiningDate != null)
+                            Text(
+                              "Joined: $joiningDate",
+                              style: TextStyle(fontSize: 12, color: textSecondary),
+                            ),
+                          const Spacer(),
+
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-            ),
+                ),
 
-            // --- Delete Icon ---
-            // CrmIc(
-            //   iconPath: ICRes.delete,
-            //   width: 40,
-            //   color: ColorRes.error,
-            //   onTap: onDelete,
-            // ),
+                // --- Delete Icon ---
+                // CrmIc(
+                //   iconPath: ICRes.delete,
+                //   width: 40,
+                //   color: ColorRes.error,
+                //   onTap: onDelete,
+                // ),
+              ],
+            ),
           ],
         ),
       ),

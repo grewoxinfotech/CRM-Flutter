@@ -3,6 +3,7 @@ import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/W
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/contoller/vendor_controller.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/add_vendor_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_detail_screen.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -65,17 +66,12 @@ class VendorsScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshVendors,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
                         final vendor = controller.items[index];
-                        return InkWell(
-                          onTap: () {
-                            Get.to(() => VendorDetailScreen(vendor: vendor));
-                          },
-                          child: VendorCard(vendor: vendor),
-                        );
+                        return VendorCard(vendor: vendor);
                       } else if (controller.isPaging.value) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),

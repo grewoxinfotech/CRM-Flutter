@@ -1,5 +1,7 @@
+import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../care/constants/size_manager.dart';
 import '../../../../../data/network/purchase/debit_notes/model/debit_node_model.dart';
 
 class DebitNoteCard extends StatelessWidget {
@@ -14,10 +16,11 @@ class DebitNoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
+    return GestureDetector(
+      child: CrmCard(
+        padding: const EdgeInsets.all(AppPadding.medium),
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+        borderRadius: BorderRadius.circular(AppRadius.large),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

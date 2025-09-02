@@ -1,4 +1,8 @@
 import 'package:crm_flutter/app/care/constants/access_res.dart';
+import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../widgets/common/indicators/crm_loading_circle.dart';
@@ -165,7 +169,7 @@ class DebitNotesScreen extends StatelessWidget {
 
         return RefreshIndicator(
           onRefresh: controller.refreshDebitNotes,
-          child: ListView.builder(
+          child: ViewScreen(
             itemCount: controller.debitNotes.length + 1,
             itemBuilder: (context, index) {
               if (index < controller.debitNotes.length) {
@@ -177,7 +181,7 @@ class DebitNotesScreen extends StatelessWidget {
                       updatedBill: note.updatedBill,
                     ),
                     Positioned(
-                      right: 8,
+                      right: 26,
                       bottom: 8,
                       child: Row(
                         children: [
@@ -191,9 +195,10 @@ class DebitNotesScreen extends StatelessWidget {
                             AccessModule.debitNote,
                             AccessAction.delete,
                           ))
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
+                            CrmIc(
+                              iconPath: ICRes.delete,
+                              color: ColorRes.error,
+                              onTap: () {
                                 _deleteDebitNote(
                                   note.debitNote.id ?? '',
                                   note.debitNote.description ?? 'Debit Note',

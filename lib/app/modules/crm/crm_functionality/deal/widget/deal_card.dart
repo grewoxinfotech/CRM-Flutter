@@ -177,6 +177,7 @@ import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../care/widget/common_widget.dart';
 
@@ -187,6 +188,7 @@ class DealCard extends StatelessWidget {
   final String? value;
   final String? pipeline;
   final String? stage;
+  final String? category;
   final String? status;
   final String? label;
   final String? closedDate;
@@ -247,7 +249,7 @@ class DealCard extends StatelessWidget {
     this.onTap,
     this.onDelete,
     this.onEdit,
-    this.products,
+    this.products, this.category,
   });
 
   @override
@@ -275,6 +277,7 @@ class DealCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                if (status != null)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -282,15 +285,15 @@ class DealCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color:
-                        color != null
-                            ? getStatusColor(status).withOpacity(0.2)
-                            : null,
+
+                             getStatusColor(status)
+                            ,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    status ?? "Unknown",
+                    status!.capitalize!,
                     style: TextStyle(
-                      color: getStatusColor(status),
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
@@ -320,12 +323,15 @@ class DealCard extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
+                      color: Colors.teal
                   ),
                 ),
-                Text(
-                  "Created: ${createdAt ?? '-'}",
-                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                ),
+                // Text(
+                //   "Created: ${createdAt ?? '-'}",
+                //   style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                // ),
+                if (createdAt != null)
+                _buildText("${createdAt ?? '-'}", "Created: ")
               ],
             ),
             const SizedBox(height: 12),
@@ -334,30 +340,30 @@ class DealCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (companyName != null)
-                  Flexible(child: _buildText(companyName!, "Company: ")),
                 if (source != null)
                   Flexible(child: _buildText(source!, "Source: ")),
+                if (category != null)
+                  Flexible(child: _buildText(category!, "Category: ")),
               ],
             ),
 
             /// Closed Date (Optional)
-            if (closedDate != null)
-              Container(
-                margin: const EdgeInsets.only(top: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  "Closed: $closedDate",
-                  style: const TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+            // if (closedDate != null)
+            //   Container(
+            //     margin: const EdgeInsets.only(top: 8),
+            //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //     decoration: BoxDecoration(
+            //       color: Colors.blue.withOpacity(0.2),
+            //       borderRadius: BorderRadius.circular(8),
+            //     ),
+            //     child: Text(
+            //       "Closed: ${DateFormat('yyyy-MMM-dd').format(DateTime.tryParse(closedDate!)!)}",
+            //       style: const TextStyle(
+            //         color: Colors.blue,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ),
           ],
         ),
       ),
@@ -385,9 +391,8 @@ class DealCard extends StatelessWidget {
           TextSpan(
             text: text,
             style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: fontWeight,
-              color: color,
+
+              color: Colors.grey[600],
             ),
           ),
         ],
@@ -400,13 +405,15 @@ class DealCard extends StatelessWidget {
   Color getStatusColor(String? status) {
     switch (status?.toLowerCase()) {
       case 'won':
-        return Colors.green;
+        return Colors.green.shade600;
       case 'lost':
-        return Colors.red;
+        return Colors.red.shade900;
       case 'pending':
-        return Colors.orange;
+        return Colors.orange.shade700;
       default:
-        return Colors.grey;
+        return Colors.grey.shade500;
     }
   }
+
+
 }

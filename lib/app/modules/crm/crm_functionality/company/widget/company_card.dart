@@ -35,8 +35,11 @@ class CompanyCard extends StatelessWidget {
         padding: const EdgeInsets.all(AppPadding.medium),
         margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
                   backgroundColor: Colors.teal,
@@ -66,31 +69,14 @@ class CompanyCard extends StatelessWidget {
                       if (company.website != null &&
                           company.website!.isNotEmpty)
                         _buildInfoRow('Website', company.website!),
-                      // if (company.industry != null &&
-                      //     company.industry!.isNotEmpty)
-                      //   _buildInfoRow('Industry', company.!),
+
                     ],
                   ),
                 ),
                 Column(
                   children: [
                     Text(formattedDate, style: const TextStyle(fontSize: 12)),
-                    // if (company.country != null && company.country!.isNotEmpty)
-                    //   Container(
-                    //     margin: const EdgeInsets.only(top: 4),
-                    //     padding: const EdgeInsets.symmetric(
-                    //       horizontal: 6,
-                    //       vertical: 2,
-                    //     ),
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.grey[200],
-                    //       borderRadius: BorderRadius.circular(4),
-                    //     ),
-                    //     child: Text(
-                    //       company.country!,
-                    //       style: const TextStyle(fontSize: 10),
-                    //     ),
-                    //   ),
+
                   ],
                 ),
               ],
