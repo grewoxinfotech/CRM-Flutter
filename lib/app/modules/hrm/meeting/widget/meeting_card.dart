@@ -1,5 +1,7 @@
+import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../care/constants/size_manager.dart';
 import '../../../../data/network/hrm/meeting/meeting_model.dart';
 
 class MeetingCard extends StatelessWidget {
@@ -26,99 +28,102 @@ class MeetingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
+    return GestureDetector(
+      child: CrmCard(
+        padding: const EdgeInsets.all(AppPadding.medium),
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+        borderRadius: BorderRadius.circular(AppRadius.large),
+        child: Column(
           children: [
-            // Icon Placeholder
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                width: 60,
-                height: 60,
-                color: Colors.purple[100],
-                child: Icon(
-                  Icons.video_call, // Meeting icon
-                  color: Colors.purple[700],
-                  size: 32,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-
-            // Meeting Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Meeting Title
-                  Text(
-                    meeting.title ?? 'Untitled Meeting',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+            Row(
+              children: [
+                // Icon Placeholder
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    color: Colors.purple[100],
+                    child: Icon(
+                      Icons.video_call, // Meeting icon
+                      color: Colors.purple[700],
+                      size: 32,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                ),
+                const SizedBox(width: 12),
 
-                  // Meeting Date
-                  if (meeting.date != null)
-                    Text(
-                      "Date: ${formatDate(meeting.date)}",
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.blueGrey,
+                // Meeting Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Meeting Title
+                      Text(
+                        meeting.title ?? 'Untitled Meeting',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
+                      const SizedBox(height: 6),
 
-                  const SizedBox(height: 4),
+                      // Meeting Date
+                      if (meeting.date != null)
+                        Text(
+                          "Date: ${formatDate(meeting.date)}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
 
-                  // Meeting Time
-                  if (meeting.startTime != null || meeting.endTime != null)
-                    Text(
-                      "Time: ${formatTime(meeting.startTime, meeting.endTime)}",
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
-                    ),
+                      const SizedBox(height: 4),
 
-                  const SizedBox(height: 4),
+                      // Meeting Time
+                      if (meeting.startTime != null || meeting.endTime != null)
+                        Text(
+                          "Time: ${formatTime(meeting.startTime, meeting.endTime)}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black87,
+                          ),
+                        ),
 
-                  // Meeting Status
-                  if (meeting.status != null && meeting.status!.isNotEmpty)
-                    Text(
-                      'Status: ${meeting.status}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color:
-                            meeting.status == "scheduled"
-                                ? Colors.green[700]
-                                : Colors.red[700],
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                      const SizedBox(height: 4),
 
-                  const SizedBox(height: 4),
+                      // Meeting Status
+                      if (meeting.status != null && meeting.status!.isNotEmpty)
+                        Text(
+                          'Status: ${meeting.status}',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color:
+                                meeting.status == "scheduled"
+                                    ? Colors.green[700]
+                                    : Colors.red[700],
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
 
-                  // Department
-                  if (meeting.department != null &&
-                      meeting.department!.isNotEmpty)
-                    Text(
-                      'Dept: ${meeting.department}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.indigo,
-                      ),
-                    ),
-                ],
-              ),
+                      const SizedBox(height: 4),
+
+                      // Department
+                      // if (meeting.department != null &&
+                      //     meeting.department!.isNotEmpty)
+                      //   Text(
+                      //     'Dept: ${meeting.department}',
+                      //     style: const TextStyle(
+                      //       fontSize: 13,
+                      //       color: Colors.indigo,
+                      //     ),
+                      //   ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -1,6 +1,8 @@
+import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../care/constants/size_manager.dart';
 import '../../../../data/network/hrm/payroll/salary/salary_model.dart';
 
 
@@ -36,128 +38,131 @@ class PayslipCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
+    return GestureDetector(
+      child: CrmCard(
+        padding: const EdgeInsets.all(AppPadding.medium),
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+        borderRadius: BorderRadius.circular(AppRadius.large),
+        child: Column(
           children: [
-            // Icon Placeholder
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                width: 60,
-                height: 60,
-                color: Colors.green[100],
-                child: Icon(
-                  Icons.payment,
-                  color: Colors.green[700],
-                  size: 32,
+            Row(
+              children: [
+                // Icon Placeholder
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    color: Colors.green[100],
+                    child: Icon(
+                      Icons.payment,
+                      color: Colors.green[700],
+                      size: 32,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(width: 12),
+                const SizedBox(width: 12),
 
-            // Payslip Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Employee ID
-                  
-               
-
-                  // Payslip Type & Status
-                  Row(
-                    mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                // Payslip Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Flexible(
-                        child: Text(
-                          "Emp-${formatId(payslip.employeeId!) ?? ''}",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                      // Employee ID
+
+
+
+                      // Payslip Type & Status
+                      Row(
+                        mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              "Emp-${formatId(payslip.employeeId!) ?? ''}",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                          const SizedBox(width: 10),
+                          if (payslip.status != null)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: payslip.status == "paid"
+                                    ? Colors.green[100]
+                                    : Colors.red[100],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                payslip.status!.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: payslip.status == "paid"
+                                      ? Colors.green[800]
+                                      : Colors.red[800],
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      if (payslip.status != null)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: payslip.status == "paid"
-                                ? Colors.green[100]
-                                : Colors.red[100],
-                            borderRadius: BorderRadius.circular(8),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          if (payslip.payslipType != null)
+                            Text(
+                              payslip.payslipType!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.blueGrey,
+                              ),
+                            ),
+                          const SizedBox(width: 10),
+                          if(payslip.salary != null)
+                            Text(
+                              'Salary: ${formatCurrency(payslip.salary)}',
+                              style:  TextStyle(
+                                fontSize: 12,
+                                color: payslip.status == "paid"
+                                    ? Colors.green[800]
+                                    : Colors.red[800],
+                              ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+
+                      // Payment Date
+                      if (payslip.paymentDate != null)
+                        Text(
+                          'Payment Date: ${formatDate(payslip.paymentDate)}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black87,
                           ),
+                        ),
+
+                      // Net Salary
+                      if (payslip.netSalary != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6),
                           child: Text(
-                            payslip.status!.toUpperCase(),
+                            'Net Salary: ${formatCurrency(payslip.netSalary)}',
                             style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: payslip.status == "paid"
-                                  ? Colors.green[800]
-                                  : Colors.red[800],
+                              fontSize: 13,
+                              color: Colors.green[700],
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                     ],
                   ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      if (payslip.payslipType != null)
-                        Text(
-                          payslip.payslipType!,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.blueGrey,
-                          ),
-                        ),
-                      const SizedBox(width: 10),
-                      if(payslip.salary != null)
-                        Text(
-                          'Salary: ${formatCurrency(payslip.salary)}',
-                          style:  TextStyle(
-                            fontSize: 12,
-                            color: payslip.status == "paid"
-                                ? Colors.green[800]
-                                : Colors.red[800],
-                          ),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-
-                  // Payment Date
-                  if (payslip.paymentDate != null)
-                    Text(
-                      'Payment Date: ${formatDate(payslip.paymentDate)}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
-                    ),
-
-                  // Net Salary
-                  if (payslip.netSalary != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: Text(
-                        'Net Salary: ${formatCurrency(payslip.netSalary)}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.green[700],
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

@@ -1,8 +1,10 @@
 import 'package:crm_flutter/app/care/utils/format.dart';
 import 'package:crm_flutter/app/modules/hrm/branch/controllers/branch_controller.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../../care/constants/size_manager.dart';
 import '../../../../data/network/hrm/announcement/announcement_model.dart';
 
 class AnnouncementCard extends StatelessWidget {
@@ -45,96 +47,107 @@ class AnnouncementCard extends StatelessWidget {
               .toList();
     }
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
+    return GestureDetector(
+      child: CrmCard(
+        padding: const EdgeInsets.all(AppPadding.medium),
+        margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
+        borderRadius: BorderRadius.circular(AppRadius.large),
+        child: Column(
           children: [
-            // Icon Placeholder
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                width: 60,
-                height: 60,
-                color: Colors.green[100],
-                child: Icon(
-                  Icons.announcement,
-                  color: Colors.green[700],
-                  size: 32,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-
-            // Announcement Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title
-                  Text(
-                    announcement.title ?? 'Untitled Announcement',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+            Row(
+              children: [
+                // Icon Placeholder
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    color: Colors.green[100],
+                    child: Icon(
+                      Icons.announcement,
+                      color: Colors.green[700],
+                      size: 32,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                ),
+                const SizedBox(width: 12),
 
-                  // Branch Name
-                  if (branchNames.isNotEmpty)
-                    Text(
-                      'Branch: ${branchNames.join(", ")}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.blueGrey,
+                // Announcement Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      Text(
+                        announcement.title ?? 'Untitled Announcement',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      const SizedBox(height: 6),
 
-                  const SizedBox(height: 4),
+                      // Branch Name
+                      if (branchNames.isNotEmpty)
+                        Text(
+                          'Branch: ${branchNames.join(", ")}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.blueGrey,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
 
-                  // Description
-                  if (announcement.description != null)
-                    Text(
-                      announcement.description!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      const SizedBox(height: 4),
 
-                  const SizedBox(height: 4),
+                      // Description
+                      if (announcement.description != null)
+                        Text(
+                          announcement.description!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black87,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
 
-                  // Created Date
-                  if (announcement.createdAt != null)
-                    Text(
-                      'Created: ${formatDate(announcement.createdAt)}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                      ),
-                    ),
+                      const SizedBox(height: 4),
 
-                  // Time & Date
-                  if (announcement.time != null && announcement.date != null)
-                    Text(
-                      'Scheduled: ${announcement.time} | ${formatDate(announcement.date)}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                      ),
-                    ),
-                ],
-              ),
+                      // Created Date
+                      if (announcement.createdAt != null)
+                        Text(
+                          'Created: ${formatDate(announcement.createdAt)}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+
+                      // Time & Date
+                      if ( announcement.date != null)
+                        Text(
+                          'Scheduled Date: ${formatDate(announcement.date)}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      if (announcement.time != null)
+                        Text(
+                          'Scheduled Time: ${announcement.time}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -1,5 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/access_res.dart';
+import 'package:crm_flutter/app/care/constants/color_res.dart';
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -86,7 +90,7 @@ class BranchScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
@@ -95,7 +99,7 @@ class BranchScreen extends StatelessWidget {
                           children: [
                             BranchCard(branch: branch),
                             Positioned(
-                              right: 8,
+                              right: 26,
                               bottom: 8,
                               child: Row(
                                 children: [
@@ -104,12 +108,10 @@ class BranchScreen extends StatelessWidget {
                                     AccessModule.branch,
                                     AccessAction.update,
                                   ))
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: Colors.blue,
-                                      ),
-                                      onPressed: () {
+                                    CrmIc(
+                                      iconPath: ICRes.edit,
+                                      color: ColorRes.success,
+                                      onTap: () {
                                         Get.to(
                                           () => AddBranchScreen(
                                             branch: branch,
@@ -118,16 +120,15 @@ class BranchScreen extends StatelessWidget {
                                         );
                                       },
                                     ),
+                                  SizedBox(width: 12,),
                                   if (accessController.can(
                                     AccessModule.branch,
                                     AccessAction.delete,
                                   ))
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed: () {
+                                    CrmIc(
+                                      iconPath: ICRes.delete,
+                                      color: ColorRes.error,
+                                      onTap: () {
                                         _deleteBranch(
                                           branch.id ?? '',
                                           branch.branchName ?? 'Branch',

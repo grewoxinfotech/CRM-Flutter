@@ -3,6 +3,7 @@ import 'package:crm_flutter/app/data/network/hrm/employee/employee_model.dart';
 import 'package:crm_flutter/app/modules/hrm/attendance/views/attandence_detail_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/employee/controllers/employee_controller.dart';
 import 'package:crm_flutter/app/modules/hrm/employee/widget/employee_card.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -202,7 +203,7 @@ class AttendanceScreen extends StatelessWidget {
               }
               return RefreshIndicator(
                 onRefresh: employeeController.refreshList,
-                child: ListView.builder(
+                child: ViewScreen(
                   itemCount: employeeController.items.length,
                   itemBuilder: (context, index) {
                     final employee = employeeController.items[index];

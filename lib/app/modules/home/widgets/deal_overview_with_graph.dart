@@ -37,7 +37,8 @@ class _DealsOverviewCardState extends State<DealsOverviewCard> {
 
   void _updateAggregationData() {
     Map<String, int> newData = {};
-    final agg = widget.aggregationResponse?.message?.aggregations;
+    // final agg = widget.aggregationResponse?.message?.aggregations;
+    final agg = DealDummyData.dummyDealAggregationResponse.message?.aggregations;
 
     switch (currentFilter) {
       case "byStage":
@@ -146,7 +147,7 @@ class _DealsOverviewCardState extends State<DealsOverviewCard> {
             ],
           ),
           const SizedBox(height: 16),
-          AggregationPieChart(aggregationData: aggregationData),
+          AggregationPieChart(aggregationData: aggregationData,colors: [Colors.red,Colors.blue,Colors.green],),
         ],
       ),
     );

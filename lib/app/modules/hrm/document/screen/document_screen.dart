@@ -1,10 +1,14 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/access_res.dart';
+import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../care/constants/color_res.dart';
+import '../../../../care/constants/ic_res.dart';
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
+import '../../../../widgets/common/display/crm_ic.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../../../access/controller/access_controller.dart';
 import '../controllers/document_controller.dart';
@@ -86,7 +90,7 @@ class DocumentScreen extends StatelessWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
-                  child: ListView.builder(
+                  child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
@@ -95,7 +99,7 @@ class DocumentScreen extends StatelessWidget {
                           children: [
                             DocumentCard(document: document),
                             Positioned(
-                              right: 8,
+                              right: 26,
                               bottom: 8,
                               child: Row(
                                 children: [
@@ -103,12 +107,10 @@ class DocumentScreen extends StatelessWidget {
                                     AccessModule.document,
                                     AccessAction.update,
                                   ))
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: Colors.blue,
-                                      ),
-                                      onPressed: () {
+                                    CrmIc(
+                                      iconPath: ICRes.edit,
+                                      color: ColorRes.success,
+                                      onTap: () {
                                         Get.to(
                                           () => AddDocumentScreen(
                                             document: document,
@@ -117,16 +119,15 @@ class DocumentScreen extends StatelessWidget {
                                         );
                                       },
                                     ),
+                                  SizedBox(width: 12,),
                                   if (accessController.can(
                                     AccessModule.document,
                                     AccessAction.delete,
                                   ))
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed: () {
+                                    CrmIc(
+                                      iconPath: ICRes.delete,
+                                      color: ColorRes.error,
+                                      onTap: () {
                                         _deleteDocument(
                                           document.id ?? '',
                                           document.name ?? 'Document',
