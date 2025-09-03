@@ -1,199 +1,16 @@
-// import 'package:crm_flutter/app/care/constants/color_res.dart';
-// import 'package:crm_flutter/app/care/constants/ic_res.dart';
-// import 'package:crm_flutter/app/care/constants/size_manager.dart';
-// import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
-// import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-//
-// class EmployeeCard extends StatelessWidget {
-//   final String? id;
-//   final String? employeeId;
-//   final String? username;
-//   final String? password;
-//   final String? email;
-//   final String? roleId;
-//   final String? profilePic;
-//   final String? firstName;
-//   final String? lastName;
-//   final String? phoneCode;
-//   final String? phone;
-//   final String? address;
-//   final String? state;
-//   final String? city;
-//   final String? country;
-//   final String? zipcode;
-//   final String? website;
-//   final String? gender;
-//   final String? joiningDate;
-//   final String? leaveDate;
-//   final String? branch;
-//   final String? department;
-//   final String? designation;
-//   final String? salary;
-//   final String? accountHolder;
-//   final String? accountNumber;
-//   final String? bankName;
-//   final String? ifsc;
-//   final String? gstIn;
-//   final String? bankLocation;
-//   final String? cvPath;
-//   final String? links;
-//   final String? eSignature;
-//   final String? accountType;
-//   final String? clientId;
-//   final String? clientPlanId;
-//   final String? documents;
-//   final String? resetPasswordOTP;
-//   final String? resetPasswordOTPExpiry;
-//   final String? storageLimit;
-//   final String? storageUsed;
-//   final String? createdBy;
-//   final String? updatedBy;
-//   final String? createdAt;
-//   final String? updatedAt;
-//   final GestureTapCallback? onTap;
-//   final GestureTapCallback? onDelete;
-//
-//   const EmployeeCard({
-//     super.key,
-//     this.id,
-//     this.employeeId,
-//     this.username,
-//     this.password,
-//     this.email,
-//     this.roleId,
-//     this.profilePic,
-//     this.firstName,
-//     this.lastName,
-//     this.phoneCode,
-//     this.phone,
-//     this.address,
-//     this.state,
-//     this.city,
-//     this.country,
-//     this.zipcode,
-//     this.website,
-//     this.gender,
-//     this.joiningDate,
-//     this.leaveDate,
-//     this.branch,
-//     this.department,
-//     this.designation,
-//     this.salary,
-//     this.accountHolder,
-//     this.accountNumber,
-//     this.bankName,
-//     this.ifsc,
-//     this.gstIn,
-//     this.bankLocation,
-//     this.cvPath,
-//     this.links,
-//     this.eSignature,
-//     this.accountType,
-//     this.clientId,
-//     this.clientPlanId,
-//     this.documents,
-//     this.resetPasswordOTP,
-//     this.resetPasswordOTPExpiry,
-//     this.storageLimit,
-//     this.storageUsed,
-//     this.createdBy,
-//     this.updatedBy,
-//     this.createdAt,
-//     this.updatedAt,
-//     this.onTap,
-//     this.onDelete,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     Color textPrimary = Get.theme.colorScheme.onPrimary;
-//     Color textSecondary = Get.theme.colorScheme.onSecondary;
-//     return GestureDetector(
-//       onTap: onTap,
-//       child: CrmCard(
-//         padding: EdgeInsets.all(AppPadding.small),
-//         margin: EdgeInsets.symmetric(horizontal: AppMargin.large),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text("id : $id",style: TextStyle(
-//               fontSize: 12,
-//               fontWeight: FontWeight.w600,
-//               color: textSecondary,
-//             ),),
-//             Text("employeeId : $employeeId"),
-//             Text("username : $username"),
-//             Text("password : $password"),
-//             Text("email : $email"),
-//             Text("roleId : $roleId"),
-//             Text("profilePic : $profilePic"),
-//             Text("firstName : $firstName"),
-//             Text("lastName : $lastName"),
-//             Text("phoneCode : $phoneCode"),
-//             Text("phone : $phone"),
-//             Text("address : $address"),
-//             Text("state : $state"),
-//             Text("city : $city"),
-//             Text("country : $country"),
-//             Text("zipcode : $zipcode"),
-//             Text("website : $website"),
-//             Text("gender : $gender"),
-//             Text("joiningDate : $joiningDate"),
-//             Text("leaveDate : $leaveDate"),
-//             Text("branch : $branch"),
-//             Text("department : $department"),
-//             Text("designation : $designation"),
-//             Text("salary : $salary"),
-//             Text("accountHolder : $accountHolder"),
-//             Text("accountNumber : $accountNumber"),
-//             Text("bankName : $bankName"),
-//             Text("ifsc : $ifsc"),
-//             Text("gstIn : $gstIn"),
-//             Text("bankLocation : $bankLocation"),
-//             Text("cvPath : $cvPath"),
-//             Text("links : $links"),
-//             Text("eSignature : $eSignature"),
-//             Text("accountType : $accountType"),
-//             Text("clientId : $clientId"),
-//             Text("clientPlanId : $clientPlanId"),
-//             Text("documents : $documents"),
-//             Text("resetPasswordOTP : $resetPasswordOTP"),
-//             Text("resetPasswordOTPExpiry : $resetPasswordOTPExpiry"),
-//             Text("storageLimit : $storageLimit"),
-//             Text("storageUsed : $storageUsed"),
-//             Text("createdBy : $createdBy"),
-//             Text("updatedBy : $updatedBy"),
-//             Text("createdAt : $createdAt"),
-//             Text("updatedAt : $updatedAt"),
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 CrmIc(
-//                   iconPath: ICRes.delete,
-//                   width: 50,
-//                   color: ColorRes.error,
-//                   onTap: onDelete,
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/hrm/hrm_system/designation/designation_model.dart';
+import 'package:crm_flutter/app/data/network/system/country/controller/country_controller.dart';
+import 'package:crm_flutter/app/modules/hrm/designation/controllers/designation_controller.dart';
+import 'package:crm_flutter/app/modules/hrm/employee/controllers/employee_controller.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EmployeeCard extends StatelessWidget {
+class EmployeeCard extends StatefulWidget {
   final String? id;
   final String? employeeId;
   final String? username;
@@ -234,137 +51,175 @@ class EmployeeCard extends StatelessWidget {
   });
 
   @override
+  State<EmployeeCard> createState() => _EmployeeCardState();
+}
+
+class _EmployeeCardState extends State<EmployeeCard> {
+  final DesignationController designationController = Get.put(
+    DesignationController(),
+  );
+  final EmployeeController employeeController = Get.find<EmployeeController>();
+  final CountryController countryController = Get.put(CountryController());
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch designation safely after first frame
+    if (widget.designation != null && widget.designation!.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        employeeController.getDesignationById(widget.designation!);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Color textPrimary = Get.theme.colorScheme.onPrimary;
-    Color textSecondary = Get.theme.colorScheme.onSecondary;
+    final textPrimary = Get.theme.colorScheme.onPrimary;
+    final textSecondary = Get.theme.colorScheme.onSecondary;
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.medium),
         margin: const EdgeInsets.symmetric(horizontal: AppMargin.medium),
         borderRadius: BorderRadius.circular(AppRadius.large),
-        child: Column(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // --- Profile Picture or Initials ---
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: ColorRes.primary.withOpacity(0.2),
-                  backgroundImage:
-                      (profilePic != null && profilePic!.isNotEmpty)
-                          ? NetworkImage(profilePic!)
-                          : null,
-                  child:
-                      (profilePic == null || profilePic!.isEmpty)
-                          ? Text(
-                            (firstName?.substring(0, 1) ?? "?") +
-                                (lastName?.substring(0, 1) ?? ""),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: ColorRes.primary,
-                            ),
-                          )
-                          : null,
-                ),
-                const SizedBox(width: 12),
+            // --- Profile Picture or Initials ---
+            CircleAvatar(
+              radius: 28,
+              backgroundColor: ColorRes.primary.withOpacity(0.2),
+              backgroundImage:
+                  (widget.profilePic != null && widget.profilePic!.isNotEmpty)
+                      ? NetworkImage(widget.profilePic!)
+                      : null,
+              child:
+                  (widget.profilePic == null || widget.profilePic!.isEmpty)
+                      ? Text(
+                        "${widget.firstName?.substring(0, 1) ?? '?'}${widget.lastName?.substring(0, 1) ?? ''}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: ColorRes.primary,
+                        ),
+                      )
+                      : null,
+            ),
+            const SizedBox(width: 12),
 
-                // --- Employee Details ---
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            // --- Employee Details ---
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name + Salary
+                  Row(
                     children: [
-                      // Name + Designation
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "${firstName ?? ''} ${lastName ?? ''}".trim(),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: textPrimary,
-                              ),
-                            ),
-                          ),
-                          if (salary != null)
-                            Text(
-                              "₹ $salary",
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.teal,
-                              ),
-                            ),
-                        ],
-                      ),
-                      if (designation != null && designation!.isNotEmpty)
-                        Text(
-                          designation!,
+                      Expanded(
+                        child: Text(
+                          "${widget.firstName ?? ''} ${widget.lastName ?? ''}"
+                              .trim(),
                           style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: textPrimary,
+                          ),
+                        ),
+                      ),
+                      if (widget.salary != null)
+                        Text(
+                          "₹ ${widget.salary}",
+                          style: const TextStyle(
                             fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: textSecondary,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.teal,
                           ),
                         ),
-                      if (department != null && department!.isNotEmpty)
-                        Text(
-                          department!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: textSecondary.withOpacity(0.8),
-                          ),
-                        ),
-                      const SizedBox(height: 6),
-
-                      // Contact Info
-                      if (email != null)
-                        Text(
-                          email!,
-                          style: TextStyle(fontSize: 13, color: textSecondary),
-                        ),
-                      if (phone != null)
-                        Text(
-                          "${phoneCode ?? ''} $phone",
-                          style: TextStyle(fontSize: 13, color: textSecondary),
-                        ),
-                      if (address != null)
-                        Text(
-                          address!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12, color: textSecondary),
-                        ),
-                      const SizedBox(height: 6),
-
-                      // Joining date & Salary
-                      Row(
-                        children: [
-                          if (joiningDate != null)
-                            Text(
-                              "Joined: $joiningDate",
-                              style: TextStyle(fontSize: 12, color: textSecondary),
-                            ),
-                          const Spacer(),
-
-                        ],
-                      ),
                     ],
                   ),
-                ),
 
-                // --- Delete Icon ---
-                // CrmIc(
-                //   iconPath: ICRes.delete,
-                //   width: 40,
-                //   color: ColorRes.error,
-                //   onTap: onDelete,
-                // ),
-              ],
+                  // Designation (reactive)
+                  if (widget.designation != null &&
+                      widget.designation!.isNotEmpty)
+                    Obx(() {
+                      final DesignationData? data = designationController.items
+                          .firstWhereOrNull(
+                            (element) => element.id == widget.designation,
+                          );
+                      return data == null
+                          ? const SizedBox.shrink()
+                          : Text(
+                            data.designationName ?? '',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: textSecondary,
+                            ),
+                          );
+                    }),
+
+                  // Department
+                  // if (widget.department != null &&
+                  //     widget.department!.isNotEmpty)
+                  //   Text(
+                  //     widget.department!,
+                  //     style: TextStyle(
+                  //       fontSize: 12,
+                  //       color: textSecondary.withOpacity(0.8),
+                  //     ),
+                  //   ),
+                  // const SizedBox(height: 6),
+
+                  // Contact Info
+                  if (widget.email != null)
+                    Text(
+                      widget.email!,
+                      style: TextStyle(fontSize: 13, color: textSecondary),
+                    ),
+                  if (widget.phone != null)
+                    Obx(() {
+                      final data = countryController.countryModel
+                          .firstWhereOrNull(
+                            (element) => element.id == widget.phoneCode,
+                          );
+                      return data == null
+                          ? const SizedBox.shrink()
+                          : Text(
+                            "${data.phoneCode ?? ''} ${widget.phone}",
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: textSecondary,
+                            ),
+                          );
+                    }),
+                  if (widget.address != null)
+                    Text(
+                      widget.address!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 12, color: textSecondary),
+                    ),
+                  const SizedBox(height: 6),
+
+                  // Joining Date
+                  if (widget.joiningDate != null)
+                    Text(
+                      "Joined: ${widget.joiningDate}",
+                      style: TextStyle(fontSize: 12, color: textSecondary),
+                    ),
+                ],
+              ),
             ),
+
+            // --- Delete Icon ---
+            if (widget.onDelete != null)
+              CrmIc(
+                iconPath: ICRes.delete,
+                width: 40,
+                color: ColorRes.error,
+                onTap: widget.onDelete,
+              ),
           ],
         ),
       ),

@@ -1,4 +1,6 @@
 import 'package:crm_flutter/app/care/pagination/controller/pagination_controller.dart';
+import 'package:crm_flutter/app/data/network/hrm/hrm_system/designation/designation_model.dart';
+import 'package:crm_flutter/app/modules/hrm/designation/controllers/designation_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../../care/constants/url_res.dart';
@@ -9,6 +11,10 @@ class EmployeeController extends PaginatedController<EmployeeData> {
   final EmployeeService _service = EmployeeService();
   final String url = UrlRes.employees;
   var error = ''.obs;
+
+  final DesignationController _designationController = Get.put(
+    DesignationController(),
+  );
 
   @override
   Future<List<EmployeeData>> fetchItems(int page) async {
@@ -26,6 +32,14 @@ class EmployeeController extends PaginatedController<EmployeeData> {
   void onInit() {
     super.onInit();
     loadInitial();
+  }
+
+  Future<void> getDesignationById(String id) async {
+    try {
+      await _designationController.getDesignationById(id);
+    } catch (e) {
+      print("Get designation error: $e");
+    }
   }
 
   /// Get single employee by ID

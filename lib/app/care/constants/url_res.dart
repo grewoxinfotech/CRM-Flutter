@@ -55,6 +55,10 @@ class UrlRes {
 
   static const String inquiry = "$baseURL/inquiry";
 
+  static const String leadsAggregation = "$baseURL/leads/advance";
+
+  static const String dealsAggregation = "$baseURL/leads/advance";
+
   /// HRM
   static const String branches = "$baseURL/branches";
 

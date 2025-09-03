@@ -47,6 +47,7 @@ class DesignationService {
   /// Get single designation by ID
   Future<DesignationData?> getDesignationById(String id) async {
     try {
+      print("Get designation by ID: $id");
       final response = await http.get(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
@@ -54,6 +55,7 @@ class DesignationService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print("Get designation by ID response: $data");
         return DesignationData.fromJson(data["message"]["data"]);
       }
     } catch (e) {

@@ -61,6 +61,7 @@ class DesignationController extends PaginatedController<DesignationData> {
   /// Get single designation by ID
   Future<DesignationData?> getDesignationById(String id) async {
     try {
+      await loadInitial();
       final existing = items.firstWhereOrNull((item) => item.id == id);
       if (existing != null) {
         return existing;
