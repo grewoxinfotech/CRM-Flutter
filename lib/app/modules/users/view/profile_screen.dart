@@ -125,47 +125,51 @@ class ProfileScreen extends StatelessWidget {
                       ),
 
                       SizedBox(height: 20),
-                      subscriptionController.isLoading.value?Center(child: CrmLoadingCircle(),):
-                      CrmButton(
-                        title: "Renew Plan",
-                        onTap: () async {
-                          if (subscriptionController.isLoading.value) return;
-                          try {
-                            subscriptionController.isLoading.value = true;
-                            final data = InquiryData(
-                              name:
-                                  "${user.firstName ?? ''} ${user.lastName ?? ''}" ??
-                                  '',
-                              email: user.email ?? '',
-                              phone: user.phone ?? '',
-                              phonecode: user.phoneCode ?? '',
-                              subject: 'Subscription Renew',
-                              message: 'Please renew my subscription',
-                            );
-                            final response = await subscriptionController
-                                .createInquiry(data);
+                      subscriptionController.isLoading.value
+                          ? Center(child: CrmLoadingCircle())
+                          : CrmButton(
+                            title: "Renew Plan",
+                            onTap: () async {
+                              if (subscriptionController.isLoading.value)
+                                return;
+                              try {
+                                subscriptionController.isLoading.value = true;
+                                final data = InquiryData(
+                                  name:
+                                      "${user.firstName ?? ''} ${user.lastName ?? ''}" ??
+                                      '',
+                                  email: user.email ?? '',
+                                  phone: user.phone ?? '',
+                                  phonecode: user.phoneCode ?? '',
+                                  subject: 'Subscription Renew',
+                                  message: 'Please renew my subscription',
+                                );
+                                final response = await subscriptionController
+                                    .createInquiry(data);
 
-                            if(response){
-                              CrmSnackBar.showAwesomeSnackbar(
-                                title: "Success",
-                                message: "Your subscription renewal request has been sent.",
-                                contentType: ContentType.success,
-                              );
-                            }else{
-                              CrmSnackBar.showAwesomeSnackbar(
-                                title: "Error",
-                                message: "Failed to send subscription renewal request.",
-                                contentType: ContentType.failure,
-                              );
-                            }
-                          } catch (e) {
-                            print("Exception in Renew Plan: $e");
-                          }finally {
-                            subscriptionController.isLoading.value = false;
-                          }
-                        },
-                        width: double.infinity,
-                      ),
+                                if (response) {
+                                  CrmSnackBar.showAwesomeSnackbar(
+                                    title: "Success",
+                                    message:
+                                        "Your subscription renewal request has been sent.",
+                                    contentType: ContentType.success,
+                                  );
+                                } else {
+                                  CrmSnackBar.showAwesomeSnackbar(
+                                    title: "Error",
+                                    message:
+                                        "Failed to send subscription renewal request.",
+                                    contentType: ContentType.failure,
+                                  );
+                                }
+                              } catch (e) {
+                                print("Exception in Renew Plan: $e");
+                              } finally {
+                                subscriptionController.isLoading.value = false;
+                              }
+                            },
+                            width: double.infinity,
+                          ),
                     ],
                   );
                 }),
@@ -234,16 +238,16 @@ class ProfileScreen extends StatelessWidget {
                     title: 'Logout',
                   ),
                 ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: CrmButton(
-                    onTap: () {},
-                    title: 'Delete Account',
-                    backgroundColor: ColorRes.error,
-                  ),
-                ),
-                const SizedBox(height: 26),
+                // const SizedBox(height: 20),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: CrmButton(
+                //     onTap: () {},
+                //     title: 'Delete Account',
+                //     backgroundColor: ColorRes.error,
+                //   ),
+                // ),
+                // const SizedBox(height: 26),
               ],
             ),
           );

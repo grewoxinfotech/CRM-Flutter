@@ -26,6 +26,7 @@ class _AggregationPieChartState extends State<AggregationPieChart> {
 
   @override
   Widget build(BuildContext context) {
+    final total = widget.aggregationData.values.fold<int>(0, (a, b) => a + b);
     final sections =
         widget.aggregationData.entries.toList().asMap().entries.map((entry) {
           int index = entry.key;
@@ -79,31 +80,124 @@ class _AggregationPieChartState extends State<AggregationPieChart> {
             ),
           ),
           const SizedBox(height: 20),
+
           // Legend
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 26),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children:
+          //         widget.aggregationData.keys.toList().asMap().entries.map((
+          //           entry,
+          //         ) {
+          //           int index = entry.key;
+          //           String label = entry.value;
+          //           return Padding(
+          //             padding: const EdgeInsets.only(bottom: 8),
+          //             child: Row(
+          //               mainAxisSize: MainAxisSize.min,
+          //               children: [
+          //                 Container(
+          //                   width: 15,
+          //                   height: 15,
+          //                   color: widget.colors[index % widget.colors.length],
+          //                 ),
+          //                 const SizedBox(width: 5),
+          //                 Text(label),
+          //               ],
+          //             ),
+          //           );
+          //         }).toList(),
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 26),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children:
+          //         widget.aggregationData.entries.toList().asMap().entries.map((
+          //           entry,
+          //         ) {
+          //           int index = entry.key;
+          //           String label = entry.value.key;
+          //           int value = entry.value.value;
+          //           double percentage =
+          //               total == 0 ? 0 : (value / total * 100); // calculate %
+          //           return Padding(
+          //             padding: const EdgeInsets.only(bottom: 8, right: 12),
+          //             child: Row(
+          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //               children: [
+          //                 Row(
+          //                   mainAxisSize: MainAxisSize.min,
+          //                   children: [
+          //                     Container(
+          //                       width: 15,
+          //                       height: 15,
+          //                       color:
+          //                           widget.colors[index % widget.colors.length],
+          //                     ),
+          //                     const SizedBox(width: 5),
+          //                     Text('$label'),
+          //                   ],
+          //                 ),
+          //                 Text('${percentage.toStringAsFixed(1)}%'),
+          //               ],
+          //             ),
+          //           );
+          //         }).toList(),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.only(left: 26),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:
-                  widget.aggregationData.keys.toList().asMap().entries.map((
+                  widget.aggregationData.entries.toList().asMap().entries.map((
                     entry,
                   ) {
                     int index = entry.key;
-                    String label = entry.value;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 15,
-                            height: 15,
-                            color: widget.colors[index % widget.colors.length],
+                    String label = entry.value.key;
+                    int value = entry.value.value;
+                    double percentage = total == 0 ? 0 : (value / total * 100);
+
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8, right: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 15,
+                                    height: 15,
+                                    color:
+                                        widget.colors[index %
+                                            widget.colors.length],
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text('$label'),
+                                ],
+                              ),
+                              Text('${percentage.toStringAsFixed(1)}%'),
+                            ],
                           ),
-                          const SizedBox(width: 5),
-                          Text(label),
-                        ],
-                      ),
+                        ),
+                        // Add divider except for the last item
+                        if (index != widget.aggregationData.length - 1)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Divider(
+                              thickness: 0.5,
+                              endIndent: 19,
+                              height: 1,
+                              color: Colors.grey.shade400,
+                            ),
+                          ),
+                      ],
                     );
                   }).toList(),
             ),

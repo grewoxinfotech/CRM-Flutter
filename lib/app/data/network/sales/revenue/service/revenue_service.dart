@@ -13,7 +13,7 @@ class RevenueService {
   }
 
   /// Fetch revenues with optional pagination & search
-  Future<List<RevenueData>> fetchRevenues({
+  Future<RevenueModel?> fetchRevenues({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -31,16 +31,44 @@ class RevenueService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> revenues = data["message"]["data"];
-        return revenues.map((json) => RevenueData.fromJson(json)).toList();
+
+        return RevenueModel.fromJson(data);
       } else {
         print("Failed to load revenues: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchRevenues: $e");
     }
-    return [];
+    return null;
   }
+  // Future<List<RevenueData>> fetchRevenues({
+  //     int page = 1,
+  //     int pageSize = 10,
+  //     String search = '',
+  //   }) async {
+  //     try {
+  //       final uri = Uri.parse(baseUrl).replace(
+  //         queryParameters: {
+  //           'page': page.toString(),
+  //           'pageSize': pageSize.toString(),
+  //           'search': search,
+  //         },
+  //       );
+  //
+  //       final response = await http.get(uri, headers: await headers());
+  //
+  //       if (response.statusCode == 200) {
+  //         final data = jsonDecode(response.body);
+  //         final List<dynamic> revenues = data["message"]["data"];
+  //         return revenues.map((json) => RevenueData.fromJson(json)).toList();
+  //       } else {
+  //         print("Failed to load revenues: ${response.statusCode}");
+  //       }
+  //     } catch (e) {
+  //       print("Exception in fetchRevenues: $e");
+  //     }
+  //     return [];
+  //   }
 
   /// Get single revenue by ID
   Future<RevenueData?> getRevenueById(String id) async {

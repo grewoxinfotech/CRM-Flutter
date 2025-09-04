@@ -62,4 +62,82 @@ class AuthService extends GetConnect {
     await SecureStorage.clearAll();
     Get.offAll(LoginScreen());
   }
+
+  // static Future<UserModel> updateProfile(UserModel user) async {
+  //   print('${user.city}');
+  //   final updateUrl = '${UrlRes.auth}/${user.id}';
+  //   final header = await UrlRes.getHeaders();
+  //   final response = await http.put(
+  //     Uri.parse(updateUrl),
+  //     headers: header,
+  //     body: jsonEncode(user),
+  //   );
+  //   final sample = jsonDecode(response.body);
+  //   print('${sample['data']["city"]}');
+  //
+  //   if (response.statusCode == 200) {
+  //     final data = jsonDecode(response.body);
+  //     return UserModel.fromJson(data["data"]);
+  //   } else {
+  //     throw Exception("Failed to update profile");
+  //   }
+  // }
+
+  static Future<UserModel> updateProfile(UserModel user) async {
+    final updateUrl = '${UrlRes.baseURL}/clients/${user.id}';
+    final header = await UrlRes.getHeaders();
+
+    // 🔹 Create multipart request
+    var request = http.MultipartRequest('PUT', Uri.parse(updateUrl));
+
+    // 🔹 Add headers
+    request.headers.addAll(header);
+
+    request.fields.addAll({
+      'firstName': user.firstName ?? '',
+      'lastName': user.lastName ?? '',
+      'username': user.username ?? '',
+      'email': user.email ?? '',
+      'phone': user.phone ?? '',
+      'address': user.address ?? '',
+      'city': user.city ?? '',
+      'state': user.state ?? '',
+      'country': user.country ?? '',
+      'zipcode': user.zipcode ?? '',
+      'currency': user.currency ?? '',
+      'gstIn': user.gstIn ?? '',
+      'bankname': user.bankName ?? '',
+      'accounttype': user.accountType ?? '',
+      'accountholder': user.accountHolder ?? '',
+      // 'accountnumber': user.accountNumber.toString() ?? '',
+      'ifsc': user.ifsc ?? '',
+      'banklocation': user.bankLocation ?? '',
+      'updatedAt': DateTime.now().toIso8601String(),
+    });
+
+    if (user.accountNumber != null) {
+      request.fields['accountnumber'] = user.accountNumber.toString();
+    }
+
+    // 🔹 Add file if provided
+    // if (profileImage != null) {
+    //   request.files.add(
+    //     await http.MultipartFile.fromPath(
+    //       'profileImage', // backend must accept this key
+    //       profileImage.path,
+    //     ),
+    //   );
+    // }
+
+    // 🔹 Send request
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return UserModel.fromJson(data["data"]);
+    } else {
+      throw Exception("Failed to update profile: ${response.body}");
+    }
+  }
 }

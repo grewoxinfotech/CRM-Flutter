@@ -117,14 +117,24 @@ class UserModel {
       zipcode: json['zipcode']?.toString(),
       website: json['website']?.toString(),
       gender: json['gender']?.toString(),
-      joiningDate: json['joiningDate'] != null ? DateTime.parse(json['joiningDate']) : null,
-      leaveDate: json['leaveDate'] != null ? DateTime.parse(json['leaveDate']) : null,
+      joiningDate:
+          json['joiningDate'] != null
+              ? DateTime.parse(json['joiningDate'])
+              : null,
+      leaveDate:
+          json['leaveDate'] != null ? DateTime.parse(json['leaveDate']) : null,
       branch: json['branch']?.toString(),
       department: json['department']?.toString(),
       designation: json['designation']?.toString(),
-      salary: json['salary'] != null ? double.parse(json['salary'].toString()) : null,
+      salary:
+          json['salary'] != null
+              ? double.parse(json['salary'].toString())
+              : null,
       accountHolder: json['accountholder']?.toString(),
-      accountNumber: json['accountnumber'] != null ? int.parse(json['accountnumber'].toString()) : null,
+      accountNumber:
+          json['accountnumber'] != null
+              ? int.parse(json['accountnumber'].toString())
+              : null,
       bankName: json['bankname']?.toString(),
       ifsc: json['ifsc']?.toString(),
       gstIn: json['gstIn']?.toString(),
@@ -138,13 +148,22 @@ class UserModel {
       documents: json['documents']?.toString(),
       conversations: json['conversations']?.toString(),
       resetPasswordOTP: json['resetPasswordOTP']?.toString(),
-      resetPasswordOTPExpiry: json['resetPasswordOTPExpiry'] != null ? DateTime.parse(json['resetPasswordOTPExpiry']) : null,
+      resetPasswordOTPExpiry:
+          json['resetPasswordOTPExpiry'] != null
+              ? DateTime.parse(json['resetPasswordOTPExpiry'])
+              : null,
       createdBy: json['created_by']?.toString(),
       updatedBy: json['updated_by']?.toString(),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
-      storageLimit: json['storage_limit'] != null ? int.parse(json['storage_limit'].toString()) : null,
-      storageUsed: json['storage_used'] != null ? int.parse(json['storage_used'].toString()) : null,
+      storageLimit:
+          json['storage_limit'] != null
+              ? int.parse(json['storage_limit'].toString())
+              : null,
+      storageUsed:
+          json['storage_used'] != null
+              ? int.parse(json['storage_used'].toString())
+              : null,
       currency: json['currency']?.toString() ?? 'USD',
     );
   }
@@ -178,7 +197,7 @@ class UserModel {
       'accountholder': accountHolder,
       'accountnumber': accountNumber,
       'bankname': bankName,
-      'ifsc': ifsc,
+      'ifsc': num.tryParse(ifsc ?? ''),
       'gstIn': gstIn,
       'banklocation': bankLocation,
       'cv_path': cvPath,

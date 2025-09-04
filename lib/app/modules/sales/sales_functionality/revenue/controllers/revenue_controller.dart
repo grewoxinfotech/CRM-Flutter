@@ -25,7 +25,7 @@ class RevenueController extends PaginatedController<RevenueData> {
   Future<List<RevenueData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchRevenues(page: page);
-      return response;
+      return response?.message?.data ?? [];
     } catch (e) {
       throw Exception("Exception in fetchItems: $e");
     }

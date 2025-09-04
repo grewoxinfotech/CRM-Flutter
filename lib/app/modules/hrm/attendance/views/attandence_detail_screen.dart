@@ -1,5 +1,6 @@
 import 'package:crm_flutter/app/modules/hrm/attendance/controllers/attendence_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
+import 'package:crm_flutter/app/widgets/common/inputs/crm_dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -88,8 +89,8 @@ class AttendanceDetailScreen extends StatelessWidget {
               return Row(
                 children: [
                   Expanded(
-                    child: DropdownButton<int>(
-                      isExpanded: true,
+                    child: CrmDropdownField<int>(
+                      title: 'Select Month',
                       value: controller.selectedMonth.value,
                       items: List.generate(
                         12,
@@ -108,28 +109,28 @@ class AttendanceDetailScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: DropdownButton<int>(
-                      isExpanded: true,
-                      value: controller.selectedYear.value,
-                      items: List.generate(5, (index) {
-                        final year = DateTime.now().year - 2 + index;
-                        return DropdownMenuItem(
-                          value: year,
-                          child: Text(year.toString()),
-                        );
-                      }),
-                      onChanged: (value) {
-                        if (value != null) {
-                          controller.changeMonth(
-                            controller.selectedMonth.value,
-                            value,
-                          );
-                        }
-                      },
-                    ),
-                  ),
+                  // const SizedBox(width: 8),
+                  // Expanded(
+                  //   child: DropdownButton<int>(
+                  //     isExpanded: true,
+                  //     value: controller.selectedYear.value,
+                  //     items: List.generate(5, (index) {
+                  //       final year = DateTime.now().year - 2 + index;
+                  //       return DropdownMenuItem(
+                  //         value: year,
+                  //         child: Text(year.toString()),
+                  //       );
+                  //     }),
+                  //     onChanged: (value) {
+                  //       if (value != null) {
+                  //         controller.changeMonth(
+                  //           controller.selectedMonth.value,
+                  //           value,
+                  //         );
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
                 ],
               );
             }),

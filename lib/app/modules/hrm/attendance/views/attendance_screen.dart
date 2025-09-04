@@ -211,23 +211,34 @@ class AttendanceScreen extends StatelessWidget {
                     return GestureDetector(
                       onTap: () async {
                         /// fetch attendance for this employee
+                        // final DateTime now = DateTime.now();
+                        // final DateTime startOfMonth = DateTime(
+                        //   now.year,
+                        //   now.month,
+                        //   1,
+                        // );
+                        // final DateTime endOfMonth = DateTime(
+                        //   now.year,
+                        //   now.month + 1,
+                        //   0,
+                        // ); // last day of month
+                        //
+                        // final data = await attendanceController
+                        //     .getAttendanceForEmployee(
+                        //       employee.id ?? "",
+                        //       startOfMonth,
+                        //       endOfMonth,
+                        //     );
+
                         final DateTime now = DateTime.now();
-                        final DateTime startOfMonth = DateTime(
-                          now.year,
-                          now.month,
-                          1,
-                        );
-                        final DateTime endOfMonth = DateTime(
-                          now.year,
-                          now.month + 1,
-                          0,
-                        ); // last day of month
+                        final DateTime startOfYear = DateTime(now.year, 1, 1);
+                        final DateTime endOfYear = DateTime(now.year, 12, 31);
 
                         final data = await attendanceController
                             .getAttendanceForEmployee(
                               employee.id ?? "",
-                              startOfMonth,
-                              endOfMonth,
+                              startOfYear,
+                              endOfYear,
                             );
 
                         Get.to(

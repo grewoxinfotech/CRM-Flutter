@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../care/constants/color_res.dart';
 import '../../../care/constants/font_res.dart';
 import '../../../data/network/super_admin/auth/model/user_model.dart';
+import '../../../data/network/super_admin/auth/service/auth_service.dart';
 import '../../../widgets/button/crm_button.dart';
 import '../../../widgets/common/inputs/crm_text_field.dart';
 
@@ -78,6 +79,101 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   //   );
   // }
 
+  // Future<void> _saveProfile() async {
+  //   if (!_formKey.currentState!.validate()) return;
+  //
+  //   setState(() => _loading = true);
+  //
+  //   try {
+  //     final user = await SecureStorage.getUserData();
+  //
+  //     final data = UserModel(
+  //       createdAt: user!.createdAt,
+  //       updatedAt: updatedAt,
+  //       currency: currency,
+  //     );
+  //
+  //     // 🔹 Call your API service here
+  //     final updatedUser = await AuthService.updateProfile(user!);
+  //
+  //     // 🔹 Save latest user data in local storage
+  //     await SecureStorage.saveUserData(updatedUser);
+  //
+  //     setState(() => _loading = false);
+  //     Get.back(result: true);
+  //     Get.snackbar(
+  //       "Success",
+  //       "Profile updated successfully",
+  //       backgroundColor: Colors.green,
+  //       colorText: Colors.white,
+  //     );
+  //   } catch (e) {
+  //     setState(() => _loading = false);
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
+  //   }
+  // }
+
+  Future<void> _saveProfile() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _loading = true);
+
+    try {
+      final currentUser = await SecureStorage.getUserData();
+
+      if (currentUser == null) {
+        throw Exception("User not found in local storage");
+      }
+
+      // 🔹 Build updated user object from controllers
+      final updatedUserData = UserModel(
+        id: currentUser.id,
+        createdAt: currentUser.createdAt,
+        updatedAt: DateTime.now(), // set latest update
+        currency: currentUser.currency,
+
+        firstName: firstNameCtrl.text.trim(),
+        lastName: lastNameCtrl.text.trim(),
+        username: usernameCtrl.text.trim(),
+        email: emailCtrl.text.trim(),
+        phone: phoneCtrl.text.trim(),
+        address: addressCtrl.text.trim(),
+        city: cityCtrl.text.trim(),
+        state: stateCtrl.text.trim(),
+        country: countryCtrl.text.trim(),
+        zipcode: zipCtrl.text.trim(),
+      );
+
+      // 🔹 Call your API service here
+      final updatedUser = await AuthService.updateProfile(updatedUserData);
+
+      // 🔹 Save latest user data in local storage
+      await SecureStorage.saveUserData(updatedUser);
+
+      setState(() => _loading = false);
+      Get.back(result: true);
+      Get.snackbar(
+        "Success",
+        "Profile updated successfully",
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      setState(() => _loading = false);
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,8 +242,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               SizedBox(
                 width: double.infinity,
                 child: CrmButton(
-                  // onTap: _loading ? null : _saveProfile,
-                  onTap: () {},
+                  onTap: _loading ? null : _saveProfile,
+                  // onTap: () {},
                   title: _loading ? "Saving..." : "Save Changes",
                 ),
               ),

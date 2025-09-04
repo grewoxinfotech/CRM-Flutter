@@ -6,6 +6,7 @@ import 'package:crm_flutter/app/modules/functions/controller/function_controller
 import 'package:crm_flutter/app/modules/functions/widget/functions_widget.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/views/attendance_widget.dart';
 import 'package:crm_flutter/app/modules/home/widgets/deal_overview_with_graph.dart';
+import 'package:crm_flutter/app/modules/home/widgets/most_selling_product.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
@@ -91,6 +92,9 @@ class HomeScreen extends StatelessWidget {
       // ),
       LeadsOverviewCard(),
       DealsOverviewCard(),
+      SizedBox(height: AppSpacing.small),
+
+      MostSellingProductScreen(),
     ];
     return ViewScreen(
       // padding: EdgeInsets.all(0),

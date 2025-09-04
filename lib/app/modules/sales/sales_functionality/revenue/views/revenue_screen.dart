@@ -1,101 +1,16 @@
-// import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-//
-// import '../controllers/revenue_controller.dart';
-// import '../widget/reevenue_card.dart';
-//
-// class RevenueScreen extends StatelessWidget {
-//   RevenueScreen({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     Get.lazyPut<RevenueController>(() => RevenueController());
-//     final RevenueController controller = Get.find();
-//
-//     return Scaffold(
-//       appBar: AppBar(title: const Text("Revenue")),
-//       // floatingActionButton: FloatingActionButton(
-//       //   onPressed: () {
-//       //     Get.to(() => AddRevenueScreen());
-//       //   },
-//       //   child: const Icon(Icons.add, color: Colors.white),
-//       // ),
-//       body: FutureBuilder(
-//         future: controller.loadInitial(),
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             return const Center(child: CrmLoadingCircle());
-//           } else if (snapshot.hasError) {
-//             return Center(
-//               child: SizedBox(
-//                 width: 250,
-//                 child: Text(
-//                   'Server Error:\n${snapshot.error}',
-//                   style: const TextStyle(
-//                     color: Colors.red,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                   textAlign: TextAlign.center,
-//                 ),
-//               ),
-//             );
-//           } else if (snapshot.connectionState == ConnectionState.done) {
-//             return Obx(() {
-//               if (!controller.isLoading.value && controller.items.isEmpty) {
-//                 return const Center(child: Text("No Revenue records found."));
-//               }
-//               return NotificationListener<ScrollEndNotification>(
-//                 onNotification: (scrollEnd) {
-//                   final metrics = scrollEnd.metrics;
-//                   if (metrics.atEdge && metrics.pixels != 0) {
-//                     controller.loadMore();
-//                   }
-//                   return false;
-//                 },
-//                 child: RefreshIndicator(
-//                   onRefresh: controller.refreshList,
-//                   child: ListView.builder(
-//                     itemCount: controller.items.length + 1,
-//                     itemBuilder: (context, index) {
-//                       if (index < controller.items.length) {
-//                         final revenue = controller.items[index];
-//                         return GestureDetector(
-//                           // onTap: () => Get.to(() => RevenueDetailScreen(revenue: revenue)),
-//                           child: RevenueCard(revenue: revenue),
-//                         );
-//                       } else if (controller.isPaging.value) {
-//                         return const Padding(
-//                           padding: EdgeInsets.all(16.0),
-//                           child: Center(child: CircularProgressIndicator()),
-//                         );
-//                       } else {
-//                         return const SizedBox.shrink();
-//                       }
-//                     },
-//                   ),
-//                 ),
-//               );
-//             });
-//           } else {
-//             return const Center(child: Text("Something went wrong."));
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../data/network/sales/revenue/model/revenue_menu.dart';
 import '../controllers/revenue_controller.dart';
 import '../widget/reevenue_card.dart';
 
 class RevenueScreen extends StatelessWidget {
-  RevenueScreen({Key? key}) : super(key: key);
+  final String? id;
+  RevenueScreen({Key? key, this.id}) : super(key: key);
 
   String _formatWithCommas(num value) {
     final formatter = NumberFormat('#,##,###');
@@ -134,14 +49,28 @@ class RevenueScreen extends StatelessWidget {
                 return const Center(child: Text("No Revenue records found."));
               }
 
-              double totalRevenue = controller.items.fold(
+              List<RevenueData> data = controller.items;
+
+              if (id != null) {
+                // data.clear();
+                data =
+                    controller.items
+                        .where(
+                          (element) =>
+                              element.products?.any((p) => p.productId == id) ??
+                              false,
+                        )
+                        .toList();
+              }
+
+              double totalRevenue = data.fold(
                 0.0,
                 (sum, item) =>
                     sum +
                     (double.tryParse(item.amount.toString() ?? '0') ?? 0.0),
               );
 
-              double totalProfit = controller.items.fold(
+              double totalProfit = data.fold(
                 0.0,
                 (sum, item) =>
                     sum +
@@ -151,7 +80,7 @@ class RevenueScreen extends StatelessWidget {
               double profitMargin =
                   totalRevenue != 0 ? (totalProfit / totalRevenue) * 100 : 0;
 
-              int productsSold = controller.items.fold(
+              int productsSold = data.fold(
                 0,
                 (sum, item) => sum + (item.products!.length ?? 0),
               );
@@ -167,8 +96,7 @@ class RevenueScreen extends StatelessWidget {
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
                   child: ViewScreen(
-                    itemCount:
-                        controller.items.length + 2, // +2 for grid + spacing
+                    itemCount: data.length + 2, // +2 for grid + spacing
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return Padding(
@@ -205,9 +133,8 @@ class RevenueScreen extends StatelessWidget {
                             ],
                           ),
                         );
-                      } else if (index > 0 &&
-                          index <= controller.items.length) {
-                        final revenue = controller.items[index - 1];
+                      } else if (index > 0 && index <= data.length) {
+                        final revenue = data[index - 1];
                         return RevenueCard(revenue: revenue);
                       } else if (controller.isPaging.value) {
                         return const Padding(
