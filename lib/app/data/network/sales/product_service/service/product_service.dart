@@ -156,6 +156,7 @@ class ProductsServicesService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print("[DEBUG]=> ${data}");
         return productsServicesModel.fromJson(data);
       } else {
         print("Failed to load products: ${response.statusCode}");

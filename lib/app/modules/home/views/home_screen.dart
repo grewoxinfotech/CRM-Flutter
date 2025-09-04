@@ -7,10 +7,13 @@ import 'package:crm_flutter/app/modules/functions/widget/functions_widget.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/views/attendance_widget.dart';
 import 'package:crm_flutter/app/modules/home/widgets/deal_overview_with_graph.dart';
 import 'package:crm_flutter/app/modules/home/widgets/most_selling_product.dart';
+import 'package:crm_flutter/app/modules/home/widgets/revenue_graph.dart';
+import 'package:crm_flutter/app/modules/sales/sales_functionality/revenue/controllers/revenue_controller.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/model/tab_bar_model.dart';
 import 'package:crm_flutter/app/widgets/bar/tab_bar/view/crm_tab_bar.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
+import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +25,7 @@ import '../widgets/lead_overview_with_graph.dart';
 
 class HomeScreen extends StatelessWidget {
   final controller = Get.put(FunctionController());
+  final RevenueController revenueController = Get.put(RevenueController());
 
   HomeScreen({super.key});
 
@@ -90,6 +94,12 @@ class HomeScreen extends StatelessWidget {
       //     TabBarModel(iconPath: ICRes.leads, label: "deal"),
       //   ],
       // ),
+      Obx(() {
+        if(revenueController.items.isEmpty){
+          return Center(child: CrmLoadingCircle());
+        }
+        return RevenueChart(revenueData: revenueController.items);
+      }),
       LeadsOverviewCard(),
       DealsOverviewCard(),
       SizedBox(height: AppSpacing.small),

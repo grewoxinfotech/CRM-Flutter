@@ -31,7 +31,7 @@ class RevenueService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
+        print("[DEBUG]=> $baseUrl ---- ${response.body}");
         return RevenueModel.fromJson(data);
       } else {
         print("Failed to load revenues: ${response.statusCode}");

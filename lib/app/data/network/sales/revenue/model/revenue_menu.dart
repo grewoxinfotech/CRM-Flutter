@@ -1,57 +1,112 @@
+// class RevenueModel {
+//   bool? success;
+//   RevenueMessage? message;
+//   dynamic data;
+//
+//   RevenueModel({this.success, this.message, this.data});
+//
+//   RevenueModel.fromJson(Map<String, dynamic> json) {
+//     success = json['success'];
+//     message =
+//         json['message'] != null
+//             ? RevenueMessage.fromJson(json['message'])
+//             : null;
+//     data = json['data'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> map = {};
+//     map['success'] = success;
+//     if (message != null) {
+//       map['message'] = message!.toJson();
+//     }
+//     map['data'] = data;
+//     return map;
+//   }
+// }
+//
+// class RevenueMessage {
+//   List<RevenueData>? data;
+//   Pagination? pagination;
+//
+//   RevenueMessage({this.data, this.pagination});
+//
+//   RevenueMessage.fromJson(Map<String, dynamic> json) {
+//     if (json['data'] != null) {
+//       data = List<RevenueData>.from(
+//         json['data'].map((x) => RevenueData.fromJson(x)),
+//       );
+//     }
+//     pagination =
+//         json['pagination'] != null
+//             ? Pagination.fromJson(json['pagination'])
+//             : null;
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> map = {};
+//     if (data != null) {
+//       map['data'] = data!.map((v) => v.toJson()).toList();
+//     }
+//     if (pagination != null) {
+//       map['pagination'] = pagination!.toJson();
+//     }
+//     return map;
+//   }
+// }
+
 class RevenueModel {
   bool? success;
-  RevenueMessage? message;
-  dynamic data;
+  Message? message;
+  Null? data;
 
   RevenueModel({this.success, this.message, this.data});
 
   RevenueModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message =
-        json['message'] != null
-            ? RevenueMessage.fromJson(json['message'])
-            : null;
+    json['message'] != null ? new Message.fromJson(json['message']) : null;
     data = json['data'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
-    map['success'] = success;
-    if (message != null) {
-      map['message'] = message!.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    if (this.message != null) {
+      data['message'] = this.message!.toJson();
     }
-    map['data'] = data;
-    return map;
+    data['data'] = this.data;
+    return data;
   }
 }
 
-class RevenueMessage {
+class Message {
   List<RevenueData>? data;
   Pagination? pagination;
 
-  RevenueMessage({this.data, this.pagination});
+  Message({this.data, this.pagination});
 
-  RevenueMessage.fromJson(Map<String, dynamic> json) {
+  Message.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = List<RevenueData>.from(
-        json['data'].map((x) => RevenueData.fromJson(x)),
-      );
+      data = <RevenueData>[];
+      json['data'].forEach((v) {
+        data!.add(new RevenueData.fromJson(v));
+      });
     }
-    pagination =
-        json['pagination'] != null
-            ? Pagination.fromJson(json['pagination'])
-            : null;
+    pagination = json['pagination'] != null
+        ? new Pagination.fromJson(json['pagination'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
-    if (data != null) {
-      map['data'] = data!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    if (pagination != null) {
-      map['pagination'] = pagination!.toJson();
+    if (this.pagination != null) {
+      data['pagination'] = this.pagination!.toJson();
     }
-    return map;
+    return data;
   }
 }
 
