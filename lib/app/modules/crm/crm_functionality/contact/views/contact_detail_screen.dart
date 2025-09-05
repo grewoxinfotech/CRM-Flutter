@@ -344,19 +344,19 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             itemBuilder: (context, i) {
               final data = leads[i];
               final status = leadController.statusOptions.firstWhereOrNull(
-                    (element) => element['id'] == data.status,
+                (element) => element['id'] == data.status,
               );
 
               final currency = leadController.currencies.firstWhereOrNull(
-                    (element) => element.id == data.currency,
+                (element) => element.id == data.currency,
               );
 
               final source = leadController.sourceOptions.firstWhereOrNull(
-                    (element) => element['id'] == data.source,
+                (element) => element['id'] == data.source,
               );
 
               final category = leadController.categoryOptions.firstWhereOrNull(
-                    (element) => element['id'] == data.category,
+                (element) => element['id'] == data.category,
               );
 
               return LeadCard(
@@ -377,14 +377,13 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 // email: data.email ?? '',
                 // address: data.address ?? '',
                 leadMembers:
-                data.leadMembers?.leadMembers?.isNotEmpty == true
-                    ? data.leadMembers!.leadMembers!.length.toString()
-                    : '',
+                    data.leadMembers?.leadMembers?.isNotEmpty == true
+                        ? data.leadMembers!.leadMembers!.length.toString()
+                        : '',
                 category: category != null ? category['name'] ?? '' : '',
                 // files: data.files.isNotEmpty ? data.files.length.toString() : '',
                 // Use the status directly from the API instead of trying to map it
-                status:
-                status != null ? status['name']!.capitalize ?? '' : '',
+                status: status != null ? status['name']!.capitalize ?? '' : '',
 
                 interestLevel: data.interestLevel ?? '',
                 leadScore: data.leadScore?.toString() ?? '',
@@ -475,17 +474,17 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             itemBuilder: (context, i) {
               final data = deals[i];
 
-
-              final source = dealController.sourceOptions
-                  .firstWhereOrNull(
-                    (element) => element['id'] == data.source,
+              final source = dealController.sourceOptions.firstWhereOrNull(
+                (element) => element['id'] == data.source,
               );
 
               final currency = dealController.currencies.firstWhereOrNull(
-                    (element) => element.id == data.currency,
+                (element) => element.id == data.currency,
               );
 
-              final category = dealController.categoryOptions.firstWhereOrNull((element) => element['id']==data.category,);
+              final category = dealController.categoryOptions.firstWhereOrNull(
+                (element) => element['id'] == data.category,
+              );
 
               return DealCard(
                 id: data.id.toString(),
@@ -494,7 +493,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 value: data.value.toString(),
                 pipeline: dealController.getPipelineName(data.pipeline ?? ''),
                 stage: dealController.getStageName(data.stage ?? ''),
-                category: category!=null ? category['name'] ?? '' : '',
+                category: category != null ? category['name'] ?? '' : '',
                 status: data.status.toString(),
                 label: data.label.toString(),
                 closedDate: data.closedDate.toString(),
@@ -520,9 +519,14 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 color: Get.theme.colorScheme.error,
                 onTap:
                     () =>
-                (data.id != null)
-                    ? Get.to(() => DealDetailScreen(id: data.id!))
-                    : Get.snackbar('Error', 'deal ID is missing'),
+                        (data.id != null)
+                            ? Get.off(
+                              () => DealDetailScreen(
+                                id: data.id!,
+                                isContactScreen: true,
+                              ),
+                            )
+                            : Get.snackbar('Error', 'deal ID is missing'),
                 onEdit: () {},
                 onDelete: () {},
               );

@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/key_res.dart';
 import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/home/views/home_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/hrm_functions/view/hrm_screen.dart';
@@ -14,13 +15,14 @@ import '../../purchase/purchase_functions/view/purchase_screen.dart';
 import '../../sales/sales_functions/view/sales_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Get.lazyPut<AccessController>(() => AccessController());
     final navigationController = Get.put(NavigationController());
     return Scaffold(
+      key: KeyRes.scaffoldKey,
       extendBody: true,
       drawer: CrmDrawer(),
       appBar: CrmAppBar(),

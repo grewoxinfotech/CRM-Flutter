@@ -15,7 +15,7 @@ class RevenueService {
   /// Fetch revenues with optional pagination & search
   Future<RevenueModel?> fetchRevenues({
     int page = 1,
-    int pageSize = 10,
+    int pageSize = 50,
     String search = '',
   }) async {
     try {

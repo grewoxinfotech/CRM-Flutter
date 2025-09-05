@@ -187,7 +187,6 @@ import '../widget/reevenue_card.dart';
 //   }
 // }
 
-
 // class RevenueScreen extends StatelessWidget {
 //   final String? id;
 //   RevenueScreen({Key? key, this.id}) : super(key: key);
@@ -366,7 +365,6 @@ import '../widget/reevenue_card.dart';
 //   }
 // }
 
-
 class RevenueScreen extends StatelessWidget {
   final String? id;
   RevenueScreen({Key? key, this.id}) : super(key: key);
@@ -382,9 +380,7 @@ class RevenueScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Call initial load once when the widget builds
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
-        controller.loadInitial();
-
+      controller.loadInitial();
     });
 
     return Scaffold(
@@ -417,36 +413,49 @@ class RevenueScreen extends StatelessWidget {
         List<RevenueData> data = controller.items;
 
         if (id != null) {
-          data = controller.items
-              .where(
-                (element) =>
-            element.products?.any((p) => p.productId == id) ?? false,
-          )
-              .toList();
+          data =
+              controller.items
+                  .where(
+                    (element) =>
+                        element.products?.any((p) => p.productId == id) ??
+                        false,
+                  )
+                  .toList();
         }
 
         double totalRevenue = data.fold(
           0.0,
-              (sum, item) => sum + (double.tryParse(item.amount.toString()) ?? 0.0),
+          (sum, item) => sum + (double.tryParse(item.amount.toString()) ?? 0.0),
         );
 
         double totalProfit = data.fold(
           0.0,
-              (sum, item) => sum + (double.tryParse(item.profit.toString()) ?? 0.0),
+          (sum, item) => sum + (double.tryParse(item.profit.toString()) ?? 0.0),
         );
 
         double profitMargin =
-        totalRevenue != 0 ? (totalProfit / totalRevenue) * 100 : 0;
+            totalRevenue != 0 ? (totalProfit / totalRevenue) * 100 : 0;
+
+        // int productsSold = data.fold(
+        //   0,
+        //   (sum, item) =>
+        //       sum + (item.products?.map((e) => e.quantity as int) ?? 0),
+        // );
 
         int productsSold = data.fold(
           0,
-              (sum, item) => sum + (item.products?.length ?? 0),
+          (sum, item) =>
+              sum +
+              (item.products?.fold<int>(
+                    0,
+                    (innerSum, e) => innerSum + (e.quantity ?? 0),
+                  ) ??
+                  0),
         );
 
         return NotificationListener<ScrollEndNotification>(
           onNotification: (scrollEnd) {
-            if (scrollEnd.metrics.pixels ==
-                scrollEnd.metrics.maxScrollExtent) {
+            if (scrollEnd.metrics.pixels == scrollEnd.metrics.maxScrollExtent) {
               controller.loadMore();
             }
             return false;
@@ -454,8 +463,7 @@ class RevenueScreen extends StatelessWidget {
           child: RefreshIndicator(
             onRefresh: controller.refreshList,
             child: ViewScreen(
-              itemCount:
-              data.length + 2 + (controller.isPaging.value ? 1 : 0),
+              itemCount: data.length + 2 + (controller.isPaging.value ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index == 0) {
                   // ✅ Stats grid

@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
+import 'package:crm_flutter/app/care/constants/key_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/users/view/profile_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
@@ -40,7 +41,15 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           leading:
               leading ??
-              Align(alignment: Alignment.center, child: CrmAppLogo()),
+              Align(
+                alignment: Alignment.center,
+                child: IconButton(
+                  onPressed: () {
+                    KeyRes.scaffoldKey.currentState!.openDrawer();
+                  },
+                  icon: Icon(Icons.dehaze_rounded, color: Colors.black),
+                ),
+              ),
           title: title,
           actions:
               action ??

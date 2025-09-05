@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CrmDropdownField<T> extends StatelessWidget {
-  final String title;
-  final dynamic value; 
+  String? title;
+  final dynamic value;
   final List<DropdownMenuItem<T>> items;
-  final Function(dynamic) onChanged; 
+  final Function(dynamic) onChanged;
   final bool isRequired;
   final String? hintText;
   final IconData? prefixIcon;
@@ -20,9 +20,9 @@ class CrmDropdownField<T> extends StatelessWidget {
   final bool showSelectedItems;
   final VoidCallback? onMenuOpened;
 
-  const CrmDropdownField({
+  CrmDropdownField({
     super.key,
-    required this.title,
+    this.title,
     required this.value,
     required this.items,
     required this.onChanged,
@@ -45,14 +45,15 @@ class CrmDropdownField<T> extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14,
-                color: Get.theme.colorScheme.onSecondary,
-                fontWeight: FontWeight.w700,
+            if (title != null)
+              Text(
+                title!,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Get.theme.colorScheme.onSecondary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
             if (isRequired)
               Text(
                 ' *',
@@ -76,10 +77,10 @@ class CrmDropdownField<T> extends StatelessWidget {
     if (value != null) {
       valueExists = items.any((item) => item.value == value);
     }
-    
+
     // Use null if the value doesn't exist in the items
     final safeValue = valueExists ? value as T? : null;
-    
+
     return DropdownButtonFormField<T>(
       value: safeValue,
       borderRadius: BorderRadius.circular(AppRadius.large),
@@ -95,10 +96,7 @@ class CrmDropdownField<T> extends StatelessWidget {
       ),
       decoration: _getInputDecoration(),
       isExpanded: true,
-      icon: CrmIc(
-        iconPath: ICRes.down,
-        color: Get.theme.colorScheme.primary,
-      ),
+      icon: CrmIc(iconPath: ICRes.down, color: Get.theme.colorScheme.primary),
       dropdownColor: Get.theme.colorScheme.surface,
       menuMaxHeight: 300,
       itemHeight: 50,
@@ -107,7 +105,7 @@ class CrmDropdownField<T> extends StatelessWidget {
 
   Widget _buildMultiSelect() {
     final selectedValues = (value as List<T>?) ?? [];
-    
+
     return FormField<List<T>>(
       initialValue: selectedValues,
       validator: validator,
@@ -121,30 +119,49 @@ class CrmDropdownField<T> extends StatelessWidget {
                 Wrap(
                   spacing: 8,
                   runSpacing: 4,
-                  children: selectedValues.map((item) => Chip(
-                    label: Text(item.toString()),
-                    onDeleted: enabled ? () {
-                      final newValue = List<T>.from(selectedValues)..remove(item);
-                      onChanged(newValue);
-                    } : null,
-                  )).toList(),
+                  children:
+                      selectedValues
+                          .map(
+                            (item) => Chip(
+                              label: Text(item.toString()),
+                              onDeleted:
+                                  enabled
+                                      ? () {
+                                        final newValue = List<T>.from(
+                                          selectedValues,
+                                        )..remove(item);
+                                        onChanged(newValue);
+                                      }
+                                      : null,
+                            ),
+                          )
+                          .toList(),
                 ),
               DropdownButton<T>(
                 value: null,
                 hint: Text(
-                  selectedValues.isEmpty ? (hintText ?? 'Select items') : 'Add more',
+                  selectedValues.isEmpty
+                      ? (hintText ?? 'Select items')
+                      : 'Add more',
                   style: TextStyle(
                     color: Get.theme.colorScheme.onSurface.withAlpha(128),
                   ),
                 ),
-                items: items.where((item) => !selectedValues.contains(item.value)).toList(),
-                onChanged: enabled ? (T? newValue) {
-                  if (newValue != null) {
-                    final newList = List<T>.from(selectedValues)..add(newValue);
-                    onChanged(newList);
-                    state.didChange(newList);
-                  }
-                } : null,
+                items:
+                    items
+                        .where((item) => !selectedValues.contains(item.value))
+                        .toList(),
+                onChanged:
+                    enabled
+                        ? (T? newValue) {
+                          if (newValue != null) {
+                            final newList = List<T>.from(selectedValues)
+                              ..add(newValue);
+                            onChanged(newList);
+                            state.didChange(newList);
+                          }
+                        }
+                        : null,
                 isExpanded: true,
                 icon: CrmIc(
                   iconPath: ICRes.down,
@@ -163,25 +180,27 @@ class CrmDropdownField<T> extends StatelessWidget {
     return InputDecoration(
       contentPadding: const EdgeInsets.all(AppPadding.small),
       filled: true,
-      fillColor: enabled
-          ? Get.theme.colorScheme.surface
-          : Get.theme.colorScheme.surface.withAlpha(128),
+      fillColor:
+          enabled
+              ? Get.theme.colorScheme.surface
+              : Get.theme.colorScheme.surface.withAlpha(128),
       hintText: hintText,
       hintStyle: TextStyle(
         color: Get.theme.colorScheme.onSurface.withAlpha(128),
         fontSize: 15,
         fontWeight: FontWeight.w400,
       ),
-      prefixIcon: prefixIcon != null
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Icon(
-                prefixIcon,
-                size: 20,
-                color: Get.theme.colorScheme.primary,
-              ),
-            )
-          : null,
+      prefixIcon:
+          prefixIcon != null
+              ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Icon(
+                  prefixIcon,
+                  size: 20,
+                  color: Get.theme.colorScheme.primary,
+                ),
+              )
+              : null,
       prefixIconConstraints: const BoxConstraints(minWidth: 40),
       enabledBorder: tile(Get.theme.dividerColor),
       focusedBorder: tile(Get.theme.colorScheme.primary),

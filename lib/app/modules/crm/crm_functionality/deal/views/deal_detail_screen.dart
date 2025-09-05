@@ -39,6 +39,7 @@ import '../../../../../care/constants/access_res.dart';
 import '../../../../access/controller/access_controller.dart';
 import '../../../../project/notes/widget/note_card.dart';
 import '../../activity/views/activity_card.dart';
+import '../../contact/views/contact_detail_screen.dart';
 import '../../sales_invoice/pages/sales_invoice_create_page.dart';
 import '../widget/deal_overview_card.dart';
 import 'deal_edit_screen.dart';
@@ -61,8 +62,13 @@ class FollowUpController extends GetxController {
 
 class DealDetailScreen extends StatelessWidget {
   final String id;
+  final bool isContactScreen;
 
-  DealDetailScreen({super.key, required this.id}) {
+  DealDetailScreen({
+    super.key,
+    required this.id,
+    this.isContactScreen = false,
+  }) {
     if (!Get.isRegistered<FollowUpController>()) {
       Get.put(FollowUpController());
     }
@@ -88,7 +94,20 @@ class DealDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Deal"),
-        leading: CrmBackButton(),
+        leading: CrmBackButton(
+          onTap: () {
+            if (isContactScreen) {
+              final matchedLead = dealController.deal.firstWhereOrNull(
+                (lead) => lead.id == id,
+              );
+              if (matchedLead != null) {
+                Get.off(() => ContactDetailScreen(id: matchedLead.contactId));
+              }
+            } else {
+              Get.back();
+            }
+          },
+        ),
         bottom: CrmTabBar(
           items: [
             TabBarModel(iconPath: ICRes.attach, label: "Overview"),
@@ -213,20 +232,20 @@ class DealDetailScreen extends StatelessWidget {
           updatedBy: deal.updatedBy.toString(),
           createdAt: deal.createdAt.toString(),
           updatedAt: deal.updatedAt.toString(),
-          onDelete: () => Get.dialog(
-            CrmDeleteDialog(
-              entityType: deal.dealTitle.toString(),
-              onConfirm: () {
-                dealController.deleteDeal(deal.id.toString());
-                Get.back();
-              },
-            ),
-          ),
+          onDelete:
+              () => Get.dialog(
+                CrmDeleteDialog(
+                  entityType: deal.dealTitle.toString(),
+                  onConfirm: () {
+                    dealController.deleteDeal(deal.id.toString());
+                    Get.back();
+                  },
+                ),
+              ),
           onEdit: () => _handleEdit(deal, dealController),
         );
       },
     );
-
   }
 
   Widget _buildFilesTab(
@@ -616,11 +635,13 @@ class DealDetailScreen extends StatelessWidget {
 
     final closeDate = deal.closedDate;
     if (closeDate != null) {
-      dealController.endDateController.text = DateFormat('yyyy-MM-dd').format(closeDate);
+      dealController.endDateController.text = DateFormat(
+        'yyyy-MM-dd',
+      ).format(closeDate);
       dealController.selectedEndDate.value = closeDate;
     }
 
-     Get.to(() => DealEditScreen(deal: deal));
+    Get.to(() => DealEditScreen(deal: deal));
     await dealController.getDealById(id);
     await dealController.refreshData();
   }

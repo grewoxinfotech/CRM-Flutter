@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../views/attendance_widget.dart';
+
 class TimeRangeSelector extends StatelessWidget {
   final Function(String) onSelected;
 
   TimeRangeSelector({super.key, required this.onSelected});
 
-  final List<String> items = ["Week", "Month", "Year"];
-  final RxString selectedItem = "Month".obs;
+  // Removed "Year"
+
+  // final RxString selectedItem = "Month".obs;
 
   @override
   Widget build(BuildContext context) {
+    Get.put(AttendanceController());
+    final AttendanceController controller = Get.find();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children:
-          items.map((item) {
+          controller.items.map((item) {
             return GestureDetector(
               onTap: () {
-                selectedItem.value = item;
+                controller.selectedRange.value = item;
                 onSelected(item); // Notify parent about selection
               },
-              child: Obx(() => _text(item, selectedItem.value == item)),
+              child: Obx(
+                () => _text(item, controller.selectedRange.value == item),
+              ),
             );
           }).toList(),
     );

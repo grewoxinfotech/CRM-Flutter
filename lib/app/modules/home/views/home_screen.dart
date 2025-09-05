@@ -85,17 +85,11 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      // DateContainerWidget(fd: "Nov 16, 2020", ld: "Dec 16, 2020"),
+
       AttendanceWidget(),
 
-      // CrmTabBar(
-      //   items: [
-      //     TabBarModel(iconPath: ICRes.leads, label: "lead"),
-      //     TabBarModel(iconPath: ICRes.leads, label: "deal"),
-      //   ],
-      // ),
       Obx(() {
-        if(revenueController.items.isEmpty){
+        if (revenueController.items.isEmpty) {
           return Center(child: CrmLoadingCircle());
         }
         return RevenueChart(revenueData: revenueController.items);
@@ -107,7 +101,6 @@ class HomeScreen extends StatelessWidget {
       MostSellingProductScreen(),
     ];
     return ViewScreen(
-      // padding: EdgeInsets.all(0),
       itemCount: widgets.length,
       itemBuilder: (context, i) => widgets[i],
     );

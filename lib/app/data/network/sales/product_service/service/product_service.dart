@@ -138,7 +138,7 @@ class ProductsServicesService {
 
   Future<productsServicesModel?> fetchProductsServices({
     int page = 1,
-    int pageSize = 10,
+    int pageSize = 50,
     String search = '',
     String id = '',
   }) async {

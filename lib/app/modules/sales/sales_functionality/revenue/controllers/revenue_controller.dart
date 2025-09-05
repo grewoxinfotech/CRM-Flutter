@@ -229,8 +229,9 @@ class RevenueController extends PaginatedController<RevenueData> {
   }
 
   Future<String?> getCustomerById(String id) async {
-    final existingCustomer =
-    customers.firstWhereOrNull((customer) => customer.id == id);
+    final existingCustomer = customers.firstWhereOrNull(
+      (customer) => customer.id == id,
+    );
 
     if (existingCustomer != null) return existingCustomer.name;
 
