@@ -164,11 +164,16 @@ class LeadService {
 
   /// 4. Update a lead by ID
   Future<http.Response> updateLead(String id, Map<String, dynamic> data) async {
-    return await http.put(
+    print("[DEBUG]=> data =--------- $data");
+    print("[DEBUG]=> url =--------- $url/$id");
+    final response = await http.put(
       Uri.parse("$url/$id"),
       headers: await headers(),
       body: jsonEncode(data),
     );
+
+    print("[DEBUG]=> response =--------- ${response.body}");
+    return response;
   }
 
   /// 5. Delete a lead by ID

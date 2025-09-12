@@ -8,6 +8,7 @@ import 'package:crm_flutter/app/data/network/crm/crm_system/stage/controller/sta
 import 'package:crm_flutter/app/data/network/system/country/controller/country_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/contact/controller/contact_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/views/deal_screen.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/users/controllers/users_controller.dart';
 import 'package:crm_flutter/app/widgets/button/crm_back_button.dart';
@@ -37,74 +38,54 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
   @override
   void initState() {
     super.initState();
-    Get.lazyPut(() => PipelineController());
-    Get.lazyPut(() => StageController());
-    Get.lazyPut(() => LeadController());
-    Get.lazyPut(() => UsersController());
-    final pipelineController = Get.find<PipelineController>();
-    final stageController = Get.find<StageController>();
-    final DealController dealController = Get.find<DealController>();
-    final CountryController countryController = Get.put(CountryController());
-
-    // // Load pipelines and select first as default
-    pipelineController.getPipelines().then((_) {
-      if (pipelineController.pipelines.isNotEmpty) {
-        dealController.selectedPipelineId.value =
-            pipelineController.pipelines.first.id!;
-        stageController.getStagesByPipeline(
-          dealController.selectedPipelineId.value!,
-        );
-      }
-    });
+    // Get.lazyPut(() => PipelineController());
+    // Get.lazyPut(() => StageController());
+    // Get.lazyPut(() => LeadController());
+    // Get.lazyPut(() => UsersController());
+    // final pipelineController = Get.find<PipelineController>();
+    // final stageController = Get.find<StageController>();
+    // final DealController dealController = Get.find<DealController>();
+    // final CountryController countryController = Get.put(CountryController());
     //
-    // Load stages and select first as default
-    stageController.getStages().then((_) {
-      if (stageController.stages.isNotEmpty) {
-        final stage = stageController.stages.firstWhereOrNull(
-          (stage) => (stage.stageName).toLowerCase() == "new deal",
-        );
-        dealController.selectedStageId.value = stage!.id;
-      }
-    });
-
-    countryController.getCountries().then((_) {
-      if (countryController.countryModel.isNotEmpty) {
-        dealController.selectedCountryCode.value =
-            countryController.countryModel.first;
-      }
-    });
-
-    if (dealController.sourceOptions.isNotEmpty) {
-      dealController.selectedSource.value =
-          dealController.sourceOptions.first['id']!;
-    }
-    //
-    if (dealController.categoryOptions.isNotEmpty) {
-      dealController.selectedCategory.value =
-          dealController.categoryOptions.first['id']!;
-    }
-    dealController.dealValue.text = 0.toString();
-    dealController.selectedEndDate.value = DateTime.now();
-    dealController.endDateController.text = DateFormat(
-      'yyyy-MM-dd',
-    ).format(DateTime.now());
-
-    //
-    // if (leadController.statusOptions.isNotEmpty) {
-    //   final pendingStatus = leadController.statusOptions.firstWhereOrNull(
-    //     (element) => element['name'] == "Pending",
-    //   );
-    //
-    //   print("Status: ${pendingStatus}");
-    //
-    //   if (pendingStatus != null) {
-    //     leadController.selectedStatus.value = pendingStatus['id'] ?? '';
+    // // // Load pipelines and select first as default
+    // pipelineController.getPipelines().then((_) {
+    //   if (pipelineController.pipelines.isNotEmpty) {
+    //     dealController.selectedPipelineId.value =
+    //         pipelineController.pipelines.first.id!;
+    //     stageController.getStagesByPipeline(
+    //       dealController.selectedPipelineId.value!,
+    //     );
     //   }
+    // });
+    // //
+    // // Load stages and select first as default
+    // stageController.getStages().then((_) {
+    //   if (stageController.stages.isNotEmpty) {
+    //     final stage = stageController.stages.firstWhereOrNull(
+    //       (stage) => (stage.stageName).toLowerCase() == "new deal",
+    //     );
+    //     dealController.selectedStageId.value = stage!.id;
+    //   }
+    // });
+    //
+    // countryController.getCountries().then((_) {
+    //   if (countryController.countryModel.isNotEmpty) {
+    //     dealController.selectedCountryCode.value =
+    //         countryController.countryModel.first;
+    //   }
+    // });
+    //
+    // if (dealController.sourceOptions.isNotEmpty) {
+    //   dealController.selectedSource.value =
+    //       dealController.sourceOptions.first['id']!;
     // }
+    // //
+    // if (dealController.categoryOptions.isNotEmpty) {
+    //   dealController.selectedCategory.value =
+    //       dealController.categoryOptions.first['id']!;
+    // }
+    //
 
-    // if (stageController.stages.isEmpty) {
-    //   stageController.getStages();
-    // }
   }
 
   Future<void> _pickDate(
@@ -160,7 +141,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
     final ContactController contactController = Get.put(ContactController());
 
     return Scaffold(
-      appBar: AppBar(title: Text("Create Lead"), leading: CrmBackButton()),
+      appBar: AppBar(title: Text("Create Deal"), leading: CrmBackButton()),
       body:
           isLoading
               ? Center(child: CircularProgressIndicator())
@@ -199,32 +180,6 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Stage
-                    // Obx(
-                    //   () => CrmDropdownField<String>(
-                    //     title: "Stage",
-                    //     value:
-                    //         leadController.selectedStageId.value != null
-                    //             ? null
-                    //             : leadController.selectedStageId.value,
-                    //     items:
-                    //         stageController.stages.map((stage) {
-                    //           return DropdownMenuItem(
-                    //             value: stage.id,
-                    //             child: Text(stage.stageName ?? ''),
-                    //           );
-                    //         }).toList(),
-                    //     onChanged: (value) {
-                    //       if (value != null) {
-                    //         leadController.selectedStageId.value = value;
-                    //       }
-                    //     },
-                    //     hintText: "Select stage",
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 16),
-
-                    // Lead Value
                     Row(
                       children: [
                         Expanded(
@@ -311,26 +266,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Interest Level
-                    // Obx(
-                    //   () => CrmDropdownField<String>(
-                    //     title: "Interest Level",
-                    //     value: dealController.selectedInterestLevel.value,
-                    //     items:
-                    //         ['low', 'medium', 'high'].map((level) {
-                    //           return DropdownMenuItem(
-                    //             value: level,
-                    //             child: Text(level.capitalizeFirst!),
-                    //           );
-                    //         }).toList(),
-                    //     onChanged: (value) {
-                    //       if (value != null) {
-                    //         leadController.selectedInterestLevel.value = value;
-                    //       }
-                    //     },
-                    //     hintText: "Select interest level",
-                    //   ),
-                    // ),
+
                     const SizedBox(height: 16),
 
                     // Source
@@ -415,50 +351,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Obx(
-                    //   () => CrmDropdownField<String>(
-                    //     title: "Company Name",
-                    //     value: dealController.selectedCompany.value,
-                    //     items:
-                    //         dealController.companies.map((company) {
-                    //           return DropdownMenuItem(
-                    //             value: company.id,
-                    //             child: Text(company.companyName ?? ''),
-                    //           );
-                    //         }).toList(),
-                    //     onChanged: (value) {
-                    //       if (value != null) {
-                    //         dealController.selectedCompany.value = value;
-                    //         // stageController.getStagesByPipeline(value);
-                    //         // dealController.selectedStageId.value = '';
-                    //       }
-                    //     },
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 16),
-                    // Obx(
-                    //   () => CrmDropdownField<String>(
-                    //     title: "Contact Name",
-                    //     value: dealController.selectedContact.value,
-                    //     items:
-                    //         contactController.contacts.map((contact) {
-                    //           return DropdownMenuItem(
-                    //             value: contact.id,
-                    //             child: Text(
-                    //               '${contact.firstName} ${contact.lastName} (${contact.companyId})' ??
-                    //                   '',
-                    //             ),
-                    //           );
-                    //         }).toList(),
-                    //     onChanged: (value) {
-                    //       if (value != null) {
-                    //         dealController.selectedContact.value = value;
-                    //         // stageController.getStagesByPipeline(value);
-                    //         // dealController.selectedStageId.value = '';
-                    //       }
-                    //     },
-                    //   ),
-                    // ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -505,78 +398,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                                 contactController: contactController,
                               ),
                     ),
-                    // // Team Members
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Text(
-                    //       "Team Members",
-                    //       style: TextStyle(
-                    //         fontSize: 16,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 8),
-                    //     Container(
-                    //       padding: EdgeInsets.all(12),
-                    //       decoration: BoxDecoration(
-                    //         color: Colors.white,
-                    //         borderRadius: BorderRadius.circular(8),
-                    //         border: Border.all(color: Colors.grey.shade300),
-                    //       ),
-                    //       child: Column(
-                    //         crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //         children: [
-                    //           Obx(
-                    //             () =>
-                    //                 selectedMembers.isEmpty
-                    //                     ? Center(
-                    //                       child: Padding(
-                    //                         padding: EdgeInsets.symmetric(
-                    //                           vertical: 16,
-                    //                         ),
-                    //                         child: Text(
-                    //                           "No team members selected",
-                    //                           style: TextStyle(
-                    //                             color: Colors.grey.shade600,
-                    //                             fontStyle: FontStyle.italic,
-                    //                           ),
-                    //                         ),
-                    //                       ),
-                    //                     )
-                    //                     : Wrap(
-                    //                       spacing: 8,
-                    //                       runSpacing: 8,
-                    //                       children:
-                    //                           selectedMembers.map((memberId) {
-                    //                             final user = usersController
-                    //                                 .getUserById(memberId);
-                    //                             return Chip(
-                    //                               label: Text(
-                    //                                 user?.username ?? memberId,
-                    //                               ),
-                    //                               onDeleted:
-                    //                                   () => selectedMembers
-                    //                                       .remove(memberId),
-                    //                             );
-                    //                           }).toList(),
-                    //                     ),
-                    //           ),
-                    //           const SizedBox(height: 16),
-                    //           ElevatedButton.icon(
-                    //             icon: Icon(Icons.person_add, size: 18),
-                    //             label: Text("Add Team Member"),
-                    //             onPressed:
-                    //                 () => _showTeamMemberSelection(
-                    //                   context,
-                    //                   usersController,
-                    //                 ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
+
                     const SizedBox(height: 24),
 
                     // Create Button
@@ -586,11 +408,11 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                         title:
                             dealController.isCreating.value
                                 ? "Creating..."
-                                : "Create Lead",
+                                : "Create Deal",
                         onTap:
                             dealController.isCreating.value
                                 ? null
-                                : () => _createLead(dealController),
+                                : () => _createDeal(dealController),
                       ),
                     ),
                   ],
@@ -909,7 +731,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
     }
   }
 
-  Future<void> _createLead(DealController dealController) async {
+  Future<void> _createDeal(DealController dealController) async {
     dealController.isCreating(true);
     try {
       if (dealController.isSelectFromExisting.value) {
@@ -930,6 +752,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
         source: dealController.selectedSource.value,
         stage: dealController.selectedStageId.value,
         value: int.tryParse(dealController.dealValue.text) ?? 0,
+        leadId: dealController.selectedLeadId.value,
         // status: dealController.selectedStatus.value,
         //
         // interestLevel: leadController.selectedInterestLevel.value,
@@ -940,22 +763,26 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
       );
       print("[DEBUG]=> data ${newDeal.toJson()}");
 
-      final success = await dealController.createDeal(newDeal);
+      final createdDeal = await dealController.createDeal(newDeal);
 
-      if (success) {
-        // CrmSnackBar.showAwesomeSnackbar(
-        //   title: 'Success',
-        //   message: 'Lead created successfully',
-        //   contentType: ContentType.success,
-        // );
-        Get.back(result: newDeal);
-      } else {
-        // CrmSnackBar.showAwesomeSnackbar(
-        //   title: 'Error',
-        //   message: 'Failed to create lead',
-        //   contentType: ContentType.failure,
-        // );
+      if (createdDeal != null) {
+        //   CrmSnackBar.showAwesomeSnackbar(
+        //     title: 'Success',
+        //     message: 'Lead converted into deal successfully',
+        //     contentType: ContentType.success,
+        //   );
+        //
+        Get.back(result: createdDeal.id);
       }
+      //   // ✅ Now you have a valid id from backend
+      // } else {
+      //   CrmSnackBar.showAwesomeSnackbar(
+      //     title: 'Error',
+      //     message: 'Failed to convert lead into deal',
+      //     contentType: ContentType.failure,
+      //   );
+      // }
+
     } finally {
       dealController.isCreating(false);
     }

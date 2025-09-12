@@ -101,7 +101,7 @@ class LeaveScreen extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap:
-                                  leave.status == "pending"
+                                   accessController.can(AccessModule.leaveList, AccessAction.update) ? leave.status == "pending"
                                       ? () async {
                                         final result =
                                             await showLeaveReasonDialog(
@@ -126,7 +126,7 @@ class LeaveScreen extends StatelessWidget {
                                           controller.approveLeave(rejectLeave);
                                         }
                                       }
-                                      : null,
+                                      : null : null,
                               child: LeaveCard(leave: leave),
                             ),
                             Positioned(

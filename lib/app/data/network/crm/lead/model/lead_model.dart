@@ -311,6 +311,7 @@ class LeadModel {
   final String? id;
   final dynamic inquiryId;
   final String? leadTitle;
+  final String? dealId;
   final String? leadStage;
   final String? pipeline;
   final String? currency;
@@ -331,9 +332,10 @@ class LeadModel {
   final String? createdAt;
   final String? updatedAt;
 
-  LeadModel({
+  LeadModel( {
     this.id,
     this.inquiryId,
+    this.dealId,
     this.leadTitle,
     this.leadStage,
     this.pipeline,
@@ -391,6 +393,7 @@ class LeadModel {
     updatedBy: json['updated_by']?.toString(),
     createdAt: json['createdAt']?.toString(),
     updatedAt: json['updatedAt']?.toString(),
+    dealId: json['dealId']?.toString()
   );
 
   Map<String, dynamic> toJson() => {
@@ -416,6 +419,7 @@ class LeadModel {
     'updated_by': updatedBy,
     'createdAt': createdAt,
     'updatedAt': updatedAt,
+    'dealId':dealId
   };
 }
 

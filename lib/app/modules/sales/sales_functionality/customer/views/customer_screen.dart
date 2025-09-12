@@ -54,10 +54,7 @@ class CustomerScreen extends StatelessWidget {
               ),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            return Obx(() {
-              if (!controller.isLoading.value && controller.items.isEmpty) {
-                return const Center(child: Text("No Customers found."));
-              }
+
               return NotificationListener<ScrollEndNotification>(
                 onNotification: (scrollEnd) {
                   final metrics = scrollEnd.metrics;
@@ -69,7 +66,7 @@ class CustomerScreen extends StatelessWidget {
                 child: RefreshIndicator(
                   onRefresh: controller.refreshList,
                   child: ViewScreen(
-                    itemCount: controller.items.length + 1,
+                    itemCount: controller.items.length,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
                         final customer = controller.items[index];
@@ -86,7 +83,7 @@ class CustomerScreen extends StatelessWidget {
                   ),
                 ),
               );
-            });
+
           } else {
             return const Center(child: Text("Something went wrong."));
           }

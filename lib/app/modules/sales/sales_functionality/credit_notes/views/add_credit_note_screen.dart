@@ -106,101 +106,107 @@ class _AddCreditNoteScreenState extends State<AddCreditNoteScreen> {
     final CurrencyController _currencyController = Get.find();
     return Scaffold(
       appBar: AppBar(title: const Text('Add Credit Note')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
+      body:
+      Obx(
+        () {
+          final invoices =
+          invoiceController.items
+              .where((element) => element.paymentStatus == "unpaid")
+              .toList();
+          if(invoices.isEmpty){
+            return const Center(child: Text('No unpaid invoices found'));
+          }
+          return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
 
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: ListView(
-            children: [
-              // ✅ Dropdown with live data from GetX
-              Obx(() {
-                final invoices =
-                    invoiceController.items
-                        .where((element) => element.paymentStatus == "unpaid")
-                        .toList();
-                return CrmDropdownField<SalesInvoice>(
-                  title: 'Invoice',
-                  value: selectedInvoice,
-                  items:
-                      invoices
-                          .map(
-                            (invoice) => DropdownMenuItem<SalesInvoice>(
-                              value: invoice,
-                              child: Text(
-                                invoice.salesInvoiceNumber ?? 'No Number',
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: ListView(
+              children: [
+                // ✅ Dropdown with live data from GetX
+                CrmDropdownField<SalesInvoice>(
+                    title: 'Invoice',
+                    value: selectedInvoice,
+                    items:
+                        invoices
+                            .map(
+                              (invoice) => DropdownMenuItem<SalesInvoice>(
+                                value: invoice,
+                                child: Text(
+                                  invoice.salesInvoiceNumber ?? 'No Number',
+                                ),
                               ),
-                            ),
-                          )
-                          .toList(),
-                  onChanged: (invoice) async{
-                    if (invoice != null) {
-                      final customer = await customerController.getCustomerById(invoice.customer);
-                      final currency = await _currencyController.getCurrencyById(invoice.currency);
-                        selectedInvoice = invoice;
-                        customerNameController.text = customer?.name ?? '';
-                        currencyController.text = currency?.currencyName ?? '';
-                        amountController.text = invoice.total?.toString() ?? '';
-                    setState(() {});
-                    }
-                  },
-                  isRequired: true,
-                  // validator:
-                  //     (value) => requiredValidator(value, 'Customer Name'),
-                );
-              }),
-
-              CrmTextField(
-                controller: customerNameController,
-                title: 'Customer Name',
-                isRequired: true,
-                enabled: false,
-              ),
-              CrmTextField(
-                controller: currencyController,
-                title: 'Currency',
-                isRequired: true,
-                enabled: false,
-                validator: (value) => requiredValidator(value, 'Currency'),
-              ),
-              GestureDetector(
-                onTap: _pickDate,
-                child: AbsorbPointer(
-                  child: CrmTextField(
-                    controller: dateController,
-                    title: 'Date',
-                    isRequired: true,
-                    validator: (value) => requiredValidator(value, 'Date'),
-                    onChanged: (value) {
-                      // Revalidate only this field
-
-                      if (_formKey.currentState != null) {
-                        _formKey.currentState!.validate();
+                            )
+                            .toList(),
+                    onChanged: (invoice) async{
+                      if (invoice != null) {
+                        final customer = await customerController.getCustomerById(invoice.customer);
+                        final currency = await _currencyController.getCurrencyById(invoice.currency);
+                          selectedInvoice = invoice;
+                          customerNameController.text = customer?.name ?? '';
+                          currencyController.text = currency?.currencyName ?? '';
+                          amountController.text = invoice.total?.toString() ?? '';
+                      setState(() {});
                       }
                     },
+                    isRequired: true,
+                    // validator:
+                    //     (value) => requiredValidator(value, 'Customer Name'),
+                  ),
+
+                CrmTextField(
+                  controller: customerNameController,
+                  title: 'Customer Name',
+                  isRequired: true,
+                  enabled: false,
+                ),
+                CrmTextField(
+                  controller: currencyController,
+                  title: 'Currency',
+                  isRequired: true,
+                  enabled: false,
+                  validator: (value) => requiredValidator(value, 'Currency'),
+                ),
+                GestureDetector(
+                  onTap: _pickDate,
+                  child: AbsorbPointer(
+                    child: CrmTextField(
+                      controller: dateController,
+                      title: 'Date',
+                      isRequired: true,
+                      validator: (value) => requiredValidator(value, 'Date'),
+                      onChanged: (value) {
+                        // Revalidate only this field
+
+                        if (_formKey.currentState != null) {
+                          _formKey.currentState!.validate();
+                        }
+                      },
+                    ),
                   ),
                 ),
-              ),
-              CrmTextField(
-                controller: amountController,
-                title: 'Amount',
-                isRequired: true,
-                enabled: false,
-                keyboardType: TextInputType.number,
-              ),
-              CrmTextField(
-                controller: descriptionController,
-                title: 'Description',
-                maxLines: 3,
-              ),
-              const SizedBox(height: 24),
-              isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : CrmButton(onTap: _submit, title: 'Create Credit Note'),
-            ],
+                CrmTextField(
+                  controller: amountController,
+                  title: 'Amount',
+                  isRequired: true,
+                  enabled: false,
+                  keyboardType: TextInputType.number,
+                ),
+                CrmTextField(
+                  controller: descriptionController,
+                  title: 'Description',
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 24),
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : CrmButton(onTap: _submit, title: 'Create Credit Note'),
+              ],
+            ),
           ),
-        ),
+        );
+        },
       ),
     );
   }

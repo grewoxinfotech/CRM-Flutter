@@ -60,16 +60,33 @@ class DealService {
   //   );
   // }
 
-  Future<bool> createDeal(DealModel data) async {
+  // Future<bool> createDeal(DealModel data) async {
+  //   final response = await http.post(
+  //     Uri.parse(url),
+  //     headers: await headers(),
+  //     body: jsonEncode(data),
+  //   );
+  //
+  //   print("[DEBUG]=> response =--------- ${response.body}");
+  //   return (response.statusCode == 200 || response.statusCode == 201);
+  // }
+
+  Future<DealModel?> createDeal(DealModel data) async {
     final response = await http.post(
       Uri.parse(url),
       headers: await headers(),
       body: jsonEncode(data),
     );
 
-    print("[DEBUG]=> response =--------- ${response.body}");
-    return (response.statusCode == 200 || response.statusCode == 201);
+    print("[DEBUG]=> response = ${response.body}");
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final json = jsonDecode(response.body);
+      return DealModel.fromJson(json); // ✅ Parse and return created deal
+    }
+    return null;
   }
+
 
   /// 4. Update Deal by ID
   Future<bool> updateDeal(String id, DealModel data) async {

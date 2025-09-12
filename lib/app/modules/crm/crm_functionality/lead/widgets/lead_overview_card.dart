@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/care/constants/access_res.dart';
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
@@ -43,6 +44,7 @@ class LeadOverviewCard extends StatelessWidget {
   final String? updatedAt;
   final GestureTapCallback? onDelete;
   final GestureTapCallback? onEdit;
+  final GestureTapCallback? onConvert;
 
   const LeadOverviewCard({
     super.key,
@@ -75,7 +77,7 @@ class LeadOverviewCard extends StatelessWidget {
     this.createdAt,
     this.updatedAt,
     this.onDelete,
-    this.onEdit,
+    this.onEdit, this.onConvert,
   });
 
   String? _getCurrencyValue(LeadController leadController, String currencyId) {
@@ -355,6 +357,21 @@ class LeadOverviewCard extends StatelessWidget {
                 ),
             ],
           ),
+          if(isConverted!.toLowerCase() == "false")...[
+            SizedBox(height: AppMargin.medium),
+            CrmButton(
+              width: double.infinity,
+              title: "Convert to Deal",
+              backgroundColor: Get.theme.colorScheme.surface,
+              titleTextStyle: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: ColorRes.primary,
+              ),
+              onTap: onConvert,
+            ),
+          ]
+
         ],
       ),
     );

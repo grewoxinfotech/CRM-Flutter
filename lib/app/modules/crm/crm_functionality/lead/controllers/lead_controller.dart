@@ -294,7 +294,7 @@ class LeadController extends GetxController {
       isUpdating(true);
 
       final response = await _leadService.updateLead(id, lead.toJson());
-
+      print('Response status code: ${response.statusCode}');
       if (response.statusCode == 200) {
         await fetchLeads();
         _showSuccessSnackbar('Lead updated successfully');

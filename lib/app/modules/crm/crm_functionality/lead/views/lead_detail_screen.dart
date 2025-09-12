@@ -6,6 +6,9 @@ import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
 import 'package:crm_flutter/app/data/network/file/model/file_model.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/activity/controller/activity_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/contact/controller/contact_controller.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/controllers/deal_controller.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/views/deal_add_screen.dart';
+import 'package:crm_flutter/app/modules/crm/crm_functionality/deal/views/deal_edit_screen.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/file/controllers/file_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/controllers/lead_controller.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_edit_screen.dart';
@@ -301,6 +304,116 @@ class LeadDetailScreen extends StatelessWidget {
               ),
             ),
         onEdit: () => _handleEdit(lead, leadController),
+        // onConvert: () async {
+        //   Get.lazyPut(() => DealController());
+        //   final dealController = Get.find<DealController>();
+        //   dealController.dealTitle.text = lead.leadTitle.toString();
+        //   dealController.dealValue.text = lead.leadValue.toString();
+        //   print("[DEBUG]=> Lead Value : ${lead.leadValue}");
+        //   dealController.currency.value = lead.currency.toString();
+        //   dealController.selectedPipelineId.value = lead.pipeline.toString();
+        //   dealController.selectedStageId.value = lead.leadStage.toString();
+        //   dealController.selectedSource.value = lead.source.toString();
+        //   dealController.selectedCategory.value = lead.category.toString();
+        //   dealController.selectedStatus.value = lead.status.toString();
+        //   dealController.selectedContact.value = lead.contactId.toString();
+        //   dealController.selectedCompany.value = lead.companyId.toString();
+        //   dealController.selectedLeadId.value = lead.id.toString();
+        //
+        //   final createDealId = await Get.to(() => DealCreateScreen());
+        //   if (createDealId != null && lead.id != null) {
+        //     final data = LeadModel(isConverted: true, dealId: createDealId);
+        //     leadController.updateLead(lead.id!, data);
+        //   }
+        // },
+
+        onConvert: () async {
+          try {
+            // ✅ Ensure DealController is available
+            if (!Get.isRegistered<DealController>()) {
+              Get.lazyPut(() => DealController());
+            }
+            final dealController = Get.find<DealController>();
+
+            // ✅ Prefill only if values are not null
+            dealController.dealTitle.text = lead.leadTitle ?? '';
+            dealController.dealValue.text = lead.leadValue?.toString() ?? '0';
+            dealController.currency.value = lead.currency?.toString() ?? '';
+            dealController.selectedPipelineId.value = lead.pipeline?.toString() ?? '';
+            dealController.selectedStageId.value = lead.leadStage?.toString() ?? '';
+            dealController.selectedSource.value = lead.source?.toString() ?? '';
+            dealController.selectedCategory.value = lead.category?.toString() ?? '';
+            dealController.selectedStatus.value = lead.status?.toString() ?? '';
+            dealController.selectedContact.value = lead.contactId?.toString() ?? '';
+            dealController.selectedCompany.value = lead.companyId?.toString() ?? '';
+            dealController.selectedLeadId.value = lead.id?.toString() ?? '';
+
+            print("[DEBUG]=> Pre-filling DealCreateScreen from Lead ${lead.id}");
+
+            // ✅ Open DealCreateScreen and wait for result
+            final createdDealId = await Get.to(() => DealCreateScreen());
+
+            // ✅ If user canceled or deal creation failed, do nothing
+            if (createdDealId == null) {
+              print("[DEBUG]=> Deal creation cancelled for Lead ${lead.id}");
+              return;
+            }
+
+            // ✅ Ensure lead.id exists before updating
+            if (lead.id == null) {
+              print("[ERROR]=> Cannot update lead: lead.id is null");
+              return;
+            }
+
+            // ✅ Prepare update model safely
+            final updatedLead = LeadModel(
+              id: lead.id,
+              leadTitle: lead.leadTitle,  // fallback to avoid null
+              currency: lead.currency,              // or your system default
+              leadValue: lead.leadValue ?? 0,
+              pipeline: lead.pipeline,
+              leadStage: lead.leadStage,
+              source: lead.source,
+              category: lead.category,
+              status: lead.status,
+              contactId: lead.contactId,
+              companyId: lead.companyId,
+              isConverted: true,
+              dealId: createdDealId,
+              createdBy: lead.createdBy,
+              updatedBy: lead.updatedBy,
+              createdAt: lead.createdAt,
+              updatedAt: lead.updatedAt,
+              leadMembers: lead.leadMembers,
+              interestLevel: lead.interestLevel,
+              leadScore: lead.leadScore,
+              files: lead.files,
+              clientId: lead.clientId,
+
+            );
+
+            final converted = await leadController.updateLead(lead.id!, updatedLead);
+            if (!converted) {
+              print("[ERROR]=> Failed to convert lead");
+              return;
+            }
+
+
+            print("[SUCCESS]=> Lead ${lead.id} converted to Deal $createdDealId");
+          } catch (e, stack) {
+            print("[ERROR]=> Failed to convert lead: $e");
+            print(stack);
+            // optionally show snackbar
+            Get.snackbar(
+              "Error",
+              "Failed to convert lead",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.red.withOpacity(0.8),
+              colorText: Colors.white,
+            );
+          }
+        },
+
       );
     });
   }
@@ -469,6 +582,8 @@ class LeadDetailScreen extends StatelessWidget {
     String leadId,
     BuildContext context,
   ) {
+    Get.lazyPut(() => AccessController());
+    final accessController = Get.find<AccessController>();
     return Stack(
       children: [
         Obx(() {
@@ -486,24 +601,36 @@ class LeadDetailScreen extends StatelessWidget {
             itemBuilder: (context, i) {
               final note = noteController.notes[i];
               return NoteCard(
-                id: note.id,
-                relatedId: note.relatedId,
+                // id: note.id,
+                // relatedId: note.relatedId,
                 noteTitle: note.noteTitle,
                 noteType: note.notetype,
                 description: note.description,
-                clientId: note.clientId,
-                createdBy: note.createdBy,
-                updatedBy: note.updatedBy,
-                createdAt: formatDate(note.createdAt.toString()),
-                updatedAt: formatDate(note.updatedAt.toString()),
-                onDelete: () => noteController.deleteNote(note.id, leadId),
+                // clientId: note.clientId,
+                // createdBy: note.createdBy,
+                // updatedBy: note.updatedBy,
+                // createdAt: formatDate(note.createdAt.toString()),
+                // updatedAt: formatDate(note.updatedAt.toString()),
+                // onDelete: () => noteController.deleteNote(note.id, leadId),
+                onDelete:
+                    (accessController.can(
+                          AccessModule.deal,
+                          AccessAction.delete,
+                        ))
+                        ? () => noteController.deleteNote(note.id, leadId)
+                        : null,
                 onEdit:
-                    () => _showNoteDialog(
-                      context,
-                      noteController,
-                      leadId,
-                      note: note,
-                    ),
+                    (accessController.can(
+                          AccessModule.deal,
+                          AccessAction.delete,
+                        ))
+                        ? () => _showNoteDialog(
+                          context,
+                          noteController,
+                          leadId,
+                          note: note,
+                        )
+                        : null,
               );
             },
           );

@@ -1,6 +1,7 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/key_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/modules/search/views/search_screen.dart';
 import 'package:crm_flutter/app/modules/users/view/profile_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -54,9 +55,12 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
           actions:
               action ??
               [
-                CrmIc(
-                  iconPath: ICRes.search,
-                  color: Get.theme.colorScheme.onPrimary,
+                GestureDetector(
+                  onTap: ()=> Get.to(()=>SearchModuleScreen()),
+                  child: CrmIc(
+                    iconPath: ICRes.search,
+                    color: Get.theme.colorScheme.onPrimary,
+                  ),
                 ),
                 AppSpacing.horizontalMedium,
                 CrmIc(

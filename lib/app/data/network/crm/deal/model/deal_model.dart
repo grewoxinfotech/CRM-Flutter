@@ -4,6 +4,7 @@ class DealModel {
   final String? id;
   final String? dealTitle;
   final String? currency;
+  final String? leadId;
   final int? value;
   final String? pipeline;
   final String? stage;
@@ -32,7 +33,8 @@ class DealModel {
   final DateTime? updatedAt;
   final List<DealMember> dealMembers;
 
-  DealModel({
+  DealModel( {
+    this.leadId,
     this.id,
     this.dealTitle,
     this.currency,
@@ -133,6 +135,7 @@ class DealModel {
       updatedAt:
           json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       dealMembers: parseDealMembers(),
+      leadId: json['leadId'] ?? '',
     );
   }
 
@@ -168,6 +171,7 @@ class DealModel {
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
       'dealMembers': dealMembers.map((m) => m.toJson()).toList(),
+      'leadId': leadId,
     };
   }
 }

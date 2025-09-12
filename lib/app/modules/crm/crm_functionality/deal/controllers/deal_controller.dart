@@ -20,10 +20,12 @@ import 'package:crm_flutter/app/data/network/crm/notes/service/note_service.dart
 import 'package:crm_flutter/app/data/network/crm/notes/model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../data/network/crm/crm_system/label/controller/label_controller.dart';
 import '../../../../../data/network/crm/crm_system/pipeline/controller/pipeline_controller.dart';
 import '../../../../../data/network/crm/crm_system/stage/controller/stage_controller.dart';
+import '../../../../../data/network/system/country/controller/country_controller.dart';
 import '../../../../../data/network/system/country/model/country_model.dart';
 import '../../../../../data/network/system/currency/model/currency_model.dart';
 import '../../../../../data/network/system/currency/service/currency_service.dart';
@@ -76,6 +78,7 @@ class DealController extends GetxController {
   final StageController stageController = Get.put(StageController());
   final CompanyController companyController = Get.put(CompanyController());
   final PipelineController pipelineController = Get.put(PipelineController());
+  final CountryController countryController = Get.put(CountryController());
 
   // Dropdown Selections
   final selectedPipeline = ''.obs;
@@ -88,6 +91,7 @@ class DealController extends GetxController {
   final selectedStage = ''.obs;
   final selectedStageId = ''.obs;
   final selectedStatus = ''.obs;
+  final selectedLeadId = ''.obs;
   Rxn<CountryModel> selectedCountryCode = Rxn<CountryModel>();
 
   final isCreating = false.obs;
@@ -183,24 +187,45 @@ class DealController extends GetxController {
     loadCompanies();
   }
 
-  Future<bool> createDeal(DealModel deal) async {
+  // Future<bool> createDeal(DealModel deal) async {
+  //   try {
+  //     isCreating(true);
+  //     final response = await dealService.createDeal(deal);
+  //
+  //     if (response) {
+  //       await getDeals();
+  //       _showSuccessSnackbar('Lead created successfully');
+  //       return true;
+  //     }
+  //     return false;
+  //   } catch (e) {
+  //     _showErrorSnackbar('Failed to create lead', e);
+  //     return false;
+  //   } finally {
+  //     isCreating(false);
+  //   }
+  // }
+
+
+  Future<DealModel?> createDeal(DealModel deal) async {
     try {
       isCreating(true);
-      final response = await dealService.createDeal(deal);
+      final createdDeal = await dealService.createDeal(deal);
 
-      if (response) {
+      if (createdDeal != null) {
         await getDeals();
-        _showSuccessSnackbar('Lead created successfully');
-        return true;
+        _showSuccessSnackbar('Deal created successfully');
+        return createdDeal;
       }
-      return false;
+      return null;
     } catch (e) {
-      _showErrorSnackbar('Failed to create lead', e);
-      return false;
+      _showErrorSnackbar('Failed to create deal', e);
+      return null;
     } finally {
       isCreating(false);
     }
   }
+
 
   // Helper methods for showing snackbars
   void _showSuccessSnackbar(String message) {
@@ -281,6 +306,48 @@ class DealController extends GetxController {
     email.clear();
     phoneNumber.clear();
     address.clear();
+    dealValue.text = 0.toString();
+    selectedEndDate.value = DateTime.now();
+    endDateController.text = DateFormat(
+      'yyyy-MM-dd',
+    ).format(DateTime.now());
+    pipelineController.getPipelines().then((_) {
+      if (pipelineController.pipelines.isNotEmpty) {
+        selectedPipelineId.value =
+        pipelineController.pipelines.first.id!;
+        stageController.getStagesByPipeline(
+          selectedPipelineId.value!,
+        );
+      }
+    });
+    //
+    // Load stages and select first as default
+    stageController.getStages().then((_) {
+      if (stageController.stages.isNotEmpty) {
+        final stage = stageController.stages.firstWhereOrNull(
+              (stage) => (stage.stageName).toLowerCase() == "new deal",
+        );
+        selectedStageId.value = stage!.id;
+      }
+    });
+
+    countryController.getCountries().then((_) {
+      if (countryController.countryModel.isNotEmpty) {
+        selectedCountryCode.value =
+            countryController.countryModel.first;
+      }
+    });
+
+    if (sourceOptions.isNotEmpty) {
+      selectedSource.value =
+      sourceOptions.first['id']!;
+    }
+    //
+    if (categoryOptions.isNotEmpty) {
+      selectedCategory.value =
+      categoryOptions.first['id']!;
+    }
+
   }
 
   Future<void> refreshData() async {

@@ -10,16 +10,53 @@ import 'package:crm_flutter/app/widgets/drawer/crm_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/database/helper/sqlite_db_helper.dart';
+import '../../../data/database/storage/secure_storage_service.dart';
 import '../../crm/crm_functions/view/crm_screen.dart';
 import '../../purchase/purchase_functions/view/purchase_screen.dart';
 import '../../sales/sales_functions/view/sales_screen.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   DashboardScreen({super.key});
 
   @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    // Get.lazyPut<AccessController>(() => AccessController());
+    super.initState();
+    _initAccessController();
+  }
+  Future<void> _initAccessController() async {
+    // Initialize AccessController if not already
+    AccessController accessController;
+    if (!Get.isRegistered<AccessController>()) {
+      accessController = Get.put(AccessController());
+    } else {
+      accessController = Get.find<AccessController>();
+    }
+
+    // Fetch role data
+    final DBHelper dbHelper = DBHelper();
+    final user = await SecureStorage.getUserData();
+    final roleId = user?.roleId;
+    if (roleId == null) return;
+
+    final roleData = await dbHelper.getRoleById(roleId);
+    if (roleData == null) return;
+
+    // Initialize AccessController with permissions
+    accessController.init(roleData.permissions ?? {});
+
+    // // Now safely update functions
+    // updateFunctions(accessController);
+  }
+  @override
   Widget build(BuildContext context) {
-    Get.lazyPut<AccessController>(() => AccessController());
+
     final navigationController = Get.put(NavigationController());
     return Scaffold(
       key: KeyRes.scaffoldKey,

@@ -32,7 +32,9 @@ class CustomerService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print("[DEBUG]=> $baseUrl ---- ${response.body}");
         final List<dynamic> customers = data["message"]["data"];
+        print("[DEBUG]=> $baseUrl ---- ${customers.length}");
         return customers.map((json) => CustomerData.fromJson(json)).toList();
       } else {
         print("Failed to load customers: ${response.statusCode}");

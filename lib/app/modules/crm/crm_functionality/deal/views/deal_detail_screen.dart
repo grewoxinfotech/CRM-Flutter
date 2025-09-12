@@ -369,24 +369,25 @@ class DealDetailScreen extends StatelessWidget {
             itemBuilder: (context, i) {
               final note = noteController.notes[i];
               return NoteCard(
-                id: note.id,
-                relatedId: note.relatedId,
+                // id: note.id,
+                // relatedId: note.relatedId,
                 noteTitle: note.noteTitle,
                 noteType: note.notetype,
                 description: note.description,
-                clientId: note.clientId,
-                createdBy: note.createdBy,
-                updatedBy: note.updatedBy,
-                createdAt: formatDate(note.createdAt.toString()),
-                updatedAt: formatDate(note.updatedAt.toString()),
-                onDelete: () => noteController.deleteNote(note.id, dealId),
+                // clientId: note.clientId,
+                // createdBy: note.createdBy,
+                // updatedBy: note.updatedBy,
+                // createdAt: formatDate(note.createdAt.toString()),
+                // updatedAt: formatDate(note.updatedAt.toString()),
+                // onDelete: () => noteController.deleteNote(note.id, dealId),
+                onDelete: (accessController.can(AccessModule.deal, AccessAction.delete)) ? ()=> noteController.deleteNote(note.id, dealId) : null ,
                 onEdit:
-                    () => _showNoteDialog(
+                (accessController.can(AccessModule.deal, AccessAction.delete)) ? () => _showNoteDialog(
                       context,
                       noteController,
                       dealId,
                       note: note,
-                    ),
+                    ):null,
               );
             },
           ),
