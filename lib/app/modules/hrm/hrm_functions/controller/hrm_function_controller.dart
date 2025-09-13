@@ -18,6 +18,7 @@ import 'package:crm_flutter/app/modules/hrm/holiday/views/holiday_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/leave_management/views/leave_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/payroll/views/payroll_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/role/views/role_screen.dart';
+import 'package:crm_flutter/app/modules/job/job_functions/view/job_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/debit_notes/views/debit_note_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
@@ -271,6 +272,13 @@ class HrmFunctionController extends GetxController {
         color: const Color(0xffad0000),
         count: 66,
         screenBuilder: CalendarScreen(),
+      ),
+      FunctionModel(
+        title: 'Job',
+        iconPath: ICRes.employee,
+        color: const Color(0xff008dad),
+        count: 66,
+        screenBuilder: JobScreen(),
       ),
     ];
   }

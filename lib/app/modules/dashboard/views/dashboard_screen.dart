@@ -30,6 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     _initAccessController();
   }
+
   Future<void> _initAccessController() async {
     // Initialize AccessController if not already
     AccessController accessController;
@@ -54,9 +55,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // // Now safely update functions
     // updateFunctions(accessController);
   }
+
   @override
   Widget build(BuildContext context) {
-
     final navigationController = Get.put(NavigationController());
     return Scaffold(
       key: KeyRes.scaffoldKey,
@@ -75,8 +76,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           return PurchaseScreen();
         } else if (navigationController.currentIndex.value == 4) {
           return HrmScreen();
-        } else if (navigationController.currentIndex.value == 5) {
-          return Center(child: Text("No Update"));
         } else {
           return SizedBox();
         }

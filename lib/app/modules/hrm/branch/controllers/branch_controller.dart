@@ -12,7 +12,7 @@ import '../../../users/controllers/users_controller.dart';
 class BranchController extends PaginatedController<BranchData> {
   final BranchService _service = BranchService();
   final String url = UrlRes.branches;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -28,10 +28,17 @@ class BranchController extends PaginatedController<BranchData> {
   Future<List<BranchData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchBranches(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch revenues";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

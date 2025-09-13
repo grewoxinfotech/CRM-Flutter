@@ -657,11 +657,13 @@
 // }
 
 import 'package:crm_flutter/app/data/network/sales/revenue/model/revenue_menu.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 
+import '../../../care/constants/size_manager.dart';
 import '../../../widgets/common/inputs/crm_dropdown_field.dart';
 
 class RevenueChart extends StatefulWidget {
@@ -747,9 +749,10 @@ class _RevenueChartState extends State<RevenueChart> {
       if (revenue > maxRevenue) maxRevenue = revenue;
     }
 
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return CrmCard(
+      margin: EdgeInsets.symmetric(horizontal: AppMargin.medium),
+      padding: EdgeInsets.all(AppPadding.small),
+
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

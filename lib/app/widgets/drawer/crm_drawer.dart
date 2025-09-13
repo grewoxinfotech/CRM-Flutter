@@ -8,6 +8,8 @@ import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../modules/job/job_functions/view/job_screen.dart';
+
 class CrmDrawer extends StatelessWidget {
   const CrmDrawer({super.key});
 
@@ -67,7 +69,7 @@ class CrmDrawer extends StatelessWidget {
                   () => GestureDetector(
                     onTap: () {
                       drawerController.onchange(i);
-                      Get.back();
+                      // Get.back();
                     },
                     child: CrmCard(
                       padding: const EdgeInsets.all(AppPadding.small),
@@ -165,7 +167,12 @@ class DrawerController extends GetxController {
   final NavigationController navigationController = Get.find();
 
   onchange(int index) {
+    if (index == 5) {
+      Get.to(() => JobScreen());
+      return selextedIndex(index);
+    }
     navigationController.changeIndex(index);
+    Get.back();
     return selextedIndex(index);
   }
 }

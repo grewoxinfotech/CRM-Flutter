@@ -3,19 +3,19 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../../widgets/common/messages/crm_snack_bar.dart';
-import 'branch_model.dart';
+import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import 'job_candidate_model.dart';
 
-class BranchService {
-  final String baseUrl = UrlRes.branches; // Define in UrlRes
+class JobCandidateService {
+  final String baseUrl = UrlRes.jobCandidates; // Define in UrlRes
 
   /// Common headers
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
   }
 
-  /// Fetch branches with optional pagination & search
-  Future<BranchModel?> fetchBranches({
+  /// Fetch job candidates with optional pagination & search
+  Future<JobCandidateModel?> fetchCandidates({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -33,20 +33,19 @@ class BranchService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> branches = data["message"]["data"];
-        print("Branches: ${data}");
-        return BranchModel.fromJson(data);
+        print("Job Candidates: ${data}");
+        return JobCandidateModel.fromJson(data);
       } else {
-        print("Failed to load branches: ${response.statusCode}");
+        print("Failed to load job candidates: ${response.statusCode}");
       }
     } catch (e) {
-      print("Exception in fetchBranches: $e");
+      print("Exception in fetchCandidates: $e");
     }
     return null;
   }
 
-  /// Get single branch by ID
-  Future<BranchData?> getBranchById(String id) async {
+  /// Get single candidate by ID
+  Future<JobCandidateData?> getCandidateById(String id) async {
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/$id"),
@@ -55,38 +54,21 @@ class BranchService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return BranchData.fromJson(data["message"]["data"]);
+        return JobCandidateData.fromJson(data["message"]["data"]);
       }
     } catch (e) {
-      print("Get branch by ID exception: $e");
+      print("Get candidate by ID exception: $e");
     }
     return null;
   }
 
-  /// Create new branch
-  // Future<bool> createBranch(BranchData branch) async {
-  //   try {
-  //     print("[DEBUG]=> $baseUrl ---- ${branch.toJson()}");
-  //     final response = await http.post(
-  //       Uri.parse(baseUrl),
-  //       headers: await headers(),
-  //       body: jsonEncode(branch.toJson()),
-  //     );
-  //     if()
-  //     print("[DEBUG]=> $baseUrl ---- ${response.body}");
-  //     return response.statusCode == 201 || response.statusCode == 200;
-  //   } catch (e) {
-  //     print("Create branch exception: $e");
-  //     return false;
-  //   }
-  // }
-
-  Future<bool> createBranch(BranchData branch) async {
+  /// Create new candidate
+  Future<bool> createCandidate(JobCandidateData candidate) async {
     try {
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
-        body: jsonEncode(branch.toJson()),
+        body: jsonEncode(candidate.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -94,45 +76,31 @@ class BranchService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Branch created successfully",
+          message: responseData["message"] ?? "Candidate created successfully",
           contentType: ContentType.success,
         );
         return true;
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Error",
-          message: responseData["message"] ?? "Failed to create branch",
+          message: responseData["message"] ?? "Failed to create candidate",
           contentType: ContentType.failure,
         );
         return false;
       }
     } catch (e) {
-      print("Create branch exception: $e");
+      print("Create candidate exception: $e");
       return false;
     }
   }
 
-  /// Update branch
-  // Future<bool> updateBranch(String id, BranchData branch) async {
-  //   try {
-  //     final response = await http.put(
-  //       Uri.parse("$baseUrl/$id"),
-  //       headers: await headers(),
-  //       body: jsonEncode(branch.toJson()),
-  //     );
-  //
-  //     return response.statusCode == 200;
-  //   } catch (e) {
-  //     print("Update branch exception: $e");
-  //     return false;
-  //   }
-  // }
-  Future<bool> updateBranch(String id, BranchData branch) async {
+  /// Update candidate
+  Future<bool> updateCandidate(String id, JobCandidateData candidate) async {
     try {
       final response = await http.put(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
-        body: jsonEncode(branch.toJson()),
+        body: jsonEncode(candidate.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -140,31 +108,31 @@ class BranchService {
       if (response.statusCode == 200) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Branch updated successfully",
+          message: responseData["message"] ?? "Candidate updated successfully",
           contentType: ContentType.success,
         );
         return true;
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Error",
-          message: responseData["message"] ?? "Failed to update branch",
+          message: responseData["message"] ?? "Failed to update candidate",
           contentType: ContentType.failure,
         );
         return false;
       }
     } catch (e) {
-      print("Update branch exception: $e");
+      print("Update candidate exception: $e");
       CrmSnackBar.showAwesomeSnackbar(
         title: "Exception",
-        message: "Something went wrong while updating the branch",
+        message: "Something went wrong while updating the candidate",
         contentType: ContentType.failure,
       );
       return false;
     }
   }
 
-  /// Delete branch
-  Future<bool> deleteBranch(String id) async {
+  /// Delete candidate
+  Future<bool> deleteCandidate(String id) async {
     try {
       final response = await http.delete(
         Uri.parse("$baseUrl/$id"),
@@ -172,7 +140,7 @@ class BranchService {
       );
       return response.statusCode == 200 || response.statusCode == 204;
     } catch (e) {
-      print("Delete branch exception: $e");
+      print("Delete candidate exception: $e");
       return false;
     }
   }

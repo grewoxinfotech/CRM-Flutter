@@ -86,6 +86,11 @@ class UrlRes {
 
   static const String calendar = "$baseURL/calendar";
 
+  /// Job
+  static const String jobCandidates = "$baseURL/job-applications";
+
+  static const String jobList = "$baseURL/jobs";
+
   //puchase
   static const String revenue = "$baseURL/sales-revenue";
 
