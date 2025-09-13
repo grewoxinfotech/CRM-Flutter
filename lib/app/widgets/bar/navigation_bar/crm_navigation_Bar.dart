@@ -1,4 +1,6 @@
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -44,27 +46,31 @@ class CrmNavigationBar extends StatelessWidget {
             onTap: (i) => controller.changeIndex(i),
             items: [
               SalomonBottomBarItem(
-                icon: Icon(FontAwesomeIcons.dashboard, size: iconSize),
+                icon: CrmIc(iconPath: ICRes.dashboard),
+
                 title: Text("Dashboard", style: style),
               ),
 
               SalomonBottomBarItem(
-                icon: Icon(FontAwesomeIcons.whatsapp, size: iconSize),
+                icon: CrmIc(iconPath: ICRes.crm),
                 title: Text("Crm", style: style),
               ),
 
               SalomonBottomBarItem(
-                icon: Icon(FontAwesomeIcons.facebookF, size: iconSize),
+                icon: CrmIc(iconPath: ICRes.sales),
+
                 title: Text("Sales", style: style),
               ),
 
               SalomonBottomBarItem(
-                icon: Icon(FontAwesomeIcons.google, size: iconSize),
+                icon: CrmIc(iconPath: ICRes.purchase),
+
                 title: Text("purchase", style: style),
               ),
 
               SalomonBottomBarItem(
-                icon: Icon(FontAwesomeIcons.twitter, size: iconSize),
+                icon: CrmIc(iconPath: ICRes.hrm),
+
                 title: Text("Hrm", style: style),
               ),
             ],

@@ -25,7 +25,7 @@ class CrmTextField extends StatelessWidget {
   const CrmTextField({
     super.key,
     this.controller,
-    required this.title,
+    this.title,
     this.validator,
     this.hintText,
     this.obscureText = false,
@@ -39,7 +39,8 @@ class CrmTextField extends StatelessWidget {
     this.focusNode,
     this.textInputAction,
     this.onChanged,
-    this.onTap, this.inputFormatters,
+    this.onTap,
+    this.inputFormatters,
   });
 
   @override
@@ -47,27 +48,28 @@ class CrmTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              title!,
-              style: TextStyle(
-                fontSize: 14,
-                color: Get.theme.colorScheme.onSecondary,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            if (isRequired)
+        if (title != null)
+          Row(
+            children: [
               Text(
-                ' *',
+                title!,
                 style: TextStyle(
-                  color: Get.theme.colorScheme.error,
                   fontSize: 14,
+                  color: Get.theme.colorScheme.onSecondary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-          ],
-        ),
+              if (isRequired)
+                Text(
+                  ' *',
+                  style: TextStyle(
+                    color: Get.theme.colorScheme.error,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+            ],
+          ),
         AppSpacing.verticalSmall,
         TextFormField(
           inputFormatters: inputFormatters,

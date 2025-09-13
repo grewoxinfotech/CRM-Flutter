@@ -87,7 +87,7 @@ class CrmFunctionController extends GetxController {
           accessController.can(AccessModule.lead, AccessAction.delete))
         FunctionModel(
           title: 'Leads',
-          iconPath: ICRes.leads,
+          iconPath: ICRes.lead,
           color: const Color(0xffFFBD21),
           screenBuilder: LeadScreen(),
         ),
@@ -97,21 +97,21 @@ class CrmFunctionController extends GetxController {
           accessController.can(AccessModule.deal, AccessAction.delete))
         FunctionModel(
           title: 'Deals',
-          iconPath: ICRes.leads,
+          iconPath: ICRes.deal,
           color: const Color(0xff28B999),
           screenBuilder: DealScreen(),
         ),
 
       FunctionModel(
         title: 'Company',
-        iconPath: ICRes.employees,
+        iconPath: ICRes.company,
         color: const Color(0xff2B648F),
         count: 4,
         screenBuilder: CompanyScreen(),
       ),
       FunctionModel(
         title: 'Contacts',
-        iconPath: ICRes.customer,
+        iconPath: ICRes.contact,
         color: const Color(0xff6D5DD3),
         count: 10,
         screenBuilder: ContactScreen(),

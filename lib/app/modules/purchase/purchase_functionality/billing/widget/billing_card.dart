@@ -66,7 +66,7 @@ class BillingCard extends StatelessWidget {
                   height: 55,
                   decoration: BoxDecoration(
                     color: Colors.blueGrey[50],
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(AppSpacing.extraLarge),
                   ),
                   child: Icon(
                     Icons.receipt_long_rounded,
@@ -101,7 +101,9 @@ class BillingCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: _getStatusColor(status).withOpacity(0.15),
+                                color: _getStatusColor(
+                                  status,
+                                ).withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(

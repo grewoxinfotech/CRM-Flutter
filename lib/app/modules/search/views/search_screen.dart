@@ -1,9 +1,12 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
+import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../care/constants/size_manager.dart';
 import '../../../data/network/search/module_config.dart';
+import '../../../widgets/common/inputs/crm_text_field.dart';
 import '../controllers/search_controller.dart';
 
 class SearchModuleScreen extends StatelessWidget {
@@ -18,14 +21,11 @@ class SearchModuleScreen extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8),
-            child: TextField(
-              decoration: const InputDecoration(
-                hintText: "Search by name or tag",
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search),
-              ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: CrmTextField(
               onChanged: controller.filterModules,
+              hintText: 'Search Module...',
+              suffixIcon: Icon(Icons.search_rounded),
             ),
           ),
           Expanded(
@@ -43,18 +43,19 @@ class SearchModuleScreen extends StatelessWidget {
                   //   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   //   onTap: () => controller.openModule(module),
                   // );
-                  return SearchModuleCard(module: module,onTap: () => controller.openModule(module),);
+                  return SearchModuleCard(
+                    module: module,
+                    onTap: () => controller.openModule(module),
+                  );
                 },
               );
             }),
-          )
+          ),
         ],
       ),
     );
   }
 }
-
-
 
 class SearchModuleCard extends StatelessWidget {
   final ModuleConfig module;
@@ -83,10 +84,10 @@ class SearchModuleCard extends StatelessWidget {
                 color: Colors.blueAccent.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                ModuleIconMapper.getIcon(module.tag),
-                color: Colors.blueAccent,
-                size: 28,
+              child: CrmIc(
+                iconPath: ModuleIconMapper.getIcon(module.tag),
+                color: ColorRes.primary,
+                // color: Colors.blueAccent,
               ),
             ),
 
@@ -106,9 +107,9 @@ class SearchModuleCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     module.category,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[600],
-                    ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

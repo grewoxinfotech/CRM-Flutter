@@ -111,7 +111,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.branch, AccessAction.delete))
         FunctionModel(
           title: 'Branch',
-          iconPath: ICRes.employee,
+          iconPath: ICRes.branch,
           color: const Color(0xff0070ad),
           count: 66,
           screenBuilder: BranchScreen(),
@@ -122,7 +122,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.designation, AccessAction.delete))
         FunctionModel(
           title: 'Designation',
-          iconPath: ICRes.employee,
+          iconPath: ICRes.designation,
           color: const Color(0xff2000ad),
           count: 66,
           screenBuilder: DesignationScreen(),
@@ -133,7 +133,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.department, AccessAction.delete))
         FunctionModel(
           title: 'Department',
-          iconPath: ICRes.employee,
+          iconPath: ICRes.department,
           color: const Color(0xffad4800),
           count: 66,
           screenBuilder: DepartmentScreen(),
@@ -144,7 +144,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.holiday, AccessAction.delete))
         FunctionModel(
           title: 'Holiday',
-          iconPath: ICRes.calendar,
+          iconPath: ICRes.holiday,
           color: const Color(0xff00ad09),
           count: 66,
           screenBuilder: HolidayScreen(),
@@ -155,7 +155,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.leaveList, AccessAction.delete))
         FunctionModel(
           title: 'Leave Management',
-          iconPath: ICRes.calendar,
+          iconPath: ICRes.leave,
           color: const Color(0xff00ad99),
           count: 66,
           screenBuilder: LeaveScreen(),
@@ -166,7 +166,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.payroll, AccessAction.delete))
         FunctionModel(
           title: 'Pay Roll',
-          iconPath: ICRes.calendar,
+          iconPath: ICRes.payroll,
           color: const Color(0xff6e00ad),
           count: 66,
           screenBuilder: PayrollScreen(),
@@ -183,7 +183,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.announcement, AccessAction.delete))
         FunctionModel(
           title: 'Announcement',
-          iconPath: ICRes.notifications,
+          iconPath: ICRes.announcement,
           color: const Color(0xff005fad),
           count: 66,
           screenBuilder: AnnouncementScreen(),
@@ -194,7 +194,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.meeting, AccessAction.delete))
         FunctionModel(
           title: 'Meeting',
-          iconPath: ICRes.notifications,
+          iconPath: ICRes.meeting,
           color: const Color(0xff3a00ad),
           count: 66,
           screenBuilder: MeetingScreen(),
@@ -211,7 +211,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.trainingSetup, AccessAction.delete))
         FunctionModel(
           title: 'Training',
-          iconPath: ICRes.notifications,
+          iconPath: ICRes.training,
           color: const Color(0xffad0062),
           count: 66,
           screenBuilder: TrainingScreen(),
@@ -222,7 +222,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.document, AccessAction.delete))
         FunctionModel(
           title: 'Document',
-          iconPath: ICRes.file,
+          iconPath: ICRes.document,
           color: const Color(0xff00a7ad),
           count: 66,
           screenBuilder: DocumentScreen(),
@@ -233,7 +233,7 @@ class HrmFunctionController extends GetxController {
           accessController.can(AccessModule.role, AccessAction.delete))
         FunctionModel(
           title: 'Role',
-          iconPath: ICRes.file,
+          iconPath: ICRes.role,
           color: const Color(0xff68ad00),
           count: 66,
           screenBuilder: RoleScreen(),
@@ -256,7 +256,7 @@ class HrmFunctionController extends GetxController {
           ))
         FunctionModel(
           title: 'Attendance',
-          iconPath: ICRes.file,
+          iconPath: ICRes.attendance,
           color: const Color(0xff0028ad),
           count: 66,
           screenBuilder: AttendanceScreen(),

@@ -69,8 +69,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
         if (customerController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (customerController.error.isNotEmpty) {
-          return Center(child: Text(customerController.error.value));
+        if (customerController.errorMessage.isNotEmpty) {
+          return Center(child: Text(customerController.errorMessage.value));
         }
         if (customer == null) {
           return const Center(child: Text("Customer not found"));

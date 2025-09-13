@@ -161,10 +161,10 @@ class RevenueController extends PaginatedController<RevenueData> {
   void onInit() {
     super.onInit();
     // Preload customers
-    Get.lazyPut<CustomerController>(() => CustomerController());
-    final customerController = Get.find<CustomerController>();
-    customerController.loadInitial();
-    customers.assignAll(customerController.items);
+    // Get.lazyPut<CustomerController>(() => CustomerController());
+    // final customerController = Get.find<CustomerController>();
+    // customerController.loadInitial();
+    // customers.assignAll(customerController.items);
 
     // Start fetching revenues
     loadInitial();

@@ -14,7 +14,7 @@ import '../../../../../care/utils/validation.dart';
 class CustomerController extends PaginatedController<CustomerData> {
   final CustomerService _service = CustomerService();
   final String url = UrlRes.customers;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   /// Text controllers (Form Fields)
   final customerNumberController = TextEditingController();
@@ -58,12 +58,26 @@ class CustomerController extends PaginatedController<CustomerData> {
 
   @override
   Future<List<CustomerData>> fetchItems(int page) async {
+    // try {
+    //   final response = await _service.fetchCustomers(page: page);
+    //   return r;
+    // } catch (e) {
+    //   print("Exception in fetchItems: $e");
+    //   throw Exception("Exception in fetchItems: $e");
+    // }
+
     try {
       final response = await _service.fetchCustomers(page: page);
-      return response;
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch revenues";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

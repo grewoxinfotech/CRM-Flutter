@@ -1,6 +1,7 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/modules/super_admin/auth/controllers/auth_controller.dart';
+import 'package:crm_flutter/app/widgets/bar/navigation_bar/crm_navigation_Bar.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
@@ -15,13 +16,12 @@ class CrmDrawer extends StatelessWidget {
     Get.lazyPut<DrawerController>(() => DrawerController());
     DrawerController drawerController = Get.find();
     List<DrawerModel> items = [
-      DrawerModel(title: "DashBoard", iconPath: ICRes.customer),
-      DrawerModel(title: "Project", iconPath: ICRes.project),
-      DrawerModel(title: "Calendar", iconPath: ICRes.calendar),
-      DrawerModel(title: "Vacations", iconPath: ICRes.project),
-      DrawerModel(title: "Employees", iconPath: ICRes.employees),
-      DrawerModel(title: "Messenger", iconPath: ICRes.notifications),
-      DrawerModel(title: "Info Portal", iconPath: ICRes.file),
+      DrawerModel(title: "DashBoard", iconPath: ICRes.dashboard),
+      DrawerModel(title: "CRM", iconPath: ICRes.crm),
+      DrawerModel(title: "Sales", iconPath: ICRes.sales),
+      DrawerModel(title: "Purchase", iconPath: ICRes.purchase),
+      DrawerModel(title: "Hrm", iconPath: ICRes.hrm),
+      DrawerModel(title: "Job", iconPath: ICRes.notifications),
     ];
     Widget divider = Divider(
       height: 0,
@@ -42,17 +42,21 @@ class CrmDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                CrmAppLogo(),
-                SizedBox(width: 12),
-                Text(
-                  "Grewox",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CrmAppLogo(),
+                  SizedBox(width: 12),
+                  Text(
+                    "Grewox",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: AppPadding.medium),
+            // SizedBox(height: AppPadding.medium),
             ListView.separated(
               physics: NeverScrollableScrollPhysics(),
               itemCount: items.length,
@@ -61,7 +65,10 @@ class CrmDrawer extends StatelessWidget {
               itemBuilder: (context, i) {
                 return Obx(
                   () => GestureDetector(
-                    onTap: () => drawerController.onchange(i),
+                    onTap: () {
+                      drawerController.onchange(i);
+                      Get.back();
+                    },
                     child: CrmCard(
                       padding: const EdgeInsets.all(AppPadding.small),
                       boxShadow: [],
@@ -77,7 +84,7 @@ class CrmDrawer extends StatelessWidget {
                         children: [
                           CrmIc(
                             iconPath: items[i].iconPath.toString(),
-                            width: 24,
+                            width: 18,
                             color:
                                 (drawerController.selextedIndex == i)
                                     ? Get.theme.colorScheme.primary
@@ -87,7 +94,7 @@ class CrmDrawer extends StatelessWidget {
                           Text(
                             items[i].title.toString(),
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight:
                                   (drawerController.selextedIndex == i)
                                       ? FontWeight.w700
@@ -155,8 +162,12 @@ class CrmDrawer extends StatelessWidget {
 
 class DrawerController extends GetxController {
   RxInt selextedIndex = 0.obs;
+  final NavigationController navigationController = Get.find();
 
-  onchange(int index) => selextedIndex(index);
+  onchange(int index) {
+    navigationController.changeIndex(index);
+    return selextedIndex(index);
+  }
 }
 
 class DrawerModel {

@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/data/network/sales_invoice/service/sales_invoice_service.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/announcement/views/announcement_screen.dart';
@@ -31,7 +32,7 @@ class ModuleConfig {
   final String name;
   final String tag;
   final String screen;
-  final String category; // new field
+  final String category;
 
   ModuleConfig({
     required this.name,
@@ -45,21 +46,15 @@ class ModuleConfig {
       name: json['name'],
       tag: json['tag'],
       screen: json['screen'],
-      category: json['category'] ?? 'Unknown', // default if missing
+      category: json['category'] ?? 'Unknown',
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'tag': tag,
-      'screen': screen,
-      'category': category,
-    };
+    return {'name': name, 'tag': tag, 'screen': screen, 'category': category};
   }
 }
 
-/// Map of screen name → Widget builder
 final Map<String, dynamic> screenMapper = {
   "RoleScreen": () => RoleScreen(),
   "DealScreen": () => DealScreen(),
@@ -97,49 +92,46 @@ final Map<String, dynamic> screenMapper = {
 };
 
 class ModuleIconMapper {
-  static final Map<String, IconData> _iconMap = {
-    "dashboards-deal": Icons.handshake, // Deals
-    "dashboards-lead": Icons.trending_up, // Leads
-    "dashboards-task": Icons.task_alt, // Tasks
-    "extra-hrm-employee": Icons.people_alt, // Employees
-    "extra-hrm-payroll": Icons.payments, // Payroll
-    "extra-hrm-role": Icons.admin_panel_settings, // Roles
-    "extra-hrm-branch": Icons.apartment, // Branches
-    "extra-users-list": Icons.supervised_user_circle, // Users
-    "extra-hrm-holiday": Icons.beach_access, // Holidays
-    "extra-hrm-meeting": Icons.video_call, // Meetings
-    "extra-hrm-document": Icons.description, // Documents
-    "dashboards-proposal": Icons.request_page, // Proposals
-    "extra-hrm-department": Icons.business, // Departments
-    "extra-hrm-designation": Icons.badge, // Designation
-    "dashboards-systemsetup": Icons.settings, // System Setup
-    "extra-hrm-announcement": Icons.campaign, // Announcements
-    "extra-hrm-jobs-joblist": Icons.work_outline, // Job List
-    "dashboards-TaskCalendar": Icons.calendar_today, // Task Calendar
-    "dashboards-project-list": Icons.folder_open, // Projects
-    "extra-hrm-trainingSetup": Icons.school, // Training
-    "extra-users-client-list": Icons.group, // Clients
-    "dashboards-sales-invoice": Icons.receipt_long, // Sales Invoice
-    "dashboards-sales-revenue": Icons.show_chart, // Revenue
-    "extra-hrm-jobs-interview": Icons.record_voice_over, // Interview
-    "dashboards-sales-customer": Icons.person_outline, // Customer
-    "extra-hrm-leave-leavelist": Icons.time_to_leave, // Leaves
-    "dashboards-purchase-vendor": Icons.store, // Vendor
-    "dashboards-purchase-billing": Icons.request_quote, // Billing
-    "extra-hrm-jobs-jobcandidate": Icons.assignment_ind, // Candidate
-    "extra-hrm-jobs-jobonbording": Icons.how_to_reg, // Onboarding
-    "dashboards-sales-credit-notes": Icons.note_add, // Credit Notes
-    "extra-hrm-jobs-jobapplication": Icons.fact_check, // Application
-    "extra-hrm-jobs-jobofferletter": Icons.mark_email_read, // Offer Letter
-    "dashboards-purchase-debit-note": Icons.note, // Debit Notes
-    "dashboards-sales-product-services": Icons.inventory, // Products/Services
-    "extra-hrm-attendance-attendancelist": Icons.check_circle, // Attendance
+  static final Map<String, String> _iconMap = {
+    "dashboards-deal": ICRes.deal,
+    "dashboards-lead": ICRes.lead,
+    "dashboards-task": ICRes.task,
+    "extra-hrm-employee": ICRes.employee,
+    "extra-hrm-payroll": ICRes.payroll,
+    "extra-hrm-role": ICRes.role,
+    "extra-hrm-branch": ICRes.branch,
+    // "extra-users-list": ICRes.user,
+    "extra-hrm-holiday": ICRes.holiday,
+    "extra-hrm-meeting": ICRes.meeting,
+    "extra-hrm-document": ICRes.document,
+    // "dashboards-proposal":ICRes.payroll,
+    "extra-hrm-department": ICRes.department,
+    "extra-hrm-designation": ICRes.designation,
+    // "dashboards-systemsetup": ICRes.deal,
+    "extra-hrm-announcement": ICRes.announcement,
+    // "extra-hrm-jobs-joblist": ICRes.deal,
+    "dashboards-TaskCalendar": ICRes.calendar,
+    // "dashboards-project-list": ICRes.deal,
+    "extra-hrm-trainingSetup": ICRes.training,
+    "extra-users-client-list": ICRes.customer,
+    "dashboards-sales-invoice": ICRes.salesInvoice,
+    "dashboards-sales-revenue": ICRes.revenue,
+    // "extra-hrm-jobs-interview":ICRes.deal,
+    "dashboards-sales-customer": ICRes.customer,
+    "extra-hrm-leave-leavelist": ICRes.leave,
+    "dashboards-purchase-vendor": ICRes.vendor,
+    "dashboards-purchase-billing": ICRes.bill,
+    // "extra-hrm-jobs-jobcandidate": ICRes.deal,
+    // "extra-hrm-jobs-jobonbording": ICRes.deal,
+    "dashboards-sales-credit-notes": ICRes.creditNote,
+    // "extra-hrm-jobs-jobapplication": ICRes.deal,
+    // "extra-hrm-jobs-jobofferletter": ICRes.deal,
+    "dashboards-purchase-debit-note": ICRes.debitNote,
+    "dashboards-sales-product-services": ICRes.product,
+    "extra-hrm-attendance-attendancelist": ICRes.attendance,
   };
 
-  /// Get icon by tag
-  static IconData getIcon(String tag) {
-    return _iconMap[tag] ?? Icons.apps; // default icon
+  static String getIcon(String tag) {
+    return _iconMap[tag] ?? ICRes.notifications;
   }
 }
-
-

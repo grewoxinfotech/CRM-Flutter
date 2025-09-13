@@ -28,6 +28,7 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Get.put(RolesController());
     splash();
   }
 
@@ -58,8 +59,68 @@ class SplashController extends GetxController {
   //   }
   // }
 
+  // Future<void> splash() async {
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   bool isLogin = await SecureStorage.getLoggedIn();
+  //   bool rememberMe = await SecureStorage.getRememberMe();
+  //   String? token = await SecureStorage.getToken();
+  //
+  //   if (isLogin && rememberMe && token != null && token.isNotEmpty) {
+  //     final roleController = Get.put(RolesController());
+  //     final DBHelper _dbHelper = DBHelper();
+  //     final user = await SecureStorage.getUserData();
+  //
+  //     // 🔄 Load roles with retry if needed
+  //     await roleController.loadInitial();
+  //
+  //     if (roleController.items.isEmpty) {
+  //       print("[WARN] Empty roles, retrying after 1s...");
+  //       await Future.delayed(Duration(seconds: 1));
+  //       await roleController.loadInitial();
+  //     }
+  //
+  //     if (roleController.items.isNotEmpty) {
+  //       // Add client role
+  //       roleController.items.add(RoleData.fromJson(ClientPermissions.client));
+  //
+  //       // ✅ Ensure DB sync is awaited
+  //       await _dbHelper.syncRolesFromAPI(roleController.items);
+  //
+  //       // Fetch all roles after sync
+  //       final roles = await _dbHelper.getAllRoles();
+  //       print("[DEBUG]=> created Roles: ${roles.map((e) => e.toJson())}");
+  //       print("[DEBUG]=> created Roles Count: ${roles.length}");
+  //       print("[DEBUG]=> User Get By Id: ${user?.toJson()}");
+  //
+  //       // ✅ Fetch role for this user
+  //       RoleData? role;
+  //       if (user?.roleId != null) {
+  //         role = await _dbHelper.getRoleById(user!.roleId!);
+  //         if (role == null) {
+  //           print("[ERROR] Role not found for roleId: ${user.roleId}");
+  //         } else {
+  //           print("[DEBUG]=> Role Get By Id: ${role.toJson()}");
+  //         }
+  //       }
+  //
+  //       // ✅ Only go to dashboard if user + role are valid
+  //       if (role != null) {
+  //         Get.offAll(() => DashboardScreen());
+  //       } else {
+  //         Get.offAll(() => LoginScreen());
+  //       }
+  //     } else {
+  //       print("[ERROR] No roles found after retry, redirecting to login.");
+  //       Get.offAll(() => LoginScreen());
+  //     }
+  //   } else {
+  //     Get.offAll(() => LoginScreen());
+  //   }
+  // }
+
   Future<void> splash() async {
     await Future.delayed(const Duration(seconds: 1));
+
     bool isLogin = await SecureStorage.getLoggedIn();
     bool rememberMe = await SecureStorage.getRememberMe();
     String? token = await SecureStorage.getToken();
@@ -69,27 +130,32 @@ class SplashController extends GetxController {
       final DBHelper _dbHelper = DBHelper();
       final user = await SecureStorage.getUserData();
 
-      // 🔄 Load roles with retry if needed
-      await roleController.loadInitial();
-      if (roleController.items.isEmpty) {
-        print("[WARN] Roles list is empty, retrying loadInitial...");
+      // 🔄 Try to load roles with retries (max 3 attempts)
+      int retry = 0;
+      while (roleController.items.isEmpty && retry < 3) {
+        print("[WARN] Roles empty, retrying... attempt ${retry + 1}");
         await roleController.loadInitial();
+        if (roleController.items.isNotEmpty) break;
+        await Future.delayed(const Duration(seconds: 1));
+        retry++;
       }
 
       if (roleController.items.isNotEmpty) {
         // Add client role
         roleController.items.add(RoleData.fromJson(ClientPermissions.client));
 
-        // ✅ Ensure DB sync is awaited
+        // ✅ Sync roles into DB (inside transaction)
         await _dbHelper.syncRolesFromAPI(roleController.items);
 
-        // Fetch all roles after sync
+        // Fetch all roles for debug
         final roles = await _dbHelper.getAllRoles();
-        print("[DEBUG]=> created Roles: ${roles.map((e) => e.toJson())}");
+        print(
+          "[DEBUG]=> created Roles: ${roles.map((e) => e.toJson()).toList()}",
+        );
         print("[DEBUG]=> created Roles Count: ${roles.length}");
         print("[DEBUG]=> User Get By Id: ${user?.toJson()}");
 
-        // ✅ Fetch role for this user
+        // ✅ Try fetching role for this user
         RoleData? role;
         if (user?.roleId != null) {
           role = await _dbHelper.getRoleById(user!.roleId!);
@@ -100,23 +166,21 @@ class SplashController extends GetxController {
           }
         }
 
-        // ✅ Only go to dashboard if user + role are valid
+        // ✅ Navigate based on role presence
         if (role != null) {
           Get.offAll(() => DashboardScreen());
         } else {
           Get.offAll(() => LoginScreen());
         }
       } else {
-        print("[ERROR] No roles found after retry, redirecting to login.");
+        print("[ERROR] No roles found after retries, redirecting to login.");
         Get.offAll(() => LoginScreen());
       }
     } else {
       Get.offAll(() => LoginScreen());
     }
   }
-
 }
-
 
 // Future<void> splash() async {
 //   // Small delay for splash screen

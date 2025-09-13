@@ -102,6 +102,11 @@ flutter:
     - assets/icons/native_icons/system/
     - assets/icons/native_icons/ui/
     - assets/module_config.json
+    - assets/icons/crm/
+    - assets/icons/purchase/
+    - assets/icons/sales/
+    - assets/icons/hrm/
+    - assets/icons/navigation/
 
 
   # To add assets to your application, add an assets section, like this:

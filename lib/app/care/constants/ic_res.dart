@@ -11,22 +11,68 @@ class ICRes {
 
   // employee icons
   static const EmployeePath = "${IconPath}employee/";
-  static const employee = "${EmployeePath}ic_employee.svg";
+  // static const employee = "${EmployeePath}ic_employee.svg";
   static const employeeAdd = "${EmployeePath}ic_employee_add.svg";
+
+  //Navigation icons
+  static const NavigationIconsPath = "${IconPath}navigation";
+  static const dashboard = "${NavigationIconsPath}/ic_dashboard.svg";
+  static const crm = "${NavigationIconsPath}/ic_crm.svg";
+  static const sales = "${NavigationIconsPath}/ic_sales.svg";
+  static const purchase = "${NavigationIconsPath}/ic_purchase.svg";
+  static const hrm = "${NavigationIconsPath}/ic_hrm.svg";
+
+  // Crm
+  static const crmPath = "${IconPath}crm";
+  static const lead = "${crmPath}/ic_lead.svg";
+  static const deal = "${crmPath}/ic_deal.svg";
+  static const contact = "${crmPath}/ic_contact.svg";
+  static const company = "${crmPath}/ic_company.svg";
+  static const task = "${crmPath}/ic_task.svg";
+
+  // Sales
+  static const SalesPath = "${IconPath}sales";
+  static const product = "${SalesPath}/ic_product.svg";
+  static const salesInvoice = "${SalesPath}/ic_sales_invoice.svg";
+  static const customer = "${SalesPath}/ic_customer.svg";
+  static const creditNote = "${SalesPath}/ic_credit_note.svg";
+  static const revenue = "${SalesPath}/ic_revenue.svg";
+
+  // Purchase
+  static const purchasePath = "${IconPath}purchase";
+  static const vendor = "${purchasePath}/ic_vendor.svg";
+  static const bill = "${purchasePath}/ic_billing.svg";
+  static const debitNote = "${purchasePath}/ic_debit_note.svg";
+
+  // Hrm
+  static const hrmPath = "${IconPath}hrm";
+  static const announcement = "${hrmPath}/ic_announcement.svg";
+  static const attendance = "${hrmPath}/ic_attendence.svg";
+  static const branch = "${hrmPath}/ic_branch.svg";
+  static const calender = "${hrmPath}/ic_calendar.svg";
+  static const department = "${hrmPath}/ic_department.svg";
+  static const designation = "${hrmPath}/ic_designation.svg";
+  static const document = "${hrmPath}/ic_document.svg";
+  static const employee = "${hrmPath}/ic_employee.svg";
+  static const holiday = "${hrmPath}/ic_holiday.svg";
+  static const leave = "${hrmPath}/ic_leave.svg";
+  static const meeting = "${hrmPath}/ic_meeting.svg";
+  static const payroll = "${hrmPath}/ic_payroll.svg";
+  static const role = "${hrmPath}/ic_role.svg";
+  static const training = "${hrmPath}/ic_training.svg";
 
   // functions icons
   static const FunctionsPath = "${IconPath}functions/";
   static const clients = "${FunctionsPath}ic_clients.svg";
   static const contract = "${FunctionsPath}ic_contract.svg";
-  static const customer = "${FunctionsPath}ic_custemer.svg";
-  static const document = "${FunctionsPath}ic_document.svg";
+  // static const customer = "${FunctionsPath}ic_custemer.svg";
+  // static const document = "${FunctionsPath}ic_document.svg";
   static const employees = "${FunctionsPath}ic_employee.svg";
-//  static const sales_functionality = "${FunctionsPath}ic_employee.svg";
+  //  static const sales_functionality = "${FunctionsPath}ic_employee.svg";
 
-
-  static const leads = "${FunctionsPath}ic_leads.svg";
+  // static const leads = "${FunctionsPath}ic_leads.svg";
   static const project = "${FunctionsPath}ic_project.svg";
-  static const task = "${FunctionsPath}ic_task.svg";
+  // static const task = "${FunctionsPath}ic_task.svg";
 
   // members icons
   static const MambersPath = "${IconPath}member/";
@@ -60,8 +106,8 @@ class ICRes {
 
   // business icons
   static const BusinessPath = "${NativeIconPath}business/";
-  static const company = "${BusinessPath}ic_company.svg";
-  static const meeting = "${BusinessPath}ic_meeting.svg";
+  // static const company = "${BusinessPath}ic_company.svg";
+  // static const meeting = "${BusinessPath}ic_meeting.svg";
 
   // date_time icons
   static const Date_timePath = "${NativeIconPath}date_time/";
@@ -111,11 +157,11 @@ class ICRes {
 
   // ui icons
   static const UiPath = "${NativeIconPath}ui/";
-  static const dashboard = "${UiPath}ic_dashbord.png";
+  // static const dashboard = "${UiPath}ic_dashbord.png";
   static const birthday = "${UiPath}ic_birthday.svg";
   static const call = "${UiPath}ic_call.svg";
   static const emoji = "${UiPath}ic_emoji.svg";
   static const location = "${UiPath}ic_location.svg";
-   static const mailSVG = "${UiPath}ic_mail.svg";
+  static const mailSVG = "${UiPath}ic_mail.svg";
   static const mention = "${UiPath}ic_mention.svg";
 }

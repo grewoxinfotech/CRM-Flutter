@@ -97,7 +97,7 @@ class SalesFunctionController extends GetxController {
           ))
         FunctionModel(
           title: 'Product & Service',
-          iconPath: ICRes.clients,
+          iconPath: ICRes.product,
           color: const Color(0xffFFCC01),
           count: 45,
           screenBuilder: ProductsServicesScreen(),
@@ -131,7 +131,7 @@ class SalesFunctionController extends GetxController {
           accessController.can(AccessModule.salesInvoice, AccessAction.delete))
         FunctionModel(
           title: 'Invoice',
-          iconPath: ICRes.document,
+          iconPath: ICRes.salesInvoice,
           color: const Color(0xff5f00ad),
           count: 66,
           screenBuilder: InvoiceScreen(),
@@ -142,7 +142,7 @@ class SalesFunctionController extends GetxController {
           accessController.can(AccessModule.creditNotes, AccessAction.delete))
         FunctionModel(
           title: 'Credit Notes',
-          iconPath: ICRes.document,
+          iconPath: ICRes.creditNote,
           color: const Color(0xffad001a),
           count: 66,
           screenBuilder: CreditNoteScreen(),
@@ -159,7 +159,7 @@ class SalesFunctionController extends GetxController {
           accessController.can(AccessModule.salesRevenue, AccessAction.delete))
         FunctionModel(
           title: 'Revenue',
-          iconPath: ICRes.document,
+          iconPath: ICRes.revenue,
           color: const Color(0xff005fad),
           // color: const Color(0xff005fad),
           count: 66,

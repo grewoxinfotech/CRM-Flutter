@@ -112,7 +112,7 @@ class PurchaseFunctionController extends GetxController {
           ))
         FunctionModel(
           title: 'Vendor',
-          iconPath: ICRes.clients,
+          iconPath: ICRes.vendor,
           color: const Color(0xffFFCC01),
           count: 45,
           screenBuilder: VendorsScreen(),
@@ -135,7 +135,7 @@ class PurchaseFunctionController extends GetxController {
           ))
         FunctionModel(
           title: 'Billing',
-          iconPath: ICRes.customer,
+          iconPath: ICRes.bill,
           color: const Color(0xff00a7ad),
           count: 66,
           screenBuilder: BillingScreen(),
@@ -146,7 +146,7 @@ class PurchaseFunctionController extends GetxController {
           accessController.can(AccessModule.debitNote, AccessAction.delete))
         FunctionModel(
           title: 'Debit Note',
-          iconPath: ICRes.document,
+          iconPath: ICRes.debitNote,
           color: const Color(0xff68ad00),
           count: 66,
           screenBuilder: DebitNotesScreen(),

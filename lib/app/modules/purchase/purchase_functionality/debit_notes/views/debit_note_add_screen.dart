@@ -268,6 +268,7 @@ class AddDebitNoteScreen extends StatelessWidget {
                 controller.amountController.text =
                     selectedBill.amount?.toString() ?? '0';
                 controller.selectedBill.value = selectedBill;
+                controller.selectedCurrency.value = selectedBill.currency ?? '';
               }
             },
             isRequired: true,
@@ -344,27 +345,27 @@ class AddDebitNoteScreen extends StatelessWidget {
                         hint: 'Choose Date',
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Obx(
-                        () => CrmDropdownField<String>(
-                          title: 'Currency',
-                          value: controller.selectedCurrency.value,
-                          items:
-                              controller.currencies.map((c) {
-                                return DropdownMenuItem(
-                                  value: c,
-                                  child: Text(c),
-                                );
-                              }).toList(),
-                          onChanged: (val) {
-                            if (val != null)
-                              controller.selectedCurrency.value = val;
-                          },
-                          isRequired: true,
-                        ),
-                      ),
-                    ),
+                    // const SizedBox(width: 16),
+                    // Expanded(
+                    //   child: Obx(
+                    //     () => CrmDropdownField<String>(
+                    //       title: 'Currency',
+                    //       value: controller.selectedCurrency.value,
+                    //       items:
+                    //           controller.currencies.map((c) {
+                    //             return DropdownMenuItem(
+                    //               value: c,
+                    //               child: Text(c),
+                    //             );
+                    //           }).toList(),
+                    //       onChanged: (val) {
+                    //         if (val != null)
+                    //           controller.selectedCurrency.value = val;
+                    //       },
+                    //       isRequired: true,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 30),

@@ -14,7 +14,7 @@ class CustomerService {
   }
 
   /// Fetch customers with optional pagination & search
-  Future<List<CustomerData>> fetchCustomers({
+  Future<CustomerModel?> fetchCustomers({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -33,16 +33,17 @@ class CustomerService {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         print("[DEBUG]=> $baseUrl ---- ${response.body}");
-        final List<dynamic> customers = data["message"]["data"];
-        print("[DEBUG]=> $baseUrl ---- ${customers.length}");
-        return customers.map((json) => CustomerData.fromJson(json)).toList();
+        // final List<dynamic> customers = data["message"]["data"];
+        // print("[DEBUG]=> $baseUrl ---- ${customers.length}");
+        return CustomerModel.fromJson(data);
+        // return customers.map((json) => CustomerData.fromJson(json)).toList();
       } else {
         print("Failed to load customers: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchCustomers: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single customer by ID

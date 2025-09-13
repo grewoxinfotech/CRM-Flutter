@@ -47,13 +47,13 @@ class FunctionController extends GetxController {
     functions.value = [
       FunctionModel(
         title: 'Leads',
-        iconPath: ICRes.leads,
+        iconPath: ICRes.lead,
         color: const Color(0xffFFBD21),
         screenBuilder: LeadScreen(),
       ),
       FunctionModel(
         title: 'Deals',
-        iconPath: ICRes.leads,
+        iconPath: ICRes.lead,
         color: const Color(0xff28B999),
         screenBuilder: DealScreen(),
       ),
