@@ -2,7 +2,6 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/access_res.dart';
 import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/modules/job/job_functionality/job_list/views/add_job_screen.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
@@ -12,30 +11,33 @@ import 'package:get/get.dart';
 import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../../../../access/controller/access_controller.dart';
-import '../controllers/job_list_controller.dart';
-import '../widget/job_list_card.dart';
+import '../controllers/offer_letter_controller.dart';
+import '../widget/offer_letter_card.dart';
+import 'add_offer_letter_screen.dart';
 
-class JobListScreen extends StatelessWidget {
-  JobListScreen({Key? key}) : super(key: key);
+
+
+class OfferLetterScreen extends StatelessWidget {
+  OfferLetterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final AccessController accessController = Get.find<AccessController>();
 
-    Get.lazyPut<JobListController>(() => JobListController());
-    final JobListController controller = Get.find();
+    Get.lazyPut<OfferLetterController>(() => OfferLetterController());
+    final OfferLetterController controller = Get.find();
 
-    void _deleteJob(String id, String title) {
+    void _deleteOfferLetter(String id) {
       Get.dialog(
         CrmDeleteDialog(
-          entityType: title,
+          entityType: "Offer Letter",
           onConfirm: () async {
-            final success = await controller.deleteJob(id);
+            final success = await controller.deleteOfferLetter(id);
             if (success) {
               Get.back();
               CrmSnackBar.showAwesomeSnackbar(
                 title: "Success",
-                message: "Job deleted successfully",
+                message: "Offer letter deleted successfully",
                 contentType: ContentType.success,
               );
             }
@@ -45,14 +47,13 @@ class JobListScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Jobs")),
+      appBar: AppBar(title: const Text("Offer Letters")),
       floatingActionButton:
-      accessController.can(AccessModule.jobList, AccessAction.create)
+      accessController.can(AccessModule.jobOfferLetter, AccessAction.create)
           ? FloatingActionButton(
         onPressed: () {
-          // Navigate to add job screen
           controller.resetForm();
-          Get.to(() => AddJobScreen());
+          Get.to(() => AddOfferLetterScreen());
         },
         child: const Icon(Icons.add, color: Colors.white),
       )
@@ -78,7 +79,7 @@ class JobListScreen extends StatelessWidget {
           } else if (snapshot.connectionState == ConnectionState.done) {
             return Obx(() {
               if (!controller.isLoading.value && controller.items.isEmpty) {
-                return const Center(child: Text("No Jobs found."));
+                return const Center(child: Text("No Offer Letters found."));
               }
               return NotificationListener<ScrollEndNotification>(
                 onNotification: (scrollEnd) {
@@ -89,22 +90,22 @@ class JobListScreen extends StatelessWidget {
                   return false;
                 },
                 child: RefreshIndicator(
-                  onRefresh: () async => controller.refreshList(),
+                  onRefresh: controller.refreshList,
                   child: ViewScreen(
                     itemCount: controller.items.length + 1,
                     itemBuilder: (context, index) {
                       if (index < controller.items.length) {
-                        final job = controller.items[index];
+                        final offerLetter = controller.items[index];
                         return Stack(
                           children: [
-                            JobListCard(job: job),
+                            OfferLetterCard(offerLetter: offerLetter),
                             Positioned(
                               right: 26,
                               bottom: 8,
                               child: Row(
                                 children: [
                                   if (accessController.can(
-                                    AccessModule.jobList,
+                                    AccessModule.jobOfferLetter,
                                     AccessAction.update,
                                   ))
                                     CrmIc(
@@ -112,8 +113,8 @@ class JobListScreen extends StatelessWidget {
                                       color: ColorRes.success,
                                       onTap: () {
                                         Get.to(
-                                              () => AddJobScreen(
-                                            job: job,
+                                              () => AddOfferLetterScreen(
+                                            offerLetter: offerLetter,
                                             isFromEdit: true,
                                           ),
                                         );
@@ -121,16 +122,15 @@ class JobListScreen extends StatelessWidget {
                                     ),
                                   const SizedBox(width: 12),
                                   if (accessController.can(
-                                    AccessModule.jobList,
+                                    AccessModule.jobOfferLetter,
                                     AccessAction.delete,
                                   ))
                                     CrmIc(
                                       iconPath: ICRes.delete,
                                       color: ColorRes.error,
                                       onTap: () {
-                                        _deleteJob(
-                                          job.id ?? '',
-                                          job.title ?? 'Job',
+                                        _deleteOfferLetter(
+                                          offerLetter.id ?? '',
                                         );
                                       },
                                     ),
@@ -139,7 +139,7 @@ class JobListScreen extends StatelessWidget {
                             ),
                           ],
                         );
-                      } else if (controller.isLoading.value) {
+                      } else if (controller.isPaging.value) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Center(child: CircularProgressIndicator()),

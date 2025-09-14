@@ -3,19 +3,19 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../../widgets/common/messages/crm_snack_bar.dart';
-import 'branch_model.dart';
+import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import 'job_onboarding_model.dart';
 
-class BranchService {
-  final String baseUrl = UrlRes.branches; // Define in UrlRes
+class JobOnboardingService {
+  final String baseUrl = UrlRes.jobOnboarding; // Define in UrlRes
 
   /// Common headers
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
   }
 
-  /// Fetch branches with optional pagination & search
-  Future<BranchModel?> fetchBranches({
+  /// Fetch job onboardings with optional pagination & search
+  Future<JobOnboardingModel?> fetchJobOnboardings({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -33,20 +33,19 @@ class BranchService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> branches = data["message"]["data"];
-        print("Branches: ${data}");
-        return BranchModel.fromJson(data);
+        print("Job Onboardings: $data");
+        return JobOnboardingModel.fromJson(data);
       } else {
-        print("Failed to load branches: ${response.statusCode}");
+        print("Failed to load job onboardings: ${response.statusCode}");
       }
     } catch (e) {
-      print("Exception in fetchBranches: $e");
+      print("Exception in fetchJobOnboardings: $e");
     }
     return null;
   }
 
-  /// Get single branch by ID
-  Future<BranchData?> getBranchById(String id) async {
+  /// Get single job onboarding by ID
+  Future<JobOnboardingData?> getJobOnboardingById(String id) async {
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/$id"),
@@ -55,20 +54,21 @@ class BranchService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return BranchData.fromJson(data["message"]["data"]);
+        return JobOnboardingData.fromJson(data["message"]["data"]);
       }
     } catch (e) {
-      print("Get branch by ID exception: $e");
+      print("Get job onboarding by ID exception: $e");
     }
     return null;
   }
 
-  Future<bool> createBranch(BranchData branch) async {
+  /// Create job onboarding
+  Future<bool> createJobOnboarding(JobOnboardingData job) async {
     try {
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
-        body: jsonEncode(branch.toJson()),
+        body: jsonEncode(job.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -76,30 +76,31 @@ class BranchService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Branch created successfully",
+          message: responseData["message"] ?? "Job onboarding created successfully",
           contentType: ContentType.success,
         );
         return true;
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Error",
-          message: responseData["message"] ?? "Failed to create branch",
+          message: responseData["message"] ?? "Failed to create job onboarding",
           contentType: ContentType.failure,
         );
         return false;
       }
     } catch (e) {
-      print("Create branch exception: $e");
+      print("Create job onboarding exception: $e");
       return false;
     }
   }
 
-  Future<bool> updateBranch(String id, BranchData branch) async {
+  /// Update job onboarding
+  Future<bool> updateJobOnboarding(String id, JobOnboardingData job) async {
     try {
       final response = await http.put(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
-        body: jsonEncode(branch.toJson()),
+        body: jsonEncode(job.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -107,31 +108,31 @@ class BranchService {
       if (response.statusCode == 200) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Branch updated successfully",
+          message: responseData["message"] ?? "Job onboarding updated successfully",
           contentType: ContentType.success,
         );
         return true;
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Error",
-          message: responseData["message"] ?? "Failed to update branch",
+          message: responseData["message"] ?? "Failed to update job onboarding",
           contentType: ContentType.failure,
         );
         return false;
       }
     } catch (e) {
-      print("Update branch exception: $e");
+      print("Update job onboarding exception: $e");
       CrmSnackBar.showAwesomeSnackbar(
         title: "Exception",
-        message: "Something went wrong while updating the branch",
+        message: "Something went wrong while updating the job onboarding",
         contentType: ContentType.failure,
       );
       return false;
     }
   }
 
-  /// Delete branch
-  Future<bool> deleteBranch(String id) async {
+  /// Delete job onboarding
+  Future<bool> deleteJobOnboarding(String id) async {
     try {
       final response = await http.delete(
         Uri.parse("$baseUrl/$id"),
@@ -139,7 +140,7 @@ class BranchService {
       );
       return response.statusCode == 200 || response.statusCode == 204;
     } catch (e) {
-      print("Delete branch exception: $e");
+      print("Delete job onboarding exception: $e");
       return false;
     }
   }

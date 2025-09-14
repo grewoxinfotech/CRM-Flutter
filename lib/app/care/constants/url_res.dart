@@ -91,6 +91,14 @@ class UrlRes {
 
   static const String jobList = "$baseURL/jobs";
 
+  static const String jobOnboarding = "$baseURL/job-onboarding";
+
+  static const String jobApplications = "$baseURL/job-applications";
+
+  static const String offerLetters = "$baseURL/offer-letters";
+
+  static const String interviewSchedules = "$baseURL/interview-schedules";
+
   //puchase
   static const String revenue = "$baseURL/sales-revenue";
 

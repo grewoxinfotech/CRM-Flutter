@@ -42,11 +42,7 @@ class AddBranchScreen extends StatelessWidget {
 
     controller.isLoading.value = false;
     if (success) Get.back();
-    // CrmSnackBar.showAwesomeSnackbar(
-    //   title: success ? "Success" : "Error",
-    //   message: success ? "Branch added successfully" : "Failed to add branch",
-    //   contentType: success ? ContentType.success : ContentType.failure,
-    // );
+
   }
 
   void _update() async {
@@ -65,11 +61,7 @@ class AddBranchScreen extends StatelessWidget {
 
     controller.isLoading.value = false;
     if (success) Get.back();
-    // CrmSnackBar.showAwesomeSnackbar(
-    //   title: success ? "Success" : "Error",
-    //   message: success ? "Branch Updated successfully" : "Failed to add branch",
-    //   contentType: success ? ContentType.success : ContentType.failure,
-    // );
+
   }
 
   @override
@@ -111,16 +103,6 @@ class AddBranchScreen extends StatelessWidget {
                 () => CrmDropdownField<User>(
                   title: 'Branch Manager',
                   value: controller.selectedManager.value,
-                  // items: const [
-                  //   DropdownMenuItem<String>(
-                  //     value: "7dzE4fFaAfNtBUNDxW0xmci",
-                  //     child: Text("Manager A"),
-                  //   ),
-                  //   DropdownMenuItem<String>(
-                  //     value: "8aaE5fFaZxNtBUNDyW9xyzi",
-                  //     child: Text("Manager B"),
-                  //   ),
-                  // ],
                   items:
                       controller.managers
                           .map(

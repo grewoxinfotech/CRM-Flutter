@@ -21,7 +21,6 @@ class BranchController extends PaginatedController<BranchData> {
 
   final RxList<User> managers = <User>[].obs;
   final UsersController usersController = Get.put(UsersController());
-  // EmployeeData? selectedManager;
   Rxn<User> selectedManager = Rxn<User>();
 
   @override

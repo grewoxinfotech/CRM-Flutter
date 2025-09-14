@@ -161,34 +161,40 @@ class JobData {
 }
 
 class JobSkills {
-  String? skills;
+  List<String> skills;
 
-  JobSkills({this.skills});
+  JobSkills({required this.skills});
 
-  JobSkills.fromJson(Map<String, dynamic> json) {
-    skills = json['Skills'];
-  }
+  JobSkills.fromJson(Map<String, dynamic> json)
+      : skills = (json['Skills'] is List
+      ? (json['Skills'] as List).map((e) => e.toString()).toList()
+      : json['Skills'] != null
+      ? [json['Skills'].toString()]
+      : []);
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
-    map['Skills'] = skills;
-    return map;
+    return {
+      'Skills': skills,
+    };
   }
 }
 
 class JobInterviewRounds {
-  String? interviewRounds;
+  List<String> interviewRounds;
 
-  JobInterviewRounds({this.interviewRounds});
+  JobInterviewRounds({required this.interviewRounds});
 
-  JobInterviewRounds.fromJson(Map<String, dynamic> json) {
-    interviewRounds = json['InterviewRounds'];
-  }
+  JobInterviewRounds.fromJson(Map<String, dynamic> json)
+      : interviewRounds = (json['InterviewRounds'] is List
+      ? (json['InterviewRounds'] as List).map((e) => e.toString()).toList()
+      : json['InterviewRounds'] != null
+      ? [json['InterviewRounds'].toString()]
+      : []);
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
-    map['InterviewRounds'] = interviewRounds;
-    return map;
+    return {
+      'InterviewRounds': interviewRounds,
+    };
   }
 }
 

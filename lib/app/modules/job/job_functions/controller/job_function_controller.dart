@@ -11,8 +11,12 @@ import 'package:crm_flutter/app/data/network/user/role/service/roles_service.dar
 import 'package:crm_flutter/app/modules/crm/crm_functionality/company/view/company_screen.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/contact/views/contact_screen.dart';
 import 'package:crm_flutter/app/modules/crm/crm_functionality/lead/views/lead_screen.dart';
+import 'package:crm_flutter/app/modules/job/job_functionality/interview_schedule/views/interview_schedule_screeen.dart';
+import 'package:crm_flutter/app/modules/job/job_functionality/job_applications/views/job_application_screen.dart';
 import 'package:crm_flutter/app/modules/job/job_functionality/job_candidate/views/job_candidate_screen.dart';
 import 'package:crm_flutter/app/modules/job/job_functionality/job_list/views/job_list_screen.dart';
+import 'package:crm_flutter/app/modules/job/job_functionality/job_onboarding/views/job_onboarding_screen.dart';
+import 'package:crm_flutter/app/modules/job/job_functionality/offer_letter/views/offer_letter_screen.dart';
 import 'package:crm_flutter/app/modules/role/controllers/role_controller.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/customer/views/customer_screen.dart';
 import 'package:crm_flutter/app/modules/sales/sales_functionality/invoice/views/invoice_screen.dart';
@@ -82,6 +86,17 @@ class JobFunctionController extends GetxController {
     }
 
     functions.value = [
+      if (accessController.can(AccessModule.jobList, AccessAction.view) ||
+          accessController.can(AccessModule.jobList, AccessAction.create) ||
+          accessController.can(AccessModule.jobList, AccessAction.update) ||
+          accessController.can(AccessModule.jobList, AccessAction.delete))
+        FunctionModel(
+          title: 'Job',
+          iconPath: ICRes.lead,
+          color: const Color(0xff008dad),
+          screenBuilder: JobListScreen(),
+        ),
+
       if (accessController.can(AccessModule.jobCandidate, AccessAction.view) ||
           accessController.can(
             AccessModule.jobCandidate,
@@ -93,61 +108,63 @@ class JobFunctionController extends GetxController {
           ) ||
           accessController.can(AccessModule.jobCandidate, AccessAction.delete))
         FunctionModel(
-          title: 'Job',
-          iconPath: ICRes.lead,
-          color: const Color(0xff008dad),
-          screenBuilder: JobListScreen(),
-        ),
-      if (accessController.can(AccessModule.jobList, AccessAction.view) ||
-          accessController.can(AccessModule.jobList, AccessAction.create) ||
-          accessController.can(AccessModule.jobList, AccessAction.update) ||
-          accessController.can(AccessModule.jobList, AccessAction.delete))
-        FunctionModel(
           title: 'Job Candidate',
-          iconPath: ICRes.lead,
+          iconPath: ICRes.employee,
           color: const Color(0xff0600ad),
           screenBuilder: JobCandidateScreen(),
         ),
-      if (accessController.can(AccessModule.jobList, AccessAction.view) ||
-          accessController.can(AccessModule.jobList, AccessAction.create) ||
-          accessController.can(AccessModule.jobList, AccessAction.update) ||
-          accessController.can(AccessModule.jobList, AccessAction.delete))
+      if (accessController.can(AccessModule.jobOnboarding, AccessAction.view) ||
+          accessController.can(
+            AccessModule.jobOnboarding,
+            AccessAction.create,
+          ) ||
+          accessController.can(
+            AccessModule.jobOnboarding,
+            AccessAction.update,
+          ) ||
+          accessController.can(AccessModule.jobOnboarding, AccessAction.delete))
         FunctionModel(
           title: 'Job On-Boarding',
-          iconPath: ICRes.lead,
+          iconPath: ICRes.employees,
           color: const Color(0xff2bad00),
-          screenBuilder: JobCandidateScreen(),
+          screenBuilder: JobOnboardingScreen(),
         ),
-      if (accessController.can(AccessModule.jobList, AccessAction.view) ||
-          accessController.can(AccessModule.jobList, AccessAction.create) ||
-          accessController.can(AccessModule.jobList, AccessAction.update) ||
-          accessController.can(AccessModule.jobList, AccessAction.delete))
+      if (accessController.can(AccessModule.jobApplication, AccessAction.view) ||
+          accessController.can(AccessModule.jobApplication, AccessAction.create) ||
+          accessController.can(AccessModule.jobApplication, AccessAction.update) ||
+          accessController.can(AccessModule.jobApplication, AccessAction.delete))
         FunctionModel(
           title: 'Job Applications',
-          iconPath: ICRes.lead,
+          iconPath: ICRes.document,
           color: const Color(0xffad0000),
-          screenBuilder: JobCandidateScreen(),
+          screenBuilder: JobApplicationScreen(),
         ),
-      if (accessController.can(AccessModule.jobList, AccessAction.view) ||
-          accessController.can(AccessModule.jobList, AccessAction.create) ||
-          accessController.can(AccessModule.jobList, AccessAction.update) ||
-          accessController.can(AccessModule.jobList, AccessAction.delete))
+      if (accessController.can(AccessModule.jobOfferLetter, AccessAction.view) ||
+          accessController.can(
+            AccessModule.jobOfferLetter,
+            AccessAction.create,
+          ) ||
+          accessController.can(
+            AccessModule.jobOfferLetter,
+            AccessAction.update,
+          ) ||
+          accessController.can(AccessModule.jobOfferLetter, AccessAction.delete))
         FunctionModel(
           title: 'Offer Letters',
           iconPath: ICRes.lead,
           color: const Color(0xff9600ad),
-          screenBuilder: JobCandidateScreen(),
+          screenBuilder: OfferLetterScreen(),
         ),
 
-      if (accessController.can(AccessModule.jobList, AccessAction.view) ||
-          accessController.can(AccessModule.jobList, AccessAction.create) ||
-          accessController.can(AccessModule.jobList, AccessAction.update) ||
-          accessController.can(AccessModule.jobList, AccessAction.delete))
+      if (accessController.can(AccessModule.jobInterview, AccessAction.view) ||
+          accessController.can(AccessModule.jobInterview, AccessAction.create) ||
+          accessController.can(AccessModule.jobInterview, AccessAction.update) ||
+          accessController.can(AccessModule.jobInterview, AccessAction.delete))
         FunctionModel(
           title: 'Interviews',
-          iconPath: ICRes.lead,
+          iconPath: ICRes.calendar,
           color: const Color(0xffad6800),
-          screenBuilder: JobCandidateScreen(),
+          screenBuilder: InterviewScheduleCalendarScreen(),
         ),
     ];
   }

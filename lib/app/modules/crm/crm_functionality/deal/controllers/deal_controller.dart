@@ -104,6 +104,7 @@ class DealController extends GetxController {
   var currenciesLoaded = false.obs;
 
   final isSelectFromExisting = false.obs;
+  final isSelectCompanyAndContact = false.obs;
 
   // Dropdown Options - Show names in UI
   // List<String> get sourceOptions =>

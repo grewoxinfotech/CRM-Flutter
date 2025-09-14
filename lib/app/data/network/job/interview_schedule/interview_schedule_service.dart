@@ -3,29 +3,23 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../../widgets/common/messages/crm_snack_bar.dart';
-import 'branch_model.dart';
+import '../../../../widgets/common/messages/crm_snack_bar.dart';
+import 'interview_schedule_model.dart';
 
-class BranchService {
-  final String baseUrl = UrlRes.branches; // Define in UrlRes
+class InterviewScheduleService {
+  final String baseUrl = UrlRes.interviewSchedules; // Define in UrlRes
 
   /// Common headers
   static Future<Map<String, String>> headers() async {
     return await UrlRes.getHeaders();
   }
 
-  /// Fetch branches with optional pagination & search
-  Future<BranchModel?> fetchBranches({
-    int page = 1,
-    int pageSize = 10,
-    String search = '',
-  }) async {
+  /// Fetch all interview schedules (with optional search/filter if needed)
+  Future<InterviewScheduleModel?> fetchInterviewSchedules({String search = ''}) async {
     try {
       final uri = Uri.parse(baseUrl).replace(
         queryParameters: {
-          'page': page.toString(),
-          'pageSize': pageSize.toString(),
-          'search': search,
+          if (search.isNotEmpty) 'search': search,
         },
       );
 
@@ -33,20 +27,19 @@ class BranchService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> branches = data["message"]["data"];
-        print("Branches: ${data}");
-        return BranchModel.fromJson(data);
+        print("InterviewSchedules: $data");
+        return InterviewScheduleModel.fromJson(data);
       } else {
-        print("Failed to load branches: ${response.statusCode}");
+        print("Failed to load interview schedules: ${response.statusCode}");
       }
     } catch (e) {
-      print("Exception in fetchBranches: $e");
+      print("Exception in fetchInterviewSchedules: $e");
     }
     return null;
   }
 
-  /// Get single branch by ID
-  Future<BranchData?> getBranchById(String id) async {
+  /// Get single interview schedule by ID
+  Future<InterviewScheduleData?> getInterviewScheduleById(String id) async {
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/$id"),
@@ -55,20 +48,21 @@ class BranchService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return BranchData.fromJson(data["message"]["data"]);
+        return InterviewScheduleData.fromJson(data["data"]);
       }
     } catch (e) {
-      print("Get branch by ID exception: $e");
+      print("Get interview schedule by ID exception: $e");
     }
     return null;
   }
 
-  Future<bool> createBranch(BranchData branch) async {
+  /// Create interview schedule
+  Future<bool> createInterviewSchedule(InterviewScheduleData schedule) async {
     try {
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
-        body: jsonEncode(branch.toJson()),
+        body: jsonEncode(schedule.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -76,30 +70,31 @@ class BranchService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Branch created successfully",
+          message: responseData["message"] ?? "Interview schedule created successfully",
           contentType: ContentType.success,
         );
         return true;
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Error",
-          message: responseData["message"] ?? "Failed to create branch",
+          message: responseData["message"] ?? "Failed to create interview schedule",
           contentType: ContentType.failure,
         );
         return false;
       }
     } catch (e) {
-      print("Create branch exception: $e");
+      print("Create interview schedule exception: $e");
       return false;
     }
   }
 
-  Future<bool> updateBranch(String id, BranchData branch) async {
+  /// Update interview schedule
+  Future<bool> updateInterviewSchedule(String id, InterviewScheduleData schedule) async {
     try {
       final response = await http.put(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
-        body: jsonEncode(branch.toJson()),
+        body: jsonEncode(schedule.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -107,31 +102,31 @@ class BranchService {
       if (response.statusCode == 200) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Branch updated successfully",
+          message: responseData["message"] ?? "Interview schedule updated successfully",
           contentType: ContentType.success,
         );
         return true;
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Error",
-          message: responseData["message"] ?? "Failed to update branch",
+          message: responseData["message"] ?? "Failed to update interview schedule",
           contentType: ContentType.failure,
         );
         return false;
       }
     } catch (e) {
-      print("Update branch exception: $e");
+      print("Update interview schedule exception: $e");
       CrmSnackBar.showAwesomeSnackbar(
         title: "Exception",
-        message: "Something went wrong while updating the branch",
+        message: "Something went wrong while updating the interview schedule",
         contentType: ContentType.failure,
       );
       return false;
     }
   }
 
-  /// Delete branch
-  Future<bool> deleteBranch(String id) async {
+  /// Delete interview schedule
+  Future<bool> deleteInterviewSchedule(String id) async {
     try {
       final response = await http.delete(
         Uri.parse("$baseUrl/$id"),
@@ -139,7 +134,7 @@ class BranchService {
       );
       return response.statusCode == 200 || response.statusCode == 204;
     } catch (e) {
-      print("Delete branch exception: $e");
+      print("Delete interview schedule exception: $e");
       return false;
     }
   }

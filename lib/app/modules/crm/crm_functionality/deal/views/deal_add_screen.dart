@@ -38,53 +38,6 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
   @override
   void initState() {
     super.initState();
-    // Get.lazyPut(() => PipelineController());
-    // Get.lazyPut(() => StageController());
-    // Get.lazyPut(() => LeadController());
-    // Get.lazyPut(() => UsersController());
-    // final pipelineController = Get.find<PipelineController>();
-    // final stageController = Get.find<StageController>();
-    // final DealController dealController = Get.find<DealController>();
-    // final CountryController countryController = Get.put(CountryController());
-    //
-    // // // Load pipelines and select first as default
-    // pipelineController.getPipelines().then((_) {
-    //   if (pipelineController.pipelines.isNotEmpty) {
-    //     dealController.selectedPipelineId.value =
-    //         pipelineController.pipelines.first.id!;
-    //     stageController.getStagesByPipeline(
-    //       dealController.selectedPipelineId.value!,
-    //     );
-    //   }
-    // });
-    // //
-    // // Load stages and select first as default
-    // stageController.getStages().then((_) {
-    //   if (stageController.stages.isNotEmpty) {
-    //     final stage = stageController.stages.firstWhereOrNull(
-    //       (stage) => (stage.stageName).toLowerCase() == "new deal",
-    //     );
-    //     dealController.selectedStageId.value = stage!.id;
-    //   }
-    // });
-    //
-    // countryController.getCountries().then((_) {
-    //   if (countryController.countryModel.isNotEmpty) {
-    //     dealController.selectedCountryCode.value =
-    //         countryController.countryModel.first;
-    //   }
-    // });
-    //
-    // if (dealController.sourceOptions.isNotEmpty) {
-    //   dealController.selectedSource.value =
-    //       dealController.sourceOptions.first['id']!;
-    // }
-    // //
-    // if (dealController.categoryOptions.isNotEmpty) {
-    //   dealController.selectedCategory.value =
-    //       dealController.categoryOptions.first['id']!;
-    // }
-    //
 
   }
 
@@ -352,38 +305,58 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Select Existing',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Obx(
-                          () => Switch(
-                            value: dealController.isSelectFromExisting.value,
-                            onChanged: (newValue) {
-                              dealController.isSelectFromExisting.value =
-                                  newValue;
-                            },
-                            activeColor: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          'Create New',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       'Select Existing',
+                    //       style: TextStyle(
+                    //         fontSize: 16,
+                    //         fontWeight: FontWeight.w500,
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 8),
+                    //     Obx(
+                    //       () => Switch(
+                    //         value: dealController.isSelectFromExisting.value,
+                    //         onChanged: (newValue) {
+                    //           dealController.isSelectFromExisting.value =
+                    //               newValue;
+                    //         },
+                    //         activeColor: Theme.of(context).primaryColor,
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 8),
+                    //     Text(
+                    //       'Create New',
+                    //       style: TextStyle(
+                    //         fontSize: 16,
+                    //         fontWeight: FontWeight.w500,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    Obx(
+                          () => ToggleButtons(
+                        borderRadius: BorderRadius.circular(12),
+                        selectedColor: Colors.white,
+                        fillColor: Get.theme.primaryColor,
+                        constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width *.45, minHeight: 40),
+                        isSelected: [
+                          dealController.isSelectFromExisting.value,
+                          !dealController.isSelectFromExisting.value
+                        ],
+                        onPressed: (index) {
+                          dealController.isSelectFromExisting.value = index == 0;
+                        },
+                        children: const [
+                          Text("Create New"),
+                          Text("Select From Existing"),
+                        ],
+                      ),
                     ),
+
                     SizedBox(height: 16),
 
                     Obx(
