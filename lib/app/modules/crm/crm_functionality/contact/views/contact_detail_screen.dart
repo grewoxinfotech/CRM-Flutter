@@ -164,7 +164,7 @@ class ContactDetailScreen extends StatefulWidget {
 
 class _ContactDetailScreenState extends State<ContactDetailScreen> {
   final controller = Get.put(ContactController());
-  ContactModel? contact;
+  ContactData? contact;
 
   @override
   void initState() {
@@ -197,8 +197,9 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
         leading: CrmBackButton(
           onTap: () {
             if (widget.isFromCompanyScreen) {
-              final matchedContact = contactController.contacts
-                  .firstWhereOrNull((contact) => contact.id == widget.id);
+              final matchedContact = contactController.items.firstWhereOrNull(
+                (contact) => contact.id == widget.id,
+              );
               if (matchedContact != null) {
                 Get.off(
                   () => CompanyDetailScreen(id: matchedContact.companyId),
@@ -218,14 +219,14 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
         ),
       ),
       body: Obx(() {
-        if (dealController.deal.isEmpty) {
+        if (dealController.items.isEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            contactController.refreshData();
+            // contactController.refreshData();
           });
           return const Center(child: CircularProgressIndicator());
         }
 
-        final deal = dealController.deal.first;
+        final deal = dealController.items.first;
 
         List<Widget> widgets = [
           if (contact != null)
@@ -251,7 +252,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   }
 
   Widget _buildOverviewTab(
-    ContactModel contact,
+    ContactData contact,
     ContactController dealController,
     String sourceName,
     String statusName,
@@ -289,7 +290,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   }
 
   Widget _buildContactLeadsTab(
-    ContactModel? contact,
+    ContactData? contact,
     LeadController leadController,
   ) {
     // Safely handle null contact or id
@@ -403,7 +404,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   }
 
   Widget _buildContactDealsTab(
-    ContactModel? contact,
+    ContactData? contact,
     DealController dealController,
   ) {
     // Safely handle null contact or id

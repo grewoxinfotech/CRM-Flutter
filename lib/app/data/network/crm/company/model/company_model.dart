@@ -1,7 +1,7 @@
 class CompanyModel {
   bool? success;
   Message? message;
-  Data? data;
+  CompanyData? data;
 
   CompanyModel({this.success, this.message, this.data});
 
@@ -24,16 +24,16 @@ class CompanyModel {
 }
 
 class Message {
-  List<Data>? data;
+  List<CompanyData>? data;
   Pagination? pagination;
 
   Message({this.data, this.pagination});
 
   Message.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <CompanyData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new CompanyData.fromJson(v));
       });
     }
     pagination =
@@ -54,7 +54,7 @@ class Message {
   }
 }
 
-class Data {
+class CompanyData {
   String? id;
   String? accountOwner;
   String? companyName;
@@ -85,7 +85,7 @@ class Data {
   String? updatedAt;
   String? key;
 
-  Data({
+  CompanyData({
     this.id,
     this.accountOwner,
     this.companyName,
@@ -117,7 +117,7 @@ class Data {
     this.key,
   });
 
-  Data.fromJson(Map<String, dynamic> json) {
+  CompanyData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     accountOwner = json['account_owner'];
     companyName = json['company_name'];

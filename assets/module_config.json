@@ -23,5 +23,16 @@
   { "name": "Credit Notes", "tag": "dashboards-sales-credit-notes", "screen": "CreditNotesScreen", "category": "Sales" },
   { "name": "Debit Note", "tag": "dashboards-purchase-debit-note", "screen": "DebitNoteScreen", "category": "Purchase" },
   { "name": "Product & Services", "tag": "dashboards-sales-product-services", "screen": "ProductServicesScreen", "category": "Sales" },
-  { "name": "Attendance List", "tag": "extra-hrm-attendance-attendancelist", "screen": "AttendanceListScreen", "category": "HRM" }
+  { "name": "Attendance List", "tag": "extra-hrm-attendance-attendancelist", "screen": "AttendanceListScreen", "category": "HRM" },
+  { "name": "Users List", "tag": "extra-users-list", "screen": "UsersListScreen", "category": "Users" },
+  { "name": "Proposal", "tag": "dashboards-proposal", "screen": "ProposalScreen", "category": "CRM" },
+  { "name": "System Setup", "tag": "dashboards-systemsetup", "screen": "SystemSetupScreen", "category": "System" },
+  { "name": "Job List", "tag": "extra-hrm-jobs-joblist", "screen": "JobListScreen", "category": "HRM" },
+  { "name": "Project List", "tag": "dashboards-project-list", "screen": "ProjectListScreen", "category": "CRM" },
+  { "name": "Client List", "tag": "extra-users-client-list", "screen": "ClientListScreen", "category": "Users" },
+  { "name": "Job Interview", "tag": "extra-hrm-jobs-interview", "screen": "JobInterviewScreen", "category": "HRM" },
+  { "name": "Job Candidate", "tag": "extra-hrm-jobs-jobcandidate", "screen": "JobCandidateScreen", "category": "HRM" },
+  { "name": "Job Onboarding", "tag": "extra-hrm-jobs-jobonbording", "screen": "JobOnboardingScreen", "category": "HRM" },
+  { "name": "Job Application", "tag": "extra-hrm-jobs-jobapplication", "screen": "JobApplicationScreen", "category": "HRM" },
+  { "name": "Job Offer Letter", "tag": "extra-hrm-jobs-jobofferletter", "screen": "JobOfferLetterScreen", "category": "HRM" }
 ]

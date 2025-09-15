@@ -9,8 +9,8 @@ import '../controller/company_controller.dart';
 import '../view/company_detail_screen.dart';
 
 class CompanyCard extends StatelessWidget {
-  final Data company;
-  final Function(Data)? onTap;
+  final CompanyData company;
+  final Function(CompanyData)? onTap;
 
   const CompanyCard({super.key, required this.company, this.onTap});
 
@@ -69,14 +69,12 @@ class CompanyCard extends StatelessWidget {
                       if (company.website != null &&
                           company.website!.isNotEmpty)
                         _buildInfoRow('Website', company.website!),
-
                     ],
                   ),
                 ),
                 Column(
                   children: [
                     Text(formattedDate, style: const TextStyle(fontSize: 12)),
-
                   ],
                 ),
               ],

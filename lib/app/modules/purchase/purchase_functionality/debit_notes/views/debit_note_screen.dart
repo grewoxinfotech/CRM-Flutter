@@ -159,66 +159,75 @@ class DebitNotesScreen extends StatelessWidget {
               )
               : null,
       body: Obx(() {
-        if (controller.isLoading.value && controller.debitNotes.isEmpty) {
+        if (controller.isLoading.value && controller.items.isEmpty) {
           return const Center(child: CrmLoadingCircle());
         }
 
-        if (controller.debitNotes.isEmpty) {
+        if (controller.items.isEmpty) {
           return const Center(child: Text("No debit notes found."));
         }
 
-        return RefreshIndicator(
-          onRefresh: controller.refreshDebitNotes,
-          child: ViewScreen(
-            itemCount: controller.debitNotes.length + 1,
-            itemBuilder: (context, index) {
-              if (index < controller.debitNotes.length) {
-                final note = controller.debitNotes[index];
-                return Stack(
-                  children: [
-                    DebitNoteCard(
-                      debitNote: note.debitNote,
-                      updatedBill: note.updatedBill,
-                    ),
-                    Positioned(
-                      right: 26,
-                      bottom: 8,
-                      child: Row(
-                        children: [
-                          // IconButton(
-                          //   icon: const Icon(Icons.edit, color: Colors.blue),
-                          //   onPressed: () {
-                          //     Get.to(() => AddDebitNoteScreen());
-                          //   },
-                          // ),
-                          if (accessController.can(
-                            AccessModule.debitNote,
-                            AccessAction.delete,
-                          ))
-                            CrmIc(
-                              iconPath: ICRes.delete,
-                              color: ColorRes.error,
-                              onTap: () {
-                                _deleteDebitNote(
-                                  note.debitNote.id ?? '',
-                                  note.debitNote.description ?? 'Debit Note',
-                                );
-                              },
-                            ),
-                        ],
+        return NotificationListener<ScrollEndNotification>(
+          onNotification: (scrollEnd) {
+            final metrics = scrollEnd.metrics;
+            if (metrics.atEdge && metrics.pixels != 0) {
+              controller.loadMore();
+            }
+            return false;
+          },
+          child: RefreshIndicator(
+            onRefresh: controller.refreshList,
+            child: ViewScreen(
+              itemCount: controller.items.length + 1,
+              itemBuilder: (context, index) {
+                if (index < controller.items.length) {
+                  final note = controller.items[index];
+                  return Stack(
+                    children: [
+                      DebitNoteCard(
+                        debitNote: note.debitNote,
+                        updatedBill: note.updatedBill,
                       ),
-                    ),
-                  ],
-                );
-              } else if (controller.isLoading.value) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
+                      Positioned(
+                        right: 26,
+                        bottom: 8,
+                        child: Row(
+                          children: [
+                            // IconButton(
+                            //   icon: const Icon(Icons.edit, color: Colors.blue),
+                            //   onPressed: () {
+                            //     Get.to(() => AddDebitNoteScreen());
+                            //   },
+                            // ),
+                            if (accessController.can(
+                              AccessModule.debitNote,
+                              AccessAction.delete,
+                            ))
+                              CrmIc(
+                                iconPath: ICRes.delete,
+                                color: ColorRes.error,
+                                onTap: () {
+                                  _deleteDebitNote(
+                                    note.debitNote.id ?? '',
+                                    note.debitNote.description ?? 'Debit Note',
+                                  );
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                } else if (controller.isLoading.value) {
+                  return const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
           ),
         );
       }),

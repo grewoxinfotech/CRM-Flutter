@@ -61,6 +61,14 @@ class ICRes {
   static const role = "${hrmPath}/ic_role.svg";
   static const training = "${hrmPath}/ic_training.svg";
 
+  // Jobs
+  static const jobsPath = "${IconPath}job";
+  static const jobList = "${jobsPath}/ic_jon_list.svg";
+  static const jobApplication = "${jobsPath}/ic_job_application.svg";
+  static const jobCandidate = "${jobsPath}/ic_job_candidates.svg";
+  static const offerLetter = "${jobsPath}/ic_offer_letter.svg";
+  static const jobOnboarding = "${jobsPath}/ic_job_onboarding.svg";
+
   // functions icons
   static const FunctionsPath = "${IconPath}functions/";
   static const clients = "${FunctionsPath}ic_clients.svg";

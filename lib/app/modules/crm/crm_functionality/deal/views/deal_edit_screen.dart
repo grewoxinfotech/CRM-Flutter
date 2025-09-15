@@ -29,7 +29,7 @@ import '../../../../../data/network/system/country/model/country_model.dart';
 import '../../../../../data/network/user/all_users/model/all_users_model.dart';
 
 class DealEditScreen extends StatefulWidget {
-  final DealModel deal;
+  final DealData deal;
 
   const DealEditScreen({super.key, required this.deal});
   @override
@@ -100,7 +100,9 @@ class _DealCreateScreenState extends State<DealEditScreen> {
         Get.find<PipelineController>();
     final StageController stageController = Get.find<StageController>();
     final UsersController usersController = Get.find<UsersController>();
-    final ProductsServicesController productsController = Get.put(ProductsServicesController());
+    final ProductsServicesController productsController = Get.put(
+      ProductsServicesController(),
+    );
     final ContactController contactController = Get.put(ContactController());
 
     return Scaffold(
@@ -259,7 +261,6 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                       ],
                     ),
                     const SizedBox(height: 16),
-
 
                     // Source
                     Obx(
@@ -524,135 +525,175 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                     ),
                     SizedBox(height: 16),
 
-              /// Product Selection
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Products",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey.shade300),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 3,
-                          spreadRadius: 0,
-                          offset: Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                    /// Product Selection
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Obx(
-                              () => selectedProducts.isEmpty
-                              ? Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade50,
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: Colors.grey.shade200),
-                            ),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.shopping_bag_outlined,
-                                  size: 32,
-                                  color: Colors.grey,
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  "No products selected",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                              : Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade50,
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: Colors.grey.shade200),
-                            ),
-                            child: Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: selectedProducts.map((product) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    color: Get.theme.primaryColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                      color: Get.theme.primaryColor.withOpacity(0.3),
-                                    ),
-                                  ),
-                                  child: Chip(
-                                    materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                    avatar: CircleAvatar(
-                                      backgroundColor: Get.theme.primaryColor,
-                                      child: Icon(
-                                        Icons.shopping_bag,
-                                        color: Colors.white,
-                                        size: 14,
-                                      ),
-                                    ),
-                                    label: Text(
-                                      product.name ?? "Product ${product.id}",
-                                      style: TextStyle(
-                                        color: Get.theme.primaryColor.withOpacity(0.8),
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                    elevation: 0,
-                                    deleteIconColor: Get.theme.primaryColor,
-                                    onDeleted: () {
-                                      selectedProducts.remove(product);
-                                    },
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+                        Text(
+                          "Products",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 16),
-                        ElevatedButton.icon(
-                          icon: Icon(Icons.add_shopping_cart, size: 18),
-                          label: Text("Add Product"),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Get.theme.primaryColor,
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                        SizedBox(height: 8),
+                        Container(
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 3,
+                                spreadRadius: 0,
+                                offset: Offset(0, 1),
+                              ),
+                            ],
                           ),
-                          onPressed: () {
-                            _showProductSelection(context, productsController, selectedProducts);
-                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Obx(
+                                () =>
+                                    selectedProducts.isEmpty
+                                        ? Container(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 16,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade50,
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey.shade200,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Icon(
+                                                Icons.shopping_bag_outlined,
+                                                size: 32,
+                                                color: Colors.grey,
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                "No products selected",
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade600,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                        : Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade50,
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey.shade200,
+                                            ),
+                                          ),
+                                          child: Wrap(
+                                            spacing: 8,
+                                            runSpacing: 8,
+                                            children:
+                                                selectedProducts.map((product) {
+                                                  return Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Get
+                                                          .theme
+                                                          .primaryColor
+                                                          .withOpacity(0.1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            20,
+                                                          ),
+                                                      border: Border.all(
+                                                        color: Get
+                                                            .theme
+                                                            .primaryColor
+                                                            .withOpacity(0.3),
+                                                      ),
+                                                    ),
+                                                    child: Chip(
+                                                      materialTapTargetSize:
+                                                          MaterialTapTargetSize
+                                                              .shrinkWrap,
+                                                      avatar: CircleAvatar(
+                                                        backgroundColor:
+                                                            Get
+                                                                .theme
+                                                                .primaryColor,
+                                                        child: Icon(
+                                                          Icons.shopping_bag,
+                                                          color: Colors.white,
+                                                          size: 14,
+                                                        ),
+                                                      ),
+                                                      label: Text(
+                                                        product.name ??
+                                                            "Product ${product.id}",
+                                                        style: TextStyle(
+                                                          color: Get
+                                                              .theme
+                                                              .primaryColor
+                                                              .withOpacity(0.8),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      elevation: 0,
+                                                      deleteIconColor:
+                                                          Get
+                                                              .theme
+                                                              .primaryColor,
+                                                      onDeleted: () {
+                                                        selectedProducts.remove(
+                                                          product,
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                          ),
+                                        ),
+                              ),
+                              SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                icon: Icon(Icons.add_shopping_cart, size: 18),
+                                label: Text("Add Product"),
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Get.theme.primaryColor,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _showProductSelection(
+                                    context,
+                                    productsController,
+                                    selectedProducts,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -975,24 +1016,27 @@ class _DealCreateScreenState extends State<DealEditScreen> {
   }
 
   void _showProductSelection(
-      BuildContext context,
-      ProductsServicesController productsController,
-      RxList<Data> selectedProducts, // product IDs
-      ) {
+    BuildContext context,
+    ProductsServicesController productsController,
+    RxList<Data> selectedProducts, // product IDs
+  ) {
     final searchController = TextEditingController();
-    final RxList<Data> filteredProducts = RxList<Data>([...productsController.items]);
+    final RxList<Data> filteredProducts = RxList<Data>([
+      ...productsController.items,
+    ]);
 
     // Function to filter products
     void filterProducts(String query) {
       if (query.isEmpty) {
         filteredProducts.value = [...productsController.items];
       } else {
-        filteredProducts.value = productsController.items
-            .where(
-              (product) =>
-          product.name!.toLowerCase().contains(query.toLowerCase())
-        )
-            .toList();
+        filteredProducts.value =
+            productsController.items
+                .where(
+                  (product) =>
+                      product.name!.toLowerCase().contains(query.toLowerCase()),
+                )
+                .toList();
       }
     }
 
@@ -1061,91 +1105,111 @@ class _DealCreateScreenState extends State<DealEditScreen> {
 
                 // Products list
                 Obx(
-                      () => Flexible(
-                    child: filteredProducts.isEmpty
-                        ? Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(
-                          "No products found",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-                    )
-                        : ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = filteredProducts[index];
-
-                        return Obx(() {
-                          final isSelected = selectedProducts.contains(product);
-
-                          return Container(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? Get.theme.primaryColor.withOpacity(0.1)
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: isSelected
-                                    ? Get.theme.primaryColor.withOpacity(0.5)
-                                    : Colors.grey.shade300,
-                                width: isSelected ? 1.5 : 1,
-                              ),
-                            ),
-                            child: ListTile(
-                              dense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 4,
-                              ),
-                              leading: CircleAvatar(
-                                backgroundColor: isSelected
-                                    ? Get.theme.primaryColor
-                                    : Colors.grey.shade300,
-                                child: Icon(
-                                  Icons.shopping_bag,
-                                  color: isSelected ? Colors.white : Colors.black87,
+                  () => Flexible(
+                    child:
+                        filteredProducts.isEmpty
+                            ? Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "No products found",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                                 ),
                               ),
-                              title: Text(
-                                product.name ?? '',
-                                style: TextStyle(
-                                  fontWeight:
-                                  isSelected ? FontWeight.bold : FontWeight.normal,
-                                ),
-                              ),
-                              subtitle: Text(
-                                "Stock: ${product.stockQuantity}",
-                                style: TextStyle(fontSize: 12),
-                              ),
-                              trailing: isSelected
-                                  ? Icon(Icons.check_circle,
-                                  color: Get.theme.primaryColor)
-                                  : Icon(Icons.circle_outlined,
-                                  color: Colors.grey.shade400),
-                              onTap: () {
-                                if (isSelected) {
-                                  selectedProducts.remove(product);
-                                } else {
-                                  if (!selectedProducts.contains(product)) {
-                                    selectedProducts.add(product);
-                                  }
-                                }
+                            )
+                            : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: filteredProducts.length,
+                              itemBuilder: (context, index) {
+                                final product = filteredProducts[index];
+
+                                return Obx(() {
+                                  final isSelected = selectedProducts.contains(
+                                    product,
+                                  );
+
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          isSelected
+                                              ? Get.theme.primaryColor
+                                                  .withOpacity(0.1)
+                                              : Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color:
+                                            isSelected
+                                                ? Get.theme.primaryColor
+                                                    .withOpacity(0.5)
+                                                : Colors.grey.shade300,
+                                        width: isSelected ? 1.5 : 1,
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      dense: true,
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 4,
+                                      ),
+                                      leading: CircleAvatar(
+                                        backgroundColor:
+                                            isSelected
+                                                ? Get.theme.primaryColor
+                                                : Colors.grey.shade300,
+                                        child: Icon(
+                                          Icons.shopping_bag,
+                                          color:
+                                              isSelected
+                                                  ? Colors.white
+                                                  : Colors.black87,
+                                        ),
+                                      ),
+                                      title: Text(
+                                        product.name ?? '',
+                                        style: TextStyle(
+                                          fontWeight:
+                                              isSelected
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        "Stock: ${product.stockQuantity}",
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      trailing:
+                                          isSelected
+                                              ? Icon(
+                                                Icons.check_circle,
+                                                color: Get.theme.primaryColor,
+                                              )
+                                              : Icon(
+                                                Icons.circle_outlined,
+                                                color: Colors.grey.shade400,
+                                              ),
+                                      onTap: () {
+                                        if (isSelected) {
+                                          selectedProducts.remove(product);
+                                        } else {
+                                          if (!selectedProducts.contains(
+                                            product,
+                                          )) {
+                                            selectedProducts.add(product);
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  );
+                                });
                               },
                             ),
-                          );
-                        });
-                      },
-                    ),
                   ),
                 ),
 
@@ -1160,7 +1224,10 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
                         style: TextButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
                         ),
                         child: Text(
                           "CANCEL",
@@ -1172,7 +1239,10 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                         onPressed: () => Navigator.of(context).pop(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Get.theme.primaryColor,
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
                         ),
                         child: Text(
                           "DONE",
@@ -1190,13 +1260,12 @@ class _DealCreateScreenState extends State<DealEditScreen> {
     );
   }
 
-
   Future<void> _createContact(DealController dealController) async {
     try {
       final ContactService _contactService = ContactService();
       // Create the contact model with only required fields
       final user = await SecureStorage.getUserData();
-      final newContact = ContactModel(
+      final newContact = ContactData(
         firstName: dealController.firstName.text.trim(),
         lastName: dealController.lastName.text.trim(),
         contactOwner: user?.id ?? "",
@@ -1218,9 +1287,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
       dealController.isLoading.value = true;
 
       // Call the service to add the contact
-      final ContactModel? success = await _contactService.addContact(
-        newContact,
-      );
+      final ContactData? success = await _contactService.addContact(newContact);
       print("[DEBUG]=> success ${success!.toJson()}");
       dealController.selectedContact.value = success!.id!;
 
@@ -1250,7 +1317,6 @@ class _DealCreateScreenState extends State<DealEditScreen> {
   }
 
   Future<void> _updateDeal(DealController dealController) async {
-
     try {
       if (dealController.isSelectFromExisting.value) {
         await _createContact(dealController);
@@ -1261,50 +1327,61 @@ class _DealCreateScreenState extends State<DealEditScreen> {
       final user = await SecureStorage.getUserData();
       final userId = user?.id ?? "";
 
-      final newDeal = DealModel(
+      final newDeal = DealData(
         category: dealController.selectedCategory.value,
         closedDate: dealController.selectedEndDate.value,
-        companyId: dealController.selectedCompany.isEmpty ? null : dealController.selectedCompany.value,
-        contactId: dealController.selectedContact.isEmpty ? null : dealController.selectedContact.value,
+        companyId:
+            dealController.selectedCompany.isEmpty
+                ? null
+                : dealController.selectedCompany.value,
+        contactId:
+            dealController.selectedContact.isEmpty
+                ? null
+                : dealController.selectedContact.value,
         currency: dealController.currency.value,
         dealTitle: dealController.dealTitle.text,
         dealMembers:
-        selectedMembers
-            .map((element) => DealMember(memberId: element))
-            .toList(),
+            selectedMembers
+                .map((element) => DealMember(memberId: element))
+                .toList(),
         pipeline: dealController.selectedPipelineId.value,
-        products: selectedProducts.map((element) => Data(
-          id: element.id,
-          relatedId: element.relatedId,
-          name: element.name,
-          currency: element.currency,
-          buyingPrice: element.buyingPrice,
-          sellingPrice: element.sellingPrice,
-          profitMargin: element.profitMargin,
-          profitPercentage: element.profitPercentage,
-          category: element.category,
-          sku: element.sku,
-          hsnSac: element.hsnSac,
-          description: element.description,
-          taxName: element.taxName,
-          taxPercentage: element.taxPercentage,
-          image: element.image,
-          stockQuantity: element.stockQuantity,
-          minStockLevel: element.minStockLevel,
-          maxStockLevel: element.maxStockLevel,
-          reorderQuantity: element.reorderQuantity,
-          stockStatus: element.stockStatus,
-          lastStockUpdate: element.lastStockUpdate,
-          totalInvestment: element.totalInvestment,
-          potentialRevenue: element.potentialRevenue,
-          potentialProfit: element.potentialProfit,
-          clientId: element.clientId,
-          createdBy: element.createdBy,
-          updatedBy: element.updatedBy,
-          createdAt: element.createdAt,
-          updatedAt: element.updatedAt,
-          key: element.key,
-        )).toList(),
+        products:
+            selectedProducts
+                .map(
+                  (element) => Data(
+                    id: element.id,
+                    relatedId: element.relatedId,
+                    name: element.name,
+                    currency: element.currency,
+                    buyingPrice: element.buyingPrice,
+                    sellingPrice: element.sellingPrice,
+                    profitMargin: element.profitMargin,
+                    profitPercentage: element.profitPercentage,
+                    category: element.category,
+                    sku: element.sku,
+                    hsnSac: element.hsnSac,
+                    description: element.description,
+                    taxName: element.taxName,
+                    taxPercentage: element.taxPercentage,
+                    image: element.image,
+                    stockQuantity: element.stockQuantity,
+                    minStockLevel: element.minStockLevel,
+                    maxStockLevel: element.maxStockLevel,
+                    reorderQuantity: element.reorderQuantity,
+                    stockStatus: element.stockStatus,
+                    lastStockUpdate: element.lastStockUpdate,
+                    totalInvestment: element.totalInvestment,
+                    potentialRevenue: element.potentialRevenue,
+                    potentialProfit: element.potentialProfit,
+                    clientId: element.clientId,
+                    createdBy: element.createdBy,
+                    updatedBy: element.updatedBy,
+                    createdAt: element.createdAt,
+                    updatedAt: element.updatedAt,
+                    key: element.key,
+                  ),
+                )
+                .toList(),
         source: dealController.selectedSource.value,
         stage: dealController.selectedStageId.value,
         value: int.tryParse(dealController.dealValue.text) ?? 0,
@@ -1314,7 +1391,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
       );
       print("[DEBUG]=> data ${newDeal.toJson()}");
 
-      final success = await dealController.updateDeal(widget.deal.id!,newDeal);
+      final success = await dealController.updateDeal(widget.deal.id!, newDeal);
 
       if (success) {
         print("[DEBUG]=> success");
@@ -1331,9 +1408,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
           contentType: ContentType.failure,
         );
       }
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 
   Widget _buildCompanyAndContactDropdowns({
@@ -1358,7 +1433,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                 dealController.selectedCompany.value = value;
 
                 // Check selected contact
-                final selectedContact = contactController.contacts
+                final selectedContact = contactController.items
                     .firstWhereOrNull(
                       (c) => c.id == dealController.selectedContact.value,
                     );
@@ -1378,7 +1453,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
             title: "Contact Name",
             value: dealController.selectedContact.value,
             items:
-                contactController.contacts.map((contact) {
+                contactController.items.map((contact) {
                   return DropdownMenuItem(
                     value: contact.id,
                     child: Text(
@@ -1391,7 +1466,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
                 dealController.selectedContact.value = value;
 
                 // Find contact object
-                final contact = contactController.contacts.firstWhereOrNull(
+                final contact = contactController.items.firstWhereOrNull(
                   (c) => c.id == value,
                 );
 
@@ -1482,7 +1557,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 12),
         CrmTextField(
           title: "Address",

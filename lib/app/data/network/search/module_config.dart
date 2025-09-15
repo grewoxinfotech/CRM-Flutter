@@ -15,6 +15,8 @@ import 'package:crm_flutter/app/modules/hrm/meeting/views/meeting_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/payroll/views/payroll_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/role/views/role_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/training/views/training_screen.dart';
+import 'package:crm_flutter/app/modules/job/job_functionality/interview_schedule/views/add_interview_schedule_screen.dart';
+import 'package:crm_flutter/app/modules/job/job_functionality/offer_letter/views/offer_letter_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/billing/views/billing_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/debit_notes/views/debit_note_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functionality/vendor/views/vendor_screen.dart';
@@ -27,6 +29,10 @@ import 'package:crm_flutter/app/modules/task/task/views/task_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../modules/crm/crm_functionality/deal/views/deal_screen.dart';
+import '../../../modules/job/job_functionality/job_applications/views/job_application_screen.dart';
+import '../../../modules/job/job_functionality/job_candidate/views/job_candidate_screen.dart';
+import '../../../modules/job/job_functionality/job_list/views/job_list_screen.dart';
+import '../../../modules/job/job_functionality/job_onboarding/views/job_onboarding_screen.dart';
 
 class ModuleConfig {
   final String name;
@@ -89,6 +95,18 @@ final Map<String, dynamic> screenMapper = {
   "DebitNoteScreen": () => DebitNotesScreen(),
   "ProductServicesScreen": () => ProductsServicesScreen(),
   "AttendanceListScreen": () => AttendanceScreen(),
+
+  // "UsersListScreen": () => UsersListScreen(),
+  // "ProposalScreen": () => ProposalScreen(),
+  // "SystemSetupScreen": () => SystemSetupScreen(),
+  "JobListScreen": () => JobListScreen(),
+  // "ProjectListScreen": () => ProjectListScreen(),
+  // "ClientListScreen": () => ClientListScreen(),
+  "JobInterviewScreen": () => AddInterviewScheduleScreen(),
+  "JobCandidateScreen": () => JobCandidateScreen(),
+  "JobOnboardingScreen": () => JobOnboardingScreen(),
+  "JobApplicationScreen": () => JobApplicationScreen(),
+  "JobOfferLetterScreen": () => OfferLetterScreen(),
 };
 
 class ModuleIconMapper {
@@ -109,23 +127,23 @@ class ModuleIconMapper {
     "extra-hrm-designation": ICRes.designation,
     // "dashboards-systemsetup": ICRes.deal,
     "extra-hrm-announcement": ICRes.announcement,
-    // "extra-hrm-jobs-joblist": ICRes.deal,
+    "extra-hrm-jobs-joblist": ICRes.jobList,
     "dashboards-TaskCalendar": ICRes.calendar,
     // "dashboards-project-list": ICRes.deal,
     "extra-hrm-trainingSetup": ICRes.training,
     "extra-users-client-list": ICRes.customer,
     "dashboards-sales-invoice": ICRes.salesInvoice,
     "dashboards-sales-revenue": ICRes.revenue,
-    // "extra-hrm-jobs-interview":ICRes.deal,
+    "extra-hrm-jobs-interview": ICRes.calendar,
     "dashboards-sales-customer": ICRes.customer,
     "extra-hrm-leave-leavelist": ICRes.leave,
     "dashboards-purchase-vendor": ICRes.vendor,
     "dashboards-purchase-billing": ICRes.bill,
-    // "extra-hrm-jobs-jobcandidate": ICRes.deal,
-    // "extra-hrm-jobs-jobonbording": ICRes.deal,
+    "extra-hrm-jobs-jobcandidate": ICRes.jobCandidate,
+    "extra-hrm-jobs-jobonbording": ICRes.jobOnboarding,
     "dashboards-sales-credit-notes": ICRes.creditNote,
-    // "extra-hrm-jobs-jobapplication": ICRes.deal,
-    // "extra-hrm-jobs-jobofferletter": ICRes.deal,
+    "extra-hrm-jobs-jobapplication": ICRes.jobApplication,
+    "extra-hrm-jobs-jobofferletter": ICRes.offerLetter,
     "dashboards-purchase-debit-note": ICRes.debitNote,
     "dashboards-sales-product-services": ICRes.product,
     "extra-hrm-attendance-attendancelist": ICRes.attendance,

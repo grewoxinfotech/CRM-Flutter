@@ -10,7 +10,7 @@ import '../../../../sales/sales_functionality/products_services/controllers/prod
 class BillingController extends PaginatedController<BillingData> {
   final BillingService _service = BillingService();
   final String url = UrlRes.billing;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
   List<Data> products = <Data>[].obs;
 
   static Future<Map<String, String>> headers() async {
@@ -21,10 +21,17 @@ class BillingController extends PaginatedController<BillingData> {
   Future<List<BillingData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchBills(page: page);
-      return response?.data ?? [];
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch revenues";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

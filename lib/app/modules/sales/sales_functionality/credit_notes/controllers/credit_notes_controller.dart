@@ -11,7 +11,7 @@ import '../../invoice/controllers/invoice_controller.dart';
 class CreditNoteController extends PaginatedController<CreditNoteData> {
   final CreditNoteService _service = CreditNoteService();
   final String url = UrlRes.creditNotes;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final RxList<SalesInvoice> invoices = <SalesInvoice>[].obs;
 
@@ -19,14 +19,33 @@ class CreditNoteController extends PaginatedController<CreditNoteData> {
   //   return await UrlRes.getHeaders();
   // }
 
+  // @override
+  // Future<List<CreditNoteData>> fetchItems(int page) async {
+  //   try {
+  //     final response = await _service.fetchCreditNotes(page: page);
+  //     return response;
+  //   } catch (e) {
+  //     print("Exception in fetchItems: $e");
+  //     throw Exception("Exception in fetchItems: $e");
+  //   }
+  // }
+
   @override
   Future<List<CreditNoteData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchCreditNotes(page: page);
-      return response;
+      print("CreditNotes Response: ${response?.toJson()}");
+
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch credit notes";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

@@ -12,7 +12,7 @@ class BillingService {
   }
 
   /// Fetch bills with optional pagination, search, and filtering by ID
-  Future<BillingMessage?> fetchBills({
+  Future<BillingModel?> fetchBills({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -33,7 +33,7 @@ class BillingService {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['success'] == true) {
-          return BillingMessage.fromJson(data['message']);
+          return BillingModel.fromJson(data);
         }
       } else {
         print("Failed to fetch bills: ${response.statusCode}");

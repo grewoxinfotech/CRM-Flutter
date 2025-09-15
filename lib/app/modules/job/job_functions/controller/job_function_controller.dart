@@ -92,7 +92,7 @@ class JobFunctionController extends GetxController {
           accessController.can(AccessModule.jobList, AccessAction.delete))
         FunctionModel(
           title: 'Job',
-          iconPath: ICRes.lead,
+          iconPath: ICRes.jobList,
           color: const Color(0xff008dad),
           screenBuilder: JobListScreen(),
         ),
@@ -109,7 +109,7 @@ class JobFunctionController extends GetxController {
           accessController.can(AccessModule.jobCandidate, AccessAction.delete))
         FunctionModel(
           title: 'Job Candidate',
-          iconPath: ICRes.employee,
+          iconPath: ICRes.jobCandidate,
           color: const Color(0xff0600ad),
           screenBuilder: JobCandidateScreen(),
         ),
@@ -125,21 +125,36 @@ class JobFunctionController extends GetxController {
           accessController.can(AccessModule.jobOnboarding, AccessAction.delete))
         FunctionModel(
           title: 'Job On-Boarding',
-          iconPath: ICRes.employees,
+          iconPath: ICRes.jobOnboarding,
           color: const Color(0xff2bad00),
           screenBuilder: JobOnboardingScreen(),
         ),
-      if (accessController.can(AccessModule.jobApplication, AccessAction.view) ||
-          accessController.can(AccessModule.jobApplication, AccessAction.create) ||
-          accessController.can(AccessModule.jobApplication, AccessAction.update) ||
-          accessController.can(AccessModule.jobApplication, AccessAction.delete))
+      if (accessController.can(
+            AccessModule.jobApplication,
+            AccessAction.view,
+          ) ||
+          accessController.can(
+            AccessModule.jobApplication,
+            AccessAction.create,
+          ) ||
+          accessController.can(
+            AccessModule.jobApplication,
+            AccessAction.update,
+          ) ||
+          accessController.can(
+            AccessModule.jobApplication,
+            AccessAction.delete,
+          ))
         FunctionModel(
           title: 'Job Applications',
-          iconPath: ICRes.document,
+          iconPath: ICRes.jobApplication,
           color: const Color(0xffad0000),
           screenBuilder: JobApplicationScreen(),
         ),
-      if (accessController.can(AccessModule.jobOfferLetter, AccessAction.view) ||
+      if (accessController.can(
+            AccessModule.jobOfferLetter,
+            AccessAction.view,
+          ) ||
           accessController.can(
             AccessModule.jobOfferLetter,
             AccessAction.create,
@@ -148,17 +163,26 @@ class JobFunctionController extends GetxController {
             AccessModule.jobOfferLetter,
             AccessAction.update,
           ) ||
-          accessController.can(AccessModule.jobOfferLetter, AccessAction.delete))
+          accessController.can(
+            AccessModule.jobOfferLetter,
+            AccessAction.delete,
+          ))
         FunctionModel(
           title: 'Offer Letters',
-          iconPath: ICRes.lead,
+          iconPath: ICRes.offerLetter,
           color: const Color(0xff9600ad),
           screenBuilder: OfferLetterScreen(),
         ),
 
       if (accessController.can(AccessModule.jobInterview, AccessAction.view) ||
-          accessController.can(AccessModule.jobInterview, AccessAction.create) ||
-          accessController.can(AccessModule.jobInterview, AccessAction.update) ||
+          accessController.can(
+            AccessModule.jobInterview,
+            AccessAction.create,
+          ) ||
+          accessController.can(
+            AccessModule.jobInterview,
+            AccessAction.update,
+          ) ||
           accessController.can(AccessModule.jobInterview, AccessAction.delete))
         FunctionModel(
           title: 'Interviews',

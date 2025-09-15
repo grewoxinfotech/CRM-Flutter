@@ -14,7 +14,7 @@ import '../../../../../widgets/common/inputs/crm_text_field.dart';
 import '../controller/contact_controller.dart';
 
 class ContactAddScreen extends StatelessWidget {
-  ContactModel? contactModel;
+  ContactData? contactModel;
   final bool isFromEdit;
 
   ContactAddScreen({super.key, this.contactModel, this.isFromEdit = false});
@@ -198,8 +198,7 @@ class ContactAddScreen extends StatelessWidget {
                                     value;
 
                                 // Check selected contact
-                                final selectedContact = contactController
-                                    .contacts
+                                final selectedContact = contactController.items
                                     .firstWhereOrNull(
                                       (c) =>
                                           c.id ==

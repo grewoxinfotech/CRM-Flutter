@@ -38,7 +38,6 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
   @override
   void initState() {
     super.initState();
-
   }
 
   Future<void> _pickDate(
@@ -219,7 +218,6 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                     ),
                     const SizedBox(height: 16),
 
-
                     const SizedBox(height: 16),
 
                     // Source
@@ -338,17 +336,21 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                     //   ],
                     // ),
                     Obx(
-                          () => ToggleButtons(
+                      () => ToggleButtons(
                         borderRadius: BorderRadius.circular(12),
                         selectedColor: Colors.white,
                         fillColor: Get.theme.primaryColor,
-                        constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width *.45, minHeight: 40),
+                        constraints: BoxConstraints(
+                          minWidth: MediaQuery.of(context).size.width * .45,
+                          minHeight: 40,
+                        ),
                         isSelected: [
                           dealController.isSelectFromExisting.value,
-                          !dealController.isSelectFromExisting.value
+                          !dealController.isSelectFromExisting.value,
                         ],
                         onPressed: (index) {
-                          dealController.isSelectFromExisting.value = index == 0;
+                          dealController.isSelectFromExisting.value =
+                              index == 0;
                         },
                         children: const [
                           Text("Create New"),
@@ -651,7 +653,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
       final ContactService _contactService = ContactService();
       // Create the contact model with only required fields
       final user = await SecureStorage.getUserData();
-      final newContact = ContactModel(
+      final newContact = ContactData(
         firstName: dealController.firstName.text.trim(),
         lastName: dealController.lastName.text.trim(),
         contactOwner: user?.id ?? "",
@@ -673,9 +675,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
       dealController.isLoading.value = true;
 
       // Call the service to add the contact
-      final ContactModel? success = await _contactService.addContact(
-        newContact,
-      );
+      final ContactData? success = await _contactService.addContact(newContact);
       print("[DEBUG]=> success ${success!.toJson()}");
       dealController.selectedContact.value = success!.id!;
 
@@ -714,7 +714,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
         }
       }
 
-      final newDeal = DealModel(
+      final newDeal = DealData(
         category: dealController.selectedCategory.value,
         closedDate: dealController.selectedEndDate.value,
         companyId: dealController.selectedCompany.value,
@@ -755,7 +755,6 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
       //     contentType: ContentType.failure,
       //   );
       // }
-
     } finally {
       dealController.isCreating(false);
     }
@@ -783,7 +782,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                 dealController.selectedCompany.value = value;
 
                 // Check selected contact
-                final selectedContact = contactController.contacts
+                final selectedContact = contactController.items
                     .firstWhereOrNull(
                       (c) => c.id == dealController.selectedContact.value,
                     );
@@ -803,7 +802,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
             title: "Contact Name",
             value: dealController.selectedContact.value,
             items:
-                contactController.contacts.map((contact) {
+                contactController.items.map((contact) {
                   return DropdownMenuItem(
                     value: contact.id,
                     child: Text(
@@ -816,7 +815,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                 dealController.selectedContact.value = value;
 
                 // Find contact object
-                final contact = contactController.contacts.firstWhereOrNull(
+                final contact = contactController.items.firstWhereOrNull(
                   (c) => c.id == value,
                 );
 

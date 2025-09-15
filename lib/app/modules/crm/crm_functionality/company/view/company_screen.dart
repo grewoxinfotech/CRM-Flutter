@@ -90,7 +90,7 @@ class CompanyScreen extends StatelessWidget {
       //   },
       // ),
       body: FutureBuilder(
-        future: controller.refreshData(),
+        future: controller.loadInitial(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CrmLoadingCircle();
@@ -109,28 +109,40 @@ class CompanyScreen extends StatelessWidget {
             );
           } else {
             return Obx(() {
-              if (controller.companies.isEmpty) {
+              if (controller.items.isEmpty) {
                 return const Center(child: Text("No companies available."));
               }
 
-              return ViewScreen(
-                itemCount: controller.companies.length,
-                itemBuilder: (context, index) {
-                  final company = controller.companies[index];
-                  return GestureDetector(
-                    onTap: () async {
-                      if (company.id != null) {
-                        await Get.to(
-                              () => CompanyDetailScreen(id: company.id!),
-                        );
-                        controller.refreshData();
-                      } else {
-                        Get.snackbar("Error", "Company ID is missing");
-                      }
-                    },
-                    child: CompanyCard(company: company),
-                  );
+              return NotificationListener<ScrollEndNotification>(
+                onNotification: (scrollEnd) {
+                  final metrics = scrollEnd.metrics;
+                  if (metrics.atEdge && metrics.pixels != 0) {
+                    controller.loadMore();
+                  }
+                  return false;
                 },
+                child: RefreshIndicator(
+                  onRefresh: controller.refreshList,
+                  child: ViewScreen(
+                    itemCount: controller.items.length,
+                    itemBuilder: (context, index) {
+                      final company = controller.items[index];
+                      return GestureDetector(
+                        onTap: () async {
+                          if (company.id != null) {
+                            await Get.to(
+                              () => CompanyDetailScreen(id: company.id!),
+                            );
+                            controller.refreshList();
+                          } else {
+                            Get.snackbar("Error", "Company ID is missing");
+                          }
+                        },
+                        child: CompanyCard(company: company),
+                      );
+                    },
+                  ),
+                ),
               );
             });
           }

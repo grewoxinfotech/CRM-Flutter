@@ -38,7 +38,7 @@ class CompanyDetailScreen extends StatefulWidget {
 class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
   final companyController = Get.put(CompanyController());
   // CompanyModel? companyModel;
-  Data? company;
+  CompanyData? company;
 
   @override
   void initState() {
@@ -80,9 +80,9 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
         ),
       ),
       body: Obx(() {
-        if (companyController.companies.isEmpty) {
+        if (companyController.items.isEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            companyController.refreshData();
+            companyController.refreshList();
           });
           return const Center(child: CircularProgressIndicator());
         }
@@ -104,7 +104,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
     );
   }
 
-  Widget _buildOverviewTab(Data company) {
+  Widget _buildOverviewTab(CompanyData company) {
     // print("[DEBUG]=>:${company.companyName}");
     return CompanyOverviewCard(
       color: Colors.teal,
@@ -129,7 +129,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
     );
   }
 
-  Widget _buildLeadsTab(Data company, LeadController leadController) {
+  Widget _buildLeadsTab(CompanyData company, LeadController leadController) {
     final companyId = company.id;
     final leads = leadController.getLeadsByCompanyId(companyId!);
     if (leads.isEmpty) {
@@ -167,19 +167,19 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
       itemBuilder: (context, i) {
         final data = leadController.leads[i];
         final status = leadController.statusOptions.firstWhereOrNull(
-              (element) => element['id'] == data.status,
+          (element) => element['id'] == data.status,
         );
 
         final currency = leadController.currencies.firstWhereOrNull(
-              (element) => element.id == data.currency,
+          (element) => element.id == data.currency,
         );
 
         final source = leadController.sourceOptions.firstWhereOrNull(
-              (element) => element['id'] == data.source,
+          (element) => element['id'] == data.source,
         );
 
         final category = leadController.categoryOptions.firstWhereOrNull(
-              (element) => element['id'] == data.category,
+          (element) => element['id'] == data.category,
         );
 
         return LeadCard(
@@ -200,14 +200,13 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
           // email: data.email ?? '',
           // address: data.address ?? '',
           leadMembers:
-          data.leadMembers?.leadMembers?.isNotEmpty == true
-              ? data.leadMembers!.leadMembers!.length.toString()
-              : '',
+              data.leadMembers?.leadMembers?.isNotEmpty == true
+                  ? data.leadMembers!.leadMembers!.length.toString()
+                  : '',
           category: category != null ? category['name'] ?? '' : '',
           // files: data.files.isNotEmpty ? data.files.length.toString() : '',
           // Use the status directly from the API instead of trying to map it
-          status:
-          status != null ? status['name']!.capitalize ?? '' : '',
+          status: status != null ? status['name']!.capitalize ?? '' : '',
 
           interestLevel: data.interestLevel ?? '',
           leadScore: data.leadScore?.toString() ?? '',
@@ -223,7 +222,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
     );
   }
 
-  Widget _buildDealsTab(Data company, DealController dealController) {
+  Widget _buildDealsTab(CompanyData company, DealController dealController) {
     final companyId = company.id;
     final deals = dealController.getDealsByCompanyId(companyId!);
     if (deals.isEmpty) {
@@ -279,17 +278,17 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
       itemBuilder: (context, i) {
         final data = deals[i];
 
-
-        final source = dealController.sourceOptions
-            .firstWhereOrNull(
-              (element) => element['id'] == data.source,
+        final source = dealController.sourceOptions.firstWhereOrNull(
+          (element) => element['id'] == data.source,
         );
 
         final currency = dealController.currencies.firstWhereOrNull(
-              (element) => element.id == data.currency,
+          (element) => element.id == data.currency,
         );
 
-        final category = dealController.categoryOptions.firstWhereOrNull((element) => element['id']==data.category,);
+        final category = dealController.categoryOptions.firstWhereOrNull(
+          (element) => element['id'] == data.category,
+        );
 
         return DealCard(
           id: data.id.toString(),
@@ -298,7 +297,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
           value: data.value.toString(),
           pipeline: dealController.getPipelineName(data.pipeline ?? ''),
           stage: dealController.getStageName(data.stage ?? ''),
-          category: category!=null ? category['name'] ?? '' : '',
+          category: category != null ? category['name'] ?? '' : '',
           status: data.status.toString(),
           label: data.label.toString(),
           closedDate: data.closedDate.toString(),
@@ -324,9 +323,9 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
           color: Get.theme.colorScheme.error,
           onTap:
               () =>
-          (data.id != null)
-              ? Get.to(() => DealDetailScreen(id: data.id!))
-              : Get.snackbar('Error', 'deal ID is missing'),
+                  (data.id != null)
+                      ? Get.to(() => DealDetailScreen(id: data.id!))
+                      : Get.snackbar('Error', 'deal ID is missing'),
           onEdit: () {},
           onDelete: () {},
         );
@@ -376,7 +375,10 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
   //     );
   //   });
   // }
-  Widget _buildContactTab(Data company, ContactController contactController) {
+  Widget _buildContactTab(
+    CompanyData company,
+    ContactController contactController,
+  ) {
     final companyId = company.id;
 
     return Obx(() {
@@ -384,8 +386,8 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
         return const Center(child: CircularProgressIndicator());
       }
 
-      if (contactController.error.isNotEmpty) {
-        return Center(child: Text(contactController.error.value));
+      if (contactController.errorMessage.isNotEmpty) {
+        return Center(child: Text(contactController.errorMessage.value));
       }
 
       final contacts = contactController.getContactsByCompanyId(companyId!);

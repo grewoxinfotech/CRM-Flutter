@@ -16,11 +16,154 @@ import '../../../../access/controller/access_controller.dart';
 class DealScreen extends StatelessWidget {
   DealScreen({super.key});
 
-  @override
+  // @override
+  // Widget build(BuildContext context) {
+  //   final accessController = Get.find<AccessController>();
+  //   Get.lazyPut<DealController>(() => DealController());
+  //   final DealController dealController = Get.find<DealController>();
+  //   return Scaffold(
+  //     backgroundColor: Get.theme.colorScheme.background,
+  //     appBar: AppBar(
+  //       leading: CrmBackButton(color: Get.theme.colorScheme.onPrimary),
+  //       title: const Text("Deals"),
+  //       centerTitle: false,
+  //       backgroundColor: Colors.transparent,
+  //     ),
+  //
+  //     floatingActionButton:
+  //         accessController.can(AccessModule.deal, AccessAction.create)
+  //             ? CrmButton(
+  //               title: "Add Deal",
+  //               onTap: () {
+  //                 dealController.resetForm();
+  //                 Get.to(DealCreateScreen());
+  //               },
+  //             )
+  //             : null,
+  //     body: FutureBuilder(
+  //       future: dealController.loadInitial(),
+  //       builder: (context, snapshot) {
+  //         if (snapshot.connectionState == ConnectionState.waiting) {
+  //           return const CrmLoadingCircle();
+  //         } else if (snapshot.hasError) {
+  //           return Center(
+  //             child: SizedBox(
+  //               width: 250,
+  //               child: Text(
+  //                 'Server Error : \n${snapshot.error}',
+  //                 style: TextStyle(
+  //                   color: Colors.red,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //           );
+  //         } else if (snapshot.hasData) {
+  //           final deals = dealController.items;
+  //           if (deals.isEmpty) {
+  //             return const Center(child: Text("No deals available."));
+  //           } else {
+  //             return Obx(() {
+  //               return NotificationListener<ScrollEndNotification>(
+  //                 onNotification: (scrollEnd) {
+  //                   final metrics = scrollEnd.metrics;
+  //                   if (metrics.atEdge && metrics.pixels != 0) {
+  //                     dealController.loadMore();
+  //                   }
+  //                   return false;
+  //                 },
+  //                 child: RefreshIndicator(
+  //                   onRefresh: dealController.refreshList,
+  //                   child: ViewScreen(
+  //                     itemCount: deals.length,
+  //                     itemBuilder: (context, i) {
+  //                       final data = deals[i];
+  //
+  //                       final source = dealController.sourceOptions
+  //                           .firstWhereOrNull(
+  //                             (element) => element['id'] == data.source,
+  //                           );
+  //
+  //                       final currency = dealController.currencies
+  //                           .firstWhereOrNull(
+  //                             (element) => element.id == data.currency,
+  //                           );
+  //
+  //                       final category = dealController.categoryOptions
+  //                           .firstWhereOrNull(
+  //                             (element) => element['id'] == data.category,
+  //                           );
+  //
+  //                       return DealCard(
+  //                         id: data.id.toString(),
+  //                         dealTitle: data.dealTitle.toString(),
+  //                         currency:
+  //                             currency != null ? currency.currencyIcon : '',
+  //                         value: data.value.toString(),
+  //                         pipeline: dealController.getPipelineName(
+  //                           data.pipeline ?? '',
+  //                         ),
+  //                         stage: dealController.getStageName(data.stage ?? ''),
+  //                         category:
+  //                             category != null ? category['name'] ?? '' : '',
+  //                         status: data.status.toString(),
+  //                         label: data.label.toString(),
+  //                         closedDate: data.closedDate.toString(),
+  //                         firstName: data.firstName.toString(),
+  //                         lastName: data.lastName.toString(),
+  //                         email: data.email.toString(),
+  //                         phone: data.phone.toString(),
+  //                         source: source != null ? source['name'] ?? '' : '',
+  //                         companyName: data.companyName.toString(),
+  //                         website: data.website.toString(),
+  //                         address: data.address.toString(),
+  //                         products: data.products.toString(),
+  //                         files: data.files.toString(),
+  //                         assignedTo: data.assignedTo.toString(),
+  //                         clientId: data.clientId.toString(),
+  //                         isWon: data.isWon.toString(),
+  //                         companyId: data.companyId.toString(),
+  //                         contactId: data.contactId.toString(),
+  //                         createdBy: formatDate(data.createdBy.toString()),
+  //                         updatedBy: formatDate(data.updatedBy.toString()),
+  //                         createdAt: formatDate(data.createdAt.toString()),
+  //                         updatedAt: formatDate(data.updatedAt.toString()),
+  //                         color: Get.theme.colorScheme.error,
+  //                         onTap:
+  //                             () =>
+  //                                 (data.id != null)
+  //                                     ? Get.to(
+  //                                       () => DealDetailScreen(id: data.id!),
+  //                                     )
+  //                                     : Get.snackbar(
+  //                                       'Error',
+  //                                       'deal ID is missing',
+  //                                     ),
+  //                         onEdit: () {},
+  //                         onDelete: () {},
+  //                       );
+  //                     },
+  //                   ),
+  //                 ),
+  //               );
+  //             });
+  //           }
+  //         } else {
+  //           return const Center(child: Text("Something went wrong."));
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
+
   Widget build(BuildContext context) {
     final accessController = Get.find<AccessController>();
     Get.lazyPut<DealController>(() => DealController());
     final DealController dealController = Get.find<DealController>();
+
+    // Trigger initial load
+    dealController.loadInitial();
+
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
@@ -29,7 +172,6 @@ class DealScreen extends StatelessWidget {
         centerTitle: false,
         backgroundColor: Colors.transparent,
       ),
-
       floatingActionButton:
           accessController.can(AccessModule.deal, AccessAction.create)
               ? CrmButton(
@@ -40,95 +182,89 @@ class DealScreen extends StatelessWidget {
                 },
               )
               : null,
-      body: FutureBuilder(
-        future: dealController.getDeals(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CrmLoadingCircle();
-          } else if (snapshot.hasError) {
-            return Center(
-              child: SizedBox(
-                width: 250,
-                child: Text(
-                  'Server Error : \n${snapshot.error}',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            );
-          } else if (snapshot.hasData) {
-            final deals = dealController.deal;
-            if (deals.isEmpty) {
-              return const Center(child: Text("No deals available."));
-            } else {
-              return Obx(() {
-                return ViewScreen(
-                  itemCount: deals.length,
-                  itemBuilder: (context, i) {
-                    final data = deals[i];
+      body: Obx(() {
+        if (dealController.isLoading.value) {
+          return const CrmLoadingCircle();
+        }
 
+        final deals = dealController.items;
 
-                    final source = dealController.sourceOptions
-                        .firstWhereOrNull(
-                          (element) => element['id'] == data.source,
-                        );
+        if (deals.isEmpty) {
+          return const Center(child: Text("No deals available."));
+        }
 
-                    final currency = dealController.currencies.firstWhereOrNull(
-                      (element) => element.id == data.currency,
-                    );
-
-                    final category = dealController.categoryOptions.firstWhereOrNull((element) => element['id']==data.category,);
-
-                    return DealCard(
-                      id: data.id.toString(),
-                      dealTitle: data.dealTitle.toString(),
-                      currency: currency != null ? currency.currencyIcon : '',
-                      value: data.value.toString(),
-                      pipeline: dealController.getPipelineName(data.pipeline ?? ''),
-                      stage: dealController.getStageName(data.stage ?? ''),
-                      category: category!=null ? category['name'] ?? '' : '',
-                      status: data.status.toString(),
-                      label: data.label.toString(),
-                      closedDate: data.closedDate.toString(),
-                      firstName: data.firstName.toString(),
-                      lastName: data.lastName.toString(),
-                      email: data.email.toString(),
-                      phone: data.phone.toString(),
-                      source: source != null ? source['name'] ?? '' : '',
-                      companyName: data.companyName.toString(),
-                      website: data.website.toString(),
-                      address: data.address.toString(),
-                      products: data.products.toString(),
-                      files: data.files.toString(),
-                      assignedTo: data.assignedTo.toString(),
-                      clientId: data.clientId.toString(),
-                      isWon: data.isWon.toString(),
-                      companyId: data.companyId.toString(),
-                      contactId: data.contactId.toString(),
-                      createdBy: formatDate(data.createdBy.toString()),
-                      updatedBy: formatDate(data.updatedBy.toString()),
-                      createdAt: formatDate(data.createdAt.toString()),
-                      updatedAt: formatDate(data.updatedAt.toString()),
-                      color: Get.theme.colorScheme.error,
-                      onTap:
-                          () =>
-                              (data.id != null)
-                                  ? Get.to(() => DealDetailScreen(id: data.id!))
-                                  : Get.snackbar('Error', 'deal ID is missing'),
-                      onEdit: () {},
-                      onDelete: () {},
-                    );
-                  },
-                );
-              });
+        return NotificationListener<ScrollEndNotification>(
+          onNotification: (scrollEnd) {
+            final metrics = scrollEnd.metrics;
+            if (metrics.atEdge && metrics.pixels != 0) {
+              dealController.loadMore();
             }
-          } else {
-            return const Center(child: Text("Something went wrong."));
-          }
-        },
-      ),
+            return false;
+          },
+          child: RefreshIndicator(
+            onRefresh: dealController.refreshList,
+            child: ViewScreen(
+              itemCount: deals.length,
+              itemBuilder: (context, i) {
+                final data = deals[i];
+
+                final source = dealController.sourceOptions.firstWhereOrNull(
+                  (element) => element['id'] == data.source,
+                );
+
+                final currency = dealController.currencies.firstWhereOrNull(
+                  (element) => element.id == data.currency,
+                );
+
+                final category = dealController.categoryOptions
+                    .firstWhereOrNull(
+                      (element) => element['id'] == data.category,
+                    );
+
+                return DealCard(
+                  id: data.id.toString(),
+                  dealTitle: data.dealTitle.toString(),
+                  currency: currency != null ? currency.currencyIcon : '',
+                  value: data.value.toString(),
+                  pipeline: dealController.getPipelineName(data.pipeline ?? ''),
+                  stage: dealController.getStageName(data.stage ?? ''),
+                  category: category != null ? category['name'] ?? '' : '',
+                  status: data.status.toString(),
+                  label: data.label.toString(),
+                  closedDate: data.closedDate.toString(),
+                  firstName: data.firstName.toString(),
+                  lastName: data.lastName.toString(),
+                  email: data.email.toString(),
+                  phone: data.phone.toString(),
+                  source: source != null ? source['name'] ?? '' : '',
+                  companyName: data.companyName.toString(),
+                  website: data.website.toString(),
+                  address: data.address.toString(),
+                  products: data.products.toString(),
+                  files: data.files.toString(),
+                  assignedTo: data.assignedTo.toString(),
+                  clientId: data.clientId.toString(),
+                  isWon: data.isWon.toString(),
+                  companyId: data.companyId.toString(),
+                  contactId: data.contactId.toString(),
+                  createdBy: formatDate(data.createdBy.toString()),
+                  updatedBy: formatDate(data.updatedBy.toString()),
+                  createdAt: formatDate(data.createdAt.toString()),
+                  updatedAt: formatDate(data.updatedAt.toString()),
+                  color: Get.theme.colorScheme.error,
+                  onTap:
+                      () =>
+                          (data.id != null)
+                              ? Get.to(() => DealDetailScreen(id: data.id!))
+                              : Get.snackbar('Error', 'deal ID is missing'),
+                  onEdit: () {},
+                  onDelete: () {},
+                );
+              },
+            ),
+          ),
+        );
+      }),
     );
   }
 }

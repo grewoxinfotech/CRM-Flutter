@@ -97,7 +97,7 @@ class DealDetailScreen extends StatelessWidget {
         leading: CrmBackButton(
           onTap: () {
             if (isContactScreen) {
-              final matchedLead = dealController.deal.firstWhereOrNull(
+              final matchedLead = dealController.items.firstWhereOrNull(
                 (lead) => lead.id == id,
               );
               if (matchedLead != null) {
@@ -121,12 +121,12 @@ class DealDetailScreen extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        if (dealController.deal.isEmpty) {
+        if (dealController.items.isEmpty) {
           dealController.refreshData();
           return const Center(child: CircularProgressIndicator());
         }
 
-        final deal = dealController.deal.firstWhereOrNull(
+        final deal = dealController.items.firstWhereOrNull(
           (deal) => deal.id == id,
         );
 
@@ -178,7 +178,7 @@ class DealDetailScreen extends StatelessWidget {
   }
 
   Widget _buildOverviewTab(
-    DealModel deal,
+    DealData deal,
     DealController dealController,
     String sourceName,
     String statusName,
@@ -198,7 +198,7 @@ class DealDetailScreen extends StatelessWidget {
         members.isNotEmpty
             ? members.map((user) => user.username).join(", ")
             : "No members";
-    return FutureBuilder<ContactModel?>(
+    return FutureBuilder<ContactData?>(
       future: contactController.getContactById(deal.contactId ?? ''),
       builder: (context, snapshot) {
         final contact = snapshot.data;
@@ -302,7 +302,7 @@ class DealDetailScreen extends StatelessWidget {
   }
 
   Widget _buildMembersTab(
-    DealModel deal,
+    DealData deal,
     DealController dealController,
     RolesService rolesService,
   ) {
@@ -342,7 +342,7 @@ class DealDetailScreen extends StatelessWidget {
           if (roleName.isNotEmpty) roleName,
           if (user.designation?.isNotEmpty == true) user.designation,
           if (user.department?.isNotEmpty == true) user.department,
-        ].where((s) => s != null && s.isNotEmpty).join(' - ');
+        ].where((s) => s != null).join(' - ');
 
         return MemberCard(
           title: user.username,
@@ -380,14 +380,25 @@ class DealDetailScreen extends StatelessWidget {
                 // createdAt: formatDate(note.createdAt.toString()),
                 // updatedAt: formatDate(note.updatedAt.toString()),
                 // onDelete: () => noteController.deleteNote(note.id, dealId),
-                onDelete: (accessController.can(AccessModule.deal, AccessAction.delete)) ? ()=> noteController.deleteNote(note.id, dealId) : null ,
+                onDelete:
+                    (accessController.can(
+                          AccessModule.deal,
+                          AccessAction.delete,
+                        ))
+                        ? () => noteController.deleteNote(note.id, dealId)
+                        : null,
                 onEdit:
-                (accessController.can(AccessModule.deal, AccessAction.delete)) ? () => _showNoteDialog(
-                      context,
-                      noteController,
-                      dealId,
-                      note: note,
-                    ):null,
+                    (accessController.can(
+                          AccessModule.deal,
+                          AccessAction.delete,
+                        ))
+                        ? () => _showNoteDialog(
+                          context,
+                          noteController,
+                          dealId,
+                          note: note,
+                        )
+                        : null,
               );
             },
           ),
@@ -587,7 +598,7 @@ class DealDetailScreen extends StatelessWidget {
   }
 
   Widget _buildActivitiesTab(
-    DealModel deal,
+    DealData deal,
     DealController dealController,
     BuildContext context,
   ) {
@@ -614,10 +625,7 @@ class DealDetailScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _handleEdit(
-    DealModel deal,
-    DealController dealController,
-  ) async {
+  Future<void> _handleEdit(DealData deal, DealController dealController) async {
     dealController.dealTitle.text = deal.dealTitle ?? '';
     dealController.dealValue.text = deal.value?.toString() ?? '';
     dealController.firstName.text = deal.firstName ?? '';

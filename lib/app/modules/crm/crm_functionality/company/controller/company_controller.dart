@@ -2,16 +2,17 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../care/pagination/controller/pagination_controller.dart';
 import '../../../../../data/network/crm/company/model/company_model.dart';
 import '../../../../../data/network/crm/company/service/company_service.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 
-class CompanyController extends GetxController {
+class CompanyController extends PaginatedController<CompanyData> {
   final CompanyService _service = CompanyService();
 
-  RxList<Data> companies = <Data>[].obs;
+  // RxList<CompanyData> companies = <CompanyData>[].obs;
   var isLoading = false.obs;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final TextEditingController companyName = TextEditingController();
   final TextEditingController industry = TextEditingController();
@@ -27,51 +28,68 @@ class CompanyController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-      fetchCompanies();
+    loadInitial();
   }
 
-  Future<void> refreshData() async {
+  // Future<void> refreshData() async {
+  //   try {
+  //     isLoading.value = true;
+  //     await fetchCompanies();
+  //   } catch (e) {
+  //     CrmSnackBar.showAwesomeSnackbar(
+  //       title: 'Error',
+  //       message: 'Failed to refresh data: ${e.toString()}',
+  //       contentType: ContentType.failure,
+  //     );
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+  // Future<void> fetchCompanies() async {
+  //   try {
+  //     isLoading.value = true;
+  //     final result = await _service.getAllCompanies();
+  //     companies.value = result;
+  //     error.value = '';
+  //   } catch (e) {
+  //     error.value = e.toString();
+  //     CrmSnackBar.showAwesomeSnackbar(
+  //       title: 'Error',
+  //       message: 'Failed to load companies: ${e.toString()}',
+  //       contentType: ContentType.failure,
+  //     );
+  //     print("[DEBUG]=>:${e.toString()}");
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+  @override
+  Future<List<CompanyData>> fetchItems(int page) async {
     try {
-      isLoading.value = true;
-      await fetchCompanies();
+      final response = await _service.fetchCompanies(page: page);
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch revenues";
+        return [];
+      }
     } catch (e) {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: 'Error',
-        message: 'Failed to refresh data: ${e.toString()}',
-        contentType: ContentType.failure,
-      );
-    } finally {
-      isLoading.value = false;
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 
-  Future<void> fetchCompanies() async {
-    try {
-      isLoading.value = true;
-      final result = await _service.getAllCompanies();
-      companies.value = result;
-      error.value = '';
-    } catch (e) {
-      error.value = e.toString();
-      CrmSnackBar.showAwesomeSnackbar(
-        title: 'Error',
-        message: 'Failed to load companies: ${e.toString()}',
-        contentType: ContentType.failure,
-      );
-      print("[DEBUG]=>:${e.toString()}");
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<Data?> getCompanyById(String id) async {
+  Future<CompanyData?> getCompanyById(String id) async {
     try {
       final companyModel = await _service.getCompanyById(id);
       print("[DEBUG]=>:${companyModel}");
       return companyModel;
     } catch (e) {
-      error.value = 'Failed to fetch company: ${e.toString()}';
+      errorMessage.value = 'Failed to fetch company: ${e.toString()}';
       return null;
     }
   }

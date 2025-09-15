@@ -14,7 +14,38 @@ class CreditNoteService {
   }
 
   /// Fetch credit notes with optional pagination & search
-  Future<List<CreditNoteData>> fetchCreditNotes({
+  // Future<List<CreditNoteData>> fetchCreditNotes({
+  //   int page = 1,
+  //   int pageSize = 10,
+  //   String search = '',
+  // }) async {
+  //   try {
+  //     final uri = Uri.parse(baseUrl).replace(
+  //       queryParameters: {
+  //         'page': page.toString(),
+  //         'pageSize': pageSize.toString(),
+  //         'search': search,
+  //       },
+  //     );
+  //
+  //     final response = await http.get(uri, headers: await headers());
+  //
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       final List<dynamic> creditNotes = data["message"]["data"];
+  //       return creditNotes
+  //           .map((json) => CreditNoteData.fromJson(json))
+  //           .toList();
+  //     } else {
+  //       print("Failed to load credit notes: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print("Exception in fetchCreditNotes: $e");
+  //   }
+  //   return [];
+  // }
+
+  Future<CreditNoteModel?> fetchCreditNotes({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -32,17 +63,15 @@ class CreditNoteService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> creditNotes = data["message"]["data"];
-        return creditNotes
-            .map((json) => CreditNoteData.fromJson(json))
-            .toList();
+        print("CreditNotes Response: $data");
+        return CreditNoteModel.fromJson(data);
       } else {
         print("Failed to load credit notes: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchCreditNotes: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single credit note by ID

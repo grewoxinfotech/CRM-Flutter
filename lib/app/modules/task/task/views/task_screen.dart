@@ -20,106 +20,119 @@ class TaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AccessController accessController = Get.put(AccessController());
     final TaskController taskController = Get.put(TaskController());
-    
+
     return Scaffold(
       appBar: AppBar(
-        leading: const CrmBackButton(), 
-        title: const Text("Tasks")
+        leading: const CrmBackButton(),
+        title: const Text("Tasks"),
       ),
       floatingActionButton:
-          accessController.can(AccessModule.task, AccessAction.create)?
-      CrmButton(
+          accessController.can(AccessModule.task, AccessAction.create)
+              ? CrmButton(
                 title: "Add New Task",
-        onTap: () async {
-          final userData = await SecureStorage.getUserData();
-          if (userData?.id != null) {
-            await Get.to(() => TaskAddScreen(
-              userId: userData!.id!,
-            ));
-            // Refresh data when returning from add screen
-            taskController.refreshData();
-          } else {
-            Get.snackbar(
-              'Error',
-              'User data not found. Please login again.',
-              snackPosition: SnackPosition.BOTTOM,
-            );
-          }
-        },
-      ):null,
+                onTap: () async {
+                  final userData = await SecureStorage.getUserData();
+                  if (userData?.id != null) {
+                    await Get.to(() => TaskAddScreen(userId: userData!.id!));
+                    // Refresh data when returning from add screen
+                    taskController.refreshList();
+                  } else {
+                    Get.snackbar(
+                      'Error',
+                      'User data not found. Please login again.',
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                  }
+                },
+              )
+              : null,
       body: FutureBuilder(
-        future: taskController.refreshData(),
+        future: taskController.loadInitial(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CrmLoadingCircle();
           } else if (snapshot.hasError) {
             return Center(
-              child: SizedBox(  
-                width: 250,   
-                  child: Text(
+              child: SizedBox(
+                width: 250,
+                child: Text(
                   'Server Error : \n${snapshot.error}',
                   style: const TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
-                    ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Obx(() {
+              final tasks = taskController.items;
+              if (tasks.isEmpty) {
+                return const Center(child: Text("No tasks available."));
+              }
+
+              return NotificationListener<ScrollEndNotification>(
+                onNotification: (scrollEnd) {
+                  final metrics = scrollEnd.metrics;
+                  if (metrics.atEdge && metrics.pixels != 0) {
+                    taskController.loadMore();
+                  }
+                  return false;
+                },
+                child: RefreshIndicator(
+                  onRefresh: taskController.refreshList,
+                  child: ViewScreen(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, i) {
+                      final data = tasks[i];
+                      return TaskCard(
+                        id: data.id,
+                        relatedId: data.relatedId,
+                        taskName: data.taskName,
+                        file: data.file,
+                        startDate: formatDate(data.startDate?.toString() ?? ""),
+                        dueDate: formatDate(data.dueDate?.toString() ?? ""),
+                        assignTo: data.assignTo,
+                        status: data.status,
+                        priority: data.priority,
+                        description: data.description,
+                        reminderDate: formatDate(
+                          data.reminderDate?.toString() ?? "",
+                        ),
+                        clientId: data.clientId,
+                        taskReporter: data.taskReporter,
+                        createdBy: data.createdBy,
+                        updatedBy: data.updatedBy,
+                        onEdit: () async {
+                          final userData = await SecureStorage.getUserData();
+                          if (userData?.id != null) {
+                            await Get.to(
+                              () => TaskEditScreen(
+                                task: data,
+                                userId: userData!.id!,
+                              ),
+                            );
+                            // Refresh data when returning from edit screen
+                            taskController.refreshList();
+                          } else {
+                            Get.snackbar(
+                              'Error',
+                              'User data not found. Please login again.',
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
+                        },
+                        onDelete: () {
+                          if (data.id != null) {
+                            taskController.deleteTask(data.id!);
+                          }
+                        },
+                      );
+                    },
                   ),
                 ),
               );
-          } else {
-            return Obx(
-              () {
-                final tasks = taskController.task;
-                if (tasks.isEmpty) {
-                  return const Center(child: Text("No tasks available."));
-                }
-                
-                return ViewScreen(
-                  itemCount: tasks.length,
-                  itemBuilder: (context, i) {
-                    final data = tasks[i];
-            return TaskCard(
-              id: data.id,
-              relatedId: data.relatedId,
-              taskName: data.taskName,
-              file: data.file,
-              startDate: formatDate(data.startDate?.toString() ?? ""),
-              dueDate: formatDate(data.dueDate?.toString() ?? ""),
-              assignTo: data.assignTo,
-              status: data.status,
-              priority: data.priority,
-              description: data.description,
-              reminderDate: formatDate(data.reminderDate?.toString() ?? ""),
-              clientId: data.clientId,
-              taskReporter: data.taskReporter,
-              createdBy: data.createdBy,
-              updatedBy: data.updatedBy,
-              onEdit: () async {
-                final userData = await SecureStorage.getUserData();
-                if (userData?.id != null) {
-                  await Get.to(() => TaskEditScreen(
-                    task: data,
-                    userId: userData!.id!,
-                  ));
-                  // Refresh data when returning from edit screen
-                  taskController.refreshData();
-                } else {
-                  Get.snackbar(
-                    'Error',
-                    'User data not found. Please login again.',
-                    snackPosition: SnackPosition.BOTTOM,
-                  );
-                }
-              },
-              onDelete: () {
-                if (data.id != null) {
-                  taskController.deleteTask(data.id!);
-                }
-              },
-            );
-          },
-        );
-              },
-            );
+            });
           }
         },
       ),

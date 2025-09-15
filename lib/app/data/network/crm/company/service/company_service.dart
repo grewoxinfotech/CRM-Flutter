@@ -28,30 +28,59 @@ class CompanyService {
   // }
 
   // Fetch all companies (without pagination)
-  Future<List<Data>> getAllCompanies() async {
+  // Future<CompanyModel?> fetchCompanies() async {
+  //   try {
+  //     final headers = await UrlRes.getHeaders();
+  //     final response = await http.get(
+  //       Uri.parse(UrlRes.companies),
+  //       headers: headers,
+  //     );
+  //
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       final jsonResponse = json.decode(response.body);
+  //       // final companyModel = CompanyModel.fromJson(jsonResponse);
+  //
+  //       // Return the list of companies directly
+  //       return CompanyModel.fromJson(jsonResponse);
+  //     } else {
+  //       throw Exception('Failed to load companies: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Failed to load companies: $e');
+  //   }
+  // }
+  Future<CompanyModel?> fetchCompanies({
+    int page = 1,
+    int pageSize = 10,
+    String search = '',
+  }) async {
     try {
-      final headers = await UrlRes.getHeaders();
-      final response = await http.get(
-        Uri.parse(UrlRes.companies),
-        headers: headers,
+      final uri = Uri.parse(UrlRes.companies).replace(
+        queryParameters: {
+          'page': page.toString(),
+          'pageSize': pageSize.toString(),
+          'search': search,
+        },
       );
 
-      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
-        final companyModel = CompanyModel.fromJson(jsonResponse);
+      final response = await http.get(uri, headers: await UrlRes.getHeaders());
 
-        // Return the list of companies directly
-        return companyModel.message?.data ?? [];
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final jsonResponse = json.decode(response.body);
+        print("Companies Response: $jsonResponse");
+        return CompanyModel.fromJson(jsonResponse);
       } else {
-        throw Exception('Failed to load companies: ${response.statusCode}');
+        print("Failed to load companies: ${response.statusCode}");
       }
     } catch (e) {
-      throw Exception('Failed to load companies: $e');
+      print("Exception in fetchCompanies: $e");
     }
+
+    return null;
   }
 
   // Get company by ID
-  Future<Data?> getCompanyById(String id) async {
+  Future<CompanyData?> getCompanyById(String id) async {
     try {
       final headers = await UrlRes.getHeaders();
       final response = await http.get(
@@ -64,7 +93,7 @@ class CompanyService {
         final data = jsonDecode(response.body);
         print("[DEBUG]=>:${data}");
         // return CompanyModel.fromJson(data);
-        return Data.fromJson(data["data"]);
+        return CompanyData.fromJson(data["data"]);
       }
       return null;
     } catch (e) {

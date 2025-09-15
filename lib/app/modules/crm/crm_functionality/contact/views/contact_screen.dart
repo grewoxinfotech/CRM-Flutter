@@ -87,12 +87,12 @@ class ContactScreen extends StatelessWidget {
         child: const Icon(Icons.add_rounded, color: Colors.white),
         onPressed: () async {
           controller.resetForm();
-          await Get.to(() =>  ContactAddScreen());
-          controller.refreshData();
+          await Get.to(() => ContactAddScreen());
+          controller.refreshList();
         },
       ),
       body: FutureBuilder(
-        future: controller.refreshData(),
+        future: controller.loadInitial(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CrmLoadingCircle();
@@ -111,26 +111,40 @@ class ContactScreen extends StatelessWidget {
             );
           } else {
             return Obx(() {
-              if (controller.contacts.isEmpty) {
+              if (controller.items.isEmpty) {
                 return const Center(child: Text("No contacts available."));
               }
 
-              return ViewScreen(
-                itemCount: controller.contacts.length,
-                itemBuilder: (context, index) {
-                  final contact = controller.contacts[index];
-                  return GestureDetector(
-                    onTap: () async {
-                      if (contact.id != null) {
-                        await Get.to(() => ContactDetailScreen(id: contact.id!));
-                        controller.refreshData();
-                      } else {
-                        Get.snackbar("Error", "Contact ID is missing");
-                      }
-                    },
-                    child: ContactCard(contact: contact),
-                  );
+              return NotificationListener<ScrollEndNotification>(
+                onNotification: (scrollEnd) {
+                  final metrics = scrollEnd.metrics;
+                  if (metrics.atEdge && metrics.pixels != 0) {
+                    controller.loadMore();
+                  }
+                  return false;
                 },
+                child: RefreshIndicator(
+                  onRefresh: controller.refreshList,
+                  child: ViewScreen(
+                    itemCount: controller.items.length,
+                    itemBuilder: (context, index) {
+                      final contact = controller.items[index];
+                      return GestureDetector(
+                        onTap: () async {
+                          if (contact.id != null) {
+                            await Get.to(
+                              () => ContactDetailScreen(id: contact.id!),
+                            );
+                            controller.refreshList();
+                          } else {
+                            Get.snackbar("Error", "Contact ID is missing");
+                          }
+                        },
+                        child: ContactCard(contact: contact),
+                      );
+                    },
+                  ),
+                ),
               );
             });
           }

@@ -10,40 +10,71 @@ class DebitNoteService {
       await UrlRes.getHeaders();
 
   /// Get all debit notes
-  Future<List<DebitNoteItem>> getAllDebitNotes() async {
+  // Future<List<DebitNoteItem>> getAllDebitNotes() async {
+  //   try {
+  //     final response = await http.get(
+  //       Uri.parse(baseUrl),
+  //       headers: await headers(),
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       final decoded = json.decode(response.body);
+  //
+  //       // API can return `data` as null or wrapped in message
+  //       final data = decoded['data'] ?? decoded['message']?['data'];
+  //       if (data == null) return [];
+  //
+  //       // If data is a list, map each item
+  //       if (data is List) {
+  //         return data.map((e) {
+  //           return DebitNoteItem(
+  //             debitNote: DebitNote.fromJson(e),
+  //             updatedBill: UpdatedBill.fromJson(e['updatedBill'] ?? {}),
+  //           );
+  //         }).toList();
+  //       }
+  //       print('debug---${response.body}');
+  //
+  //       // If data is a single object
+  //       return [DebitNoteItem.fromJson(data)];
+  //     } else {
+  //       throw Exception("Failed to fetch debit notes");
+  //     }
+  //   } catch (e) {
+  //     print("Error fetching debit notes: $e");
+  //     return [];
+  //   }
+  // }
+  Future<DebitNoteModel?> fetchDebitNotes({
+    int page = 1,
+    int pageSize = 10,
+    String search = '',
+  }) async {
     try {
-      final response = await http.get(
-        Uri.parse(baseUrl),
-        headers: await headers(),
+      final uri = Uri.parse(baseUrl).replace(
+        queryParameters: {
+          'page': page.toString(),
+          'pageSize': pageSize.toString(),
+          'search': search,
+        },
       );
 
+      final response = await http.get(uri, headers: await headers());
+
       if (response.statusCode == 200) {
-        final decoded = json.decode(response.body);
+        final data = jsonDecode(response.body);
 
-        // API can return `data` as null or wrapped in message
-        final data = decoded['data'] ?? decoded['message']?['data'];
-        if (data == null) return [];
+        // Debugging
+        print("DebitNotes Response: $data");
 
-        // If data is a list, map each item
-        if (data is List) {
-          return data.map((e) {
-            return DebitNoteItem(
-              debitNote: DebitNote.fromJson(e),
-              updatedBill: UpdatedBill.fromJson(e['updatedBill'] ?? {}),
-            );
-          }).toList();
-        }
-        print('debug---${response.body}');
-
-        // If data is a single object
-        return [DebitNoteItem.fromJson(data)];
+        return DebitNoteModel.fromJson(data);
       } else {
-        throw Exception("Failed to fetch debit notes");
+        print("Failed to load debit notes: ${response.statusCode}");
       }
     } catch (e) {
-      print("Error fetching debit notes: $e");
-      return [];
+      print("Exception in fetchDebitNotes: $e");
     }
+    return null;
   }
 
   /// Find a debit note by ID

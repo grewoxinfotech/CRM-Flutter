@@ -148,18 +148,18 @@ class LeadDetailScreen extends StatelessWidget {
         }
 
         // Make sure contacts are loaded - force fetch if empty
-        if (contactController.contacts.isEmpty) {
+        if (contactController.items.isEmpty) {
           print("Contacts list is empty, fetching contacts...");
-          contactController.fetchContacts();
+          contactController.loadInitial();
         } else {
-          print("Contacts loaded: ${contactController.contacts.length}");
+          print("Contacts loaded: ${contactController.items.length}");
           // Print first few contacts for debugging
           for (
             var i = 0;
-            i < math.min(3, contactController.contacts.length);
+            i < math.min(3, contactController.items.length);
             i++
           ) {
-            final c = contactController.contacts[i];
+            final c = contactController.items[i];
           }
         }
 
@@ -216,7 +216,7 @@ class LeadDetailScreen extends StatelessWidget {
   Widget _buildOverviewTab(
     LeadModel lead,
     LeadController leadController,
-    ContactModel? initialContact,
+    ContactData? initialContact,
   ) {
     // Get label names for display
     final labelController = Get.find<LabelController>();
@@ -235,11 +235,11 @@ class LeadDetailScreen extends StatelessWidget {
 
     return Obx(() {
       // Try to find contact in the contacts list
-      ContactModel? contact;
+      ContactData? contact;
 
       if (lead.contactId != null && lead.contactId!.isNotEmpty) {
         // Try all possible ways to match the contact
-        contact = contactController.contacts.firstWhereOrNull(
+        contact = contactController.items.firstWhereOrNull(
           (c) =>
               c.id == lead.contactId ||
               c.id.toString() == lead.contactId ||
@@ -304,6 +304,7 @@ class LeadDetailScreen extends StatelessWidget {
               ),
             ),
         onEdit: () => _handleEdit(lead, leadController),
+
         // onConvert: () async {
         //   Get.lazyPut(() => DealController());
         //   final dealController = Get.find<DealController>();
@@ -326,7 +327,6 @@ class LeadDetailScreen extends StatelessWidget {
         //     leadController.updateLead(lead.id!, data);
         //   }
         // },
-
         onConvert: () async {
           try {
             // ✅ Ensure DealController is available
@@ -339,16 +339,23 @@ class LeadDetailScreen extends StatelessWidget {
             dealController.dealTitle.text = lead.leadTitle ?? '';
             dealController.dealValue.text = lead.leadValue?.toString() ?? '0';
             dealController.currency.value = lead.currency?.toString() ?? '';
-            dealController.selectedPipelineId.value = lead.pipeline?.toString() ?? '';
-            dealController.selectedStageId.value = lead.leadStage?.toString() ?? '';
+            dealController.selectedPipelineId.value =
+                lead.pipeline?.toString() ?? '';
+            dealController.selectedStageId.value =
+                lead.leadStage?.toString() ?? '';
             dealController.selectedSource.value = lead.source?.toString() ?? '';
-            dealController.selectedCategory.value = lead.category?.toString() ?? '';
+            dealController.selectedCategory.value =
+                lead.category?.toString() ?? '';
             dealController.selectedStatus.value = lead.status?.toString() ?? '';
-            dealController.selectedContact.value = lead.contactId?.toString() ?? '';
-            dealController.selectedCompany.value = lead.companyId?.toString() ?? '';
+            dealController.selectedContact.value =
+                lead.contactId?.toString() ?? '';
+            dealController.selectedCompany.value =
+                lead.companyId?.toString() ?? '';
             dealController.selectedLeadId.value = lead.id?.toString() ?? '';
 
-            print("[DEBUG]=> Pre-filling DealCreateScreen from Lead ${lead.id}");
+            print(
+              "[DEBUG]=> Pre-filling DealCreateScreen from Lead ${lead.id}",
+            );
 
             // ✅ Open DealCreateScreen and wait for result
             final createdDealId = await Get.to(() => DealCreateScreen());
@@ -368,8 +375,8 @@ class LeadDetailScreen extends StatelessWidget {
             // ✅ Prepare update model safely
             final updatedLead = LeadModel(
               id: lead.id,
-              leadTitle: lead.leadTitle,  // fallback to avoid null
-              currency: lead.currency,              // or your system default
+              leadTitle: lead.leadTitle, // fallback to avoid null
+              currency: lead.currency, // or your system default
               leadValue: lead.leadValue ?? 0,
               pipeline: lead.pipeline,
               leadStage: lead.leadStage,
@@ -389,17 +396,20 @@ class LeadDetailScreen extends StatelessWidget {
               leadScore: lead.leadScore,
               files: lead.files,
               clientId: lead.clientId,
-
             );
 
-            final converted = await leadController.updateLead(lead.id!, updatedLead);
+            final converted = await leadController.updateLead(
+              lead.id!,
+              updatedLead,
+            );
             if (!converted) {
               print("[ERROR]=> Failed to convert lead");
               return;
             }
 
-
-            print("[SUCCESS]=> Lead ${lead.id} converted to Deal $createdDealId");
+            print(
+              "[SUCCESS]=> Lead ${lead.id} converted to Deal $createdDealId",
+            );
           } catch (e, stack) {
             print("[ERROR]=> Failed to convert lead: $e");
             print(stack);
@@ -413,7 +423,6 @@ class LeadDetailScreen extends StatelessWidget {
             );
           }
         },
-
       );
     });
   }

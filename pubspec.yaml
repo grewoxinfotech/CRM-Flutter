@@ -107,6 +107,7 @@ flutter:
     - assets/icons/sales/
     - assets/icons/hrm/
     - assets/icons/navigation/
+    - assets/icons/job/
 
 
   # To add assets to your application, add an assets section, like this:

@@ -8,8 +8,8 @@ import '../controller/contact_controller.dart';
 import '../views/contact_detail_screen.dart';
 
 class ContactCard extends StatelessWidget {
-  final ContactModel contact;
-  final Function(ContactModel)? onTap;
+  final ContactData contact;
+  final Function(ContactData)? onTap;
 
   const ContactCard({super.key, required this.contact, this.onTap});
 
