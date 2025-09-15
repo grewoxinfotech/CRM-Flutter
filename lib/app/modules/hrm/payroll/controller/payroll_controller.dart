@@ -22,7 +22,7 @@ class PayrollController extends PaginatedController<PayslipData> {
 
 
   final String url = UrlRes.salary;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   // final TextEditingController payslipTypeController = TextEditingController();
   // final TextEditingController currencyController = TextEditingController();
@@ -61,10 +61,17 @@ class PayrollController extends PaginatedController<PayslipData> {
   Future<List<PayslipData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchPayslips(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch PayRoll";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 
@@ -164,8 +171,8 @@ class PayrollController extends PaginatedController<PayslipData> {
 
   void loadControllers() {
     paymentDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    salaryController.text = '0.00';
-    netSalaryController.text = '0.00';
+    salaryController.text = '0';
+    netSalaryController.text = '0';
     // selectedEmployee.value = employeeController.items.first;
     selectedPayslipType.value = payslipType.first;
     selectedStatus.value = status.first;

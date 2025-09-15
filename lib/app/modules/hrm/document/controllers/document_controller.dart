@@ -12,12 +12,12 @@ import '../../../../data/network/hrm/document/document_service.dart';
 class DocumentController extends PaginatedController<DocumentData> {
   final DocumentService _service = DocumentService();
   final String url = UrlRes.documents;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController roleController = TextEditingController();
+  // final TextEditingController roleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController fileController = TextEditingController();
 
@@ -32,10 +32,17 @@ class DocumentController extends PaginatedController<DocumentData> {
   Future<List<DocumentData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchDocuments(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch Document";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 
@@ -48,8 +55,8 @@ class DocumentController extends PaginatedController<DocumentData> {
 
   void resetForm() {
     nameController.clear();
-    roleController.clear();
     descriptionController.clear();
+    if(roles.isNotEmpty) selectedRole.value = roles.first;
     fileController.clear();
     selectedFile.value = null;
   }

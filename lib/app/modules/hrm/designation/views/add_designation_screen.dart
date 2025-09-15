@@ -36,14 +36,14 @@ class AddDesignationScreen extends StatelessWidget {
 
     controller.isLoading.value = false;
     if (success) Get.back();
-    CrmSnackBar.showAwesomeSnackbar(
-      title: success ? "Success" : "Error",
-      message:
-          success
-              ? "Designation added successfully"
-              : "Failed to add designation",
-      contentType: success ? ContentType.success : ContentType.failure,
-    );
+    // CrmSnackBar.showAwesomeSnackbar(
+    //   title: success ? "Success" : "Error",
+    //   message:
+    //       success
+    //           ? "Designation added successfully"
+    //           : "Failed to add designation",
+    //   contentType: success ? ContentType.success : ContentType.failure,
+    // );
   }
 
   void _update() async {
@@ -66,14 +66,14 @@ class AddDesignationScreen extends StatelessWidget {
       Get.back();
       controller.loadInitial();
     }
-    CrmSnackBar.showAwesomeSnackbar(
-      title: success ? "Success" : "Error",
-      message:
-          success
-              ? "Designation updated successfully"
-              : "Failed to update designation",
-      contentType: success ? ContentType.success : ContentType.failure,
-    );
+    // CrmSnackBar.showAwesomeSnackbar(
+    //   title: success ? "Success" : "Error",
+    //   message:
+    //       success
+    //           ? "Designation updated successfully"
+    //           : "Failed to update designation",
+    //   contentType: success ? ContentType.success : ContentType.failure,
+    // );
   }
 
   @override

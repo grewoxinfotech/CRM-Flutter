@@ -11,7 +11,7 @@ import '../../../../data/network/hrm/hrm_system/departments/department_service.d
 class DepartmentController extends PaginatedController<DepartmentData> {
   final DepartmentService _service = DepartmentService();
   final String url = UrlRes.departments;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -27,10 +27,17 @@ class DepartmentController extends PaginatedController<DepartmentData> {
   Future<List<DepartmentData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchDepartments(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch Department";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

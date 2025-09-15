@@ -36,14 +36,14 @@ class AddDepartmentScreen extends StatelessWidget {
 
     controller.isLoading.value = false;
     if (success) Get.back();
-    CrmSnackBar.showAwesomeSnackbar(
-      title: success ? "Success" : "Error",
-      message:
-          success
-              ? "Department added successfully"
-              : "Failed to add department",
-      contentType: success ? ContentType.success : ContentType.failure,
-    );
+    // CrmSnackBar.showAwesomeSnackbar(
+    //   title: success ? "Success" : "Error",
+    //   message:
+    //       success
+    //           ? "Department added successfully"
+    //           : "Failed to add department",
+    //   contentType: success ? ContentType.success : ContentType.failure,
+    // );
   }
 
   void _update() async {
@@ -66,14 +66,14 @@ class AddDepartmentScreen extends StatelessWidget {
       Get.back();
       controller.loadInitial();
     }
-    CrmSnackBar.showAwesomeSnackbar(
-      title: success ? "Success" : "Error",
-      message:
-          success
-              ? "Department updated successfully"
-              : "Failed to update department",
-      contentType: success ? ContentType.success : ContentType.failure,
-    );
+    // CrmSnackBar.showAwesomeSnackbar(
+    //   title: success ? "Success" : "Error",
+    //   message:
+    //       success
+    //           ? "Department updated successfully"
+    //           : "Failed to update department",
+    //   contentType: success ? ContentType.success : ContentType.failure,
+    // );
   }
 
   @override

@@ -9,7 +9,7 @@ import '../../../../data/network/hrm/training/training_service.dart';
 class TrainingController extends PaginatedController<TrainingData> {
   final TrainingService _service = TrainingService();
   final String url = UrlRes.trainings;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -31,10 +31,17 @@ class TrainingController extends PaginatedController<TrainingData> {
   Future<List<TrainingData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchTrainings(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch Training";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:crm_flutter/app/care/pagination/controller/pagination_controller.dart';
+import 'package:crm_flutter/app/data/network/hrm/leave/leave/leave_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +12,7 @@ import '../../employee/controllers/employee_controller.dart';
 class LeaveController extends PaginatedController<LeaveData> {
   final LeaveService _service = LeaveService();
   final String url = UrlRes.leaves;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   /// Form key
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -37,10 +38,17 @@ class LeaveController extends PaginatedController<LeaveData> {
   Future<List<LeaveData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchLeaves(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch Leave";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

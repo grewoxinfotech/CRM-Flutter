@@ -1,5 +1,7 @@
+import 'package:crm_flutter/app/data/network/system/currency/controller/currency_controller.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../care/constants/size_manager.dart';
@@ -11,15 +13,15 @@ class PayslipCard extends StatelessWidget {
 
   const PayslipCard({Key? key, required this.payslip}) : super(key: key);
 
-  String formatCurrency(dynamic amount) {
-    try {
-      if (amount == null) return '';
-      double value = (amount is String) ? double.tryParse(amount) ?? 0 : amount.toDouble();
-      return NumberFormat.currency(locale: 'en_IN', symbol: '₹').format(value);
-    } catch (e) {
-      return '';
-    }
-  }
+  // String formatCurrency(dynamic amount) {
+  //   try {
+  //     if (amount == null) return '';
+  //     double value = (amount is String) ? double.tryParse(amount) ?? 0 : amount.toDouble();
+  //     return NumberFormat.currency(locale: 'en_IN', symbol: '₹').format(value);
+  //   } catch (e) {
+  //     return '';
+  //   }
+  // }
 
   String formatDate(String? date) {
     if (date != null && date.isNotEmpty) {
@@ -38,6 +40,11 @@ class PayslipCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => CurrencyController());
+    final currencyController = Get.find<CurrencyController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await currencyController.getCurrency();
+    });
     return GestureDetector(
       child: CrmCard(
         padding: const EdgeInsets.all(AppPadding.medium),
@@ -123,14 +130,22 @@ class PayslipCard extends StatelessWidget {
                             ),
                           const SizedBox(width: 10),
                           if(payslip.salary != null)
-                            Text(
-                              'Salary: ${formatCurrency(payslip.salary)}',
-                              style:  TextStyle(
-                                fontSize: 12,
-                                color: payslip.status == "paid"
-                                    ? Colors.green[800]
-                                    : Colors.red[800],
-                              ),
+                            Obx(
+                              () {
+                                final currency = currencyController.currencyModel.firstWhereOrNull((element) => element.id == payslip.currency);
+                                if (currency == null) {
+                                  return SizedBox.shrink();
+                                }
+                                return Text(
+                                'Salary: ${currency.currencyIcon} ${double.parse(payslip.salary!).toStringAsFixed(2)}',
+                                style:  TextStyle(
+                                  fontSize: 12,
+                                  color: payslip.status == "paid"
+                                      ? Colors.green[800]
+                                      : Colors.red[800],
+                                ),
+                              );
+                              },
                             ),
                         ],
                       ),
@@ -139,7 +154,7 @@ class PayslipCard extends StatelessWidget {
                       // Payment Date
                       if (payslip.paymentDate != null)
                         Text(
-                          'Payment Date: ${formatDate(payslip.paymentDate)}',
+                          'Payment Date: ${DateFormat('dd-MM-yyyy').format(DateTime.parse(payslip.paymentDate!))}',
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black87,
@@ -148,16 +163,24 @@ class PayslipCard extends StatelessWidget {
 
                       // Net Salary
                       if (payslip.netSalary != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 6),
-                          child: Text(
-                            'Net Salary: ${formatCurrency(payslip.netSalary)}',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.green[700],
-                              fontWeight: FontWeight.w600,
+                        Obx(
+                          () {
+                            final currency = currencyController.currencyModel.firstWhereOrNull((element) => element.id == payslip.currency);
+                            if (currency == null) {
+                              return SizedBox.shrink();
+                            }
+                            return Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              'Net Salary: ${currency.currencyIcon} ${double.parse(payslip.salary!).toStringAsFixed(2)}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.green[700],
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
+                          );
+                          },
                         ),
                     ],
                   ),

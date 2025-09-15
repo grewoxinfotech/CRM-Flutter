@@ -14,7 +14,7 @@ class PayslipService {
   }
 
   /// Fetch payslips with optional pagination & search
-  Future<List<PayslipData>> fetchPayslips({
+  Future<PayslipModel?> fetchPayslips({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -32,15 +32,15 @@ class PayslipService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> payslips = data["message"]["data"];
-        return payslips.map((json) => PayslipData.fromJson(json)).toList();
+
+        return PayslipModel.fromJson(data);
       } else {
         print("Failed to load payslips: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchPayslips: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single payslip by ID

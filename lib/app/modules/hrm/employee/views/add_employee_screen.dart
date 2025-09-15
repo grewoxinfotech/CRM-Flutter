@@ -175,16 +175,16 @@ class AddEmployeeScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.medium),
 
               /// Password
-              // CrmTextField(
-              //   title: "Password",
-              //   hintText: "Enter Password",
-              //   controller: controller.passwordController,
-              //   obscureText: true,
-              //   validator:
-              //       (value) => controller.requiredValidator(value, "Password"),
-              //   isRequired: true,
-              // ),
-              // SizedBox(height: AppSpacing.medium),
+              CrmTextField(
+                title: "Password",
+                hintText: "Enter Password",
+                controller: controller.passwordController,
+                obscureText: true,
+                validator:
+                    (value) => controller.requiredValidator(value, "Password"),
+                isRequired: true,
+              ),
+              SizedBox(height: AppSpacing.medium),
 
               /// Phone + Code
               Row(

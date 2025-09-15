@@ -753,7 +753,7 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
   Future<void> _createLead(LeadController leadController) async {
     leadController.isCreating(true);
     try {
-      final newLead = LeadModel(
+      final newLead = LeadData(
         id: '', // API will generate
         leadTitle: leadController.leadTitleController.text,
         pipeline: leadController.selectedPipelineId.value,

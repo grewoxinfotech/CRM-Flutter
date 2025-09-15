@@ -10,7 +10,7 @@ import '../../../../data/network/hrm/employee/employee_service.dart';
 class EmployeeController extends PaginatedController<EmployeeData> {
   final EmployeeService _service = EmployeeService();
   final String url = UrlRes.employees;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final DesignationController _designationController = Get.put(
     DesignationController(),
@@ -20,11 +20,17 @@ class EmployeeController extends PaginatedController<EmployeeData> {
   Future<List<EmployeeData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchEmployees(page: page);
-
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch Employee";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

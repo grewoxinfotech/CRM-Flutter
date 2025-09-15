@@ -13,7 +13,7 @@ class HolidayService {
   }
 
   /// Fetch holidays with optional pagination & search
-  Future<List<HolidayData>> fetchHolidays({
+  Future<HolidayModel?> fetchHolidays({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -31,15 +31,15 @@ class HolidayService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> holidays = data["message"]["data"];
-        return holidays.map((json) => HolidayData.fromJson(json)).toList();
+
+        return HolidayModel.fromJson(data);
       } else {
         print("Failed to load holidays: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchHolidays: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single holiday by ID

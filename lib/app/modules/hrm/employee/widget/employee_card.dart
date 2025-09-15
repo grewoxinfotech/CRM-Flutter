@@ -3,6 +3,7 @@ import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/network/hrm/hrm_system/designation/designation_model.dart';
 import 'package:crm_flutter/app/data/network/system/country/controller/country_controller.dart';
+import 'package:crm_flutter/app/data/network/system/currency/controller/currency_controller.dart';
 import 'package:crm_flutter/app/modules/hrm/designation/controllers/designation_controller.dart';
 import 'package:crm_flutter/app/modules/hrm/employee/controllers/employee_controller.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
@@ -25,6 +26,7 @@ class EmployeeCard extends StatefulWidget {
   final String? department;
   final String? designation;
   final String? salary;
+  final String? currency;
   final String? joiningDate;
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDelete;
@@ -47,7 +49,7 @@ class EmployeeCard extends StatefulWidget {
     this.salary,
     this.joiningDate,
     this.onTap,
-    this.onDelete,
+    this.onDelete, this.currency,
   });
 
   @override
@@ -60,6 +62,7 @@ class _EmployeeCardState extends State<EmployeeCard> {
   );
   final EmployeeController employeeController = Get.find<EmployeeController>();
   final CountryController countryController = Get.put(CountryController());
+  final CurrencyController currencyController = Get.put(CurrencyController());
 
   @override
   void initState() {
@@ -70,6 +73,9 @@ class _EmployeeCardState extends State<EmployeeCard> {
         employeeController.getDesignationById(widget.designation!);
       });
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await currencyController.getCurrency();
+    });
   }
 
   @override
@@ -128,13 +134,21 @@ class _EmployeeCardState extends State<EmployeeCard> {
                         ),
                       ),
                       if (widget.salary != null)
-                        Text(
-                          "₹ ${widget.salary}",
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.teal,
-                          ),
+                        Obx(
+                          () {
+                            final currency = currencyController.currencyModel.firstWhereOrNull((element) => element.id == widget.currency,);
+                            if (currency == null) {
+                              return const SizedBox.shrink();
+                            }
+                            return Text(
+                            "${currency.currencyIcon} ${widget.salary}",
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.teal,
+                            ),
+                          );
+                          },
                         ),
                     ],
                   ),

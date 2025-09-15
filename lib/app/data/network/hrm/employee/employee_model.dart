@@ -194,15 +194,15 @@
 //   }
 // }
 
-class EmployeeResponse {
+class EmployeeModel {
   final bool success;
   final EmployeeMessage? message;
   final dynamic data;
 
-  EmployeeResponse({required this.success, this.message, this.data});
+  EmployeeModel({required this.success, this.message, this.data});
 
-  factory EmployeeResponse.fromJson(Map<String, dynamic> json) {
-    return EmployeeResponse(
+  factory EmployeeModel.fromJson(Map<String, dynamic> json) {
+    return EmployeeModel(
       success: json['success'] ?? false,
       message:
           json['message'] != null

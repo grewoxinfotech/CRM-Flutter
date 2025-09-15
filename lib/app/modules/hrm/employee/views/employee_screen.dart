@@ -103,6 +103,7 @@ class EmployeeScreen extends StatelessWidget {
                               address: employee.address,
                               branch: employee.branch,
                               employeeId: employee.employeeId,
+                              currency: employee.currency,
                               username: employee.username,
                               department: employee.department,
                               designation: employee.designation,

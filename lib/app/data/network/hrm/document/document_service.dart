@@ -14,7 +14,7 @@ class DocumentService {
   }
 
   /// Fetch documents with optional pagination & search
-  Future<List<DocumentData>> fetchDocuments({
+  Future<DocumentModel?> fetchDocuments({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -32,15 +32,15 @@ class DocumentService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> documents = data["message"]["data"];
-        return documents.map((json) => DocumentData.fromJson(json)).toList();
+
+        return DocumentModel.fromJson(data);
       } else {
         print("Failed to load documents: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchDocuments: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single document by ID

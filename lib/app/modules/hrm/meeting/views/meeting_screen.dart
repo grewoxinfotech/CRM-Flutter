@@ -111,8 +111,8 @@ class MeetingScreen extends StatelessWidget {
                                       iconPath: ICRes.edit,
                                       color: ColorRes.success,
                                       onTap: () {
+                                        controller.resetForm();
                                         Get.to(() {
-                                          controller.resetForm();
                                           return AddMeetingScreen(
                                             meeting: meeting,
                                             isFromEdit: true,

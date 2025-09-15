@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../data/network/hrm/employee/employee_model.dart';
 import '../../../../data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
+import '../../../../data/network/hrm/leave/leave/leave_model.dart';
 import '../controllers/leave_controller.dart';
 
 class AddLeaveScreen extends StatelessWidget {
@@ -228,6 +229,7 @@ class AddLeaveScreen extends StatelessWidget {
                       onTap: () => _pickDate(context, controller.startDateController,controller.selectedStartDate),
                       validator:
                           (value) => requiredValidator(value, "Start date required"),
+                      suffixIcon: const Icon(Icons.calendar_today),
                     ),
                   ),
                   SizedBox(width: AppSpacing.medium),
@@ -242,6 +244,7 @@ class AddLeaveScreen extends StatelessWidget {
                       onTap: () => _pickDate(context, controller.endDateController,controller.selectedEndDate),
                       validator:
                           (value) => requiredValidator(value, "End date required"),
+                      suffixIcon: const Icon(Icons.calendar_today),
                     ),
                   ),
                 ],

@@ -212,35 +212,46 @@ class AddHolidayScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.medium),
 
               /// Start Date
-              GestureDetector(
-                onTap: () => _pickDate(context, true),
-                child: AbsorbPointer(
-                  child: CrmTextField(
-                    controller: controller.startDateController,
-                    title: 'Start Date',
-                    isRequired: true,
-                    validator:
-                        (value) =>
-                            requiredValidator(value, 'Start Date is required'),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => _pickDate(context, true),
+                      child: AbsorbPointer(
+                        child: CrmTextField(
+                          controller: controller.startDateController,
+                          title: 'Start Date',
+                          isRequired: true,
+                          validator:
+                              (value) =>
+                                  requiredValidator(value, 'Start Date is required'),
+                          suffixIcon: const Icon(Icons.calendar_today),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(height: AppSpacing.medium),
+                  SizedBox(width: AppSpacing.medium),
 
-              /// End Date
-              GestureDetector(
-                onTap: () => _pickDate(context, false),
-                child: AbsorbPointer(
-                  child: CrmTextField(
-                    controller: controller.endDateController,
-                    title: 'End Date',
-                    isRequired: true,
-                    validator:
-                        (value) =>
-                            requiredValidator(value, 'End Date is required'),
+                  /// End Date
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => _pickDate(context, false),
+                      child: AbsorbPointer(
+                        child: CrmTextField(
+                          controller: controller.endDateController,
+                          title: 'End Date',
+                          isRequired: true,
+                          validator:
+                              (value) =>
+                              requiredValidator(value, 'End Date is required'),
+                          suffixIcon: const Icon(Icons.calendar_today),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
+
               SizedBox(height: 24),
 
               Obx(

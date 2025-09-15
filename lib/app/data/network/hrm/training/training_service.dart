@@ -13,7 +13,7 @@ class TrainingService {
   }
 
   /// Fetch trainings with optional pagination & search
-  Future<List<TrainingData>> fetchTrainings({
+  Future<TrainingModel?> fetchTrainings({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -31,15 +31,15 @@ class TrainingService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> trainings = data["message"]["data"];
-        return trainings.map((json) => TrainingData.fromJson(json)).toList();
+
+        return TrainingModel.fromJson(data);
       } else {
         print("Failed to load trainings: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchTrainings: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single training by ID

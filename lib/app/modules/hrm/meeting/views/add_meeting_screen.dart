@@ -73,6 +73,25 @@ class AddMeetingScreen extends StatelessWidget {
     }
   }
 
+  String? dateRangeValidator() {
+    final selected = controller.selectedDate.value;
+    if (selected != null) {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day); // midnight today
+      final selectedDate = DateTime(
+        selected.year,
+        selected.month,
+        selected.day,
+      );
+
+      if (selectedDate.isBefore(today)) {
+        return "Date cannot be in the past";
+      }
+    }
+    return null;
+  }
+
+
   String? formatTimeOfDay(TimeOfDay? tod) {
     if (tod == null) return null;
     final hour = tod.hour.toString().padLeft(2, '0');
@@ -88,6 +107,25 @@ class AddMeetingScreen extends StatelessWidget {
       CrmSnackBar.showAwesomeSnackbar(
         title: "Invalid Dates",
         message: timeError,
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+
+    final dateError = dateRangeValidator();
+    if (dateError != null) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Invalid Dates",
+        message: dateError,
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+
+    if (controller.selectedEmployees.isEmpty) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Please select at least one employee",
         contentType: ContentType.failure,
       );
       return;
@@ -124,6 +162,35 @@ class AddMeetingScreen extends StatelessWidget {
 
   void _update() async {
     if (!controller.formKey.currentState!.validate()) return;
+
+    if (controller.selectedEmployees.isEmpty) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Please select at least one employee",
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+
+    final timeError = _validateTimeRange();
+    if (timeError != null) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Invalid Dates",
+        message: timeError,
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+
+    final dateError = dateRangeValidator();
+    if (dateError != null) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Invalid Dates",
+        message: dateError,
+        contentType: ContentType.failure,
+      );
+      return;
+    }
 
     final meetingData = MeetingData(
       title: controller.titleController.text,
@@ -319,6 +386,9 @@ class AddMeetingScreen extends StatelessWidget {
                 controller: controller.descriptionController,
                 title: 'Description',
                 maxLines: 3,
+                isRequired: true,
+                validator:
+                    (value) => requiredValidator(value, 'Description is required'),
               ),
               SizedBox(height: AppSpacing.medium),
 
@@ -396,6 +466,9 @@ class AddMeetingScreen extends StatelessWidget {
               CrmTextField(
                 controller: controller.meetingLinkController,
                 title: 'Meeting Link',
+                isRequired: true,
+                validator:
+                    (value) => requiredValidator(value, 'Link is required'),
               ),
               SizedBox(height: AppSpacing.medium),
 

@@ -94,14 +94,14 @@ class LeadDetailScreen extends StatelessWidget {
         leading: CrmBackButton(
           onTap: () {
             if (isContactScreen) {
-              final matchedLead = leadController.leads.firstWhereOrNull(
+              final matchedLead = leadController.items.firstWhereOrNull(
                 (lead) => lead.id == id,
               );
               if (matchedLead != null) {
                 Get.off(() => ContactDetailScreen(id: matchedLead.contactId));
               }
             } else if (isCompanyScreen) {
-              final matchedLead = leadController.leads.firstWhereOrNull(
+              final matchedLead = leadController.items.firstWhereOrNull(
                 (lead) => lead.id == id,
               );
               if (matchedLead != null) {
@@ -123,12 +123,12 @@ class LeadDetailScreen extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        if (leadController.leads.isEmpty) {
+        if (leadController.items.isEmpty) {
           leadController.refreshData();
           return const Center(child: CircularProgressIndicator());
         }
 
-        final lead = leadController.leads.firstWhereOrNull(
+        final lead = leadController.items.firstWhereOrNull(
           (lead) => lead.id == id,
         );
 
@@ -214,7 +214,7 @@ class LeadDetailScreen extends StatelessWidget {
   }
 
   Widget _buildOverviewTab(
-    LeadModel lead,
+    LeadData lead,
     LeadController leadController,
     ContactData? initialContact,
   ) {
@@ -373,10 +373,12 @@ class LeadDetailScreen extends StatelessWidget {
             }
 
             // ✅ Prepare update model safely
-            final updatedLead = LeadModel(
+            final updatedLead = LeadData(
               id: lead.id,
-              leadTitle: lead.leadTitle, // fallback to avoid null
-              currency: lead.currency, // or your system default
+              leadTitle: lead.leadTitle,
+              // fallback to avoid null
+              currency: lead.currency,
+              // or your system default
               leadValue: lead.leadValue ?? 0,
               pipeline: lead.pipeline,
               leadStage: lead.leadStage,
@@ -479,7 +481,7 @@ class LeadDetailScreen extends StatelessWidget {
   }
 
   Widget _buildMembersTab(
-    LeadModel lead,
+    LeadData lead,
     LeadController leadController,
     UsersController usersController,
     RoleController roleController,
@@ -526,7 +528,7 @@ class LeadDetailScreen extends StatelessWidget {
   }
 
   Widget _buildMembersList(
-    LeadModel lead,
+    LeadData lead,
     LeadController leadController,
     UsersController usersController,
     RoleController roleController,
@@ -657,7 +659,7 @@ class LeadDetailScreen extends StatelessWidget {
   }
 
   Widget _buildActivitiesTab(
-    LeadModel lead,
+    LeadData lead,
     LeadController leadController,
     BuildContext context,
   ) {
@@ -707,10 +709,7 @@ class LeadDetailScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _handleEdit(
-    LeadModel lead,
-    LeadController leadController,
-  ) async {
+  Future<void> _handleEdit(LeadData lead, LeadController leadController) async {
     try {
       // Navigate to edit screen with current lead data
       final updatedLead = await Get.to(

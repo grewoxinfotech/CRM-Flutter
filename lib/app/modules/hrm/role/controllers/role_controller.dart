@@ -9,7 +9,7 @@ import '../../../../data/network/hrm/hrm_system/role/role_service.dart';
 class RolesController extends PaginatedController<RoleData> {
   final RoleService _service = RoleService();
   final String url = UrlRes.roles;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -22,10 +22,17 @@ class RolesController extends PaginatedController<RoleData> {
   Future<List<RoleData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchRoles(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch Role";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

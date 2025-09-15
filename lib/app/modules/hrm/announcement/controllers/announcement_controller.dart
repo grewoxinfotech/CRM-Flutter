@@ -11,7 +11,7 @@ import '../../branch/controllers/branch_controller.dart';
 class AnnouncementController extends PaginatedController<AnnouncementData> {
   final AnnouncementService _service = AnnouncementService();
   final String url = UrlRes.announcements;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -32,11 +32,17 @@ class AnnouncementController extends PaginatedController<AnnouncementData> {
   Future<List<AnnouncementData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchAnnouncements(page: page);
-      print("[DEBUG]=>Response Controller : ${response}");
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch revenues";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

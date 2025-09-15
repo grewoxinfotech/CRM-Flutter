@@ -105,33 +105,62 @@ class LeadService {
   }
 
   /// 1. Get all leads
-  Future<List<LeadModel>> getLeads() async {
-    final response = await http.get(Uri.parse(url), headers: await headers());
-    final decoded = jsonDecode(response.body);
+  // Future<List<LeadData>> getLeads() async {
+  //   final response = await http.get(Uri.parse(url), headers: await headers());
+  //   final decoded = jsonDecode(response.body);
+  //
+  //   if (response.statusCode == 200 && decoded["success"] == true) {
+  //     final rawList = decoded["data"] ?? decoded["message"]?["data"];
+  //
+  //     if (rawList != null && rawList is List) {
+  //       return rawList
+  //           .map<LeadData>((json) => LeadData.fromJson(json))
+  //           .toList();
+  //     }
+  //   }
+  //
+  //   CrmSnackBar.showAwesomeSnackbar(
+  //     title: "Error",
+  //     message:
+  //         decoded["message"] is String
+  //             ? decoded["message"]
+  //             : "Failed to fetch leads",
+  //     contentType: ContentType.failure,
+  //   );
+  //   return [];
+  // }
 
-    if (response.statusCode == 200 && decoded["success"] == true) {
-      final rawList = decoded["data"] ?? decoded["message"]?["data"];
+  Future<LeadModel?> fetchLeads({
+    int page = 1,
+    int pageSize = 10,
+    String search = '',
+  }) async {
+    try {
+      final uri = Uri.parse(url).replace(
+        queryParameters: {
+          'page': page.toString(),
+          'pageSize': pageSize.toString(),
+          'search': search,
+        },
+      );
 
-      if (rawList != null && rawList is List) {
-        return rawList
-            .map<LeadModel>((json) => LeadModel.fromJson(json))
-            .toList();
+      final response = await http.get(uri, headers: await headers());
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print("Leads: $data");
+        return LeadModel.fromJson(data);
+      } else {
+        print("Failed to load leads: ${response.statusCode}");
       }
+    } catch (e) {
+      print("Exception in fetch leads: $e");
     }
-
-    CrmSnackBar.showAwesomeSnackbar(
-      title: "Error",
-      message:
-          decoded["message"] is String
-              ? decoded["message"]
-              : "Failed to fetch leads",
-      contentType: ContentType.failure,
-    );
-    return [];
+    return null;
   }
 
   /// 2. Get a single lead by ID
-  Future<LeadModel?> getLeadById(String id) async {
+  Future<LeadData?> getLeadById(String id) async {
     final response = await http.get(
       Uri.parse("$url/$id"),
       headers: await headers(),
@@ -139,13 +168,13 @@ class LeadService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return LeadModel.fromJson(data);
+      return LeadData.fromJson(data);
     }
     return null;
   }
 
   /// 3. Create a new lead
-  Future<bool> createLead(LeadModel data) async {
+  Future<bool> createLead(LeadData data) async {
     final response = await http.post(
       Uri.parse(url),
       headers: await headers(),

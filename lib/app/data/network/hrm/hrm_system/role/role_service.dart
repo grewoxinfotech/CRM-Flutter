@@ -13,7 +13,7 @@ class RoleService {
   }
 
   /// Fetch roles with optional pagination & search
-  Future<List<RoleData>> fetchRoles({
+  Future<RoleModel?> fetchRoles({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -31,15 +31,15 @@ class RoleService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> roles = data["message"]["data"];
-        return roles.map((json) => RoleData.fromJson(json)).toList();
+
+        return RoleModel.fromJson(data);
       } else {
         print("Failed to load roles: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchRoles: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single role by ID

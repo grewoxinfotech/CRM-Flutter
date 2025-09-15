@@ -49,7 +49,7 @@ class AnnouncementService {
   //   return [];
   // }
 
-  Future<List<AnnouncementData>> fetchAnnouncements({
+  Future<AnnouncementModel?> fetchAnnouncements({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -71,19 +71,17 @@ class AnnouncementService {
         final data = jsonDecode(response.body);
 
         // message.data is a list
-        final List<dynamic> announcementsJson = data["message"]["data"] ?? [];
+
         // print("[DEBUG]=>Response : ${announcementsJson}");
 
-        return announcementsJson
-            .map((json) => AnnouncementData.fromJson(json))
-            .toList();
+        return AnnouncementModel.fromJson(data);
       } else {
         print("Failed to load announcements: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchAnnouncements: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single announcement by ID

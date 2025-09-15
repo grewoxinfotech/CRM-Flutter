@@ -4,6 +4,7 @@ import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
+import '../../../../data/network/hrm/leave/leave/leave_model.dart';
 
 // Call this where you need the dialog:
 // final result = await showLeaveReasonDialog(context, leave);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:crm_flutter/app/care/pagination/controller/pagination_controller.dart';
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/controller/label_controller.dart';
 import 'package:crm_flutter/app/data/network/crm/crm_system/label/model/label_model.dart';
@@ -23,7 +24,7 @@ import 'package:get/get.dart';
 
 import '../../activity/controller/activity_controller.dart';
 
-class LeadController extends GetxController {
+class LeadController extends PaginatedController<LeadData> {
   // Services
   final _leadService = LeadService();
   final _stageService = StageService();
@@ -40,7 +41,7 @@ class LeadController extends GetxController {
   late final LabelController labelController;
 
   // State variables
-  final leads = <LeadModel>[].obs;
+  // final leads = <LeadData>[].obs;
   final stages = <StageModel>[].obs;
   final pipelines = <PipelineModel>[].obs;
   // final currency = <CurrencyModel>[].obs;
@@ -78,6 +79,7 @@ class LeadController extends GetxController {
   final isUpdating = false.obs;
   final isDeleting = false.obs;
   final isError = ''.obs;
+  var errorMessage = ''.obs;
 
   RxString userId = ''.obs;
 
@@ -225,7 +227,7 @@ class LeadController extends GetxController {
   }
 
   Future<void> _initializeData() async {
-    await Future.wait([fetchLeads(), fetchLabels(), fetchUsers()]);
+    await Future.wait([loadInitial(), fetchLabels(), fetchUsers()]);
   }
 
   Future<void> fetchLabels() async {
@@ -246,19 +248,37 @@ class LeadController extends GetxController {
     }
   }
 
-  Future<void> fetchLeads() async {
+  // Future<void> fetchLeads() async {
+  //   try {
+  //     isLoading(true);
+  //     final fetchedLeads = await _leadService.fetchLeads();
+  //     leads.assignAll(fetchedLeads);
+  //   } catch (e) {
+  //     _showErrorSnackbar('Failed to fetch leads', e);
+  //   } finally {
+  //     isLoading(false);
+  //   }
+  // }
+
+  @override
+  Future<List<LeadData>> fetchItems(int page) async {
     try {
-      isLoading(true);
-      final fetchedLeads = await _leadService.getLeads();
-      leads.assignAll(fetchedLeads);
+      final response = await _leadService.fetchLeads(page: page);
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch revenues";
+        return [];
+      }
     } catch (e) {
-      _showErrorSnackbar('Failed to fetch leads', e);
-    } finally {
-      isLoading(false);
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 
-  Future<LeadModel?> getLeadById(String id) async {
+  Future<LeadData?> getLeadById(String id) async {
     try {
       isLoading(true);
       return await _leadService.getLeadById(id);
@@ -270,13 +290,13 @@ class LeadController extends GetxController {
     }
   }
 
-  Future<bool> createLead(LeadModel lead) async {
+  Future<bool> createLead(LeadData lead) async {
     try {
       isCreating(true);
       final response = await _leadService.createLead(lead);
 
       if (response) {
-        await fetchLeads();
+        await loadInitial();
         _showSuccessSnackbar('Lead created successfully');
         return true;
       }
@@ -289,14 +309,14 @@ class LeadController extends GetxController {
     }
   }
 
-  Future<bool> updateLead(String id, LeadModel lead) async {
+  Future<bool> updateLead(String id, LeadData lead) async {
     try {
       isUpdating(true);
 
       final response = await _leadService.updateLead(id, lead.toJson());
       print('Response status code: ${response.statusCode}');
       if (response.statusCode == 200) {
-        await fetchLeads();
+        await loadInitial();
         _showSuccessSnackbar('Lead updated successfully');
         return true;
       } else {
@@ -320,7 +340,7 @@ class LeadController extends GetxController {
       final success = await _leadService.deleteLead(id);
 
       if (success) {
-        leads.removeWhere((lead) => lead.id == id);
+        items.removeWhere((lead) => lead.id == id);
         _showSuccessSnackbar('Lead deleted successfully');
         return true;
       }
@@ -334,7 +354,7 @@ class LeadController extends GetxController {
   }
 
   // Fetch lead members with comprehensive user data
-  Future<LeadModel> fetchLeadMembers(LeadModel lead) async {
+  Future<LeadData> fetchLeadMembers(LeadData lead) async {
     if (lead.leadMembers == null ||
         (lead.leadMembers!.leadMembers?.isEmpty ?? true)) {
       return lead;
@@ -426,7 +446,7 @@ class LeadController extends GetxController {
   Future<void> refreshData() async {
     isLoading(true);
     try {
-      await Future.wait([fetchLeads(), fetchLabels(), fetchUsers()]);
+      await Future.wait([loadInitial(), fetchLabels(), fetchUsers()]);
     } catch (e) {
       _showErrorSnackbar('Failed to refresh data', e);
     } finally {
@@ -434,14 +454,14 @@ class LeadController extends GetxController {
     }
   }
 
-  List<LeadModel> getLeadsByCustomerId(String customerId) {
-    return leads
+  List<LeadData> getLeadsByCustomerId(String customerId) {
+    return items
         .where((lead) => lead.contactId?.trim() == customerId.trim())
         .toList();
   }
 
-  List<LeadModel> getLeadsByCompanyId(String companyId) {
-    return leads
+  List<LeadData> getLeadsByCompanyId(String companyId) {
+    return items
         .where((lead) => lead.companyId?.trim() == companyId.trim())
         .toList();
   }
@@ -483,4 +503,6 @@ class LeadController extends GetxController {
     noteDescriptionController.dispose();
     super.onClose();
   }
+
+
 }

@@ -170,8 +170,8 @@ class AttendanceScreen extends StatelessWidget {
     AttendanceControllerHRM controller,
     EmployeeController employeeController,
   ) async {
-    controller.loadInitial();
-    employeeController.loadInitial();
+    await controller.loadInitial();
+    await employeeController.loadInitial();
   }
 
   @override

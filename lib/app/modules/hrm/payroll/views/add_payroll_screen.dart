@@ -178,6 +178,7 @@ class AddPayrollScreen extends StatelessWidget {
                           payrollController.selectedEmployee.value = value,
                 ),
               ),
+              SizedBox(height: AppSpacing.medium),
 
               Row(
                 children: [
@@ -225,6 +226,7 @@ class AddPayrollScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: AppSpacing.medium),
 
               Obx(
                 () => CrmDropdownField<String>(
@@ -293,6 +295,7 @@ class AddPayrollScreen extends StatelessWidget {
                   isRequired: true,
                 ),
               ),
+              SizedBox(height: AppSpacing.medium),
 
               Row(
                 children: [
@@ -319,6 +322,7 @@ class AddPayrollScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: AppSpacing.medium),
 
               // CrmTextField(
               //   controller: payrollController.currencyController,
@@ -337,8 +341,9 @@ class AddPayrollScreen extends StatelessWidget {
                 title: 'Bank Account',
                 isRequired: true,
                 validator: (value) => requiredValidator(value, 'Bank Account'),
+                keyboardType: TextInputType.number,
               ),
-
+              SizedBox(height: AppSpacing.medium),
               GestureDetector(
                 onTap: () => payrollController.pickDate(context),
                 child: AbsorbPointer(

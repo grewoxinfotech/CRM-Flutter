@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
+import 'package:crm_flutter/app/data/network/hrm/leave/leave/leave_model.dart';
 import 'package:http/http.dart' as http;
 
-import 'leave_types_model.dart';
+import 'leave_types_model.dart' hide LeaveData;
 
 class LeaveService {
   final String baseUrl = UrlRes.leaves; // Define in UrlRes
@@ -14,7 +15,7 @@ class LeaveService {
   }
 
   /// Fetch leaves with optional pagination & search
-  Future<List<LeaveData>> fetchLeaves({
+  Future<LeaveModel?> fetchLeaves({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -32,15 +33,15 @@ class LeaveService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> leaves = data["message"]["data"];
-        return leaves.map((json) => LeaveData.fromJson(json)).toList();
+
+        return LeaveModel.fromJson(data);
       } else {
         print("Failed to load leaves: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchLeaves: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single leave by ID

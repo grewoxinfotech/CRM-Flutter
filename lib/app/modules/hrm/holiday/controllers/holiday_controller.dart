@@ -9,7 +9,7 @@ import '../../../../data/network/hrm/hrm_system/holiday/holiday_service.dart';
 class HolidayController extends PaginatedController<HolidayData> {
   final HolidayService _service = HolidayService();
   final String url = UrlRes.holidays;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -28,10 +28,17 @@ class HolidayController extends PaginatedController<HolidayData> {
   Future<List<HolidayData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchHolidays(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch Holiday";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

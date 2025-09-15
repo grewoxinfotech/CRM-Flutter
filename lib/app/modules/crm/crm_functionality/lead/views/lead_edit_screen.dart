@@ -17,7 +17,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class LeadEditScreen extends StatefulWidget {
   final String leadId;
-  final LeadModel? initialData;
+  final LeadData? initialData;
 
   LeadEditScreen({required this.leadId, this.initialData});
 
@@ -26,7 +26,7 @@ class LeadEditScreen extends StatefulWidget {
 }
 
 class _LeadEditScreenState extends State<LeadEditScreen> {
-  late LeadModel currentLead;
+  late LeadData currentLead;
   bool isLoading = true;
   final RxList<String> selectedMembers = <String>[].obs;
 
@@ -46,7 +46,7 @@ class _LeadEditScreenState extends State<LeadEditScreen> {
   }
 
   // New method to set data from passed lead model
-  void _setLeadData(LeadModel lead) {
+  void _setLeadData(LeadData lead) {
     final leadController = Get.find<LeadController>();
     final pipelineController = Get.find<PipelineController>();
     final stageController = Get.find<StageController>();
@@ -993,7 +993,7 @@ class _LeadEditScreenState extends State<LeadEditScreen> {
       leadController.isUpdating(true);
 
       // Create updated lead model
-      final updatedLead = LeadModel(
+      final updatedLead = LeadData(
         id: widget.leadId,
         leadTitle: leadController.leadTitleController.text,
         pipeline: leadController.selectedPipelineId.value,
@@ -1036,11 +1036,11 @@ class _LeadEditScreenState extends State<LeadEditScreen> {
         );
 
         // Update the lead in the controller's list directly to avoid extra API call
-        final index = leadController.leads.indexWhere(
+        final index = leadController.items.indexWhere(
           (lead) => lead.id == widget.leadId,
         );
         if (index != -1) {
-          leadController.leads[index] = updatedLead;
+          leadController.items[index] = updatedLead;
         }
 
         Get.back(

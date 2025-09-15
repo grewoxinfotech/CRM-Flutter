@@ -11,7 +11,7 @@ import '../../../../data/network/hrm/hrm_system/designation/designation_service.
 class DesignationController extends PaginatedController<DesignationData> {
   final DesignationService _service = DesignationService();
   final String url = UrlRes.designations;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -27,10 +27,17 @@ class DesignationController extends PaginatedController<DesignationData> {
   Future<List<DesignationData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchDesignations(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch Designation";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 

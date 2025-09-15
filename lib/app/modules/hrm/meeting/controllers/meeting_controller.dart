@@ -13,7 +13,7 @@ import '../../../../data/network/hrm/meeting/meeting_service.dart';
 class MeetingController extends PaginatedController<MeetingData> {
   final MeetingService _service = MeetingService();
   final String url = UrlRes.meetings;
-  var error = ''.obs;
+  var errorMessage = ''.obs;
 
   final formKey = GlobalKey<FormState>();
 
@@ -48,10 +48,17 @@ class MeetingController extends PaginatedController<MeetingData> {
   Future<List<MeetingData>> fetchItems(int page) async {
     try {
       final response = await _service.fetchMeetings(page: page);
-      return response;
+      print("Response: ${response!.toJson()}");
+      if (response != null && response.success == true) {
+        totalPages.value = response.message?.pagination?.totalPages ?? 1;
+        return response.message?.data ?? [];
+      } else {
+        errorMessage.value = "Failed to fetch meeting";
+        return [];
+      }
     } catch (e) {
-      print("Exception in fetchItems: $e");
-      throw Exception("Exception in fetchItems: $e");
+      errorMessage.value = "Exception in fetchItems: $e";
+      return [];
     }
   }
 
@@ -101,7 +108,8 @@ class MeetingController extends PaginatedController<MeetingData> {
     meetingLinkController.clear();
     startTimeController.clear();
     endTimeController.clear();
-    selectedDepartment.value = "";
+    dateController.clear();
+   if(departments.isNotEmpty) selectedDepartment.value = departments.first.id!;
     selectedEmployees.clear();
     selectedClientId.value = "";
     selectedDate.value = null;
@@ -150,6 +158,7 @@ class MeetingController extends PaginatedController<MeetingData> {
       if (success) {
         int index = items.indexWhere((item) => item.id == id);
         if (index != -1) {
+          updatedMeeting.id = id;
           items[index] = updatedMeeting;
           items.refresh();
         }

@@ -73,68 +73,80 @@ class LeadScreen extends StatelessWidget {
             );
           } else {
             return Obx(() {
-              if (controller.leads.isEmpty) {
+              if (controller.items.isEmpty) {
                 return const Center(child: Text("No leads available."));
               }
 
-              return ViewScreen(
-                itemCount: controller.leads.length,
-                itemBuilder: (context, i) {
-                  final data = controller.leads[i];
-                  final status = controller.statusOptions.firstWhereOrNull(
-                    (element) => element['id'] == data.status,
-                  );
-
-                  final currency = controller.currencies.firstWhereOrNull(
-                    (element) => element.id == data.currency,
-                  );
-
-                  final source = controller.sourceOptions.firstWhereOrNull(
-                    (element) => element['id'] == data.source,
-                  );
-
-                  final category = controller.categoryOptions.firstWhereOrNull(
-                    (element) => element['id'] == data.category,
-                  );
-
-                  return LeadCard(
-                    id: data.id ?? '',
-                    color: Colors.green,
-                    inquiryId: data.inquiryId ?? '',
-                    leadTitle: data.leadTitle ?? '',
-                    leadStage: controller.getStageName(data.leadStage ?? ''),
-                    pipeline: controller.getPipelineName(data.pipeline ?? ''),
-                    currency: currency != null ? currency.currencyIcon : '',
-                    leadValue: data.leadValue?.toString() ?? '',
-                    source: source != null ? source['name'] ?? '' : '',
-                    // companyName: controller.getCompanyDisplayName(data),
-                    // firstName: data.firstName ?? '',
-                    // lastName: data.lastName ?? '',
-                    // phoneCode: data.phoneCode ?? '',
-                    // telephone: data.telephone ?? '',
-                    // email: data.email ?? '',
-                    // address: data.address ?? '',
-                    leadMembers:
-                        data.leadMembers?.leadMembers?.isNotEmpty == true
-                            ? data.leadMembers!.leadMembers!.length.toString()
-                            : '',
-                    category: category != null ? category['name'] ?? '' : '',
-                    // files: data.files.isNotEmpty ? data.files.length.toString() : '',
-                    // Use the status directly from the API instead of trying to map it
-                    status:
-                        status != null ? status['name']!.capitalize ?? '' : '',
-
-                    interestLevel: data.interestLevel ?? '',
-                    leadScore: data.leadScore?.toString() ?? '',
-                    isConverted: data.isConverted?.toString() ?? '',
-                    clientId: data.clientId ?? '',
-                    createdBy: data.createdBy ?? '',
-                    updatedBy: data.updatedBy ?? '',
-                    createdAt: formatDate(data.createdAt?.toString() ?? ''),
-                    updatedAt: formatDate(data.updatedAt?.toString() ?? ''),
-                    onTap: () => _navigateToDetail(data, controller),
-                  );
+              return NotificationListener<ScrollNotification>(
+                onNotification: (scrollEnd) {
+                  final metrics = scrollEnd.metrics;
+                  if (metrics.atEdge && metrics.pixels != 0) {
+                    controller.loadMore();
+                  }
+                  return false;
                 },
+                child: RefreshIndicator(
+                  onRefresh: controller.refreshList,
+                  child: ViewScreen(
+                    itemCount: controller.items.length,
+                    itemBuilder: (context, i) {
+                      final data = controller.items[i];
+                      final status = controller.statusOptions.firstWhereOrNull(
+                        (element) => element['id'] == data.status,
+                      );
+
+                      final currency = controller.currencies.firstWhereOrNull(
+                        (element) => element.id == data.currency,
+                      );
+
+                      final source = controller.sourceOptions.firstWhereOrNull(
+                        (element) => element['id'] == data.source,
+                      );
+
+                      final category = controller.categoryOptions.firstWhereOrNull(
+                        (element) => element['id'] == data.category,
+                      );
+
+                      return LeadCard(
+                        id: data.id ?? '',
+                        color: Colors.green,
+                        inquiryId: data.inquiryId ?? '',
+                        leadTitle: data.leadTitle ?? '',
+                        leadStage: controller.getStageName(data.leadStage ?? ''),
+                        pipeline: controller.getPipelineName(data.pipeline ?? ''),
+                        currency: currency != null ? currency.currencyIcon : '',
+                        leadValue: data.leadValue?.toString() ?? '',
+                        source: source != null ? source['name'] ?? '' : '',
+                        // companyName: controller.getCompanyDisplayName(data),
+                        // firstName: data.firstName ?? '',
+                        // lastName: data.lastName ?? '',
+                        // phoneCode: data.phoneCode ?? '',
+                        // telephone: data.telephone ?? '',
+                        // email: data.email ?? '',
+                        // address: data.address ?? '',
+                        leadMembers:
+                            data.leadMembers?.leadMembers?.isNotEmpty == true
+                                ? data.leadMembers!.leadMembers!.length.toString()
+                                : '',
+                        category: category != null ? category['name'] ?? '' : '',
+                        // files: data.files.isNotEmpty ? data.files.length.toString() : '',
+                        // Use the status directly from the API instead of trying to map it
+                        status:
+                            status != null ? status['name']!.capitalize ?? '' : '',
+
+                        interestLevel: data.interestLevel ?? '',
+                        leadScore: data.leadScore?.toString() ?? '',
+                        isConverted: data.isConverted?.toString() ?? '',
+                        clientId: data.clientId ?? '',
+                        createdBy: data.createdBy ?? '',
+                        updatedBy: data.updatedBy ?? '',
+                        createdAt: formatDate(data.createdAt?.toString() ?? ''),
+                        updatedAt: formatDate(data.updatedAt?.toString() ?? ''),
+                        onTap: () => _navigateToDetail(data, controller),
+                      );
+                    },
+                  ),
+                ),
               );
             });
           }
@@ -144,7 +156,7 @@ class LeadScreen extends StatelessWidget {
   }
 
   Future<void> _navigateToDetail(
-    LeadModel data,
+      LeadData data,
     LeadController controller,
   ) async {
     if (data.id != null) {

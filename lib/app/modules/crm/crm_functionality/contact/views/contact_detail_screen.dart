@@ -539,7 +539,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   }
 
   Future<void> _navigateToDetail(
-    LeadModel data,
+      LeadData data,
     LeadController controller,
   ) async {
     if (data.id != null) {

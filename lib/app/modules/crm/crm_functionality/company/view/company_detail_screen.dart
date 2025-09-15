@@ -163,9 +163,9 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
     // );
 
     return ViewScreen(
-      itemCount: leadController.leads.length,
+      itemCount: leadController.items.length,
       itemBuilder: (context, i) {
-        final data = leadController.leads[i];
+        final data = leadController.items[i];
         final status = leadController.statusOptions.firstWhereOrNull(
           (element) => element['id'] == data.status,
         );
@@ -334,7 +334,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
   }
 
   Future<void> _navigateToLeadDetail(
-    LeadModel lead,
+      LeadData lead,
     LeadController controller,
   ) async {
     if (lead.id != null) {

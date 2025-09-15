@@ -132,6 +132,15 @@ class AddAnnouncementScreen extends StatelessWidget {
   void _submit() async {
     if (!controller.formKey.currentState!.validate()) return;
 
+    if (controller.selectedBranch.isEmpty) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Please select at least one branch",
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+
     //  Extra manual check in case validator not triggered
     final dateError = dateRangeValidator();
     if (dateError != null) {
@@ -170,9 +179,64 @@ class AddAnnouncementScreen extends StatelessWidget {
     );
   }
 
+  // static String? validateDate(String? value, {String expectedFormat = "yyyy-MM-dd"}) {
+  //   if (value == null || value.trim().isEmpty) {
+  //     return "Date is required";
+  //   }
+  //
+  //   try {
+  //     // Try parsing the date
+  //     final parsedDate = DateTime.tryParse(value);
+  //
+  //     if (parsedDate == null) {
+  //       return "Invalid date format. Expected $expectedFormat";
+  //     }
+  //
+  //     // Example extra validation: disallow future dates
+  //     final today = DateTime.now();
+  //
+  //     // Example extra validation: disallow very old dates
+  //     if (parsedDate.isBefore(DateTime(1900))) {
+  //       return "Date in the past is not allowed";
+  //     }
+  //
+  //     return null; // ✅ valid
+  //   } catch (e) {
+  //     return "Invalid date: ${e.toString()}";
+  //   }
+  // }
+
   /// Update
   void _update() async {
     if (!controller.formKey.currentState!.validate()) return;
+
+    if (controller.selectedBranch.isEmpty) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Please select at least one branch",
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+
+    if (controller.selectedDate.value == null) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Error",
+        message: "Please select a date",
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+    //  Extra manual check in case validator not triggered
+    final dateError = dateRangeValidator();
+    if (dateError != null) {
+      CrmSnackBar.showAwesomeSnackbar(
+        title: "Invalid Dates",
+        message: dateError,
+        contentType: ContentType.failure,
+      );
+      return;
+    }
 
     final announcementData = AnnouncementData(
       branch: Branch(

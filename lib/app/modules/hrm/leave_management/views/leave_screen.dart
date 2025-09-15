@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import '../../../../care/constants/color_res.dart';
 import '../../../../care/constants/ic_res.dart';
+import '../../../../data/network/hrm/leave/leave/leave_model.dart';
 import '../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../widgets/common/display/crm_ic.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';

@@ -13,7 +13,7 @@ class MeetingService {
   }
 
   /// Fetch meetings with optional pagination & search
-  Future<List<MeetingData>> fetchMeetings({
+  Future<MeetingModel?> fetchMeetings({
     int page = 1,
     int pageSize = 10,
     String search = '',
@@ -31,15 +31,15 @@ class MeetingService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List<dynamic> meetings = data["message"]["data"];
-        return meetings.map((json) => MeetingData.fromJson(json)).toList();
+
+        return MeetingModel.fromJson(data);
       } else {
         print("Failed to load meetings: ${response.statusCode}");
       }
     } catch (e) {
       print("Exception in fetchMeetings: $e");
     }
-    return [];
+    return null;
   }
 
   /// Get single meeting by ID
@@ -85,6 +85,7 @@ class MeetingService {
         headers: await headers(),
         body: jsonEncode(meeting.toJson()),
       );
+      print("[DEBUG]=> response ---- ${response.body}");
 
       return response.statusCode == 200;
     } catch (e) {

@@ -26,16 +26,20 @@ class DepartmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(()=>BranchController());
     final BranchController branchController = Get.find<BranchController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await branchController.getBranchById(department.branch!);
+    });
 
-    // Get branch name using ID
-    String branchName = '';
-    if (department.branch != null && department.branch!.isNotEmpty) {
-      final branch = branchController.items.firstWhereOrNull(
-        (b) => b.id == department.branch,
-      );
-      branchName = branch?.branchName ?? department.branch!;
-    }
+    // // Get branch name using ID
+    // String branchName = '';
+    // if (department.branch != null && department.branch!.isNotEmpty) {
+    //   final branch = branchController.items.firstWhereOrNull(
+    //     (b) => b.id == department.branch,
+    //   );
+    //   branchName = branch?.branchName ?? department.branch!;
+    // }
 
     return GestureDetector(
       child: CrmCard(
@@ -80,15 +84,23 @@ class DepartmentCard extends StatelessWidget {
                       const SizedBox(height: 6),
 
                       // Branch Name
-                      if (branchName.isNotEmpty)
-                        Text(
-                          'Branch: $branchName',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.blueGrey,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      if (department.branch != null &&department.branch!.isNotEmpty)
+                        Obx(
+                          () {
+                            final branch = branchController.items.firstWhereOrNull((element) => element.id == department.branch,);
+                            if (branch == null) {
+                              return SizedBox.shrink();
+                            }
+                            return Text(
+                            'Branch: ${branch.branchName}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.blueGrey,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          );
+                          },
                         ),
 
                       const SizedBox(height: 4),

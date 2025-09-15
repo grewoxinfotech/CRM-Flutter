@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../care/constants/size_manager.dart';
 import '../../../../data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
+import '../../../../data/network/hrm/leave/leave/leave_model.dart';
 
 class LeaveCard extends StatelessWidget {
   final LeaveData leave;

@@ -121,12 +121,13 @@ class JobOnboardingService {
         return false;
       }
     } catch (e) {
-      print("Update job onboarding exception: $e");
       CrmSnackBar.showAwesomeSnackbar(
         title: "Exception",
         message: "Something went wrong while updating the job onboarding",
         contentType: ContentType.failure,
       );
+      print("Update job onboarding exception: $e");
+
       return false;
     }
   }
