@@ -7,6 +7,8 @@ import 'package:crm_flutter/app/widgets/input/crm_date_picker.dart';
 import 'package:crm_flutter/app/data/network/sales_invoice/controller/sales_invoice_controller.dart';
 import 'package:crm_flutter/app/data/network/sales_invoice/model/sales_invoice_model.dart';
 
+import '../../common/inputs/crm_text_field.dart';
+
 class InvoiceEditDialog extends StatelessWidget {
   final SalesInvoice invoice;
   final SalesInvoiceController controller;
@@ -53,8 +55,8 @@ class InvoiceEditDialog extends StatelessWidget {
             SizedBox(height: AppSpacing.large),
             CrmTextField(
               controller: invoiceNumberController,
-              label: 'Invoice Number',
-              hint: 'Enter invoice number',
+              title: 'Invoice Number',
+              hintText: 'Enter invoice number',
             ),
             SizedBox(height: AppSpacing.medium),
             Row(
@@ -62,8 +64,8 @@ class InvoiceEditDialog extends StatelessWidget {
                 Expanded(
                   child: CrmTextField(
                     controller: totalController,
-                    label: 'Total Amount',
-                    hint: 'Enter total amount',
+                    title: 'Total Amount',
+                    hintText: 'Enter total amount',
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -71,8 +73,8 @@ class InvoiceEditDialog extends StatelessWidget {
                 Expanded(
                   child: CrmTextField(
                     controller: pendingController,
-                    label: 'Pending Amount',
-                    hint: 'Enter pending amount',
+                    title: 'Pending Amount',
+                    hintText: 'Enter pending amount',
                     keyboardType: TextInputType.number,
                   ),
                 ),

@@ -1,5 +1,7 @@
+import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/key_res.dart';
 import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
+import 'package:crm_flutter/app/modules/communication/communication_functionality/chat/views/chat_user_screen.dart';
 import 'package:crm_flutter/app/modules/home/views/home_screen.dart';
 import 'package:crm_flutter/app/modules/hrm/hrm_functions/view/hrm_screen.dart';
 import 'package:crm_flutter/app/modules/purchase/purchase_functions/view/purchase_screen.dart';
@@ -80,6 +82,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           return SizedBox();
         }
       }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.to(() => ChatUserScreen());
+        },
+        child: Icon(Icons.chat, color: ColorRes.white),
+      ),
     );
   }
 }

@@ -40,6 +40,10 @@ class UsersController extends GetxController {
     }
   }
 
+  Future<void> refreshList() async {
+    await fetchUsers();
+  }
+
   // User methods
 
   // Get user by ID
