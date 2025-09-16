@@ -179,7 +179,7 @@ class _AggregationPieChartState extends State<AggregationPieChart> {
                                             widget.colors.length],
                                   ),
                                   const SizedBox(width: 5),
-                                  Text('$label'),
+                                  Text('${label ?? 'N/A'}'),
                                 ],
                               ),
                               Text('${percentage.toStringAsFixed(1)}%'),

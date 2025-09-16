@@ -317,7 +317,10 @@ class CrmDrawer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(AppPadding.medium),
               child: GestureDetector(
-                onTap: () => Get.find<AuthController>().logout(),
+                onTap: ()  {
+                  Get.lazyPut<AuthController>(() => AuthController());
+                  Get.find<AuthController>().logout();
+                  },
                 child: Row(
                   children: [
                     CrmIc(

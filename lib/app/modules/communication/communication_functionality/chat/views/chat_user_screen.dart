@@ -202,8 +202,12 @@ class ChatUserScreen extends StatelessWidget {
     // Load logged-in user ID after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final user = await SecureStorage.getUserData();
-      if (user != null) {
-        userId.value = user.id ?? '';
+      if(user?.employeeId != null){
+        userId.value = user!.clientId ?? '';
+      }else{
+        if (user != null) {
+          userId.value = user.id ?? '';
+        }
       }
     });
 

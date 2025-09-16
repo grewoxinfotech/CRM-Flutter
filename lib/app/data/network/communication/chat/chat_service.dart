@@ -1,470 +1,181 @@
-// import 'package:socket_io_client/socket_io_client.dart' as IO;
-// import 'dart:async';
-//
-// import 'chat_model.dart'; // your enums & models file
-//
-// class ChatService {
-//   static final ChatService _instance = ChatService._internal();
-//   factory ChatService() => _instance;
-//   ChatService._internal();
-//
-//   late IO.Socket _socket;
-//   bool _isConnected = false;
-//
-//   // Stream controllers for different event types
-//   final _eventController = StreamController<ChatEvent>.broadcast();
-//   Stream<ChatEvent> get events => _eventController.stream;
-//
-//   /// Connect to socket server
-//   void connect(String url, {Map<String, dynamic>? query}) {
-//     if (_isConnected) return;
-//
-//     _socket = IO.io(
-//       url,
-//       IO.OptionBuilder()
-//           .setTransports(['websocket'])
-//           .enableReconnection()
-//           .setQuery(query ?? {})
-//           .build(),
-//     );
-//
-//     _socket.onConnect((_) {
-//       _isConnected = true;
-//       print("✅ Connected to chat server");
-//     });
-//
-//     _socket.onDisconnect((_) {
-//       _isConnected = false;
-//       print("❌ Disconnected from chat server");
-//     });
-//
-//     _socket.onReconnect((_) {
-//       print("♻️ Reconnected to chat server");
-//     });
-//
-//     _socket.onError((err) {
-//       print("⚠️ Socket error: $err");
-//     });
-//
-//     // Generic event listener
-//     _socket.on('event', (data) {
-//       print("🔹 Raw event received: $data");
-//
-//       try {
-//         if (data is List) {
-//           final event = ChatEvent.fromJson(data);
-//           _eventController.add(event);
-//           print("✅ Event parsed: ${event.type} with data: ${event.data}");
-//         } else {
-//           print("⚠️ Unexpected event format: ${data.runtimeType}");
-//         }
-//       } catch (e) {
-//         print("⚠️ Failed to parse event: $e");
-//       }
-//     });
-//   }
-//
-//   /// Disconnect safely
-//   void disconnect() {
-//     if (_isConnected) {
-//       _socket.disconnect();
-//       _isConnected = false;
-//       print("❌ Socket disconnected manually");
-//     }
-//   }
-//
-//   /// Send message
-//   void sendMessage(ChatMessage message) {
-//     if (!_isConnected) return;
-//     _socket.emit('event', [ChatEventType.sendMessage.value, message.toJson()]);
-//     print("📤 Sent message: ${message.toJson()}");
-//   }
-//
-//   /// Mark messages as read
-//   void markMessagesRead(ReadReceipt receipt) {
-//     if (!_isConnected) return;
-//     _socket.emit('event', [
-//       ChatEventType.markMessagesRead.value,
-//       receipt.toJson(),
-//     ]);
-//     print("📤 Marked messages read: ${receipt.toJson()}");
-//   }
-//
-//   /// Send typing event
-//   void sendTyping(TypingEvent typing) {
-//     if (!_isConnected) return;
-//     _socket.emit('event', [ChatEventType.typing.value, typing.toJson()]);
-//     print("📤 Sent typing: ${typing.toJson()}");
-//   }
-//
-//   // /// Upload chat files
-//   // void uploadFiles(ChatUpload upload) {
-//   //   if (!_isConnected) return;
-//   //   _socket.emit('event', [ChatEventType.uploadChatFiles.value, upload.toJson()]);
-//   //   print("📤 Uploading files: ${upload.toJson()}");
-//   // }
-// }
-
-// import 'package:socket_io_client/socket_io_client.dart' as IO;
-// import 'dart:async';
-// import 'chat_model.dart'; // your enums & models file
-//
-// class ChatService {
-//   static final ChatService _instance = ChatService._internal();
-//   factory ChatService() => _instance;
-//   ChatService._internal();
-//
-//   late IO.Socket _socket;
-//   bool _isConnected = false;
-//
-//   // Stream controller for all incoming events
-//   final _eventController = StreamController<ChatEvent>.broadcast();
-//   Stream<ChatEvent> get events => _eventController.stream;
-//
-//   /// Connect to socket server
-//   void connect(String url, {Map<String, dynamic>? query}) {
-//     if (_isConnected) return;
-//
-//     _socket = IO.io(
-//       url,
-//       IO.OptionBuilder()
-//           .setTransports(['websocket'])
-//           .enableReconnection()
-//           .setQuery(query ?? {})
-//           .build(),
-//     );
-//
-//     _socket.onConnect((_) {
-//       _isConnected = true;
-//       print("✅ Connected to chat server");
-//     });
-//
-//     _socket.onDisconnect((_) {
-//       _isConnected = false;
-//       print("❌ Disconnected from chat server");
-//     });
-//
-//     _socket.onReconnect((_) {
-//       print("♻️ Reconnected to chat server");
-//     });
-//
-//     _socket.onError((err) {
-//       print("⚠️ Socket error: $err");
-//     });
-//
-//     // Generic event listener for server events
-//     _socket.on('event', (data) {
-//       try {
-//         final event = ChatEvent(type: data[0], data: data);
-//         _eventController.add(event);
-//         print("✅ Event parsed: ${data[0]} with data: $data");
-//       } catch (e) {
-//         print("⚠️ Failed to parse event: $e");
-//       }
-//     });
-//   }
-//
-//   /// Disconnect safely
-//   void disconnect() {
-//     if (_isConnected) {
-//       _socket.disconnect();
-//       _isConnected = false;
-//       print("❌ Socket disconnected manually");
-//     }
-//   }
-//
-//   /// Send a chat message
-//   void sendMessage(ChatMessage message) {
-//     if (!_isConnected) return;
-//     _socket.emit('send_message', [
-//       ChatEventType.sendMessage.value,
-//       message.toJson(),
-//     ]);
-//     print("📤 Sent message: ${message.toJson()}");
-//   }
-//
-//   /// Send typing event
-//   void sendTyping(TypingEvent typing) {
-//     if (!_isConnected) return;
-//     _socket.emit('event', [ChatEventType.typing.value, typing.toJson()]);
-//     print("📤 Sent typing: ${typing.toJson()}");
-//   }
-//
-//   // /// Upload chat files
-//   // void uploadFiles(ChatUpload upload) {
-//   //   if (!_isConnected) return;
-//   //   _socket.emit(
-//   //     'event',
-//   //     [ChatEventType.uploadChatFiles.value, upload.toJson()],
-//   //   );
-//   //   print("📤 Uploading files: ${upload.toJson()}");
-//   // }
-// }
-
-// import 'package:socket_io_client/socket_io_client.dart' as IO;
-// import 'dart:async';
-// import 'chat_model.dart'; // your enums & models file
-//
-// class ChatService {
-//   static final ChatService _instance = ChatService._internal();
-//   factory ChatService() => _instance;
-//   ChatService._internal();
-//
-//   late IO.Socket _socket;
-//   bool _isConnected = false;
-//
-//   /// Stream controller for all incoming events
-//   final _eventController = StreamController<ChatEvent>.broadcast();
-//   Stream<ChatEvent> get events => _eventController.stream;
-//
-//   /// Connect to socket server
-//   void connect(String url, {Map<String, dynamic>? query}) {
-//     if (_isConnected) return;
-//
-//     _socket = IO.io(
-//       url,
-//       IO.OptionBuilder()
-//           .setTransports(['websocket'])
-//           .enableReconnection()
-//           .setQuery(query ?? {})
-//           .build(),
-//     );
-//
-//     _socket.onConnect((_) {
-//       _isConnected = true;
-//       print("✅ Connected to chat server");
-//     });
-//
-//     _socket.onDisconnect((_) {
-//       _isConnected = false;
-//       print("❌ Disconnected from chat server");
-//     });
-//
-//     _socket.onReconnect((_) {
-//       print("♻️ Reconnected to chat server");
-//     });
-//
-//     _socket.onError((err) {
-//       print("⚠️ Socket error: $err");
-//     });
-//
-//     /// Listen for all generic events
-//     _socket.on('event', (data) {
-//       try {
-//         if (data is List<dynamic>) {
-//           print("🔹 Raw event received: $data");
-//           final event = ChatEvent.fromJson(data);
-//           _eventController.add(event);
-//           print("✅ Event parsed: ${event.type.value} with data: ${event.data}");
-//         } else {
-//           print("⚠️ Received invalid event data: $data");
-//         }
-//       } catch (e) {
-//         print("⚠️ Failed to parse event: $e");
-//       }
-//     });
-//   }
-//
-//   /// Disconnect safely
-//   void disconnect() {
-//     if (_isConnected) {
-//       _socket.disconnect();
-//       _isConnected = false;
-//       print("❌ Socket disconnected manually");
-//     }
-//   }
-//
-//   /// Send a chat message
-//   void sendMessage(ChatMessage message) {
-//     if (!_isConnected) return;
-//     _socket.emit('send_message', [
-//       ChatEventType.sendMessage.value,
-//       message.toJson(),
-//     ]);
-//     print("📤 Sent message: ${message.toJson()}");
-//   }
-//
-//   void getMessage(String userId) {
-//     if (!_isConnected) return;
-//     print("Getting messages for user: $userId");
-//     _socket.emit('get_conversations', {"userId": "IPoucZkvAMQ0BX1owqj5jxK"});
-//
-//     print("📤 Requested conversations for user: $userId");
-//   }
-//
-//   /// Send typing event
-//   void sendTyping(TypingEvent typing) {
-//     if (!_isConnected) return;
-//     _socket.emit('event', [ChatEventType.typing.value, typing.toJson()]);
-//     print("📤 Sent typing: ${typing.toJson()}");
-//   }
-//
-//   /// Upload chat files
-//   void uploadFiles(UploadChatFiles upload) {
-//     if (!_isConnected) return;
-//     _socket.emit('event', [
-//       ChatEventType.uploadChatFiles.value,
-//       upload.toJson(),
-//     ]);
-//     print("📤 Uploading files: ${upload.toJson()}");
-//   }
-// }
-//
-
 import 'dart:async';
+import 'dart:convert';
+import 'package:crm_flutter/app/data/network/communication/chat/chat_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'chat_model.dart';
+
+class SocketEvent {
+  final String type;
+  final dynamic data;
+
+  SocketEvent(this.type, this.data);
+}
 
 class SocketService {
-  // Singleton pattern
   static final SocketService _instance = SocketService._internal();
+
   factory SocketService() => _instance;
+
   SocketService._internal();
 
   IO.Socket? _socket;
-
-  // Event streams
   final _eventController = StreamController<SocketEvent>.broadcast();
+
   Stream<SocketEvent> get events => _eventController.stream;
 
   bool get isConnected => _socket?.connected ?? false;
 
-  /// Connect to socket
-  void connect(String url, {Map<String, dynamic>? query}) {
+  void connect(String url, {Map<String, dynamic>? query, String? roomId}) {
     if (_socket != null && _socket!.connected) return;
 
     try {
       _socket = IO.io(
         url,
         IO.OptionBuilder()
-            .setTransports(['websocket', 'polling'])
+            .setTransports(['websocket', 'polling']) // Enable both transport methods
+            .setQuery(query ?? {})
             .enableReconnection()
             .setReconnectionAttempts(5)
             .setReconnectionDelay(1000)
             .setTimeout(10000)
-            .setQuery(query ?? {})
+            .enableForceNew() // Force new connection
+            .setExtraHeaders({'Connection': 'upgrade', 'Upgrade': 'websocket'})
             .build(),
       );
 
+      _socket!.connect();
+
       _socket!.onConnect((_) {
-        print('✅ Connected to socket server');
+        print('✅ Connected to socket with ID: ${_socket?.id}');
+        _safeAdd(SocketEvent('connect', null));
+
+        // Auto join room if provided
+        if (roomId != null) {
+          joinRoom(roomId);
+        } else if (_socket!.id != null) {
+          joinRoom(_socket!.id!);
+        }
       });
 
       _socket!.onConnectError((error) {
         print('⚠️ Socket connection error: $error');
+        _safeAdd(SocketEvent('error', error.toString()));
       });
 
       _socket!.onDisconnect((_) {
-        print('❌ Disconnected from socket server');
+        print('❌ Disconnected from socket');
+        _safeAdd(SocketEvent('disconnect', null));
+
+        // Try to reconnect after disconnect
+        Future.delayed(const Duration(seconds: 3), () {
+          if (!(_socket?.connected ?? false)) {
+            print('🔄 Attempting to reconnect...');
+            _socket?.connect();
+          }
+        });
       });
 
       _socket!.onError((error) {
         print('⚠️ Socket error: $error');
+        _safeAdd(SocketEvent('error', error.toString()));
       });
 
-      // Forward any custom events to the event controller
+      // Debug: catch ALL events
       _socket!.onAny((event, data) {
-        _eventController.add(SocketEvent(event, data));
+        print('📡 Event: $event → ${jsonEncode(data)}');
+        _safeAdd(SocketEvent(event, data));
       });
+
+      // Explicit listener for messages with better error handling
+      _socket!.on('receive_message', (data) {
+        try {
+          print('📩 Raw message received: ${jsonEncode(data)}');
+          _safeAdd(SocketEvent('receive_message', data));
+        } catch (e) {
+          print('❌ Error processing received message: $e');
+          print('Message data was: $data');
+        }
+      });
+
+      // Listen for specific connection events
+      _socket!.on('connect_error', (data) => print('🔴 Connect Error: $data'));
+      _socket!.on('connect_timeout', (data) => print('🔴 Connect Timeout: $data'));
+      _socket!.on('reconnect', (data) => print('🔄 Reconnected: attempt $data'));
+      _socket!.on('reconnect_attempt', (data) => print('🔄 Reconnection Attempt: $data'));
+      _socket!.on('reconnect_error', (data) => print('🔴 Reconnect Error: $data'));
+      _socket!.on('reconnect_failed', (data) => print('🔴 Reconnect Failed: $data'));
+      _socket!.on('ping', (_) => print('📍 Ping'));
+      _socket!.on('pong', (data) => print('📍 Pong: $data ms'));
+
     } catch (e) {
-      print('Error connecting to socket: $e');
+      print('❌ Error initializing socket: $e');
+      _safeAdd(SocketEvent('error', e.toString()));
     }
   }
 
-  /// Disconnect from socket
   void disconnect() {
-    _socket?.disconnect();
-    _socket = null;
+    try {
+      _socket?.dispose();  // Properly dispose all listeners
+      _socket?.disconnect();
+      _socket?.close();
+      _socket?.destroy(); // Completely destroy the socket instance
+      _socket = null;
+      _safeAdd(SocketEvent('disconnect', null));
+    } catch (e) {
+      print('❌ Error during disconnect: $e');
+    }
   }
 
-  /// Join a private room
-  void joinRoom(String userId) {
-    _socket?.emit('join_room', userId);
+  void joinRoom(String roomId) {
+    if (_socket?.connected ?? false) {
+      print('🔄 Joining room: $roomId');
+      _socket?.emit('join', {'roomId': roomId});
+    } else {
+      print('❌ Cannot join room: Socket not connected');
+    }
   }
 
-  /// Send private message
   void sendMessage(ChatMessage message) {
-    if (_socket == null) return;
-
-    final data = message.toJson();
-    data['message'] = message.message.trim();
-    data['timestamp'] = DateTime.now().toIso8601String();
-
-    _socket!.emit('send_message', data);
+    if (_socket?.connected ?? false) {
+      final data = message.toJson();
+      print('📤 Sending message: ${jsonEncode(data)}');
+      _socket?.emit('send_message', data);
+    } else {
+      print('❌ Cannot send message: Socket not connected');
+    }
   }
 
-  /// Get conversations
+  void sendFileChat(ChatFile data) {
+    _socket?.emit('upload_chat_files', data);
+    print("📤 Sent file chat: ${data.toJson()}");
+  }
+
   void getConversations(String userId) {
     _socket?.emit('get_conversations', {'userId': userId});
-    print("📤 Requested conversations for user: $userId");
   }
 
-  /// Update message status
-  void updateMessageStatus(Map<String, dynamic> data) {
-    _socket?.emit('update_message_status', data);
-  }
-
-  /// Delete message
-  void deleteMessage(Map<String, dynamic> data) {
-    _socket?.emit('delete_message', data);
-  }
-
-  /// Typing indicator
   void sendTyping(TypingEvent typing) {
-    _socket?.emit('typing', typing.toJson());
+    _socket?.emit('typing', typing);
+    print("📤 Sent typing: ${typing.toJson()}");
   }
 
-  /// Group chat features
-  void createGroup(Map<String, dynamic> groupData) {
-    _socket?.emit('create_group', groupData);
-  }
-
-  void joinGroup(String groupId, String userId) {
-    _socket?.emit('join_group', {'groupId': groupId, 'userId': userId});
-  }
-
-  void leaveGroup(String groupId, String userId) {
-    _socket?.emit('leave_group', {'groupId': groupId, 'userId': userId});
-  }
-
-  void sendGroupMessage(String groupId, Map<String, dynamic> message) {
-    _socket?.emit('group_message', {'groupId': groupId, ...message});
-  }
-
-  void markMessagesAsRead(Map<String, dynamic> data) {
-    _socket?.emit('mark_messages_read', data);
-  }
-
-  /// Upload files
-  Future<dynamic> sendFiles(Map<String, dynamic> data) async {
-    if (_socket == null) throw Exception('Socket not connected');
-
-    final completer = Completer<dynamic>();
-    _socket!.emitWithAck(
-      'upload_chat_files',
-      data,
-      ack: (response) {
-        if (response['error'] != null) {
-          completer.completeError(response['error']);
-        } else {
-          completer.complete(response);
-        }
-      },
-    );
-    return completer.future;
-  }
-
-  /// Dispose
+  /// Only disconnect socket, keep stream open (safe for singleton use)
   void dispose() {
-    _eventController.close();
     disconnect();
+    // ⚠️ Do NOT close _eventController, otherwise future socket events will crash
   }
-}
 
-/// Generic socket event wrapper
-class SocketEvent {
-  final String type;
-  final dynamic data;
+  /// If you are *sure* you will never use this service again (e.g., on logout),
+  /// call this to free everything.
+  void destroy() {
+    disconnect();
+    if (!_eventController.isClosed) {
+      _eventController.close();
+    }
+  }
 
-  SocketEvent(this.type, this.data);
+  void _safeAdd(SocketEvent event) {
+    if (!_eventController.isClosed) {
+      _eventController.add(event);
+    }
+  }
 }

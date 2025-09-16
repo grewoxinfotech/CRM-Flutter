@@ -23,6 +23,7 @@ class DealAggregationService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print("[DealAggregationService] Fetched data: $data");
         return DealAggregationResponse.fromJson(data);
       } else {
         print("Failed to load deal aggregations: ${response.statusCode}");

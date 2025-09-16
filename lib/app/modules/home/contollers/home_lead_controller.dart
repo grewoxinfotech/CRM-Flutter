@@ -62,7 +62,7 @@ class LeadAggregationController extends GetxController {
     try {
       return byStatus.firstWhere((s) => s.status == statusId).statusName;
     } catch (e) {
-      return '';
+      return 'N/A';
     }
   }
 

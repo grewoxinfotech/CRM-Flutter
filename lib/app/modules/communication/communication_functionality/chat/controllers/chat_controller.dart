@@ -1,7 +1,9 @@
-// import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
+//
+//
 // import 'package:get/get.dart';
 // import '../../../../../data/network/communication/chat/chat_model.dart';
 // import '../../../../../data/network/communication/chat/chat_service.dart';
+// import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 //
 // class ChatController extends GetxController {
 //   final SocketService _socketService = SocketService();
@@ -12,12 +14,13 @@
 //   var messages = <ChatMessage>[].obs;
 //   RxString currentUserId = ''.obs;
 //
-//   onInit() {
-//     init();
+//   @override
+//   void onInit() {
 //     super.onInit();
+//     initController();
 //   }
 //
-//   Future<void> init() async {
+//   Future<void> initController() async {
 //     final user = await SecureStorage.getUserData();
 //     if (user != null) {
 //       currentUserId.value = user.id!;
@@ -28,22 +31,26 @@
 //   void connect(String url, {Map<String, dynamic>? query}) {
 //     _socketService.connect(url, query: query);
 //
+//
+//
 //     _socketService.events.listen((event) {
 //       events.add(event);
 //
-//       if (event.type == 'connect') isConnected.value = true;
+//       if (event.type == 'connect') {
+//         isConnected.value = true;
+//         // Fetch previous conversations once after connecting
+//
+//       }
+//
 //       if (event.type == 'disconnect') isConnected.value = false;
 //
-//       // Handle incoming messages
+//       // Incoming private message
 //       if (event.type == 'receive_message') {
 //         final msg = ChatMessage.fromJson(event.data);
 //         messages.add(msg);
 //       }
-//       if (currentUserId.value != null && currentUserId.value.isNotEmpty) {
-//         getConversations(currentUserId.value);
-//       }
 //
-//       // Handle conversations_received (initial fetch)
+//       // Previous conversations received
 //       if (event.type == 'conversations_received') {
 //         final data = event.data as Map<String, dynamic>;
 //         data.forEach((conversationId, msgs) {
@@ -52,60 +59,27 @@
 //             messages.add(msg);
 //           }
 //         });
+//         messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 //       }
 //     });
 //   }
 //
-//   // Disconnect
 //   void disconnect() {
 //     _socketService.disconnect();
 //     isConnected.value = false;
 //   }
 //
-//   // Join private room
 //   void joinRoom(String userId) => _socketService.joinRoom(userId);
 //
-//   // Send private message
-//   // void sendMessage(ChatMessage message) => _socketService.sendMessage(message);
 //   void sendMessage(ChatMessage message) {
 //     _socketService.sendMessage(message);
 //     messages.add(message); // optimistic update
 //   }
 //
-//   // Get conversations
 //   void getConversations(String userId) =>
 //       _socketService.getConversations(userId);
 //
-//   // Update message status
-//   void updateMessageStatus(Map<String, dynamic> data) =>
-//       _socketService.updateMessageStatus(data);
-//
-//   // Delete message
-//   void deleteMessage(Map<String, dynamic> data) =>
-//       _socketService.deleteMessage(data);
-//
-//   // Typing indicator
 //   void sendTyping(TypingEvent typing) => _socketService.sendTyping(typing);
-//
-//   // Group chat
-//   void createGroup(Map<String, dynamic> groupData) =>
-//       _socketService.createGroup(groupData);
-//
-//   void joinGroup(String groupId, String userId) =>
-//       _socketService.joinGroup(groupId, userId);
-//
-//   void leaveGroup(String groupId, String userId) =>
-//       _socketService.leaveGroup(groupId, userId);
-//
-//   void sendGroupMessage(String groupId, Map<String, dynamic> message) =>
-//       _socketService.sendGroupMessage(groupId, message);
-//
-//   void markMessagesAsRead(Map<String, dynamic> data) =>
-//       _socketService.markMessagesAsRead(data);
-//
-//   // Upload files
-//   Future<dynamic> sendFiles(Map<String, dynamic> data) =>
-//       _socketService.sendFiles(data);
 //
 //   @override
 //   void onClose() {
@@ -113,6 +87,8 @@
 //     super.onClose();
 //   }
 // }
+
+import 'dart:convert';
 
 import 'package:get/get.dart';
 import '../../../../../data/network/communication/chat/chat_model.dart';
@@ -124,9 +100,12 @@ class ChatController extends GetxController {
 
   // Reactive variables
   var isConnected = false.obs;
+  var isLoading = true.obs;
   var events = <SocketEvent>[].obs;
   var messages = <ChatMessage>[].obs;
+  var connectionError = RxString('');
   RxString currentUserId = ''.obs;
+  RxString receiverId = ''.obs;
 
   @override
   void onInit() {
@@ -135,69 +114,207 @@ class ChatController extends GetxController {
   }
 
   Future<void> initController() async {
-    final user = await SecureStorage.getUserData();
-    if (user != null) {
-      currentUserId.value = user.id!;
+    try {
+      isLoading.value = true;
+      final user = await SecureStorage.getUserData();
+      if (user != null) {
+        currentUserId.value = user.id!;
+      }
+    } catch (e) {
+      connectionError.value = 'Failed to initialize: $e';
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  // Connect to socket
+  /// Connect to socket and start listening for events
   void connect(String url, {Map<String, dynamic>? query}) {
-    _socketService.connect(url, query: query);
+    try {
+      isLoading.value = true;
+      connectionError.value = '';
 
-    _socketService.events.listen((event) {
-      events.add(event);
+      _socketService.connect(
+        url,
+        query: {
+          ...?query,
+          'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+        }
+      );
 
-      if (event.type == 'connect') {
-        isConnected.value = true;
-        // Fetch previous conversations once after connecting
-        if (currentUserId.value.isNotEmpty) {
-          getConversations(currentUserId.value);
-          joinRoom(currentUserId.value);
+      _socketService.events.listen(
+        (event) {
+          events.add(event);
+          print('📱 Controller received event: ${event.type}');
+
+          switch (event.type) {
+            case 'connect':
+              isConnected.value = true;
+              connectionError.value = '';
+              if (currentUserId.isNotEmpty) {
+                _initializeChat();
+              }
+              break;
+
+            case 'disconnect':
+              isConnected.value = false;
+              break;
+
+            case 'error':
+              connectionError.value = event.data?.toString() ?? 'Unknown error';
+              break;
+
+            case 'receive_message':
+              try {
+                print('📱 Processing received message: ${jsonEncode(event.data)}');
+                final msg = ChatMessage.fromJson(
+                  event.data is String
+                    ? jsonDecode(event.data)
+                    : event.data
+                );
+                _handleNewMessage(msg);
+              } catch (e) {
+                print('❌ Error processing message: $e');
+                print('Message data was: ${event.data}');
+              }
+              break;
+
+            case 'conversations_received':
+              try {
+                if (event.data is Map<String, dynamic>) {
+                  _handleConversationsReceived(event.data);
+                } else {
+                  print('❌ Invalid conversations data format: ${event.data}');
+                }
+              } catch (e) {
+                print('❌ Error processing conversations: $e');
+              }
+              break;
+          }
+        },
+        onError: (error) {
+          print('❌ Socket stream error: $error');
+          connectionError.value = 'Connection error: $error';
+        },
+      );
+    } catch (e) {
+      print('❌ Connection error: $e');
+      connectionError.value = 'Connection error: $e';
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Initialize chat with user IDs
+  void initChat(String userId, String toUserId) {
+    currentUserId.value = userId;
+    receiverId.value = toUserId;
+    _initializeChat();
+  }
+
+  void _initializeChat() {
+    try {
+      // Join private chat room (combine IDs to create unique room)
+      final roomId = "${currentUserId.value}_${receiverId.value}";
+      print('🔄 Joining chat room: $roomId');
+      joinRoom(roomId);
+
+      // Get existing conversations
+      getConversations(currentUserId.value);
+
+      // Clear any previous errors
+      connectionError.value = '';
+    } catch (e) {
+      print('❌ Error initializing chat: $e');
+      connectionError.value = 'Failed to initialize chat: $e';
+    }
+  }
+
+  void _handleNewMessage(ChatMessage msg) {
+    try {
+      print('📱 Handling new message: ${jsonEncode(msg.toJson())}');
+
+      // Only add if message doesn't already exist
+      if (!messages.any((m) => m.id == msg.id)) {
+        messages.insert(0, msg); // Add to start of list for newest first
+        messages.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+        // Update message status if needed
+        if (msg.receiverId == currentUserId.value) {
+          _markMessageAsRead(msg);
         }
       }
+    } catch (e) {
+      print('❌ Error handling new message: $e');
+    }
+  }
 
-      if (event.type == 'disconnect') isConnected.value = false;
+  void _markMessageAsRead(ChatMessage message) {
+    try {
+      final readReceipt = ReadReceipt(
+        senderId: currentUserId.value,
+        receiverId: message.senderId,
+      );
+      // _socketService.emit('mark_messages_read', readReceipt.toJson());
+    } catch (e) {
+      print('❌ Error marking message as read: $e');
+    }
+  }
 
-      // Incoming private message
-      if (event.type == 'receive_message') {
-        final msg = ChatMessage.fromJson(event.data);
-        messages.add(msg);
-      }
+  void _handleConversationsReceived(Map<String, dynamic> data) {
+    messages.clear(); // Clear existing messages before adding history
 
-      // Previous conversations received
-      if (event.type == 'conversations_received') {
-        final data = event.data as Map<String, dynamic>;
-        data.forEach((conversationId, msgs) {
-          for (var msgJson in msgs) {
-            final msg = ChatMessage.fromJson(msgJson);
+    data.forEach((receiverId, msgs) {
+      if (msgs is List) {
+        for (var msgJson in msgs) {
+          msgJson['receiver_id'] = receiverId;
+          final msg = ChatMessage.fromJson(msgJson);
+
+          // Only add if message doesn't already exist
+          if (!messages.any((m) => m.id == msg.id)) {
             messages.add(msg);
           }
-        });
-        messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+        }
       }
     });
+
+    // Sort messages by timestamp, newest first
+    messages.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
   void disconnect() {
     _socketService.disconnect();
     isConnected.value = false;
+    connectionError.value = '';
   }
 
   void joinRoom(String userId) => _socketService.joinRoom(userId);
 
   void sendMessage(ChatMessage message) {
-    _socketService.sendMessage(message);
-    messages.add(message); // optimistic update
+    try {
+      _socketService.sendMessage(message);
+      _handleNewMessage(message); // Optimistic update
+    } catch (e) {
+      print('Error sending message: $e');
+      // You could add error handling here, like showing a snackbar
+    }
   }
 
-  void getConversations(String userId) =>
-      _socketService.getConversations(userId);
+  void sendFileChat(ChatFile data) {
+    try {
+      _socketService.sendFileChat(data);
+    } catch (e) {
+      print('Error sending file: $e');
+      // You could add error handling here
+    }
+  }
+
+  void getConversations(String userId) => _socketService.getConversations(userId);
 
   void sendTyping(TypingEvent typing) => _socketService.sendTyping(typing);
 
   @override
   void onClose() {
+    messages.clear();
     _socketService.dispose();
     super.onClose();
   }
