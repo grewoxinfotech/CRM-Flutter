@@ -187,6 +187,7 @@ import 'package:get/get.dart';
 
 import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
 import '../../../../../widgets/common/messages/crm_snack_bar.dart';
+import '../controllers/chat_controller.dart';
 
 class ChatUserScreen extends StatelessWidget {
   final RxString userId = ''.obs;
@@ -198,17 +199,20 @@ class ChatUserScreen extends StatelessWidget {
     Get.lazyPut<UsersController>(() => UsersController());
     final UsersController controller = Get.find();
     final AccessController accessController = Get.find<AccessController>();
-
+    Get.lazyPut<ChatController>(() => ChatController());
+    final ChatController chatController = Get.find();
     // Load logged-in user ID after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final user = await SecureStorage.getUserData();
-      if(user?.employeeId != null){
-        userId.value = user!.clientId ?? '';
-      }else{
-        if (user != null) {
-          userId.value = user.id ?? '';
-        }
-      }
+      // if (user?.employeeId != null) {
+      //   userId.value = user!.clientId ?? '';
+      // } else {
+      //   if (user != null) {
+      //     userId.value = user.id ?? '';
+      //   }
+      // }
+      userId.value = user?.clientId ?? '';
+      controller.users.removeWhere((u) => u.id == userId.value);
     });
 
     // void _deleteUser(String id, String name) {
@@ -267,9 +271,13 @@ class ChatUserScreen extends StatelessWidget {
               }
 
               // Filter users by clientId == logged-in userId
+
               final users =
                   controller.users
-                      .where((u) => u.clientId == userId.value)
+                      .where(
+                        (u) =>
+                            u.clientId == userId.value || u.id == userId.value,
+                      )
                       .toList();
 
               return RefreshIndicator(
@@ -282,56 +290,18 @@ class ChatUserScreen extends StatelessWidget {
                       children: [
                         ChatUserCard(
                           user: user,
-                          onTap: (u) {
+                          onTap: (u) async {
+                            final userId = await SecureStorage.getUserData();
+                            print("userId: ${userId?.id}, receiverId: ${u.id}");
                             Get.to(
                               () => ChatScreen(
-                                userId: userId.value,
+                                userId: userId?.id ?? '',
                                 receiverId: u.id,
+                                chatController: chatController,
                               ),
                             );
                           },
                         ),
-
-                        // Edit/Delete Actions
-                        // Positioned(
-                        //   right: 26,
-                        //   bottom: 8,
-                        //   child: Row(
-                        //     children: [
-                        //       if (accessController.can(
-                        //         AccessModule.employee,
-                        //         AccessAction.update,
-                        //       ))
-                        //         CrmIc(
-                        //           iconPath: ICRes.edit,
-                        //           color: ColorRes.success,
-                        //           onTap: () {
-                        //             // Get.to(() => AddChatUserScreen(
-                        //             //       employeeData: user,
-                        //             //       isFromEdit: true,
-                        //             //     ));
-                        //           },
-                        //         ),
-                        //       if (accessController.can(
-                        //         AccessModule.employee,
-                        //         AccessAction.delete,
-                        //       ))
-                        //         Padding(
-                        //           padding: const EdgeInsets.only(left: 16),
-                        //           child: CrmIc(
-                        //             iconPath: ICRes.delete,
-                        //             color: ColorRes.error,
-                        //             onTap: () {
-                        //               _deleteUser(
-                        //                 user.id ?? '',
-                        //                 user.username ?? 'Employee',
-                        //               );
-                        //             },
-                        //           ),
-                        //         ),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     );
                   },

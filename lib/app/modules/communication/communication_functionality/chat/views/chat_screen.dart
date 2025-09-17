@@ -12,11 +12,13 @@ import '../controllers/chat_controller.dart';
 class ChatScreen extends StatefulWidget {
   final String userId;
   final String receiverId;
+  final ChatController chatController;
 
   const ChatScreen({
     Key? key,
     required this.userId,
     required this.receiverId,
+    required this.chatController,
   }) : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final ChatController controller = Get.put(ChatController());
+  // final ChatController widget.chatController = Get.put(ChatController());
   final TextEditingController messageController = TextEditingController();
   final _scrollController = ScrollController();
   Rxn<File> selectedFile = Rxn<File>();
@@ -36,17 +38,18 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _initChat() {
-    controller.connect(
+    widget.chatController.connect(
       'https://api.raiser.in',
-      query: {'userId': widget.userId}
+      query: {'userId': widget.userId},
+      userId: widget.userId,
     );
-    controller.initChat(widget.userId, widget.receiverId);
+    // widget.chatController.initChat(widget.userId, widget.receiverId);
   }
 
   @override
   void dispose() {
-    controller.messages.clear();
-    controller.disconnect();
+    widget.chatController.messages.clear();
+    widget.chatController.disconnect();
     messageController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -103,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
           data: base64Encode(bytes),
         );
 
-        controller.sendFileChat(chatFile);
+        widget.chatController.sendFileChat(chatFile);
         selectedFile.value = null;
       }
 
@@ -118,7 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
           timestamp: DateTime.now(),
         );
 
-        controller.sendMessage(msg);
+        widget.chatController.sendMessage(msg);
         messageController.clear();
       }
     } catch (e) {
@@ -136,21 +139,26 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: const Text('Chat'),
         actions: [
-          Obx(() => Container(
-            margin: const EdgeInsets.only(right: 8),
-            child: Icon(
-              Icons.circle,
-              size: 12,
-              color: controller.isConnected.value ? Colors.green : Colors.red,
+          Obx(
+            () => Container(
+              margin: const EdgeInsets.only(right: 8),
+              child: Icon(
+                Icons.circle,
+                size: 12,
+                color:
+                    widget.chatController.isConnected.value
+                        ? Colors.green
+                        : Colors.red,
+              ),
             ),
-          ))
+          ),
         ],
       ),
       body: Column(
         children: [
           // Error banner
           Obx(() {
-            final error = controller.connectionError.value;
+            final error = widget.chatController.connectionError.value;
             if (error.isEmpty) return const SizedBox.shrink();
 
             return Container(
@@ -160,39 +168,222 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   const Icon(Icons.error_outline, color: Colors.red),
                   const SizedBox(width: 8),
-                  Expanded(child: Text(error, style: const TextStyle(color: Colors.red))),
+                  Expanded(
+                    child: Text(
+                      error,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
                   IconButton(
                     icon: const Icon(Icons.refresh),
                     onPressed: _initChat,
-                  )
+                  ),
                 ],
               ),
             );
           }),
 
           // Messages
+          // Expanded(
+          //   child: Obx(() {
+          //     if (widget.chatController.isLoading.value) {
+          //       return const Center(child: CrmLoadingCircle());
+          //     }
+          //     final chatMessages =
+          //         widget.chatController.messages
+          //             .where(
+          //               (m) =>
+          //                   (m.senderId == widget.userId &&
+          //                       m.receiverId == widget.receiverId) ||
+          //                   (m.senderId == widget.receiverId &&
+          //                       m.receiverId == widget.userId),
+          //             )
+          //             .toList();
+          //
+          //     return ListView.builder(
+          //       controller: _scrollController,
+          //       reverse: true,
+          //       padding: const EdgeInsets.all(10),
+          //       itemCount: chatMessages.length,
+          //       itemBuilder: (context, index) {
+          //         final message = chatMessages[index];
+          //         final isMe = message.senderId == widget.userId;
+          //
+          //         return Align(
+          //           alignment:
+          //               isMe ? Alignment.centerRight : Alignment.centerLeft,
+          //           child: Container(
+          //             constraints: BoxConstraints(
+          //               maxWidth: MediaQuery.of(context).size.width * 0.75,
+          //             ),
+          //             padding: const EdgeInsets.symmetric(
+          //               vertical: 8,
+          //               horizontal: 12,
+          //             ),
+          //             margin: const EdgeInsets.symmetric(vertical: 4),
+          //             decoration: BoxDecoration(
+          //               color: isMe ? Colors.blue : Colors.grey[300],
+          //               borderRadius: BorderRadius.circular(12),
+          //             ),
+          //             child: Column(
+          //               crossAxisAlignment:
+          //                   isMe
+          //                       ? CrossAxisAlignment.end
+          //                       : CrossAxisAlignment.start,
+          //               children: [
+          //                 Text(
+          //                   message.message,
+          //                   style: TextStyle(
+          //                     color: isMe ? Colors.white : Colors.black87,
+          //                   ),
+          //                 ),
+          //                 const SizedBox(height: 4),
+          //                 Row(
+          //                   mainAxisSize: MainAxisSize.min,
+          //                   children: [
+          //                     Text(
+          //                       _formatTime(message.timestamp),
+          //                       style: TextStyle(
+          //                         fontSize: 10,
+          //                         color: isMe ? Colors.white70 : Colors.black45,
+          //                       ),
+          //                     ),
+          //                     if (isMe) ...[
+          //                       const SizedBox(width: 4),
+          //                       Icon(
+          //                         message.status == MessageStatus.read
+          //                             ? Icons.done_all
+          //                             : Icons.done,
+          //                         size: 12,
+          //                         color:
+          //                             message.status == MessageStatus.read
+          //                                 ? Colors.blue[100]
+          //                                 : Colors.white70,
+          //                       ),
+          //                     ],
+          //                   ],
+          //                 ),
+          //               ],
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //     );
+          //   }),
+          // ),
+          // Expanded(
+          //   child: Obx(() {
+          //     if (widget.chatController.isLoading.value) {
+          //       return const Center(child: CrmLoadingCircle());
+          //     }
+          //
+          //     // Filter chat messages between the two users
+          //     final chatMessages =
+          //         widget.chatController.messages
+          //             .where(
+          //               (m) =>
+          //                   (m.senderId == widget.userId &&
+          //                       m.receiverId == widget.receiverId) ||
+          //                   (m.senderId == widget.receiverId &&
+          //                       m.receiverId == widget.userId),
+          //             )
+          //             .toList();
+          //
+          //     return ListView.builder(
+          //       controller: _scrollController,
+          //       reverse: true,
+          //       padding: const EdgeInsets.all(10),
+          //       itemCount: chatMessages.length,
+          //       itemBuilder: (context, index) {
+          //         final message = chatMessages[index];
+          //         final isMe = message.senderId == widget.userId;
+          //
+          //         return Align(
+          //           alignment:
+          //               isMe ? Alignment.centerRight : Alignment.centerLeft,
+          //           child: Container(
+          //             constraints: BoxConstraints(
+          //               maxWidth: MediaQuery.of(context).size.width * 0.75,
+          //             ),
+          //             padding: const EdgeInsets.symmetric(
+          //               vertical: 8,
+          //               horizontal: 12,
+          //             ),
+          //             margin: const EdgeInsets.symmetric(vertical: 4),
+          //             decoration: BoxDecoration(
+          //               color: isMe ? Colors.blue : Colors.grey[300],
+          //               borderRadius: BorderRadius.circular(12),
+          //             ),
+          //             child: Column(
+          //               crossAxisAlignment:
+          //                   isMe
+          //                       ? CrossAxisAlignment.end
+          //                       : CrossAxisAlignment.start,
+          //               children: [
+          //                 // Message text
+          //                 Text(
+          //                   message.message,
+          //                   style: TextStyle(
+          //                     color: isMe ? Colors.white : Colors.black87,
+          //                   ),
+          //                 ),
+          //                 const SizedBox(height: 4),
+          //
+          //                 // Timestamp + status
+          //                 Row(
+          //                   mainAxisSize: MainAxisSize.min,
+          //                   children: [
+          //                     Text(
+          //                       _formatTime(message.timestamp),
+          //                       style: TextStyle(
+          //                         fontSize: 10,
+          //                         color: isMe ? Colors.white70 : Colors.black45,
+          //                       ),
+          //                     ),
+          //                     if (isMe) ...[
+          //                       const SizedBox(width: 4),
+          //                       Icon(
+          //                         message.status == MessageStatus.read
+          //                             ? Icons.done_all
+          //                             : Icons.done,
+          //                         size: 12,
+          //                         color:
+          //                             message.status == MessageStatus.read
+          //                                 ? Colors.blue[100]
+          //                                 : Colors.white70,
+          //                       ),
+          //                     ],
+          //                   ],
+          //                 ),
+          //               ],
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //     );
+          //   }),
+          // ),
           Expanded(
             child: Obx(() {
-              if (controller.isLoading.value) {
+              if (widget.chatController.isLoading.value) {
                 return const Center(child: CrmLoadingCircle());
               }
 
-              final chatMessages = controller.messages
-                  .where((m) =>
-                    (m.senderId == widget.userId && m.receiverId == widget.receiverId) ||
-                    (m.senderId == widget.receiverId && m.receiverId == widget.userId))
-                  .toList();
+              // Filter messages between current user and receiver
+              final chatMessages =
+                  widget.chatController.messages
+                      .where(
+                        (m) =>
+                            (m.senderId == widget.userId &&
+                                m.receiverId == widget.receiverId) ||
+                            (m.senderId == widget.receiverId &&
+                                m.receiverId == widget.userId),
+                      )
+                      .toList();
 
-              // if (chatMessages.isEmpty) {
-              //   return Center(
-              //     child: Text(
-              //       'No messages yet',
-              //       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              //         color: Colors.grey,
-              //       ),
-              //     ),
-              //   );
-              // }
+              print(
+                'Chat Messages: ${widget.chatController.messages[0].toJson()}',
+              );
 
               return ListView.builder(
                 controller: _scrollController,
@@ -204,7 +395,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   final isMe = message.senderId == widget.userId;
 
                   return Align(
-                    alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment:
+                        isMe ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
                       constraints: BoxConstraints(
                         maxWidth: MediaQuery.of(context).size.width * 0.75,
@@ -220,7 +412,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       child: Column(
                         crossAxisAlignment:
-                        isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                            isMe
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
                         children: [
                           Text(
                             message.message,
@@ -246,11 +440,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                       ? Icons.done_all
                                       : Icons.done,
                                   size: 12,
-                                  color: message.status == MessageStatus.read
-                                      ? Colors.blue[100]
-                                      : Colors.white70,
-                                )
-                              ]
+                                  color:
+                                      message.status == MessageStatus.read
+                                          ? Colors.blue[100]
+                                          : Colors.white70,
+                                ),
+                              ],
                             ],
                           ),
                         ],
@@ -264,10 +459,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
           // Typing indicator
           Obx(() {
-            final typingEvents = controller.events.where((e) =>
-                e.type == 'typing' &&
-                e.data['senderId'] == widget.receiverId &&
-                e.data['receiverId'] == widget.userId);
+            final typingEvents = widget.chatController.events.where(
+              (e) =>
+                  e.type == 'typing' &&
+                  e.data['senderId'] == widget.receiverId &&
+                  e.data['receiverId'] == widget.userId,
+            );
 
             if (typingEvents.isEmpty) return const SizedBox.shrink();
 
@@ -294,7 +491,8 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Column(
                 children: [
                   Obx(() {
-                    if (selectedFile.value == null) return const SizedBox.shrink();
+                    if (selectedFile.value == null)
+                      return const SizedBox.shrink();
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Row(
@@ -335,7 +533,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                           ),
                           onChanged: (text) {
-                            controller.sendTyping(
+                            widget.chatController.sendTyping(
                               TypingEvent(
                                 isTyping: text.isNotEmpty,
                                 senderId: widget.userId,
