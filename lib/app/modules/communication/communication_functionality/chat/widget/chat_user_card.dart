@@ -7,12 +7,14 @@ import '../../../../../care/constants/size_manager.dart';
 import '../../../../../data/network/super_admin/auth/model/user_model.dart';
 import '../../../../../data/network/user/all_users/model/all_users_model.dart';
 import '../../../../role/controllers/role_controller.dart';
+import '../controllers/chat_controller.dart';
 
 class ChatUserCard extends StatelessWidget {
   final User user;
   final Function(User)? onTap;
+  final ChatController chatController;
 
-  const ChatUserCard({super.key, required this.user, this.onTap});
+  const ChatUserCard({super.key, required this.user, this.onTap, required this.chatController});
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +57,15 @@ class ChatUserCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        user.username ?? 'No Name',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                      Flexible(
+                        child: Text(
+                          user.username ?? 'No Name',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(width: 4),
                       Obx(() {
@@ -95,11 +99,26 @@ class ChatUserCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 4),
-                  if (user.email != null && user.email!.isNotEmpty)
-                    Text(
-                      user.email!,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
+                  Obx(() {
+                    final isTyping =
+                        chatController.typingStatus[user.id] ??
+                            false;
+                    if (!isTyping) return const SizedBox.shrink();
+                    return Text(
+                      'typing...',
+                      style: TextStyle(
+                        color: ColorRes.grey,
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    );
+                  }),
+                  // if (user.email != null && user.email!.isNotEmpty)
+                  //   Text(
+                  //     user.email!,
+                  //     style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  //   ),
+
 
                   // if (user.createdBy != null && user.createdBy!.isNotEmpty)
                   //   Text(

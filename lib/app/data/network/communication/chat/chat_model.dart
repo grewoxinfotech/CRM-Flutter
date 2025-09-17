@@ -970,7 +970,7 @@ class ChatEvent {
       case ChatEventType.uploadChatFiles:
         return ChatEvent(
           type: eventType,
-          data: UploadChatFiles.fromJson(payload),
+          data: UploadChatFilesRequest.fromJson(payload),
         );
       default:
         return ChatEvent(type: eventType, data: payload);
@@ -1026,6 +1026,29 @@ class ChatMessage {
     "delivered_at": deliveredAt?.toIso8601String(),
     "read_at": readAt?.toIso8601String(),
   };
+
+  ChatMessage copyWith({
+    String? id,
+    String? senderId,
+    String? receiverId,
+    String? message,
+    DateTime? timestamp,
+    MessageStatus? status,
+    DateTime? deliveredAt,
+    DateTime? readAt,
+  }) {
+    return ChatMessage(
+      id: id ?? this.id,
+      senderId: senderId ?? this.senderId,
+      receiverId: receiverId ?? this.receiverId,
+      message: message ?? this.message,
+      timestamp: timestamp ?? this.timestamp,
+      status: status ?? this.status,
+      deliveredAt: deliveredAt ?? this.deliveredAt,
+      readAt: readAt ?? this.readAt,
+    );
+  }
+
 }
 
 /// -------------------------
@@ -1078,29 +1101,93 @@ class ReadReceipt {
 /// -------------------------
 /// File upload event
 /// -------------------------
-class UploadChatFiles {
+// class UploadChatFiles {
+//   final List<ChatFile> files;
+//   final String senderId;
+//   final String receiverId;
+//   final String message; // optional caption
+//
+//   UploadChatFiles({
+//     required this.files,
+//     required this.senderId,
+//     required this.receiverId,
+//     required this.message,
+//   });
+//
+//   factory UploadChatFiles.fromJson(Map<String, dynamic> json) =>
+//       UploadChatFiles(
+//         files:
+//             (json['files'] as List? ?? [])
+//                 .map((f) => ChatFile.fromJson(f))
+//                 .toList(),
+//         senderId: json['sender_id'] ?? json['senderId'] ?? '',
+//         receiverId: json['receiver_id'] ?? json['receiverId'] ?? '',
+//         message: json['message'] ?? '',
+//       );
+//
+//   Map<String, dynamic> toJson() => {
+//     "files": files.map((f) => f.toJson()).toList(),
+//     "sender_id": senderId,
+//     "receiver_id": receiverId,
+//     "message": message,
+//   };
+// }
+//
+// class ChatFile {
+//   final String name;
+//   final String type;
+//   final int size;
+//   final String? data; // base64 string
+//   final Map<String, dynamic>? fileMeta; // optional metadata
+//
+//   ChatFile({
+//     required this.name,
+//     required this.type,
+//     required this.size,
+//     this.data,
+//     this.fileMeta,
+//   });
+//
+//   factory ChatFile.fromJson(Map<String, dynamic> json) => ChatFile(
+//     name: json['name'] ?? '',
+//     type: json['type'] ?? '',
+//     size: json['size'] ?? 0,
+//     data: json['data'],
+//     fileMeta: json['file'],
+//   );
+//
+//   Map<String, dynamic> toJson() => {
+//     "name": name,
+//     "type": type,
+//     "size": size,
+//     "data": data,
+//     "file": fileMeta,
+//   };
+// }
+
+class UploadChatFilesRequest {
   final List<ChatFile> files;
   final String senderId;
   final String receiverId;
-  final String message; // optional caption
+  final String message;
 
-  UploadChatFiles({
+  UploadChatFilesRequest({
     required this.files,
     required this.senderId,
     required this.receiverId,
     required this.message,
   });
 
-  factory UploadChatFiles.fromJson(Map<String, dynamic> json) =>
-      UploadChatFiles(
-        files:
-            (json['files'] as List? ?? [])
-                .map((f) => ChatFile.fromJson(f))
-                .toList(),
-        senderId: json['sender_id'] ?? json['senderId'] ?? '',
-        receiverId: json['receiver_id'] ?? json['receiverId'] ?? '',
-        message: json['message'] ?? '',
-      );
+  factory UploadChatFilesRequest.fromJson(Map<String, dynamic> json) {
+    return UploadChatFilesRequest(
+      files: (json['files'] as List)
+          .map((e) => ChatFile.fromJson(e))
+          .toList(),
+      senderId: json['sender_id'],
+      receiverId: json['receiver_id'],
+      message: json['message'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "files": files.map((f) => f.toJson()).toList(),
@@ -1111,33 +1198,57 @@ class UploadChatFiles {
 }
 
 class ChatFile {
+  final FileMeta file;
   final String name;
   final String type;
   final int size;
-  final String? data; // base64 string
-  final Map<String, dynamic>? fileMeta; // optional metadata
+  final String? data; // optional because sometimes backend might not send full data
 
   ChatFile({
+    required this.file,
     required this.name,
     required this.type,
     required this.size,
     this.data,
-    this.fileMeta,
   });
 
-  factory ChatFile.fromJson(Map<String, dynamic> json) => ChatFile(
-    name: json['name'] ?? '',
-    type: json['type'] ?? '',
-    size: json['size'] ?? 0,
-    data: json['data'],
-    fileMeta: json['file'],
-  );
+  factory ChatFile.fromJson(Map<String, dynamic> json) {
+    return ChatFile(
+      file: FileMeta.fromJson(json['file']),
+      name: json['name'],
+      type: json['type'],
+      size: json['size'],
+      data: json['data'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
+    "file": file.toJson(),
     "name": name,
     "type": type,
     "size": size,
-    "data": data,
-    "file": fileMeta,
+    if (data != null) "data": data,
+  };
+}
+
+class FileMeta {
+  final bool placeholder;
+  final int num;
+
+  FileMeta({
+    required this.placeholder,
+    required this.num,
+  });
+
+  factory FileMeta.fromJson(Map<String, dynamic> json) {
+    return FileMeta(
+      placeholder: json['_placeholder'],
+      num: json['num'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    "_placeholder": placeholder,
+    "num": num,
   };
 }

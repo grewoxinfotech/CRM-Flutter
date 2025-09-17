@@ -247,6 +247,7 @@ class SocketService {
       _socket!.onConnect((_) {
         _socket!.emit('user_connected', userId);
         _socket!.emit('get_conversations', {'userId': userId});
+        _safeAdd(SocketEvent('connect', null));
         print('✅ Connected with ID: ${_socket?.id}');
         // _safeAdd(SocketEvent('connect', null));
 
@@ -306,10 +307,17 @@ class SocketService {
   }
 
   /// Send file in chat
-  void sendFileChat(ChatFile data) {
+  void sendFileChat(UploadChatFilesRequest data) {
     if (isConnected) {
       _socket?.emit('upload_chat_files', data);
       print('📤 Sent file chat: ${data.toJson()}');
+    }
+  }
+
+  void markMessagesRead(ReadReceipt receipt) {
+    if (isConnected) {
+      _socket?.emit('mark_messages_read', receipt.toJson());
+      print('📤 Marked messages read in conversation: ${receipt.toJson()}');
     }
   }
 

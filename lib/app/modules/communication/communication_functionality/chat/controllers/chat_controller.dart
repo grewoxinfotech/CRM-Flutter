@@ -338,6 +338,9 @@ class ChatController extends GetxController {
   var connectionError = RxString('');
   RxString currentUserId = ''.obs;
   RxString receiverId = ''.obs;
+  var typingStatus = <String, bool>{}.obs;
+
+
 
   @override
   void onInit() {
@@ -419,7 +422,7 @@ class ChatController extends GetxController {
             break;
 
           case 'user_typing':
-            // Optional: implement typing UI
+            handleTypingEvent(event.data);
             break;
 
           default:
@@ -433,87 +436,69 @@ class ChatController extends GetxController {
     );
   }
 
-  // void initChat(String userId, String toUserId) {
-  //   currentUserId.value = userId;
-  //   receiverId.value = toUserId;
-  //   _initializeChat();
-  // }
+  void handleTypingEvent(Map<String, dynamic> data) {
+    final userId = data['userId'];
+    final isTyping = data['isTyping'] ?? false;
+    typingStatus[userId] = isTyping;
+  }
 
-  // void _initializeChat() {
-  //   // Get all conversations
-  //   getConversations(currentUserId.value);
-  // }
 
-  // void _processIncomingMessage(dynamic data) {
-  //   try {
-  //     final msg = ChatMessage.fromJson(
-  //       data is String ? jsonDecode(data) : data,
-  //     );
-  //     if (!messages.any((m) => m.id == msg.id)) {
-  //       messages.insert(0, msg);
-  //       messages.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-  //
-  //       if (msg.receiverId == currentUserId.value) {
-  //         _markMessageAsRead(msg);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     print('❌ Error processing incoming message: $e');
-  //   }
-  // }
 
   Future<void> _processIncomingMessage(dynamic data) async {
     try {
-      final user = await SecureStorage.getUserData();
-      // Extract nested 'message' if present
+
       final messageData = data is String ? jsonDecode(data) : data;
-      // print('📱 Processing incoming message: $messageData');
-      final recipientId = messageData['user_id'];
       final msgJson = messageData['message'] ?? messageData;
-      msgJson['receiver_id'] = user?.id;
       final msg = ChatMessage.fromJson(msgJson);
 
       if (!messages.any((m) => m.id == msg.id)) {
         messages.insert(0, msg);
-        // messages.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-
-        if (msg.receiverId == currentUserId.value) {
-          _markMessageAsRead(msg);
-        }
+        // if (msg.receiverId == currentUserId.value) {
+        //   _markMessageAsRead(msg);
+        // }
       }
     } catch (e) {
       print('❌ Error processing incoming message: $e');
     }
   }
 
-  void _markMessageAsRead(ChatMessage msg) {
+  // void _markMessageAsRead(ChatMessage msg) {
+  //   try {
+  //     final readReceipt = ReadReceipt(
+  //       senderId: currentUserId.value,
+  //       receiverId: msg.senderId,
+  //     );
+  //     // Optional: send read receipt to server
+  //     // _socketService.emit('mark_messages_read', readReceipt.toJson());
+  //   } catch (e) {
+  //     print('❌ Error marking message as read: $e');
+  //   }
+  // }
+
+  void markMessageAsRead(String senderId, String receiverId) {
     try {
-      final readReceipt = ReadReceipt(
-        senderId: currentUserId.value,
-        receiverId: msg.senderId,
+      // if (msg.status == MessageStatus.read) return; // Already marked
+
+      final receipt = ReadReceipt(
+        senderId: senderId,
+        receiverId: receiverId,
       );
-      // Optional: send read receipt to server
-      // _socketService.emit('mark_messages_read', readReceipt.toJson());
+
+      _socketService.markMessagesRead(receipt);
+
+      // // Optimistically update status
+      // final index = messages.indexWhere((m) => m.id == msg.id);
+      // if (index != -1) {
+      //   final updated = messages[index].copyWith(status: MessageStatus.read);
+      //   messages[index] = updated;
+      //   messages.refresh();
+      // }
     } catch (e) {
       print('❌ Error marking message as read: $e');
     }
   }
 
-  // void _processConversations(Map<String, dynamic> data) {
-  //   messages.clear();
-  //   data.forEach((receiverId, msgs) {
-  //     if (msgs is List) {
-  //       for (var m in msgs) {
-  //         m['receiver_id'] = receiverId;
-  //         final msg = ChatMessage.fromJson(m);
-  //         if (!messages.any((element) => element.id == msg.id)) {
-  //           messages.add(msg);
-  //         }
-  //       }
-  //     }
-  //   });
-  //   messages.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-  // }
+
 
   Future<void> _handleConversationsReceived(Map<String, dynamic> data) async {
     isLoading.value = true;
@@ -524,7 +509,7 @@ class ChatController extends GetxController {
         // print('📱 Processing conversations: $msgs');
         // print('📱 Receiver ID: $receiverId');
         for (var msgJson in msgs) {
-          msgJson['receiver_id'] = user?.id;
+          // msgJson['receiver_id'] = user?.id;
           final msg = ChatMessage.fromJson(msgJson);
           // print('📱 Message: ${msg.toJson()}');
           // Only add if message doesn't already exist
@@ -553,7 +538,7 @@ class ChatController extends GetxController {
     // _processIncomingMessage(msg); // optimistic update
   }
 
-  void sendFileChat(ChatFile file) => _socketService.sendFileChat(file);
+  void sendFileChat(UploadChatFilesRequest file) => _socketService.sendFileChat(file);
 
   void getConversations(String userId) =>
       _socketService.getConversations(userId);
