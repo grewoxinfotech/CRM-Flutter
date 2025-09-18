@@ -1,8 +1,3 @@
-
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:crm_flutter/app/care/constants/color_res.dart';
-import 'package:crm_flutter/app/care/constants/ic_res.dart';
-import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 import 'package:crm_flutter/app/modules/access/controller/access_controller.dart';
 import 'package:crm_flutter/app/modules/communication/communication_functionality/chat/views/chat_screen.dart';
@@ -13,13 +8,9 @@ import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../../widgets/common/dialogs/crm_delete_dialog.dart';
-import '../../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../controllers/chat_controller.dart';
 
 class ChatUserScreen extends StatefulWidget {
-
   ChatUserScreen({Key? key}) : super(key: key);
 
   @override
@@ -27,13 +18,12 @@ class ChatUserScreen extends StatefulWidget {
 }
 
 class _ChatUserScreenState extends State<ChatUserScreen> {
-  // Get.lazyPut<ChatController>(() => ChatController());
-  final ChatController chatController = Get.put(ChatController());
+  final ChatController chatController = Get.find();
   final RxString userId = ''.obs;
 
   @override
   void initState() {
-   _initChat();
+    // _initChat();
     super.initState();
   }
 
@@ -67,8 +57,6 @@ class _ChatUserScreenState extends State<ChatUserScreen> {
       controller.users.removeWhere((u) => u.id == userId.value);
     });
 
-
-
     return Scaffold(
       appBar: AppBar(title: const Text("Employees")),
       body: FutureBuilder(
@@ -100,8 +88,6 @@ class _ChatUserScreenState extends State<ChatUserScreen> {
                 return const Center(child: CrmLoadingCircle());
               }
 
-              // Filter users by clientId == logged-in userId
-
               final users =
                   controller.users
                       .where(
@@ -123,6 +109,12 @@ class _ChatUserScreenState extends State<ChatUserScreen> {
                           user: user,
                           onTap: (u) async {
                             final userId = await SecureStorage.getUserData();
+                            chatController.markMessageAsRead(
+                              u.id,
+                              userId?.id ?? '',
+                            );
+                            chatController.unreadCount[u.id] = 0;
+
                             print("userId: ${userId?.id}, receiverId: ${u.id}");
                             Get.to(
                               () => ChatScreen(

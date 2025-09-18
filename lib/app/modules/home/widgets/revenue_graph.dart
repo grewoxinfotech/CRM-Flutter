@@ -886,12 +886,10 @@
 //   }
 // }
 
-
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 
 import '../../../care/constants/color_res.dart';
 import '../../../care/constants/size_manager.dart';
@@ -954,11 +952,13 @@ class _RevenueChartState extends State<RevenueChart> {
 
   @override
   Widget build(BuildContext context) {
-    List<RevenueData> filteredData = widget.revenueData.where((e) {
-      final date = DateTime.tryParse(e.date!) ?? DateTime.now();
-      return date.year == (selectedMonthYear?.year ?? DateTime.now().year) &&
-          date.month == (selectedMonthYear?.month ?? DateTime.now().month);
-    }).toList();
+    List<RevenueData> filteredData =
+        widget.revenueData.where((e) {
+          final date = DateTime.tryParse(e.date!) ?? DateTime.now();
+          return date.year ==
+                  (selectedMonthYear?.year ?? DateTime.now().year) &&
+              date.month == (selectedMonthYear?.month ?? DateTime.now().month);
+        }).toList();
 
     List<FlSpot> spots = [];
     List<String> dates = [];
@@ -1007,12 +1007,13 @@ class _RevenueChartState extends State<RevenueChart> {
                 Expanded(
                   child: CrmDropdownField<DateTime>(
                     value: selectedMonthYear,
-                    items: monthYearList.map((month) {
-                      return DropdownMenuItem(
-                        value: month,
-                        child: Text(DateFormat("MMM yyyy").format(month)),
-                      );
-                    }).toList(),
+                    items:
+                        monthYearList.map((month) {
+                          return DropdownMenuItem(
+                            value: month,
+                            child: Text(DateFormat("MMM yyyy").format(month)),
+                          );
+                        }).toList(),
                     onChanged: (month) {
                       setState(() {
                         selectedMonthYear = month;
@@ -1025,91 +1026,132 @@ class _RevenueChartState extends State<RevenueChart> {
             const SizedBox(height: 12),
             SizedBox(
               height: 300,
-              child: filteredData.isEmpty
-                  ? const Center(child: Text("No revenue data for this month"))
-                  : LineChart(
-                LineChartData(
-                  lineTouchData: LineTouchData(
-                    enabled: true,
-                    touchTooltipData: LineTouchTooltipData(
-                      getTooltipItems: (spots) {
-                        return spots.map((spot) {
-                          final index = spot.x.toInt();
-                          final date = dates[index];
-                          final yValue =
-                          useLog ? exp(spot.y) - 1 : spot.y;
-                          return LineTooltipItem(
-                            "$date\n₹ ${_formatNumber(yValue)}",
-                            const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+              child:
+                  filteredData.isEmpty
+                      ? const Center(
+                        child: Text("No revenue data for this month"),
+                      )
+                      : LineChart(
+                        LineChartData(
+                          lineTouchData: LineTouchData(
+                            enabled: true,
+                            touchTooltipData: LineTouchTooltipData(
+                              getTooltipItems: (spots) {
+                                return spots.map((spot) {
+                                  final index = spot.x.toInt();
+                                  final date = dates[index];
+                                  final yValue =
+                                      useLog ? exp(spot.y) - 1 : spot.y;
+                                  return LineTooltipItem(
+                                    "$date\n₹ ${_formatNumber(yValue)}",
+                                    const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                }).toList();
+                              },
                             ),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ),
-                  minY: 0,
-                  maxY: maxY,
-                  gridData: FlGridData(show: false),
-                  titlesData: FlTitlesData(
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        interval: maxY / 5,
-                        getTitlesWidget: (value, meta) {
-                          double realValue =
-                          useLog ? exp(value) - 1 : value;
-                          return Text(
-                            _formatNumber(realValue),
-                            style: const TextStyle(fontSize: 10),
-                          );
-                        },
-                      ),
-                    ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        interval: 1,
-                        getTitlesWidget: (value, meta) {
-                          int index = value.toInt();
-                          if (index >= 0 && index < dates.length) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                dates[index],
-                                style: const TextStyle(fontSize: 10),
+                          ),
+                          minY: 0,
+                          maxY: maxY,
+                          gridData: FlGridData(show: false),
+                          titlesData: FlTitlesData(
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 40,
+                                interval: maxY / 5,
+                                getTitlesWidget: (value, meta) {
+                                  double realValue =
+                                      useLog ? exp(value) - 1 : value;
+                                  return Text(
+                                    _formatNumber(realValue),
+                                    style: const TextStyle(fontSize: 10),
+                                  );
+                                },
                               ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
+                            ),
+                            // bottomTitles: AxisTitles(
+                            //   sideTitles: SideTitles(
+                            //     showTitles: true,
+                            //     interval: 1,
+                            //     getTitlesWidget: (value, meta) {
+                            //       int index = value.toInt();
+                            //       if (index >= 0 && index < dates.length) {
+                            //         return Padding(
+                            //           padding: const EdgeInsets.only(top: 8.0),
+                            //           child: Text(
+                            //             dates[index],
+                            //             style: const TextStyle(fontSize: 10),
+                            //           ),
+                            //         );
+                            //       }
+                            //       return const SizedBox.shrink();
+                            //     },
+                            //   ),
+                            // ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                interval: 1, // keep interval 1 to use indices
+                                getTitlesWidget: (value, meta) {
+                                  int index = value.toInt();
+                                  int total = dates.length;
+
+                                  if (total == 0)
+                                    return const SizedBox.shrink();
+
+                                  // Get first, middle1, middle2, last indices
+                                  int first = 0;
+                                  int last = total - 1;
+                                  int middle1 = (total / 3).floor();
+                                  int middle2 = (2 * total / 3).floor();
+
+                                  List<int> labelIndices = [
+                                    first,
+                                    middle1,
+                                    middle2,
+                                    last,
+                                  ];
+
+                                  if (labelIndices.contains(index)) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        dates[index],
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    );
+                                  }
+
+                                  return const SizedBox.shrink(); // hide other labels
+                                },
+                              ),
+                            ),
+                          ),
+                          borderData: FlBorderData(show: false),
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: spots,
+                              isCurved: true,
+                              color: Colors.blue,
+                              barWidth: 3,
+                              belowBarData: BarAreaData(
+                                show: true,
+                                color: ColorRes.primary.withOpacity(0.1),
+                              ),
+                              dotData: FlDotData(show: false),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  borderData: FlBorderData(show: false),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: spots,
-                      isCurved: true,
-                      color: Colors.blue,
-                      barWidth: 3,
-                      belowBarData: BarAreaData(
-                        show: true,
-                        color: ColorRes.primary.withOpacity(0.1),
-                      ),
-                      dotData: FlDotData(show: false),
-                    ),
-                  ],
-                ),
-              ),
             ),
           ],
         ),

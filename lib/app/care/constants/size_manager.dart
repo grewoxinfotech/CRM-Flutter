@@ -27,6 +27,7 @@ class AppSpacing {
   static const SizedBox horizontalMedium = SizedBox(width: 16);
   static const SizedBox horizontalLarge = SizedBox(width: 24);
 
+  static const double xSmall = 4.0;
   static const double small = 8.0;
   static const double medium = 16.0;
   static const double large = 24.0;

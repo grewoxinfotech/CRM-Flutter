@@ -1,5 +1,6 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter/material.dart';import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CrmSnackBar {
   static void showAwesomeSnackbar({
@@ -10,8 +11,10 @@ class CrmSnackBar {
   }) {
     final snackBar = SnackBar(
       elevation: 0,
-      behavior: SnackBarBehavior.floating,
+      behavior: SnackBarBehavior.fixed,
       backgroundColor: Colors.transparent,
+
+      // clipBehavior: Clip.hardEdge,
       content: AwesomeSnackbarContent(
         title: title,
         message: message,

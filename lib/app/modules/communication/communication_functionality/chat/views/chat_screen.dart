@@ -41,8 +41,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    widget.chatController.markMessageAsRead(widget.userId,widget.receiverId);
-    // _initChat();
   }
 
   void _initChat() {
@@ -51,13 +49,10 @@ class _ChatScreenState extends State<ChatScreen> {
       query: {'userId': widget.userId},
       userId: widget.userId,
     );
-    // widget.chatController.initChat(widget.userId, widget.receiverId);
   }
 
   @override
   void dispose() {
-    // widget.chatController.messages.clear();
-    // widget.chatController.disconnect();
     messageController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -93,56 +88,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // void sendMessage() {
-  //   final messageText = messageController.text.trim();
-  //   final file = selectedFile.value;
-  //
-  //   if (messageText.isEmpty && file == null) return;
-  //
-  //   try {
-  //     // Handle file upload first if present
-  //     if (file != null) {
-  //       final name = file.path.split('/').last;
-  //       final extension = name.contains('.') ? name.split('.').last : 'unknown';
-  //       final type = "image/$extension"; // or use lookupMimeType() for accuracy
-  //       final size = await file.length();
-  //       final bytes = await file.readAsBytes();
-  //
-  //       final chatFile = UploadChatFilesRequest(
-  //         file: FileMeta(placeholder: true, num: 0), // required field
-  //         name: name,
-  //         type: type,
-  //         size: size,
-  //         data: base64Encode(bytes),
-  //       );
-  //
-  //       widget.chatController.sendFileChat(chatFile);
-  //       selectedFile.value = null;
-  //     }
-  //
-  //     // Send text message if present
-  //     if (messageText.isNotEmpty) {
-  //       final msg = ChatMessage(
-  //         id: DateTime.now().millisecondsSinceEpoch.toString(),
-  //         receiverId: widget.receiverId,
-  //         status: MessageStatus.sent,
-  //         senderId: widget.userId,
-  //         message: messageText,
-  //         timestamp: DateTime.now(),
-  //       );
-  //
-  //       widget.chatController.sendMessage(msg);
-  //       messageController.clear();
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar(
-  //       'Error',
-  //       'Failed to send message: $e',
-  //       snackPosition: SnackPosition.BOTTOM,
-  //     );
-  //   }
-  // }
-
   Future<void> sendMessage() async {
     final messageText = messageController.text.trim();
     final file = selectedFile.value;
@@ -167,7 +112,7 @@ class _ChatScreenState extends State<ChatScreen> {
         );
 
         final uploadRequest = UploadChatFilesRequest(
-          files: [chatFile],               // must be a list
+          files: [chatFile], // must be a list
           senderId: widget.userId,
           receiverId: widget.receiverId,
           message: messageText.isEmpty ? "" : messageText,
@@ -185,6 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
           status: MessageStatus.sent,
           senderId: widget.userId,
           message: messageText,
+          conversationId: widget.receiverId,
           timestamp: DateTime.now(),
         );
 
@@ -199,7 +145,6 @@ class _ChatScreenState extends State<ChatScreen> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -269,10 +214,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       style: const TextStyle(color: Colors.red),
                     ),
                   ),
-                  // IconButton(
-                  //   icon: const Icon(Icons.refresh),
-                  //   onPressed: _initChat,
-                  // ),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: _initChat,
+                  ),
                 ],
               ),
             );
@@ -286,12 +231,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
               final chatMessages =
                   widget.chatController.messages
-                      .where(
-                        (m) =>
-                            (m.senderId == widget.userId) ||
-                            (m.senderId == widget.receiverId),
-                      )
+                      .where((m) => m.conversationId == widget.receiverId)
                       .toList();
+
+              if (chatMessages.any(
+                (m) =>
+                    m.conversationId == widget.receiverId &&
+                    m.status != MessageStatus.read,
+              )) {
+                print("Marking message as read");
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  widget.chatController.markMessageAsRead(
+                    widget.receiverId,
+                    widget.userId,
+                  );
+                });
+              }
 
               return ListView.builder(
                 controller: _scrollController,
@@ -316,10 +271,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       decoration: BoxDecoration(
                         color: isMe ? Colors.blue : Colors.grey[300],
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
                           topLeft: Radius.circular(isMe ? 12 : 0),
                           topRight: Radius.circular(isMe ? 0 : 12),
-                        ),),
+                        ),
+                      ),
 
                       child: Column(
                         crossAxisAlignment:
@@ -347,14 +305,16 @@ class _ChatScreenState extends State<ChatScreen> {
                               if (isMe) ...[
                                 const SizedBox(width: 4),
                                 Icon(
-                                  message.status == MessageStatus.read
-                                      ? Icons.done_all
-                                      : Icons.done,
-                                  size: 12,
+                                  message.status == MessageStatus.sent
+                                      ? Icons.done
+                                      : Icons.done_all,
+                                  size: 14,
                                   color:
                                       message.status == MessageStatus.read
-                                          ? Colors.blue[100]
-                                          : Colors.white70,
+                                          ? Colors
+                                              .blue[300] // read → blue double tick
+                                          : Colors
+                                              .white70, // sent/delivered → grey/white
                                 ),
                               ],
                             ],
@@ -423,18 +383,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               vertical: 8,
                             ),
                           ),
-
-                          // onChanged: (text) {
-                          //   widget.chatController.sendTyping(
-                          //     TypingEvent(
-                          //       isTyping: text.isNotEmpty,
-                          //       senderId: widget.userId,
-                          //       receiverId: widget.receiverId,
-                          //     ),
-                          //   );
-                          // },
                           onChanged: (text) {
-
                             // If user started typing, notify once
                             if (text.isNotEmpty) {
                               widget.chatController.sendTyping(

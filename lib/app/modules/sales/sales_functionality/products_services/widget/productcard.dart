@@ -86,27 +86,6 @@ class ProductCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image or Placeholder
-            // ClipRRect(
-            //   borderRadius: BorderRadius.circular(8),
-            //   child:
-            //       product.image != null && product.image!.isNotEmpty
-            //           ? Image.network(
-            //             product.image!,
-            //             width: 60,
-            //             height: 60,
-            //             fit: BoxFit.cover,
-            //           )
-            //           : Container(
-            //             width: 60,
-            //             height: 60,
-            //             color: Colors.grey[300],
-            //             child: Icon(
-            //               Icons.image_not_supported,
-            //               color: Colors.grey[600],
-            //             ),
-            //           ),
-            // ),
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: _buildProductImage(product.image),
@@ -194,20 +173,6 @@ class ProductCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-
-                  // // Optional Category
-                  // if (product.category != null && product.category!.isNotEmpty)
-                  //   Padding(
-                  //     padding: const EdgeInsets.only(top: 6),
-                  //     child: Text(
-                  //       'Category: ${product.category}',
-                  //       style: TextStyle(
-                  //         fontSize: 13,
-                  //         color: Colors.grey[700],
-                  //         fontStyle: FontStyle.normal,
-                  //       ),
-                  //     ),
-                  //   ),
                 ],
               ),
             ),

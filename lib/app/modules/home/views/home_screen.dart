@@ -56,53 +56,60 @@ class HomeScreen extends StatelessWidget {
       aggregationData[status.statusName] = status.leadCount;
     }
 
-    List widgets = [
-      Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppPadding.medium * 2,
-          vertical: AppPadding.small,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Hi Evan, Welcome back!",
-              style: TextStyle(
-                fontSize: 14,
-                color: Get.theme.colorScheme.onSecondary,
-                fontWeight: FontWeight.w400,
-              ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.medium * 2,
+              vertical: AppPadding.small,
             ),
-            AppSpacing.verticalSmall,
-            Text(
-              "Dashboard",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w700,
-                color: Get.theme.colorScheme.onPrimary,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Hi Evan, Welcome back!",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Get.theme.colorScheme.onSecondary,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                AppSpacing.verticalSmall,
+                Text(
+                  "Dashboard",
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    color: Get.theme.colorScheme.onPrimary,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          SizedBox(height: AppSpacing.small),
+
+          AttendanceWidget(),
+          SizedBox(height: AppSpacing.small),
+
+          Obx(() {
+            if (revenueController.items.isEmpty) {
+              return Center(child: CrmLoadingCircle());
+            }
+            return RevenueChart(revenueData: revenueController.items);
+          }),
+          SizedBox(height: AppSpacing.small),
+
+          LeadsOverviewCard(),
+          SizedBox(height: AppSpacing.small),
+
+          DealsOverviewCard(),
+          SizedBox(height: AppSpacing.small),
+
+          SafeArea(child: MostSellingProductScreen()),
+        ],
       ),
-
-      AttendanceWidget(),
-
-      Obx(() {
-        if (revenueController.items.isEmpty) {
-          return Center(child: CrmLoadingCircle());
-        }
-        return RevenueChart(revenueData: revenueController.items);
-      }),
-      LeadsOverviewCard(),
-      DealsOverviewCard(),
-      SizedBox(height: AppSpacing.small),
-
-      MostSellingProductScreen(),
-    ];
-    return ViewScreen(
-      itemCount: widgets.length,
-      itemBuilder: (context, i) => widgets[i],
     );
   }
 }
