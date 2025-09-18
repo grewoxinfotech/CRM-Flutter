@@ -1097,44 +1097,84 @@ class _RevenueChartState extends State<RevenueChart> {
                             //     },
                             //   ),
                             // ),
+                            // bottomTitles: AxisTitles(
+                            //   sideTitles: SideTitles(
+                            //     showTitles: true,
+                            //     interval: 1, // keep interval 1 to use indices
+                            //     getTitlesWidget: (value, meta) {
+                            //       int index = value.toInt();
+                            //       int total = dates.length;
+                            //
+                            //       if (total == 0)
+                            //         return const SizedBox.shrink();
+                            //
+                            //       // Get first, middle1, middle2, last indices
+                            //       int first = 0;
+                            //       int last = total - 1;
+                            //       int middle1 = (total / 3).floor();
+                            //       int middle2 = (2 * total / 3).floor();
+                            //
+                            //       List<int> labelIndices = [
+                            //         first,
+                            //         middle1,
+                            //         middle2,
+                            //         last,
+                            //       ];
+                            //
+                            //       if (labelIndices.contains(index)) {
+                            //         return Padding(
+                            //           padding: const EdgeInsets.only(top: 8.0),
+                            //           child: Text(
+                            //             dates[index],
+                            //             style: const TextStyle(fontSize: 10),
+                            //           ),
+                            //         );
+                            //       }
+                            //
+                            //       return const SizedBox.shrink(); // hide other labels
+                            //     },
+                            //   ),
+                            // ),
                             bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
                                 showTitles: true,
-                                interval: 1, // keep interval 1 to use indices
+                                interval: 1,
+                                reservedSize: 40,
                                 getTitlesWidget: (value, meta) {
                                   int index = value.toInt();
                                   int total = dates.length;
 
-                                  if (total == 0)
-                                    return const SizedBox.shrink();
+                                  if (total == 0) return const SizedBox.shrink();
 
-                                  // Get first, middle1, middle2, last indices
                                   int first = 0;
                                   int last = total - 1;
                                   int middle1 = (total / 3).floor();
                                   int middle2 = (2 * total / 3).floor();
+                                  List<int> labelIndices = [first, middle1, middle2, last];
 
-                                  List<int> labelIndices = [
-                                    first,
-                                    middle1,
-                                    middle2,
-                                    last,
-                                  ];
+                                  if (!labelIndices.contains(index)) return const SizedBox.shrink();
 
-                                  if (labelIndices.contains(index)) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(
-                                        dates[index],
-                                        style: const TextStyle(fontSize: 10),
-                                      ),
-                                    );
+                                  // Add left/right padding for first/last labels
+                                  EdgeInsets padding;
+                                  if (index == first) {
+                                    padding = const EdgeInsets.only(left: 30, top: 8);
+                                  } else if (index == last) {
+                                    padding = const EdgeInsets.only(right: 30, top: 8);
+                                  } else {
+                                    padding = const EdgeInsets.only(top: 8);
                                   }
 
-                                  return const SizedBox.shrink(); // hide other labels
+                                  return Padding(
+                                    padding: padding,
+                                    child: Text(
+                                      dates[index],
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  );
                                 },
                               ),
                             ),
+
                           ),
                           borderData: FlBorderData(show: false),
                           lineBarsData: [

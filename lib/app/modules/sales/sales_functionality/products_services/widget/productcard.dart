@@ -137,8 +137,9 @@ class ProductCard extends StatelessWidget {
 
                   // Prices Row (Buy & Sell)
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
+                      Flexible(
                         child: Text(
                           "Buy: ₹${product.buyingPrice ?? 'N/A'}",
                           style: const TextStyle(
@@ -149,7 +150,7 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 20),
-                      Expanded(
+                      Flexible(
                         child: Text(
                           "Sell: ₹${product.sellingPrice ?? 'N/A'}",
                           style: const TextStyle(
