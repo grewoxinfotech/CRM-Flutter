@@ -16,7 +16,7 @@ class AuthService extends GetConnect {
   final String i = UrlRes.contentType;
   final String j = UrlRes.applicationJson;
 
-  Future<void> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     final loginData = {"login": email, "password": password};
 
     try {
@@ -35,13 +35,7 @@ class AuthService extends GetConnect {
         await SecureStorage.saveRememberMe(true);
         await SecureStorage.saveLoggedIn(true);
 
-        Get.offAll(DashboardScreen());
-
-        CrmSnackBar.showAwesomeSnackbar(
-          title: "Welcome!",
-          message: "Login successful!",
-          contentType: ContentType.success,
-        );
+        // Get.offAll(DashboardScreen());
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Login Failed",
@@ -49,12 +43,14 @@ class AuthService extends GetConnect {
           contentType: ContentType.warning,
         );
       }
+      return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
       CrmSnackBar.showAwesomeSnackbar(
         title: "Error",
         message: "Something went wrong: $e",
         contentType: ContentType.failure,
       );
+      return false;
     }
   }
 

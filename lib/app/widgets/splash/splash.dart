@@ -10,6 +10,9 @@ import 'package:get/get.dart';
 
 import '../../care/json/client_access_res.dart';
 import '../../data/network/hrm/hrm_system/role/role_model.dart';
+import '../../data/network/subscription/plan_service.dart';
+import '../../data/network/subscription/subscription_service.dart';
+import '../../modules/subscription/views/plans_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -167,10 +170,20 @@ class SplashController extends GetxController {
         }
 
         // ✅ Navigate based on role presence
-        if (role != null) {
+
+        // ✅ Check subscription before navigating to dashboard
+        final subscriptionService = SubscriptionService();
+        final hasActiveSubscription =
+            await subscriptionService.hasActiveSubscription();
+
+        if (hasActiveSubscription) {
+          print(
+            "[SUBSCRIPTION] Active subscription found, navigating to Dashboard",
+          );
           Get.offAll(() => DashboardScreen());
         } else {
-          Get.offAll(() => LoginScreen());
+          print("[SUBSCRIPTION] No active subscription, navigating to Plans");
+          Get.offAll(() => PlansScreen());
         }
       } else {
         print("[ERROR] No roles found after retries, redirecting to login.");

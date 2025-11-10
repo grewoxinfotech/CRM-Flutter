@@ -1,7 +1,8 @@
 import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
 
 class UrlRes {
-  static const String baseURL = "https://api.raiser.in/api/v1";
+  // static const String baseURL = "https://api.raiser.in/api/v1";
+  static const String baseURL = "http://192.168.1.12:5354/api/v1";
 
   static const String auth = "$baseURL/auth";
 
@@ -52,6 +53,10 @@ class UrlRes {
   static const String subscriptionsAssign = "$baseURL/subscriptions/assign";
 
   static const String subscriptions = "$baseURL/subscriptions";
+
+  static const String subscriptionsPayment = "$subscriptions/razorpay/verify";
+
+  static const String subscriptionsOrder = "$subscriptions/razorpay/order";
 
   static const String inquiry = "$baseURL/inquiry";
 

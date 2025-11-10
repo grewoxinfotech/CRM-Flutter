@@ -12,6 +12,7 @@ import '../../../data/network/subscription/subscription_model.dart';
 import '../../../widgets/button/crm_button.dart';
 import '../../../widgets/common/messages/crm_snack_bar.dart';
 import '../../subscription/controllers/subscription_controller.dart';
+import '../../subscription/views/plans_screen.dart';
 import '../../super_admin/auth/controllers/auth_controller.dart';
 import 'edit_profile_screen.dart';
 
@@ -75,31 +76,6 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // FutureBuilder<SubscriptionData?>(
-                //   future: subscriptionController.getSubscriptionById(user.clientPlanId ?? ''),
-                //   builder: (context, subscriptionSnapshot) {
-                //     if (subscriptionSnapshot.connectionState == ConnectionState.waiting) {
-                //       return const Center(child: CircularProgressIndicator());
-                //     }
-                //
-                //     if (!subscriptionSnapshot.hasData ||
-                //         subscriptionSnapshot.data?.id == null) {
-                //       return const Center(child: Text("No active subscription"));
-                //     }
-                //
-                //     final subscription = subscriptionSnapshot.data!;
-                //     return Column(
-                //       children: [
-                //         SubscriptionCard(
-                //           planName: subscription.status ?? "N/A",
-                //           startDate: DateTime.tryParse(subscription.startDate!) ?? DateTime.now(),
-                //           endDate: DateTime.tryParse(subscription.endDate!) ?? DateTime.now(),
-                //         ),
-                //         const SizedBox(height: 20),
-                //       ],
-                //     );
-                //   },
-                // ),
                 Obx(() {
                   if (subscriptionController.isLoading.value) {
                     return const Center(child: CircularProgressIndicator());
@@ -125,51 +101,13 @@ class ProfileScreen extends StatelessWidget {
                       ),
 
                       SizedBox(height: 20),
-                      subscriptionController.isLoading.value
-                          ? Center(child: CrmLoadingCircle())
-                          : CrmButton(
-                            title: "Renew Plan",
-                            onTap: () async {
-                              if (subscriptionController.isLoading.value)
-                                return;
-                              try {
-                                subscriptionController.isLoading.value = true;
-                                final data = InquiryData(
-                                  name:
-                                      "${user.firstName ?? ''} ${user.lastName ?? ''}" ??
-                                      '',
-                                  email: user.email ?? '',
-                                  phone: user.phone ?? '',
-                                  phonecode: user.phoneCode ?? '',
-                                  subject: 'Subscription Renew',
-                                  message: 'Please renew my subscription',
-                                );
-                                final response = await subscriptionController
-                                    .createInquiry(data);
-
-                                if (response) {
-                                  CrmSnackBar.showAwesomeSnackbar(
-                                    title: "Success",
-                                    message:
-                                        "Your subscription renewal request has been sent.",
-                                    contentType: ContentType.success,
-                                  );
-                                } else {
-                                  CrmSnackBar.showAwesomeSnackbar(
-                                    title: "Error",
-                                    message:
-                                        "Failed to send subscription renewal request.",
-                                    contentType: ContentType.failure,
-                                  );
-                                }
-                              } catch (e) {
-                                print("Exception in Renew Plan: $e");
-                              } finally {
-                                subscriptionController.isLoading.value = false;
-                              }
-                            },
-                            width: double.infinity,
-                          ),
+                      CrmButton(
+                        title: "Renew Plan",
+                        onTap: () {
+                          Get.to(() => PlansScreen());
+                        },
+                        width: double.infinity,
+                      ),
                     ],
                   );
                 }),

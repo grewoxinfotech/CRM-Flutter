@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/json/client_access_res.dart';
 import 'package:crm_flutter/app/data/database/helper/sqlite_db_helper.dart';
+import 'package:crm_flutter/app/data/network/subscription/plan_service.dart';
 import 'package:crm_flutter/app/data/network/super_admin/auth/service/auth_service.dart';
 import 'package:crm_flutter/app/modules/hrm/role/controllers/role_controller.dart';
 import 'package:crm_flutter/app/widgets/common/messages/crm_snack_bar.dart';
@@ -9,6 +10,9 @@ import 'package:get/get.dart';
 
 import '../../../../data/database/storage/secure_storage_service.dart';
 import '../../../../data/network/hrm/hrm_system/role/role_model.dart';
+import '../../../../data/network/subscription/subscription_service.dart';
+import '../../../subscription/views/plans_screen.dart';
+import '../../../dashboard/views/dashboard_screen.dart';
 
 class AuthController extends GetxController {
   final isLoading = false.obs;
@@ -36,29 +40,33 @@ class AuthController extends GetxController {
   Future<void> login(String userName, String password) async {
     if (!(formKey.currentState?.validate() ?? false)) return;
 
-    if (!rememberMe.value) {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: "Remember Me",
-        message: "Please enable 'Remember Me' to continue.",
-        contentType: ContentType.help,
-      );
-      return;
-    }
-
     isLoading.value = true;
     try {
-      await authService.login(userName, password);
-      final user = await SecureStorage.getUserData();
-      await roleController.loadInitial();
-      if (roleController.items.isNotEmpty) {
-        roleController.items.add(RoleData.fromJson(ClientPermissions.client));
-        await _dbHelper.syncRolesFromAPI(roleController.items);
-        final roles = await _dbHelper.getAllRoles();
-        // print("[DEBUG]=> created Roles: ${roles.map((e) => e.toJson())}");
-        // print("[DEBUG]=> created Roles: ${roles.length}");
-        // print("[DEBUG]=> User Get By Id: ${user!.toJson()}");
-        final role = await _dbHelper.getRoleById(user!.roleId!);
-        // print("[DEBUG]=> Role Get By Id: ${role!.toJson()}");
+      final success = await authService.login(userName, password);
+      if (success) {
+        final user = await SecureStorage.getUserData();
+        await roleController.loadInitial();
+        if (roleController.items.isNotEmpty) {
+          roleController.items.add(RoleData.fromJson(ClientPermissions.client));
+          await _dbHelper.syncRolesFromAPI(roleController.items);
+          final roles = await _dbHelper.getAllRoles();
+          final role = await _dbHelper.getRoleById(user!.roleId!);
+        }
+        final subscriptionService = SubscriptionService();
+        final hasActiveSubscription =
+            await subscriptionService.hasActiveSubscription();
+
+        if (hasActiveSubscription) {
+          print(
+            "[LOGIN] ✅ Active subscription found. Navigating to Dashboard...",
+          );
+          Get.offAll(() => DashboardScreen());
+        } else {
+          print(
+            "[LOGIN] ⚠️ No active subscription found. Navigating to Plans screen...",
+          );
+          Get.offAll(() => PlansScreen());
+        }
       }
     } finally {
       isLoading.value = false;

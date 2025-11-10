@@ -64,6 +64,7 @@ dependencies:
 #  socket_io:
   socket_io_client:
   emoji_picker_flutter:
+  razorpay_flutter:
 
 dev_dependencies:
   flutter_test:
