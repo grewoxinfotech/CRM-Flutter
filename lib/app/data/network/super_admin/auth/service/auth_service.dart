@@ -27,6 +27,7 @@ class AuthService extends GetConnect {
       );
 
       final data = jsonDecode(response.body);
+      print("User Data : $data");
       if (response.statusCode == 200 && data["success"] == true) {
         final token = data['data']['token'];
         final user = UserModel.fromJson(data['data']['user']);

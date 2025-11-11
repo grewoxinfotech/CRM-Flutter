@@ -121,6 +121,79 @@ class SplashController extends GetxController {
   //   }
   // }
 
+  // Future<void> splash() async {
+  //   await Future.delayed(const Duration(seconds: 1));
+  //
+  //   bool isLogin = await SecureStorage.getLoggedIn();
+  //   bool rememberMe = await SecureStorage.getRememberMe();
+  //   String? token = await SecureStorage.getToken();
+  //
+  //   if (isLogin && rememberMe && token != null && token.isNotEmpty) {
+  //     final roleController = Get.put(RolesController());
+  //     final DBHelper _dbHelper = DBHelper();
+  //     final user = await SecureStorage.getUserData();
+  //
+  //     // 🔄 Try to load roles with retries (max 3 attempts)
+  //     int retry = 0;
+  //     while (roleController.items.isEmpty && retry < 3) {
+  //       print("[WARN] Roles empty, retrying... attempt ${retry + 1}");
+  //       await roleController.loadInitial();
+  //       if (roleController.items.isNotEmpty) break;
+  //       await Future.delayed(const Duration(seconds: 1));
+  //       retry++;
+  //     }
+  //
+  //     if (roleController.items.isNotEmpty) {
+  //       // Add client role
+  //       roleController.items.add(RoleData.fromJson(ClientPermissions.client));
+  //
+  //       // ✅ Sync roles into DB (inside transaction)
+  //       await _dbHelper.syncRolesFromAPI(roleController.items);
+  //
+  //       // Fetch all roles for debug
+  //       final roles = await _dbHelper.getAllRoles();
+  //       print(
+  //         "[DEBUG]=> created Roles: ${roles.map((e) => e.toJson()).toList()}",
+  //       );
+  //       print("[DEBUG]=> created Roles Count: ${roles.length}");
+  //       print("[DEBUG]=> User Get By Id: ${user?.toJson()}");
+  //
+  //       // ✅ Try fetching role for this user
+  //       RoleData? role;
+  //       if (user?.roleId != null) {
+  //         role = await _dbHelper.getRoleById(user!.roleId!);
+  //         if (role == null) {
+  //           print("[ERROR] Role not found for roleId: ${user.roleId}");
+  //         } else {
+  //           print("[DEBUG]=> Role Get By Id: ${role.toJson()}");
+  //         }
+  //       }
+  //
+  //       // ✅ Navigate based on role presence
+  //
+  //       // ✅ Check subscription before navigating to dashboard
+  //       final subscriptionService = SubscriptionService();
+  //       final hasActiveSubscription =
+  //           await subscriptionService.hasActiveSubscription();
+  //
+  //       if (hasActiveSubscription) {
+  //         print(
+  //           "[SUBSCRIPTION] Active subscription found, navigating to Dashboard",
+  //         );
+  //         Get.offAll(() => DashboardScreen());
+  //       } else {
+  //         print("[SUBSCRIPTION] No active subscription, navigating to Plans");
+  //         Get.offAll(() => PlansScreen());
+  //       }
+  //     } else {
+  //       print("[ERROR] No roles found after retries, redirecting to login.");
+  //       Get.offAll(() => LoginScreen());
+  //     }
+  //   } else {
+  //     Get.offAll(() => LoginScreen());
+  //   }
+  // }
+
   Future<void> splash() async {
     await Future.delayed(const Duration(seconds: 1));
 
@@ -135,10 +208,21 @@ class SplashController extends GetxController {
 
       // 🔄 Try to load roles with retries (max 3 attempts)
       int retry = 0;
-      while (roleController.items.isEmpty && retry < 3) {
+      bool rolesLoaded = false;
+
+      while (!rolesLoaded && retry < 3) {
         print("[WARN] Roles empty, retrying... attempt ${retry + 1}");
         await roleController.loadInitial();
-        if (roleController.items.isNotEmpty) break;
+
+        print(
+          "[DEBUG] roleController.items after load: ${roleController.items.length}",
+        );
+
+        if (roleController.items.isNotEmpty) {
+          rolesLoaded = true;
+          break;
+        }
+
         await Future.delayed(const Duration(seconds: 1));
         retry++;
       }
@@ -168,8 +252,6 @@ class SplashController extends GetxController {
             print("[DEBUG]=> Role Get By Id: ${role.toJson()}");
           }
         }
-
-        // ✅ Navigate based on role presence
 
         // ✅ Check subscription before navigating to dashboard
         final subscriptionService = SubscriptionService();

@@ -27,7 +27,9 @@ class SubscriptionService {
         return false;
       }
 
-      print("[SUBSCRIPTION] 🔍 User ID: ${user.id}, Client Plan ID: ${user.clientPlanId}");
+      print(
+        "[SUBSCRIPTION] 🔍 User ID: ${user.id}, Client Plan ID: ${user.clientPlanId}",
+      );
 
       // If user has clientPlanId, check that specific subscription
       if (user.clientPlanId != null && user.clientPlanId!.isNotEmpty) {
@@ -42,43 +44,47 @@ class SubscriptionService {
 
           // Check if data is a Map (single subscription) or List
           final data = responseData["data"];
-          
+
           if (data is Map<String, dynamic>) {
             // Single subscription object
             final subscription = SubscriptionData.fromJson(data);
-            final isActive = subscription.status?.toLowerCase() == 'active';
-            
+            final now = DateTime.now();
+            final endDate = DateTime.tryParse(subscription.endDate ?? '');
+            final isActive = endDate != null && endDate.isAfter(now);
+
             print(
               "[SUBSCRIPTION] ID: ${subscription.id}, Status: ${subscription.status}, Active: $isActive",
             );
-            
+
             if (isActive) {
               currentSubscription.value = subscription;
               print("[SUBSCRIPTION] ✅ Active subscription found!");
               return true;
             } else {
-              print("[SUBSCRIPTION] ⚠️ Subscription exists but not active (Status: ${subscription.status})");
+              print(
+                "[SUBSCRIPTION] ⚠️ Subscription exists but not active (Status: ${subscription.status})",
+              );
               return false;
             }
           } else if (data is List) {
             // List of subscriptions
             print("[SUBSCRIPTION] 📦 Total subscriptions: ${data.length}");
-            
+
             for (final json in data) {
               final subscription = SubscriptionData.fromJson(json);
               final isActive = subscription.status?.toLowerCase() == 'active';
-              
+
               print(
                 "[SUBSCRIPTION] ID: ${subscription.id}, Status: ${subscription.status}, Active: $isActive",
               );
-              
+
               if (isActive) {
                 currentSubscription.value = subscription;
                 print("[SUBSCRIPTION] ✅ Active subscription found!");
                 return true;
               }
             }
-            
+
             print("[SUBSCRIPTION] ⚠️ No active subscription found in list");
             return false;
           }
@@ -90,35 +96,37 @@ class SubscriptionService {
         }
       } else {
         // No clientPlanId - fetch all subscriptions for user
-        print("[SUBSCRIPTION] ⚠️ No clientPlanId found, fetching all subscriptions");
-        
+        print(
+          "[SUBSCRIPTION] ⚠️ No clientPlanId found, fetching all subscriptions",
+        );
+
         final uri = Uri.parse(baseUrl);
         print("[SUBSCRIPTION] 🔍 Checking subscriptions from: $uri");
-        
+
         final response = await http.get(uri, headers: await headers());
-        
+
         if (response.statusCode == 200) {
           final responseData = jsonDecode(response.body);
           final data = responseData["data"];
-          
+
           if (data is List) {
             print("[SUBSCRIPTION] 📦 Total subscriptions: ${data.length}");
-            
+
             for (final json in data) {
               final subscription = SubscriptionData.fromJson(json);
               final isActive = subscription.status?.toLowerCase() == 'active';
-              
+
               print(
                 "[SUBSCRIPTION] ID: ${subscription.id}, Status: ${subscription.status}, Active: $isActive",
               );
-              
+
               if (isActive) {
                 currentSubscription.value = subscription;
                 print("[SUBSCRIPTION] ✅ Active subscription found!");
                 return true;
               }
             }
-            
+
             print("[SUBSCRIPTION] ⚠️ No active subscription found");
           } else {
             print("[SUBSCRIPTION] ⚠️ Unexpected data format (not a list)");

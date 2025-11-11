@@ -26,8 +26,9 @@ class RoleService {
           'search': search,
         },
       );
-
+      print("[DEBUG]=> $uri");
       final response = await http.get(uri, headers: await headers());
+      print("[DEBUG]=> $response");
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

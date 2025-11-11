@@ -94,8 +94,14 @@ class HomeScreen extends StatelessWidget {
           SizedBox(height: AppSpacing.small),
 
           Obx(() {
-            if (revenueController.items.isEmpty) {
+            if (revenueController.isLoading.value &&
+                revenueController.items.isEmpty) {
               return Center(child: CrmLoadingCircle());
+            }
+
+            if (!revenueController.isLoading.value &&
+                revenueController.items.isEmpty) {
+              return SizedBox.shrink();
             }
             return RevenueChart(revenueData: revenueController.items);
           }),

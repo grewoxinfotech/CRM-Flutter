@@ -36,38 +36,45 @@ class AllUsersService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        
+
         if (responseData['success'] == true) {
           List<dynamic> usersData = [];
-          
+
           // Handle different response structures
-        if (responseData['data'] != null) {
+          if (responseData['data'] != null) {
             usersData = responseData['data'];
-          } else if (responseData['message'] != null && responseData['message'] is Map && responseData['message']['data'] != null) {
+          } else if (responseData['message'] != null &&
+              responseData['message'] is Map &&
+              responseData['message']['data'] != null) {
             usersData = responseData['message']['data'];
           } else {
             return [];
           }
-          
+
           // Convert all users to User objects first
-          final allUsers = usersData.map((json) => User.fromJson(json)).toList();
-          
+          final allUsers =
+              usersData.map((json) => User.fromJson(json)).toList();
+
           // If userData.clientId is null, return all users
           if (userData.clientId == null) {
             return allUsers;
           }
-          
+
           // Filter users by client_id if needed
-          return allUsers.where((user) => 
-            user.clientId == userData.clientId || 
-            user.clientId == userData.id || 
-            user.id == userData.clientId
-          ).toList();
+          return allUsers
+              .where(
+                (user) =>
+                    user.clientId == userData.clientId ||
+                    user.clientId == userData.id ||
+                    user.id == userData.clientId,
+              )
+              .toList();
         } else {
-          String errorMessage = responseData['message'] is String 
-              ? responseData['message'] 
-              : 'Failed to load users';
-          
+          String errorMessage =
+              responseData['message'] is String
+                  ? responseData['message']
+                  : 'Failed to load users';
+
           CrmSnackBar.showAwesomeSnackbar(
             title: "Error",
             message: errorMessage,
@@ -89,6 +96,7 @@ class AllUsersService {
         message: "Failed to fetch users: $e",
         contentType: ContentType.failure,
       );
+      print("Error fetching users: $e");
       return [];
     }
   }
