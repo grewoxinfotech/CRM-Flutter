@@ -19,6 +19,26 @@ String? passwordValidation(String? password) {
   return null;
 }
 
+String? newPasswordValidation(String? password) {
+  if (password == null || password.isEmpty) {
+    return "Please enter your password!";
+  }
+  if (password.length < 6) {
+    return "Password must be at least 6 characters!";
+  }
+  return null;
+}
+
+String? confirmPasswordValidation(String? confirmPassword, String newPassword) {
+  if (confirmPassword == null || confirmPassword.isEmpty) {
+    return "Please confirm your password!";
+  }
+  if (confirmPassword != newPassword) {
+    return "Passwords do not match!";
+  }
+  return null;
+}
+
 String? nameValidation(String? name) {
   if (name == null || name.trim().isEmpty) {
     return "Please enter your name!";

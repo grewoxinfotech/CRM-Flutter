@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.grewox.crm_flutter"
+    namespace = "in.raiser.crm"
     compileSdk = flutter.compileSdkVersion
     // ndkVersion = "27.0.12077973"
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.grewox.crm_flutter"
+        applicationId = "in.raiser.crm"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -30,13 +30,39 @@ android {
         versionName = flutter.versionName
     }
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+//    buildTypes {
+//        release {
+//            // TODO: Add your own signing config for the release build.
+//            // Signing with the debug keys for now, so `flutter run --release` works.
+//            signingConfig = signingConfigs.getByName("debug")
+//        }
+//    }
+
+    signingConfigs {
+        create("release") {
+            val filePath = project.findProperty("MY_STORE_FILE") as String?
+            val sp = project.findProperty("MY_STORE_PASSWORD") as String?
+            val ka = project.findProperty("MY_KEY_ALIAS") as String?
+            val kp = project.findProperty("MY_KEY_PASSWORD") as String?
+
+            if (filePath != null) {
+                storeFile = file(filePath)
+            }
+
+            storePassword = sp
+            keyAlias = ka
+            keyPassword = kp
         }
     }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
+    }
+
 }
 
 flutter {

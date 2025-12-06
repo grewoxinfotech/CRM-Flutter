@@ -2,11 +2,15 @@ import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dar
 
 class UrlRes {
   static const String baseURL = "https://api.raiser.in/api/v1";
-  // static const String baseURL = "http://192.168.1.12:5354/api/v1";
 
   static const String auth = "$baseURL/auth";
 
   static const String login = "$auth/login";
+
+  static const String forgetPassword = "$auth/forgot-password";
+
+  static const String otpVerify = "$auth/verify-otp";
+  static const String resetPassword = "$auth/reset-password";
 
   static const String leads = "$baseURL/leads";
 
@@ -116,10 +120,6 @@ class UrlRes {
 
   static const String verifySignup = "$baseURL/auth/verify-signup";
 
-  //sales_functionality-APIs
-  // static const String sales = "$baseURL/products";
-  // static const String addsales = "$baseURL/products/$getClientId()";
-
   // headers from api
   static const String contentType = "Content-type";
   static const String applicationJson = "application/json";
@@ -131,8 +131,4 @@ class UrlRes {
     final token = await SecureStorage.getToken();
     return {contentType: applicationJson, authorization: "Bearer $token"};
   }
-
-  // static Future<String?> getClientId() async {
-  //   return await SecureStorage.getClientId();
-  // }
 }

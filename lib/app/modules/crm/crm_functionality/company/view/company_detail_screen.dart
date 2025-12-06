@@ -105,7 +105,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
   }
 
   Widget _buildOverviewTab(CompanyData company) {
-    // print("[DEBUG]=>:${company.companyName}");
+    // print("=>:${company.companyName}");
     return CompanyOverviewCard(
       color: Colors.teal,
       id: company.id ?? '',
@@ -135,32 +135,6 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
     if (leads.isEmpty) {
       return const Center(child: Text("No leads available"));
     }
-
-    // return ViewScreen(
-    //   itemCount: leads.length,
-    //   itemBuilder: (context, index) {
-    //     final lead = leads[index];
-    //     return LeadCard(
-    //       id: lead.id ?? '',
-    //       color: Colors.green,
-    //       inquiryId: lead.inquiryId ?? '',
-    //       leadTitle: lead.leadTitle ?? '',
-    //       currency: lead.currency ?? '',
-    //       leadValue: lead.leadValue?.toString() ?? '',
-    //       leadMembers: lead.leadMembers?.leadMembers?.length.toString() ?? '0',
-    //       status: lead.status ?? '',
-    //       interestLevel: lead.interestLevel ?? '',
-    //       leadScore: lead.leadScore?.toString() ?? '',
-    //       isConverted: lead.isConverted?.toString() ?? '',
-    //       clientId: lead.clientId ?? '',
-    //       createdBy: lead.createdBy ?? '',
-    //       updatedBy: lead.updatedBy ?? '',
-    //       createdAt: formatDate(lead.createdAt ?? ''),
-    //       updatedAt: formatDate(lead.updatedAt ?? ''),
-    //       onTap: () => _navigateToLeadDetail(lead, leadController),
-    //     );
-    //   },
-    // );
 
     return ViewScreen(
       itemCount: leadController.items.length,
@@ -192,20 +166,13 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
           currency: currency != null ? currency.currencyIcon : '',
           leadValue: data.leadValue?.toString() ?? '',
           source: source != null ? source['name'] ?? '' : '',
-          // companyName: controller.getCompanyDisplayName(data),
-          // firstName: data.firstName ?? '',
-          // lastName: data.lastName ?? '',
-          // phoneCode: data.phoneCode ?? '',
-          // telephone: data.telephone ?? '',
-          // email: data.email ?? '',
-          // address: data.address ?? '',
+
           leadMembers:
               data.leadMembers?.leadMembers?.isNotEmpty == true
                   ? data.leadMembers!.leadMembers!.length.toString()
                   : '',
           category: category != null ? category['name'] ?? '' : '',
-          // files: data.files.isNotEmpty ? data.files.length.toString() : '',
-          // Use the status directly from the API instead of trying to map it
+
           status: status != null ? status['name']!.capitalize ?? '' : '',
 
           interestLevel: data.interestLevel ?? '',
@@ -228,50 +195,6 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
     if (deals.isEmpty) {
       return const Center(child: Text("No deals available"));
     }
-
-    // return ViewScreen(
-    //   itemCount: deals.length,
-    //   itemBuilder: (context, index) {
-    //     final deal = deals[index];
-    //     final source = dealController.sourceOptions.firstWhereOrNull(
-    //       (element) => element['id'] == deal.source,
-    //     );
-    //     return DealCard(
-    //       id: deal.id.toString(),
-    //       dealTitle: deal.dealTitle.toString(),
-    //       currency: deal.currency.toString(),
-    //       value: deal.value.toString(),
-    //       pipeline: deal.pipeline.toString(),
-    //       stage: deal.stage.toString(),
-    //       status: deal.status.toString(),
-    //       label: deal.label.toString(),
-    //       closedDate: deal.closedDate.toString(),
-    //       firstName: deal.firstName.toString(),
-    //       lastName: deal.lastName.toString(),
-    //       email: deal.email.toString(),
-    //       phone: deal.phone.toString(),
-    //       source: source != null ? source['name'] ?? '' : '',
-    //       companyName: deal.companyName.toString(),
-    //       website: deal.website.toString(),
-    //       address: deal.address.toString(),
-    //       products: deal.products.toString(),
-    //       files: deal.files.toString(),
-    //       assignedTo: deal.assignedTo.toString(),
-    //       clientId: deal.clientId.toString(),
-    //       isWon: deal.isWon.toString(),
-    //       companyId: deal.companyId.toString(),
-    //       contactId: deal.contactId.toString(),
-    //       createdBy: formatDate(deal.createdBy.toString()),
-    //       updatedBy: formatDate(deal.updatedBy.toString()),
-    //       createdAt: formatDate(deal.createdAt.toString()),
-    //       updatedAt: formatDate(deal.updatedAt.toString()),
-    //       color: Colors.redAccent,
-    //       onTap: () => Get.to(() => DealDetailScreen(id: deal.id!)),
-    //       onEdit: () {},
-    //       onDelete: () {},
-    //     );
-    //   },
-    // );
 
     return ViewScreen(
       itemCount: deals.length,
@@ -334,7 +257,7 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
   }
 
   Future<void> _navigateToLeadDetail(
-      LeadData lead,
+    LeadData lead,
     LeadController controller,
   ) async {
     if (lead.id != null) {
@@ -348,33 +271,6 @@ class _CompanyDetailScreenState extends State<CompanyDetailScreen> {
     }
   }
 
-  // _buildContactTab(Data company, ContactController contactController) {
-  //   final companyId = company.id;
-  //   final contacts = contactController.getContactsByCompanyId(companyId!);
-  //   if (contacts.isEmpty) {
-  //     return const Center(child: Text("No Contact available"));
-  //   }
-  //   return Obx(() {
-  //     if (contactController.isLoading.value) {
-  //       return const Center(child: CircularProgressIndicator());
-  //     }
-  //     if (contactController.error.isNotEmpty) {
-  //       return Center(child: Text(contactController.error.value));
-  //     }
-  //     if (contactController.contacts.isEmpty) {
-  //       return const Center(child: Text('No contacts found'));
-  //     }
-  //
-  //     return ListView.builder(
-  //       padding: const EdgeInsets.symmetric(vertical: 8),
-  //       itemCount: contactController.contacts.length,
-  //       itemBuilder: (context, index) {
-  //         final contact = contactController.contacts[index];
-  //         return ContactCard(contact: contact);
-  //       },
-  //     );
-  //   });
-  // }
   Widget _buildContactTab(
     CompanyData company,
     ContactController contactController,

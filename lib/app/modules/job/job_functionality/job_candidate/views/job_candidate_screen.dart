@@ -45,18 +45,7 @@ class JobCandidateScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Job Candidates")),
-      // floatingActionButton: accessController.can(
-      //   AccessModule.jobCandidate,
-      //   AccessAction.create,
-      // )
-      //     ? FloatingActionButton(
-      //   onPressed: () {
-      //     controller.resetForm();
-      //     Get.to(() => AddJobCandidateScreen());
-      //   },
-      //   child: const Icon(Icons.add, color: Colors.white),
-      // )
-      //     : null,
+
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -98,45 +87,7 @@ class JobCandidateScreen extends StatelessWidget {
                         return Stack(
                           children: [
                             JobCandidateCard(candidate: candidate),
-                            // Positioned(
-                            //   right: 26,
-                            //   bottom: 8,
-                            // child: Row(
-                            //   children: [
-                            //     if (accessController.can(
-                            //       AccessModule.jobCandidate,
-                            //       AccessAction.update,
-                            //     ))
-                            //       CrmIc(
-                            //         iconPath: ICRes.edit,
-                            //         color: ColorRes.success,
-                            //         onTap: () {
-                            //           Get.to(
-                            //                 () => AddJobCandidateScreen(
-                            //               candidate: candidate,
-                            //               isFromEdit: true,
-                            //             ),
-                            //           );
-                            //         },
-                            //       ),
-                            //     const SizedBox(width: 12),
-                            //     if (accessController.can(
-                            //       AccessModule.jobCandidate,
-                            //       AccessAction.delete,
-                            //     ))
-                            //       CrmIc(
-                            //         iconPath: ICRes.delete,
-                            //         color: ColorRes.error,
-                            //         onTap: () {
-                            //           _deleteCandidate(
-                            //             candidate.id ?? '',
-                            //             candidate.name ?? 'Candidate',
-                            //           );
-                            //         },
-                            //       ),
-                            //   ],
-                            // ),
-                            // ),
+
                           ],
                         );
                       } else if (controller.isPaging.value) {

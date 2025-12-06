@@ -72,7 +72,7 @@ class BillingService {
         headers: await headers(),
         body: jsonEncode(bill.toJson()),
       );
-      // print("[DEBUG]=> $baseUrl/IPoucZkvAMQ0BX1owqj5jxK ---- ${response.body}");
+      // print("=> $baseUrl/IPoucZkvAMQ0BX1owqj5jxK ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create bill exception: $e");
@@ -83,15 +83,15 @@ class BillingService {
   /// Update an existing bill
   Future<bool> updateBill(String id, BillingData bill) async {
     try {
-      print("[DEBUG]=> $baseUrl/$id ---- ${bill.toJson()}");
+      print("=> $baseUrl/$id ---- ${bill.toJson()}");
       final response = await http.put(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
         body: jsonEncode(bill.toJson()),
       );
 
-      print("[DEBUG]=> $baseUrl/$id ---- ${response.body}");
-      print("[DEBUG]=> $baseUrl/$id ---- ${response.statusCode}");
+      print("=> $baseUrl/$id ---- ${response.body}");
+      print("=> $baseUrl/$id ---- ${response.statusCode}");
       return response.statusCode == 200;
     } catch (e) {
       print("Update bill exception: $e");

@@ -63,13 +63,13 @@ class MeetingService {
   /// Create new meeting
   Future<bool> createMeeting(MeetingData meeting) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${meeting.toJson()}");
+      print("=> $baseUrl ---- ${meeting.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(meeting.toJson()),
       );
-      print("[DEBUG]=> response ---- ${response.body}");
+      print("=> response ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create meeting exception: $e");
@@ -85,7 +85,7 @@ class MeetingService {
         headers: await headers(),
         body: jsonEncode(meeting.toJson()),
       );
-      print("[DEBUG]=> response ---- ${response.body}");
+      print("=> response ---- ${response.body}");
 
       return response.statusCode == 200;
     } catch (e) {

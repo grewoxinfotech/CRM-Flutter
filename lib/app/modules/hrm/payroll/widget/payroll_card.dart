@@ -13,15 +13,7 @@ class PayslipCard extends StatelessWidget {
 
   const PayslipCard({Key? key, required this.payslip}) : super(key: key);
 
-  // String formatCurrency(dynamic amount) {
-  //   try {
-  //     if (amount == null) return '';
-  //     double value = (amount is String) ? double.tryParse(amount) ?? 0 : amount.toDouble();
-  //     return NumberFormat.currency(locale: 'en_IN', symbol: '₹').format(value);
-  //   } catch (e) {
-  //     return '';
-  //   }
-  // }
+
 
   String formatDate(String? date) {
     if (date != null && date.isNotEmpty) {

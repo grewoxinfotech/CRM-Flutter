@@ -173,17 +173,7 @@ class _EmployeeCardState extends State<EmployeeCard> {
                           );
                     }),
 
-                  // Department
-                  // if (widget.department != null &&
-                  //     widget.department!.isNotEmpty)
-                  //   Text(
-                  //     widget.department!,
-                  //     style: TextStyle(
-                  //       fontSize: 12,
-                  //       color: textSecondary.withOpacity(0.8),
-                  //     ),
-                  //   ),
-                  // const SizedBox(height: 6),
+
 
                   // Contact Info
                   if (widget.email != null)

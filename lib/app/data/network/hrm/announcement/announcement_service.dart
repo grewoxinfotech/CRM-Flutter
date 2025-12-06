@@ -12,50 +12,13 @@ class AnnouncementService {
     return await UrlRes.getHeaders();
   }
 
-  /// Fetch announcements with optional pagination & search
-  // Future<List<AnnouncementData>> fetchAnnouncements({
-  //   int page = 1,
-  //   int pageSize = 10,
-  //   String search = '',
-  // }) async {
-  //   try {
-  //     print("[DEBUG]=>Announcement : ${baseUrl}");
-  //     final uri = Uri.parse(baseUrl).replace(
-  //       queryParameters: {
-  //         'page': page.toString(),
-  //         'pageSize': pageSize.toString(),
-  //         'search': search,
-  //       },
-  //     );
-  //
-  //     final response = await http.get(uri, headers: await headers());
-  //     print("[DEBUG]=>Response : ${response.body}");
-  //
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       final List<dynamic> announcements =
-  //           data["message"]["data"] != null ? [data["message"]["data"]] : [];
-  //       print("[DEBUG]=>Announcement : ${announcements.toString()}");
-  //
-  //       return announcements
-  //           .map((json) => AnnouncementData.fromJson(json))
-  //           .toList();
-  //     } else {
-  //       print("Failed to load announcements: ${response.statusCode}");
-  //     }
-  //   } catch (e) {
-  //     print("Exception in fetchAnnouncements: $e");
-  //   }
-  //   return [];
-  // }
-
   Future<AnnouncementModel?> fetchAnnouncements({
     int page = 1,
     int pageSize = 10,
     String search = '',
   }) async {
     try {
-      // print("[DEBUG]=>Announcement : ${baseUrl}");
+      // print("=>Announcement : ${baseUrl}");
       final uri = Uri.parse(baseUrl).replace(
         queryParameters: {
           'page': page.toString(),
@@ -65,14 +28,9 @@ class AnnouncementService {
       );
 
       final response = await http.get(uri, headers: await headers());
-      // print("[DEBUG]=>Response : ${response.body}");
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
-        // message.data is a list
-
-        // print("[DEBUG]=>Response : ${announcementsJson}");
 
         return AnnouncementModel.fromJson(data);
       } else {
@@ -105,13 +63,13 @@ class AnnouncementService {
   /// Create new announcement
   Future<bool> createAnnouncement(AnnouncementData announcement) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${announcement.toJson()}");
+      print("=> $baseUrl ---- ${announcement.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(announcement.toJson()),
       );
-      print("[DEBUG]=> response ---- ${response.body}");
+      print("=> response ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create announcement exception: $e");

@@ -4,7 +4,6 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:http/http.dart' as http;
 
-
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
 import 'offer_letter_model.dart';
 
@@ -65,39 +64,11 @@ class OfferLetterService {
   }
 
   /// Create new offer letter
-  // Future<bool> createOfferLetter(OfferLetterData offerLetter,File file) async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse(baseUrl),
-  //       headers: await headers(),
-  //       body: jsonEncode(offerLetter.toJson()),
-  //     );
-  //
-  //     final responseData = jsonDecode(response.body);
-  //
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       CrmSnackBar.showAwesomeSnackbar(
-  //         title: "Success",
-  //         message:
-  //         responseData["message"] ?? "Offer letter created successfully",
-  //         contentType: ContentType.success,
-  //       );
-  //       return true;
-  //     } else {
-  //       CrmSnackBar.showAwesomeSnackbar(
-  //         title: "Error",
-  //         message: responseData["message"] ?? "Failed to create offer letter",
-  //         contentType: ContentType.failure,
-  //       );
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     print("Create offer letter exception: $e");
-  //     return false;
-  //   }
-  // }
 
-  Future<bool> createOfferLetter(OfferLetterData offerLetter, File? file) async {
+  Future<bool> createOfferLetter(
+    OfferLetterData offerLetter,
+    File? file,
+  ) async {
     try {
       final uri = Uri.parse(baseUrl);
       final request = http.MultipartRequest("POST", uri);
@@ -107,14 +78,12 @@ class OfferLetterService {
 
       // Add file only if provided
       if (file != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath("file", file.path),
-        );
+        request.files.add(await http.MultipartFile.fromPath("file", file.path));
       }
 
       // Add form fields (convert model to map but remove nulls)
-      final Map<String, dynamic> fields = offerLetter.toJson()
-        ..removeWhere((key, value) => value == null);
+      final Map<String, dynamic> fields =
+          offerLetter.toJson()..removeWhere((key, value) => value == null);
 
       fields.forEach((key, value) {
         request.fields[key] = value.toString();
@@ -129,7 +98,8 @@ class OfferLetterService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Offer letter created successfully",
+          message:
+              responseData["message"] ?? "Offer letter created successfully",
           contentType: ContentType.success,
         );
         return true;
@@ -152,9 +122,12 @@ class OfferLetterService {
     }
   }
 
-
   /// Update existing offer letter
-  Future<bool> updateOfferLetter(String id, OfferLetterData offerLetter, File? file) async {
+  Future<bool> updateOfferLetter(
+    String id,
+    OfferLetterData offerLetter,
+    File? file,
+  ) async {
     try {
       final uri = Uri.parse("$baseUrl/$id");
 
@@ -173,8 +146,8 @@ class OfferLetterService {
         );
 
         // Add form fields
-        final Map<String, dynamic> fields = offerLetter.toJson()
-          ..removeWhere((key, value) => value == null);
+        final Map<String, dynamic> fields =
+            offerLetter.toJson()..removeWhere((key, value) => value == null);
 
         fields.forEach((key, value) {
           multipartRequest.fields[key] = value.toString();
@@ -183,9 +156,10 @@ class OfferLetterService {
         request = multipartRequest;
       } else {
         // ✅ Simple JSON PUT if no file
-        request = http.Request("PUT", uri)
-          ..headers.addAll(await headers())
-          ..body = jsonEncode(offerLetter.toJson());
+        request =
+            http.Request("PUT", uri)
+              ..headers.addAll(await headers())
+              ..body = jsonEncode(offerLetter.toJson());
       }
 
       // Send request
@@ -197,7 +171,8 @@ class OfferLetterService {
       if (response.statusCode == 200) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Offer letter updated successfully",
+          message:
+              responseData["message"] ?? "Offer letter updated successfully",
           contentType: ContentType.success,
         );
         return true;
@@ -219,7 +194,6 @@ class OfferLetterService {
       return false;
     }
   }
-
 
   /// Delete offer letter
   Future<bool> deleteOfferLetter(String id) async {

@@ -128,7 +128,7 @@ class InvoiceScreen extends StatelessWidget {
                               (element) => element.id == invoice.customer,
                             );
 
-                        print("[DEBUG]=>${invoice.currency}");
+                        print("=>${invoice.currency}");
                         return InvoiceCard(
                           id: invoice.id,
                           leadTitle: invoice.salesInvoiceNumber,

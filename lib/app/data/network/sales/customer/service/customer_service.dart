@@ -32,9 +32,9 @@ class CustomerService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print("[DEBUG]=> $baseUrl ---- ${response.body}");
+        print("=> $baseUrl ---- ${response.body}");
         // final List<dynamic> customers = data["message"]["data"];
-        // print("[DEBUG]=> $baseUrl ---- ${customers.length}");
+        // print("=> $baseUrl ---- ${customers.length}");
         return CustomerModel.fromJson(data);
         // return customers.map((json) => CustomerData.fromJson(json)).toList();
       } else {
@@ -46,31 +46,14 @@ class CustomerService {
     return null;
   }
 
-  /// Get single customer by ID
-  // Future<CustomerData?> getCustomerById(String id) async {
-  //   try {
-  //     final response = await http.get(
-  //       Uri.parse("$baseUrl/$id"),
-  //       headers: await headers(),
-  //     );
-  //     print("[DEBUG]=> $baseUrl/$id ---- ${response.body}");
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       return CustomerData.fromJson(data["message"]["data"]);
-  //     }
-  //   } catch (e) {
-  //     print("Get customer by ID exception: $e");
-  //   }
-  //   return null;
-  // }
-
+  /// Get single customer by I
   Future<CustomerData?> getCustomerById(String id) async {
     try {
       final response = await http.get(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
       );
-      print("[DEBUG]=> $baseUrl/$id ---- ${response.body}");
+      print("=> $baseUrl/$id ---- ${response.body}");
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['data'] != null) {
@@ -98,8 +81,8 @@ class CustomerService {
         body: jsonEncode(customer.toJson()),
       );
 
-      print("[DEBUG]=> $baseUrl/$userId ---- ${customer.name}");
-      print("[DEBUG]=> $baseUrl/$userId ---- ${response.body}");
+      print("=> $baseUrl/$userId ---- ${customer.name}");
+      print("=> $baseUrl/$userId ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create customer exception: $e");

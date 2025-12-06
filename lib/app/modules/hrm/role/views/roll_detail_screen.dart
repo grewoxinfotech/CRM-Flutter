@@ -11,7 +11,7 @@ class RoleDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("[DEBUG] RoleDetailScreen: ${role.toJson()}");
+    print(" RoleDetailScreen: ${role.toJson()}");
     return Scaffold(
       appBar: AppBar(title: Text(role.roleName ?? "Role Detail")),
       body: Padding(
@@ -74,7 +74,7 @@ class RoleDetailScreen extends StatelessWidget {
                                           .expand((e) => e.permissions ?? [])
                                           .toList();
 
-                                  print('[DEBUG]=> $perms');
+                                  print('=> $perms');
 
                                   return DataRow(
                                     cells: [
@@ -220,17 +220,4 @@ IconData getActionIcon(String action) {
 }
 
 // /// Optional: gives each action a color
-// Color _getActionColor(String action) {
-//   switch (action.toLowerCase()) {
-//     case "view":
-//       return Colors.blue;
-//     case "create":
-//       return Colors.green;
-//     case "update":
-//       return Colors.orange;
-//     case "delete":
-//       return Colors.red;
-//     default:
-//       return Colors.grey;
-//   }
-// }
+

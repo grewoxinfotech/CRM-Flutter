@@ -69,18 +69,6 @@ class EmployeeController extends PaginatedController<EmployeeData> {
   }
 
   // --- CRUD METHODS ---
-  // Future<bool> createEmployee(EmployeeData employee) async {
-  //   try {
-  //     final success = await _service.createEmployee(employee);
-  //     if (success) {
-  //       await loadInitial();
-  //     }
-  //     return success;
-  //   } catch (e) {
-  //     print("Create employee error: $e");
-  //     return false;
-  //   }
-  // }
 
   Future<bool> updateEmployee(String id, EmployeeData updatedEmployee) async {
     try {

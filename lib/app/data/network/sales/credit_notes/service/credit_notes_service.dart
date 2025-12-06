@@ -14,37 +14,6 @@ class CreditNoteService {
   }
 
   /// Fetch credit notes with optional pagination & search
-  // Future<List<CreditNoteData>> fetchCreditNotes({
-  //   int page = 1,
-  //   int pageSize = 10,
-  //   String search = '',
-  // }) async {
-  //   try {
-  //     final uri = Uri.parse(baseUrl).replace(
-  //       queryParameters: {
-  //         'page': page.toString(),
-  //         'pageSize': pageSize.toString(),
-  //         'search': search,
-  //       },
-  //     );
-  //
-  //     final response = await http.get(uri, headers: await headers());
-  //
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       final List<dynamic> creditNotes = data["message"]["data"];
-  //       return creditNotes
-  //           .map((json) => CreditNoteData.fromJson(json))
-  //           .toList();
-  //     } else {
-  //       print("Failed to load credit notes: ${response.statusCode}");
-  //     }
-  //   } catch (e) {
-  //     print("Exception in fetchCreditNotes: $e");
-  //   }
-  //   return [];
-  // }
-
   Future<CreditNoteModel?> fetchCreditNotes({
     int page = 1,
     int pageSize = 10,
@@ -95,13 +64,13 @@ class CreditNoteService {
   /// Create new credit note
   Future<bool> createCreditNote(CreditNoteData creditNote) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${creditNote.toJson()}");
+      print("=> $baseUrl ---- ${creditNote.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(creditNote.toJson()),
       );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create credit note exception: $e");

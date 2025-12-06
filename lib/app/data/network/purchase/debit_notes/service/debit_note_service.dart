@@ -10,41 +10,6 @@ class DebitNoteService {
       await UrlRes.getHeaders();
 
   /// Get all debit notes
-  // Future<List<DebitNoteItem>> getAllDebitNotes() async {
-  //   try {
-  //     final response = await http.get(
-  //       Uri.parse(baseUrl),
-  //       headers: await headers(),
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final decoded = json.decode(response.body);
-  //
-  //       // API can return `data` as null or wrapped in message
-  //       final data = decoded['data'] ?? decoded['message']?['data'];
-  //       if (data == null) return [];
-  //
-  //       // If data is a list, map each item
-  //       if (data is List) {
-  //         return data.map((e) {
-  //           return DebitNoteItem(
-  //             debitNote: DebitNote.fromJson(e),
-  //             updatedBill: UpdatedBill.fromJson(e['updatedBill'] ?? {}),
-  //           );
-  //         }).toList();
-  //       }
-  //       print('debug---${response.body}');
-  //
-  //       // If data is a single object
-  //       return [DebitNoteItem.fromJson(data)];
-  //     } else {
-  //       throw Exception("Failed to fetch debit notes");
-  //     }
-  //   } catch (e) {
-  //     print("Error fetching debit notes: $e");
-  //     return [];
-  //   }
-  // }
   Future<DebitNoteModel?> fetchDebitNotes({
     int page = 1,
     int pageSize = 10,
@@ -127,12 +92,12 @@ class DebitNoteService {
   /// Delete a debit note
   Future<bool> deleteDebitNote(String id) async {
     try {
-      print("[DEBUG]=> $baseUrl/$id");
+      print("=> $baseUrl/$id");
       final response = await http.delete(
         Uri.parse("$baseUrl/$id"),
         headers: await headers(),
       );
-      print("[DEBUG]=> ${response.body}");
+      print("=> ${response.body}");
       return response.statusCode == 200 || response.statusCode == 204;
     } catch (e) {
       print("Delete debit note error: $e");

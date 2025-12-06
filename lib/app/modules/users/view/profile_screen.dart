@@ -176,16 +176,7 @@ class ProfileScreen extends StatelessWidget {
                     title: 'Logout',
                   ),
                 ),
-                // const SizedBox(height: 20),
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: CrmButton(
-                //     onTap: () {},
-                //     title: 'Delete Account',
-                //     backgroundColor: ColorRes.error,
-                //   ),
-                // ),
-                // const SizedBox(height: 26),
+
               ],
             ),
           );

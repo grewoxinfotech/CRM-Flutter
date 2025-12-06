@@ -15,20 +15,7 @@ class CreditNoteController extends PaginatedController<CreditNoteData> {
 
   final RxList<SalesInvoice> invoices = <SalesInvoice>[].obs;
 
-  // static Future<Map<String, String>> headers() async {
-  //   return await UrlRes.getHeaders();
-  // }
 
-  // @override
-  // Future<List<CreditNoteData>> fetchItems(int page) async {
-  //   try {
-  //     final response = await _service.fetchCreditNotes(page: page);
-  //     return response;
-  //   } catch (e) {
-  //     print("Exception in fetchItems: $e");
-  //     throw Exception("Exception in fetchItems: $e");
-  //   }
-  // }
 
   @override
   Future<List<CreditNoteData>> fetchItems(int page) async {

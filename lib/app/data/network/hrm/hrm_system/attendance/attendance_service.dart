@@ -69,13 +69,13 @@ class AttendanceService {
   /// Create new attendance record
   Future<AttendanceData> createAttendance(AttendanceData attendance) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${attendance.toJson()}");
+      print("=> $baseUrl ---- ${attendance.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(attendance.toJson()),
       );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.body}");
       if (response.statusCode == 201 || response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return AttendanceData.fromJson(data["data"]);

@@ -63,13 +63,13 @@ class TrainingService {
   /// Create new training
   Future<bool> createTraining(TrainingData training) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${training.toJson()}");
+      print("=> $baseUrl ---- ${training.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(training.toJson()),
       );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create training exception: $e");

@@ -65,6 +65,7 @@ dependencies:
   socket_io_client:
   emoji_picker_flutter:
   razorpay_flutter:
+  flutter_launcher_icons: 
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +91,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/logo/
     - assets/icons/comments/
     - assets/icons/employee/
     - assets/icons/functions/
@@ -163,3 +165,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/app_logo.png"

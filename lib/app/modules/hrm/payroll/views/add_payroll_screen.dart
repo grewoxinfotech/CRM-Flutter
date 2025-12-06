@@ -106,11 +106,13 @@ class AddPayrollScreen extends StatelessWidget {
     );
 
     payrollController.isLoading.value = true;
-    final success = await payrollController.updatePayslip(payslipData!.id!,payroll);
+    final success = await payrollController.updatePayslip(
+      payslipData!.id!,
+      payroll,
+    );
     payrollController.isLoading.value = false;
 
     if (success) {
-
       Get.back();
       payrollController.loadInitial();
     }
@@ -304,9 +306,7 @@ class AddPayrollScreen extends StatelessWidget {
                       controller: payrollController.salaryController,
                       title: 'Salary',
 
-                      isRequired: true,
                       keyboardType: TextInputType.number,
-                      validator: (value) => requiredValidator(value, 'Salary'),
                     ),
                   ),
                   SizedBox(width: AppSpacing.medium),
@@ -314,28 +314,15 @@ class AddPayrollScreen extends StatelessWidget {
                     child: CrmTextField(
                       controller: payrollController.netSalaryController,
                       title: 'Net Salary',
-                      isRequired: true,
+
                       keyboardType: TextInputType.number,
-                      validator:
-                          (value) => requiredValidator(value, 'Net Salary'),
                     ),
                   ),
                 ],
               ),
               SizedBox(height: AppSpacing.medium),
 
-              // CrmTextField(
-              //   controller: payrollController.currencyController,
-              //   title: 'Currency',
-              //   isRequired: true,
-              //   validator: (value) => requiredValidator(value, 'Currency'),
-              // ),
-              // CrmTextField(
-              //   controller: payrollController.currencyCodeController,
-              //   title: 'Currency Code',
-              //   isRequired: true,
-              //   validator: (value) => requiredValidator(value, 'Currency Code'),
-              // ),
+
               CrmTextField(
                 controller: payrollController.bankAccountController,
                 title: 'Bank Account',

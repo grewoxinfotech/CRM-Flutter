@@ -43,10 +43,22 @@ class JobApplicationController extends PaginatedController<JobApplicationData> {
   final JobListController jobListController = Get.put(JobListController());
   final Rxn<JobData> selectedJobPosition = Rxn<JobData>();
 
-  final List<String> experienceList = ["Entry Level","1-3 years","3-5 years","5-7 years","7+ years"];
+  final List<String> experienceList = [
+    "Entry Level",
+    "1-3 years",
+    "3-5 years",
+    "5-7 years",
+    "7+ years",
+  ];
   final RxString selectedExperience = ''.obs;
 
-  final List<String> applicationStatus = ["pending","shortlisted","interviewed","selected","rejected"];
+  final List<String> applicationStatus = [
+    "pending",
+    "shortlisted",
+    "interviewed",
+    "selected",
+    "rejected",
+  ];
   final RxString selectedApplicationStatus = ''.obs;
 
   Rxn<File> selectedFile = Rxn<File>();
@@ -135,38 +147,6 @@ class JobApplicationController extends PaginatedController<JobApplicationData> {
   }
 
   /// Load all managers for the current client
-  // Future<void> loadManagers() async {
-  //   try {
-  //     final userData = await SecureStorage.getUserData();
-  //     final clientId = userData?.id;
-  //     if (clientId == null || clientId.isEmpty) {
-  //       print("No client ID found for the current user.");
-  //       return;
-  //     }
-  //
-  //     final clientUsers = await usersController.getUsersByClientId(clientId);
-  //     managers.assignAll(clientUsers);
-  //
-  //     if (managers.isNotEmpty && selectedManager.value == null) {
-  //       selectedManager.value = managers.first;
-  //     }
-  //   } catch (e, stackTrace) {
-  //     print("Error loading managers: $e");
-  //     print(stackTrace);
-  //   }
-  // }
-  //
-  // Future<User?> getManagerById(String id) async {
-  //   try {
-  //     final user = await usersController.getUserById(id);
-  //     if (user != null && !managers.any((m) => m.id == user.id)) {
-  //       managers.add(user);
-  //     }
-  //     return user;
-  //   } catch (e) {
-  //     print("Error loading manager by ID: $e");
-  //   }
-  // }
 
   Future<void> loadJobs() async {
     try {
@@ -241,11 +221,10 @@ class JobApplicationController extends PaginatedController<JobApplicationData> {
     }
   }
 
-
   Future<bool> updateJobApplication(
-      String id,
-      JobApplicationData updatedApplication,
-      ) async {
+    String id,
+    JobApplicationData updatedApplication,
+  ) async {
     try {
       final success = await _service.updateJobApplication(
         id,
@@ -267,7 +246,6 @@ class JobApplicationController extends PaginatedController<JobApplicationData> {
       return false;
     }
   }
-
 
   Future<bool> deleteJobApplication(String id) async {
     try {

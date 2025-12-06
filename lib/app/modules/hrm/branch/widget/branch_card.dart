@@ -69,19 +69,7 @@ class BranchCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
 
-                      // Branch Code
-                      // if (branch.code != null && branch.code!.isNotEmpty)
-                      //   Text(
-                      //     "Code: ${formatBranchCode(branch.code)}",
-                      //     style: const TextStyle(
-                      //       fontSize: 14,
-                      //       color: Colors.blueGrey,
-                      //     ),
-                      //     maxLines: 1,
-                      //     overflow: TextOverflow.ellipsis,
-                      //   ),
-                      //
-                      // const SizedBox(height: 4),
+
 
                       // Branch Address
                       if (branch.branchAddress != null &&

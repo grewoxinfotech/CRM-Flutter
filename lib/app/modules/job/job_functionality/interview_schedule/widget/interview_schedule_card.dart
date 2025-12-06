@@ -128,31 +128,7 @@ class InterviewScheduleCard extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 4),
-                // Obx(
-                //       () {
-                //     final job = controller.managers.firstWhereOrNull((item) => item.id == schedule.interviewer);
-                //     if (job == null) {
-                //       return const Text(
-                //         "N/A",
-                //         style: TextStyle(
-                //           fontWeight: FontWeight.bold,
-                //           fontSize: 16,
-                //         ),
-                //         maxLines: 1,
-                //         overflow: TextOverflow.ellipsis,
-                //       );
-                //     }
-                //     return Text(
-                //       "Interviewer: ${job.firstName ?? "N/A"} ${job.lastName ?? "N/A"}",
-                //       style: const TextStyle(
-                //         fontWeight: FontWeight.w600,
-                //         fontSize: 12,
-                //       ),
-                //       maxLines: 1,
-                //       overflow: TextOverflow.ellipsis,
-                //     );
-                //   },
-                // ),
+
                 SizedBox(height: 4),
                 Text(
                   "${formatDateString(schedule.startOn ?? '')} at ${schedule.startTime ?? ''}",

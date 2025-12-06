@@ -332,13 +332,7 @@ class AddJobApplicationScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.medium),
 
               /// Status
-              // CrmTextField(
-              //   controller: controller.statusController,
-              //   title: 'Status',
-              //   isRequired: true,
-              //   validator: (value) =>
-              //       requiredValidator(value, 'Status is required'),
-              // ),
+
 
 
               /// File Upload

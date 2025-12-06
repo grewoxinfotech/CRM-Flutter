@@ -117,56 +117,7 @@ class User {
     required this.updatedAt,
   });
 
-  // factory User.fromJson(Map<String, dynamic> json) {
-  //   return User(
-  //     id: json['id'],
-  //     employeeId: json['employeeId'],
-  //     username: json['username'],
-  //     password: json['password'],
-  //     email: json['email'],
-  //     roleId: json['role_id'],
-  //     conversations: json['conversations'],
-  //     firstName: json['firstName'],
-  //     lastName: json['lastName'],
-  //     phoneCode: json['phoneCode'],
-  //     phone: json['phone'],
-  //     currency: json['currency'],
-  //     address: json['address'],
-  //     state: json['state'],
-  //     city: json['city'],
-  //     country: json['country'],
-  //     zipcode: json['zipcode'],
-  //     website: json['website'],
-  //     gender: json['gender'],
-  //     joiningDate: json['joiningDate'],
-  //     leaveDate: json['leaveDate'],
-  //     branch: json['branch'],
-  //     department: json['department'],
-  //     designation: json['designation'],
-  //     salary: json['salary'],
-  //     accountholder: json['accountholder'],
-  //     accountnumber: json['accountnumber'],
-  //     bankname: json['bankname'],
-  //     ifsc: json['ifsc'],
-  //     gstIn: json['gstIn'],
-  //     banklocation: json['banklocation'],
-  //     cvPath: json['cv_path'],
-  //     links: json['links'],
-  //     eSignature: json['e_signature'],
-  //     accounttype: json['accounttype'],
-  //     clientId: json['client_id'],
-  //     clientPlanId: json['client_plan_id'],
-  //     documents: json['documents'],
-  //     resetPasswordOTP: json['resetPasswordOTP'],
-  //     resetPasswordOTPExpiry: json['resetPasswordOTPExpiry'],
-  //     storageLimit: json['storage_limit'],
-  //     storageUsed: json['storage_used'],
-  //     createdBy: json['created_by'],
-  //     updatedBy: json['updated_by'],
-  //     createdAt: json['createdAt'],
-  //     updatedAt: json['updatedAt'],
-  //   );
-  // }
+
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

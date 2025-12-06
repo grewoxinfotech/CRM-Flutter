@@ -35,165 +35,6 @@ class SplashController extends GetxController {
     splash();
   }
 
-  // Future<void> splash() async {
-  //   await Future.delayed(const Duration(seconds: 1));
-  //   bool isLogin = await SecureStorage.getLoggedIn();
-  //   bool rememberMe = await SecureStorage.getRememberMe();
-  //   String? token = await SecureStorage.getToken();
-  //
-  //   if (isLogin == true && rememberMe && token != null && token.isNotEmpty) {
-  //     final roleController = Get.put(RolesController());
-  //     final DBHelper _dbHelper = DBHelper();
-  //     final user = await SecureStorage.getUserData();
-  //     await roleController.loadInitial();
-  //     if (roleController.items.isNotEmpty) {
-  //       roleController.items.add(RoleData.fromJson(ClientPermissions.client));
-  //       await _dbHelper.syncRolesFromAPI(roleController.items);
-  //       final roles = await _dbHelper.getAllRoles();
-  //       print("[DEBUG]=> created Roles: ${roles.map((e) => e.toJson())}");
-  //       print("[DEBUG]=> created Roles: ${roles.length}");
-  //       print("[DEBUG]=> User Get By Id: ${user!.toJson()}");
-  //       final role = await _dbHelper.getRoleById(user!.roleId!);
-  //       print("[DEBUG]=> Role Get By Id: ${role?.toJson()}");
-  //     }
-  //     Get.offAll(() => DashboardScreen());
-  //   } else {
-  //     Get.offAll(() => LoginScreen());
-  //   }
-  // }
-
-  // Future<void> splash() async {
-  //   await Future.delayed(const Duration(seconds: 1));
-  //   bool isLogin = await SecureStorage.getLoggedIn();
-  //   bool rememberMe = await SecureStorage.getRememberMe();
-  //   String? token = await SecureStorage.getToken();
-  //
-  //   if (isLogin && rememberMe && token != null && token.isNotEmpty) {
-  //     final roleController = Get.put(RolesController());
-  //     final DBHelper _dbHelper = DBHelper();
-  //     final user = await SecureStorage.getUserData();
-  //
-  //     // 🔄 Load roles with retry if needed
-  //     await roleController.loadInitial();
-  //
-  //     if (roleController.items.isEmpty) {
-  //       print("[WARN] Empty roles, retrying after 1s...");
-  //       await Future.delayed(Duration(seconds: 1));
-  //       await roleController.loadInitial();
-  //     }
-  //
-  //     if (roleController.items.isNotEmpty) {
-  //       // Add client role
-  //       roleController.items.add(RoleData.fromJson(ClientPermissions.client));
-  //
-  //       // ✅ Ensure DB sync is awaited
-  //       await _dbHelper.syncRolesFromAPI(roleController.items);
-  //
-  //       // Fetch all roles after sync
-  //       final roles = await _dbHelper.getAllRoles();
-  //       print("[DEBUG]=> created Roles: ${roles.map((e) => e.toJson())}");
-  //       print("[DEBUG]=> created Roles Count: ${roles.length}");
-  //       print("[DEBUG]=> User Get By Id: ${user?.toJson()}");
-  //
-  //       // ✅ Fetch role for this user
-  //       RoleData? role;
-  //       if (user?.roleId != null) {
-  //         role = await _dbHelper.getRoleById(user!.roleId!);
-  //         if (role == null) {
-  //           print("[ERROR] Role not found for roleId: ${user.roleId}");
-  //         } else {
-  //           print("[DEBUG]=> Role Get By Id: ${role.toJson()}");
-  //         }
-  //       }
-  //
-  //       // ✅ Only go to dashboard if user + role are valid
-  //       if (role != null) {
-  //         Get.offAll(() => DashboardScreen());
-  //       } else {
-  //         Get.offAll(() => LoginScreen());
-  //       }
-  //     } else {
-  //       print("[ERROR] No roles found after retry, redirecting to login.");
-  //       Get.offAll(() => LoginScreen());
-  //     }
-  //   } else {
-  //     Get.offAll(() => LoginScreen());
-  //   }
-  // }
-
-  // Future<void> splash() async {
-  //   await Future.delayed(const Duration(seconds: 1));
-  //
-  //   bool isLogin = await SecureStorage.getLoggedIn();
-  //   bool rememberMe = await SecureStorage.getRememberMe();
-  //   String? token = await SecureStorage.getToken();
-  //
-  //   if (isLogin && rememberMe && token != null && token.isNotEmpty) {
-  //     final roleController = Get.put(RolesController());
-  //     final DBHelper _dbHelper = DBHelper();
-  //     final user = await SecureStorage.getUserData();
-  //
-  //     // 🔄 Try to load roles with retries (max 3 attempts)
-  //     int retry = 0;
-  //     while (roleController.items.isEmpty && retry < 3) {
-  //       print("[WARN] Roles empty, retrying... attempt ${retry + 1}");
-  //       await roleController.loadInitial();
-  //       if (roleController.items.isNotEmpty) break;
-  //       await Future.delayed(const Duration(seconds: 1));
-  //       retry++;
-  //     }
-  //
-  //     if (roleController.items.isNotEmpty) {
-  //       // Add client role
-  //       roleController.items.add(RoleData.fromJson(ClientPermissions.client));
-  //
-  //       // ✅ Sync roles into DB (inside transaction)
-  //       await _dbHelper.syncRolesFromAPI(roleController.items);
-  //
-  //       // Fetch all roles for debug
-  //       final roles = await _dbHelper.getAllRoles();
-  //       print(
-  //         "[DEBUG]=> created Roles: ${roles.map((e) => e.toJson()).toList()}",
-  //       );
-  //       print("[DEBUG]=> created Roles Count: ${roles.length}");
-  //       print("[DEBUG]=> User Get By Id: ${user?.toJson()}");
-  //
-  //       // ✅ Try fetching role for this user
-  //       RoleData? role;
-  //       if (user?.roleId != null) {
-  //         role = await _dbHelper.getRoleById(user!.roleId!);
-  //         if (role == null) {
-  //           print("[ERROR] Role not found for roleId: ${user.roleId}");
-  //         } else {
-  //           print("[DEBUG]=> Role Get By Id: ${role.toJson()}");
-  //         }
-  //       }
-  //
-  //       // ✅ Navigate based on role presence
-  //
-  //       // ✅ Check subscription before navigating to dashboard
-  //       final subscriptionService = SubscriptionService();
-  //       final hasActiveSubscription =
-  //           await subscriptionService.hasActiveSubscription();
-  //
-  //       if (hasActiveSubscription) {
-  //         print(
-  //           "[SUBSCRIPTION] Active subscription found, navigating to Dashboard",
-  //         );
-  //         Get.offAll(() => DashboardScreen());
-  //       } else {
-  //         print("[SUBSCRIPTION] No active subscription, navigating to Plans");
-  //         Get.offAll(() => PlansScreen());
-  //       }
-  //     } else {
-  //       print("[ERROR] No roles found after retries, redirecting to login.");
-  //       Get.offAll(() => LoginScreen());
-  //     }
-  //   } else {
-  //     Get.offAll(() => LoginScreen());
-  //   }
-  // }
-
   Future<void> splash() async {
     await Future.delayed(const Duration(seconds: 1));
 
@@ -215,7 +56,7 @@ class SplashController extends GetxController {
         await roleController.loadInitial();
 
         print(
-          "[DEBUG] roleController.items after load: ${roleController.items.length}",
+          " roleController.items after load: ${roleController.items.length}",
         );
 
         if (roleController.items.isNotEmpty) {
@@ -237,10 +78,10 @@ class SplashController extends GetxController {
         // Fetch all roles for debug
         final roles = await _dbHelper.getAllRoles();
         print(
-          "[DEBUG]=> created Roles: ${roles.map((e) => e.toJson()).toList()}",
+          "=> created Roles: ${roles.map((e) => e.toJson()).toList()}",
         );
-        print("[DEBUG]=> created Roles Count: ${roles.length}");
-        print("[DEBUG]=> User Get By Id: ${user?.toJson()}");
+        print("=> created Roles Count: ${roles.length}");
+
 
         // ✅ Try fetching role for this user
         RoleData? role;
@@ -249,7 +90,7 @@ class SplashController extends GetxController {
           if (role == null) {
             print("[ERROR] Role not found for roleId: ${user.roleId}");
           } else {
-            print("[DEBUG]=> Role Get By Id: ${role.toJson()}");
+
           }
         }
 
@@ -276,96 +117,3 @@ class SplashController extends GetxController {
     }
   }
 }
-
-// Future<void> splash() async {
-//   // Small delay for splash screen
-//   await Future.delayed(const Duration(seconds: 1));
-//
-//   final bool isLogin = await SecureStorage.getLoggedIn();
-//   final bool rememberMe = await SecureStorage.getRememberMe();
-//   final String? token = await SecureStorage.getToken();
-//
-//   if (!isLogin || !rememberMe || token == null || token.isEmpty) {
-//     Get.offAll(() => LoginScreen());
-//     return;
-//   }
-//
-//   final roleController = Get.put(RolesController());
-//   final DBHelper _dbHelper = DBHelper();
-//   final user = await SecureStorage.getUserData();
-//
-//   // ==========================
-//   // 1️⃣ Load roles from API
-//   // ==========================
-//   const int maxRetry = 2;
-//   int attempt = 0;
-//   while (attempt < maxRetry) {
-//     try {
-//       await roleController.loadInitial();
-//       if (roleController.items.isNotEmpty) break;
-//     } catch (e) {
-//       print("[WARN] Role load attempt ${attempt + 1} failed: $e");
-//     }
-//     attempt++;
-//   }
-//
-//   if (roleController.items.isEmpty) {
-//     print("[ERROR] No roles loaded after retry, redirecting to login");
-//     Get.offAll(() => LoginScreen());
-//     return;
-//   }
-//
-//   // ==========================
-//   // 2️⃣ Add client role if missing
-//   // ==========================
-//   if (!roleController.items.any((r) => r.id == ClientPermissions.client['id'])) {
-//     roleController.items.add(RoleData.fromJson(ClientPermissions.client));
-//   }
-//
-//   // ==========================
-//   // 3️⃣ Sync roles to DB
-//   // ==========================
-//   try {
-//     await _dbHelper.syncRolesFromAPI(roleController.items);
-//   } catch (e) {
-//     print("[ERROR] DB sync failed: $e");
-//     Get.offAll(() => LoginScreen());
-//     return;
-//   }
-//
-//   // ==========================
-//   // 4️⃣ Fetch all roles from DB
-//   // ==========================
-//   final roles = await _dbHelper.getAllRoles();
-//   print("[DEBUG] Roles after sync: ${roles.map((e) => e.toJson())}");
-//   print("[DEBUG] Total Roles Count: ${roles.length}");
-//
-//   // ==========================
-//   // 5️⃣ Fetch user role
-//   // ==========================
-//   RoleData? role;
-//   if (user?.roleId != null) {
-//     try {
-//       // Safe conversion if needed
-//       final userRoleId = int.tryParse(user!.roleId.toString()) ?? user.roleId!;
-//       role = await _dbHelper.getRoleById(userRoleId);
-//       if (role == null) {
-//         print("[ERROR] Role not found for roleId: ${user.roleId}");
-//       } else {
-//         print("[DEBUG] User Role: ${role.toJson()}");
-//       }
-//     } catch (e) {
-//       print("[ERROR] Failed to get user role: $e");
-//     }
-//   }
-//
-//   // ==========================
-//   // 6️⃣ Navigate to Dashboard or Login
-//   // ==========================
-//   if (role != null) {
-//     Get.offAll(() => DashboardScreen());
-//   } else {
-//     print("[ERROR] User role invalid, redirecting to login");
-//     Get.offAll(() => LoginScreen());
-//   }
-// }

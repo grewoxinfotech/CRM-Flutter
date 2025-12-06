@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-
 import '../../../../care/constants/url_res.dart';
 import '../../../../data/network/hrm/employee/employee_model.dart';
 import '../../../../data/network/hrm/payroll/salary/salary_model.dart';
@@ -14,19 +13,13 @@ import '../../../../data/network/system/currency/service/currency_service.dart';
 import '../../../../widgets/common/messages/crm_snack_bar.dart';
 import '../../employee/controllers/employee_controller.dart';
 
-
-
 class PayrollController extends PaginatedController<PayslipData> {
   final PayslipService _service = PayslipService();
   final _currencyService = CurrencyService();
 
-
   final String url = UrlRes.salary;
   var errorMessage = ''.obs;
 
-  // final TextEditingController payslipTypeController = TextEditingController();
-  // final TextEditingController currencyController = TextEditingController();
-  // final TextEditingController currencyCodeController = TextEditingController();
   final TextEditingController salaryController = TextEditingController();
   final TextEditingController netSalaryController = TextEditingController();
   final TextEditingController bankAccountController = TextEditingController();
@@ -39,12 +32,10 @@ class PayrollController extends PaginatedController<PayslipData> {
   final EmployeeController employeeController = Get.put(EmployeeController());
   var selectedEmployee = Rxn<EmployeeData>();
 
-
-
-  List<String> payslipType = ["Weekly","Monthly","Bi-Weekly","Annual"];
+  List<String> payslipType = ["Weekly", "Monthly", "Bi-Weekly", "Annual"];
   var selectedPayslipType = Rxn<String>();
 
-  List<String> status = ["paid","unpaid"];
+  List<String> status = ["paid", "unpaid"];
   var selectedStatus = Rxn<String>();
 
   var currency = 'AHNTpSNJHMypuNF6iPcMLrz'.obs;
@@ -53,7 +44,6 @@ class PayrollController extends PaginatedController<PayslipData> {
   var currencies = <CurrencyModel>[].obs;
   var isLoadingCurrencies = false.obs;
   var currenciesLoaded = false.obs;
-
 
   // var selectedStatus = "Pending".obs;
 
@@ -83,7 +73,7 @@ class PayrollController extends PaginatedController<PayslipData> {
     _loadBackground();
   }
 
-  void _loadBackground(){
+  void _loadBackground() {
     loadCurrencies();
     loadControllers();
   }
@@ -118,9 +108,7 @@ class PayrollController extends PaginatedController<PayslipData> {
     } catch (e) {
       print("Get employee error: $e");
     }
-
   }
-
 
   Future<void> loadCurrencies() async {
     try {
@@ -130,7 +118,7 @@ class PayrollController extends PaginatedController<PayslipData> {
 
       if (currencyList.isNotEmpty) {
         final selectedCurrency = currencyList.firstWhereOrNull(
-              (c) => c.id == currency.value,
+          (c) => c.id == currency.value,
         );
 
         if (selectedCurrency != null) {
@@ -158,7 +146,7 @@ class PayrollController extends PaginatedController<PayslipData> {
   void updateCurrencyDetails(String currencyId) {
     if (currencies.isNotEmpty) {
       final selectedCurrency = currencies.firstWhereOrNull(
-            (c) => c.id == currencyId,
+        (c) => c.id == currencyId,
       );
 
       if (selectedCurrency != null) {
@@ -170,14 +158,15 @@ class PayrollController extends PaginatedController<PayslipData> {
   }
 
   void loadControllers() {
-    paymentDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    paymentDateController.text = DateFormat(
+      'yyyy-MM-dd',
+    ).format(DateTime.now());
     salaryController.text = '0';
     netSalaryController.text = '0';
     // selectedEmployee.value = employeeController.items.first;
     selectedPayslipType.value = payslipType.first;
     selectedStatus.value = status.first;
   }
-
 
   /// Get single payslip by ID
   Future<PayslipData?> getPayslipById(String id) async {
@@ -206,8 +195,7 @@ class PayrollController extends PaginatedController<PayslipData> {
       lastDate: DateTime(2100),
     );
     if (pickedDate != null) {
-      paymentDateController.text =
-          DateFormat('yyyy-MM-dd').format(pickedDate);
+      paymentDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
       selectedDate.value = pickedDate;
     }
   }
@@ -226,10 +214,7 @@ class PayrollController extends PaginatedController<PayslipData> {
     }
   }
 
-  Future<bool> updatePayslip(
-      String id,
-      PayslipData updatedPayslip,
-      ) async {
+  Future<bool> updatePayslip(String id, PayslipData updatedPayslip) async {
     try {
       final success = await _service.updatePayslip(id, updatedPayslip);
       if (success) {

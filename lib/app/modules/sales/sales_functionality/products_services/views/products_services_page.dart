@@ -129,21 +129,7 @@ class ProductsServicesScreen extends StatelessWidget {
                                           }, binding: ProductServicesBinding());
                                         },
                                     ),
-                                  // IconButton(
-                                  //   icon: const Icon(
-                                  //     Icons.edit,
-                                  //     color: Colors.blue,
-                                  //   ),
-                                  //   onPressed: () {
-                                  //     Get.to(() {
-                                  //       controller.resetForm();
-                                  //       return AddProductScreen(
-                                  //         isFromEdit: true,
-                                  //         product: product,
-                                  //       );
-                                  //     }, binding: ProductServicesBinding());
-                                  //   },
-                                  // ),
+
                                   const SizedBox(width: 16),
                                   if (accessController.can(
                                     AccessModule.productServices,
@@ -159,18 +145,7 @@ class ProductsServicesScreen extends StatelessWidget {
                                         );
                                       },
                                     ),
-                                    // IconButton(
-                                    //   icon: const Icon(
-                                    //     Icons.delete,
-                                    //     color: Colors.red,
-                                    //   ),
-                                    //   onPressed: () {
-                                    //     _deleteProduct(
-                                    //       product.id ?? '',
-                                    //       product.name ?? 'Product',
-                                    //     );
-                                    //   },
-                                    // ),
+
                                 ],
                               ),
                             ),

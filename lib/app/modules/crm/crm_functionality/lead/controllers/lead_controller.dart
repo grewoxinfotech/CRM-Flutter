@@ -248,17 +248,6 @@ class LeadController extends PaginatedController<LeadData> {
     }
   }
 
-  // Future<void> fetchLeads() async {
-  //   try {
-  //     isLoading(true);
-  //     final fetchedLeads = await _leadService.fetchLeads();
-  //     leads.assignAll(fetchedLeads);
-  //   } catch (e) {
-  //     _showErrorSnackbar('Failed to fetch leads', e);
-  //   } finally {
-  //     isLoading(false);
-  //   }
-  // }
 
   @override
   Future<List<LeadData>> fetchItems(int page) async {
@@ -396,7 +385,7 @@ class LeadController extends PaginatedController<LeadData> {
       await _usersController.fetchUsers();
       users.assignAll(_usersController.users);
     } catch (e) {
-      _showErrorSnackbar('Failed to fetch users', e);
+      // _showErrorSnackbar('Failed to fetch users', e);
     }
   }
 
@@ -448,7 +437,7 @@ class LeadController extends PaginatedController<LeadData> {
     try {
       await Future.wait([loadInitial(), fetchLabels(), fetchUsers()]);
     } catch (e) {
-      _showErrorSnackbar('Failed to refresh data', e);
+      // _showErrorSnackbar('Failed to refresh data', e);
     } finally {
       isLoading(false);
     }
@@ -503,6 +492,4 @@ class LeadController extends PaginatedController<LeadData> {
     noteDescriptionController.dispose();
     super.onClose();
   }
-
-
 }

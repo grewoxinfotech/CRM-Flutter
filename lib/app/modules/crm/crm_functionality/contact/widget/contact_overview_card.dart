@@ -150,16 +150,7 @@ class ContactOverviewCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Text(
-                //   "$dealTitle",
-                //   maxLines: 1,
-                //   overflow: TextOverflow.ellipsis,
-                //   style: TextStyle(
-                //     fontSize: 18,
-                //     fontWeight: FontWeight.w700,
-                //     color: color,
-                //   ),
-                // ),
+
                 Text(
                   "$companyName",
                   style: TextStyle(
@@ -198,14 +189,7 @@ class ContactOverviewCard extends StatelessWidget {
                     color: textSecondary,
                   ),
                 ),
-                // Text(
-                //   "id : $clientId",
-                //   style: TextStyle(
-                //     fontSize: 10,
-                //     fontWeight: FontWeight.w600,
-                //     color: textSecondary,
-                //   ),
-                // ),
+
 
                 Divider(
                   height: AppPadding.medium,
@@ -265,26 +249,7 @@ class ContactOverviewCard extends StatelessWidget {
             ),
           ),
           AppSpacing.verticalSmall,
-          // CrmCard(
-          //   borderRadius: BorderRadius.circular(AppRadius.large),
-          //   padding: const EdgeInsets.symmetric(
-          //     horizontal: AppPadding.medium,
-          //     vertical: AppPadding.small,
-          //   ),
-          //   child: Column(
-          //     children: [
-          //       tile2("Pipeline", pipeline.toString()),
-          //       divider,
-          //       tile2("Source", source.toString()),
-          //       divider,
-          //       tile2("Category", dealTitle.toString()),
-          //       divider,
-          //       tile2("Stage", stage.toString()),
-          //       divider,
-          //       tile2("Status", status.toString()),
-          //     ],
-          //   ),
-          // ),
+
           AppSpacing.verticalSmall,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

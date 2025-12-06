@@ -54,7 +54,7 @@ class _BillDetailScreenState extends State<BillDetailScreen> {
         });
       }
     } catch (e) {
-      debugPrint("Error fetching vendor: $e");
+      ("Error fetching vendor: $e");
     }
   }
 

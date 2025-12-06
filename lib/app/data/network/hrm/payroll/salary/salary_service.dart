@@ -3,8 +3,6 @@ import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:crm_flutter/app/data/network/hrm/payroll/salary/salary_model.dart';
 import 'package:http/http.dart' as http;
 
-
-
 class PayslipService {
   final String baseUrl = UrlRes.salary; // Define this in UrlRes
 
@@ -64,13 +62,14 @@ class PayslipService {
   /// Create new payslip
   Future<bool> createPayslip(PayslipData payslip) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${payslip.toJson()}");
+      print("=> $baseUrl ---- ${payslip.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(payslip.toJson()),
       );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.statusCode}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create payslip exception: $e");
@@ -87,7 +86,7 @@ class PayslipService {
         body: jsonEncode(payslip.toJson()),
       );
 
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.body}");
 
       return response.statusCode == 200;
     } catch (e) {

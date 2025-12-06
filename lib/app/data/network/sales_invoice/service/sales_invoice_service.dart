@@ -139,13 +139,13 @@ class SalesInvoiceService {
   /// Update an existing invoice
   Future<bool> updateSalesInvoice(String id, Map<String, dynamic> data) async {
     try {
-      print("[DEBUG]=>data ---- ${data}");
+      print("=>data ---- ${data}");
       final response = await http.put(
         Uri.parse("$url/$id"),
         headers: await headers(),
         body: json.encode(data),
       );
-      print("[DEBUG]=>response ---- ${response.body}");
+      print("=>response ---- ${response.body}");
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
@@ -182,7 +182,7 @@ class SalesInvoiceService {
 
   /// Create a new invoice
   Future<bool> createSalesInvoice(SalesInvoice data, String dealId) async {
-    print("[DEBUG]=>$data");
+    print("=>$data");
 
     try {
       final response = await http.post(
@@ -190,7 +190,7 @@ class SalesInvoiceService {
         headers: await headers(),
         body: json.encode(data),
       );
-      print("[DEBUG]=>$data");
+      print("=>$data");
       if (response.statusCode == 201 || response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
@@ -213,12 +213,12 @@ class SalesInvoiceService {
           message: "Failed to create invoice. Status: ${response.statusCode}",
           contentType: ContentType.failure,
         );
-        print("[DEBUG]=>${response.body.toString()}");
+        print("=>${response.body.toString()}");
 
         return false;
       }
     } catch (e) {
-      print("[DEBUG]=>${e.toString()}");
+      print("=>${e.toString()}");
       CrmSnackBar.showAwesomeSnackbar(
         title: "Error",
         message: "Error creating invoice: ${e.toString()}",

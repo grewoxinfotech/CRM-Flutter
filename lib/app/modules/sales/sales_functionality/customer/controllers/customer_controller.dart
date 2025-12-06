@@ -58,13 +58,7 @@ class CustomerController extends PaginatedController<CustomerData> {
 
   @override
   Future<List<CustomerData>> fetchItems(int page) async {
-    // try {
-    //   final response = await _service.fetchCustomers(page: page);
-    //   return r;
-    // } catch (e) {
-    //   print("Exception in fetchItems: $e");
-    //   throw Exception("Exception in fetchItems: $e");
-    // }
+
 
     try {
       final response = await _service.fetchCustomers(page: page);

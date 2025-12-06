@@ -91,11 +91,7 @@ class AllUsersService {
         return [];
       }
     } catch (e) {
-      CrmSnackBar.showAwesomeSnackbar(
-        title: "Error",
-        message: "Failed to fetch users: $e",
-        contentType: ContentType.failure,
-      );
+
       print("Error fetching users: $e");
       return [];
     }

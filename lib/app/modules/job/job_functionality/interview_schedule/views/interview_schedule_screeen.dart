@@ -188,30 +188,7 @@ class _InterviewScheduleCalendarScreenState
                   itemCount: schedules.length,
                   itemBuilder: (context, index) {
                     final schedule = schedules[index];
-                    // return CrmCard(
-                    //   padding: EdgeInsets.all(AppSpacing.small),
-                    //   margin: EdgeInsets.symmetric(horizontal: AppSpacing.small),
-                    //   child: ListTile(
-                    //     leading: Icon(
-                    //       Icons.event_available_rounded,
-                    //       color: _getColorByType(schedule.interviewType),
-                    //     ),
-                    //     title: Text(
-                    //       "Interview with ${schedule.candidate ?? "Candidate"}",
-                    //     ),
-                    //     subtitle: Text(
-                    //       "${formatDateString(schedule.startOn ?? '')} "
-                    //           "at ${schedule.startTime ?? ''}",
-                    //     ),
-                    //     trailing: Text(
-                    //       schedule.interviewType ?? "Other",
-                    //       style: TextStyle(
-                    //         fontWeight: FontWeight.w500,
-                    //         color: _getColorByType(schedule.interviewType),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // );
+
                     return Stack(
                       children: [
                         InterviewScheduleCard(schedule: schedule),

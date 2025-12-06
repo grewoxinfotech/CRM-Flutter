@@ -48,13 +48,7 @@ class CountryController extends GetxController {
       );
       print("CountryData:----$country");
 
-      if (country == null) {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: 'Not Found',
-          message: 'Country with ID "$countryId" not found.',
-          contentType: ContentType.warning,
-        );
-      }
+
 
       return country;
     } catch (e) {

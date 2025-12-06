@@ -96,22 +96,7 @@ class BillingScreen extends StatelessWidget {
                       if (index < controller.items.length) {
                         final billing = controller.items[index];
 
-                        // return Padding(
-                        //   padding: const EdgeInsets.all(8.0),
-                        //   child: BillingCard(
-                        //     id: billing.id,
-                        //     billNumber: billing.billNumber ?? "Billing",
-                        //     totalAmount: billing.total.toString(),
-                        //     currency: billing.currency,
-                        //     status: billing.status,
-                        //     issuedDate: formatDateString(
-                        //       billing.createdAt.toString(),
-                        //     ),
-                        //     onTap: () {
-                        //       Get.to(() => BillDetailScreen(bill: billing));
-                        //     },
-                        //   ),
-                        // );
+
                         return Stack(
                           children: [
                             BillingCard(

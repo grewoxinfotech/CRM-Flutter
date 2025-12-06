@@ -77,7 +77,7 @@ class AddInterviewScheduleScreen extends StatelessWidget {
   void _submit() async {
     if (!controller.formKey.currentState!.validate()) return;
 
-    print("[DEBUG]=> startTime : ${controller.selectedStartTime.value}");
+    print("=> startTime : ${controller.selectedStartTime.value}");
 
     String startTimeString = controller.selectedStartTime.value != null
         ? _formatTimeOfDay(controller.selectedStartTime.value!)
@@ -137,18 +137,6 @@ class AddInterviewScheduleScreen extends StatelessWidget {
       ).format(selectedDate!);
       controller.selectedDay.value = selectedDate;
     }
-    // Pre-fill fields if editing
-    // if (isFromEdit && interviewSchedule != null) {
-    //   controller.sele.text = interviewSchedule!.job ?? '';
-    //   controller.candidateController.text = interviewSchedule!.candidate ?? '';
-    //   controller.interviewerController.text = interviewSchedule!.interviewer ?? '';
-    //   controller.roundController.text = interviewSchedule!.round ?? '';
-    //   controller.interviewTypeController.text = interviewSchedule!.interviewType ?? '';
-    //   controller.startOnController.text = interviewSchedule!.startOn ?? '';
-    //   controller.startTimeController.text = interviewSchedule!.startTime ?? '';
-    //   controller.commentForInterviewerController.text = interviewSchedule!.commentForInterviewer ?? '';
-    //   controller.commentForCandidateController.text = interviewSchedule!.commentForCandidate ?? '';
-    // }
 
     return Scaffold(
       appBar: AppBar(

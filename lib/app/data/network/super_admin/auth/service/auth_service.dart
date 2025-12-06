@@ -60,25 +60,7 @@ class AuthService extends GetConnect {
     Get.offAll(LoginScreen());
   }
 
-  // static Future<UserModel> updateProfile(UserModel user) async {
-  //   print('${user.city}');
-  //   final updateUrl = '${UrlRes.auth}/${user.id}';
-  //   final header = await UrlRes.getHeaders();
-  //   final response = await http.put(
-  //     Uri.parse(updateUrl),
-  //     headers: header,
-  //     body: jsonEncode(user),
-  //   );
-  //   final sample = jsonDecode(response.body);
-  //   print('${sample['data']["city"]}');
-  //
-  //   if (response.statusCode == 200) {
-  //     final data = jsonDecode(response.body);
-  //     return UserModel.fromJson(data["data"]);
-  //   } else {
-  //     throw Exception("Failed to update profile");
-  //   }
-  // }
+
 
   static Future<UserModel> updateProfile(UserModel user) async {
     final updateUrl = '${UrlRes.baseURL}/clients/${user.id}';
@@ -116,15 +98,7 @@ class AuthService extends GetConnect {
       request.fields['accountnumber'] = user.accountNumber.toString();
     }
 
-    // 🔹 Add file if provided
-    // if (profileImage != null) {
-    //   request.files.add(
-    //     await http.MultipartFile.fromPath(
-    //       'profileImage', // backend must accept this key
-    //       profileImage.path,
-    //     ),
-    //   );
-    // }
+
 
     // 🔹 Send request
     var streamedResponse = await request.send();

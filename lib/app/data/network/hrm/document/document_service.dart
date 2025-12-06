@@ -64,7 +64,7 @@ class DocumentService {
   /// Create new document
   Future<bool> createDocument(DocumentData document,File? file) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${document.toJson()}");
+      print("=> $baseUrl ---- ${document.toJson()}");
       final uri = Uri.parse(baseUrl);
       final request = http.MultipartRequest("POST",uri);
 
@@ -91,12 +91,8 @@ class DocumentService {
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
 
-      // final response = await http.post(
-      //   Uri.parse(baseUrl),
-      //   headers: await headers(),
-      //   body: jsonEncode(document.toJson()),
-      // );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+
+      print("=> $baseUrl ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create document exception: $e");

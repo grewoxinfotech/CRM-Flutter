@@ -190,55 +190,6 @@ class SalesInvoice {
     this.createdAt,
     this.updatedAt,
   });
-
-  // factory SalesInvoice.fromJson(Map<String, dynamic> json) {
-  //   return SalesInvoice(
-  //     id: json['id']?.toString() ?? '',
-  //     salesInvoiceNumber: json['salesInvoiceNumber']?.toString() ?? '',
-  //     relatedId: json['related_id']?.toString() ?? '',
-  //     relatedType: json['related_type']?.toString(),
-  //     customer: json['customer']?.toString() ?? '',
-  //     gstin: json['gstin']?.toString(),
-  //     section: json['section']?.toString(),
-  //     issueDate: DateTime.parse(
-  //       json['issueDate'] ?? DateTime.now().toIso8601String(),
-  //     ),
-  //     dueDate: DateTime.parse(
-  //       json['dueDate'] ?? DateTime.now().toIso8601String(),
-  //     ),
-  //     category: json['category']?.toString(),
-  //     upiLink: json['upiLink']?.toString() ?? '',
-  //     items:
-  //         (json['items'] as List<dynamic>?)
-  //             ?.map((item) => SalesInvoiceItem.fromJson(item))
-  //             .toList() ??
-  //         [],
-  //     discount: (json['discount'] ?? 0).toDouble(),
-  //     tax: (json['tax'] ?? 0).toDouble(),
-  //     subtotal: (json['subtotal'] ?? 0).toDouble(),
-  //     total: (json['total'] ?? 0).toDouble(),
-  //     pendingAmount: (json['pendingAmount'] ?? 0).toDouble(),
-  //     amount: (json['amount'] ?? 0).toDouble(),
-  //     paymentStatus: json['payment_status']?.toString() ?? 'unpaid',
-  //     currency: json['currency']?.toString() ?? '',
-  //     currencyCode: json['currency_code']?.toString(),
-  //     currencyIcon: json['currency_icon']?.toString(),
-  //     costOfGoods: (json['cost_of_goods'] ?? 0).toDouble(),
-  //     profit: (json['profit'] ?? 0).toDouble(),
-  //     profitPercentage: (json['profit_percentage'] ?? 0).toDouble(),
-  //     additionalNotes: json['additional_notes']?.toString(),
-  //     clientId: json['client_id']?.toString() ?? '',
-  //     createdBy: json['created_by']?.toString() ?? '',
-  //     updatedBy: json['updated_by']?.toString(),
-  //     createdAt: DateTime.parse(
-  //       json['createdAt'] ?? DateTime.now().toIso8601String(),
-  //     ),
-  //     updatedAt: DateTime.parse(
-  //       json['updatedAt'] ?? DateTime.now().toIso8601String(),
-  //     ),
-  //   );
-  // }
-
   factory SalesInvoice.fromJson(Map<String, dynamic> json) {
     return SalesInvoice(
       id: json['id']?.toString(),

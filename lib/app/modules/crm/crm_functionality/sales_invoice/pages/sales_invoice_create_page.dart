@@ -554,18 +554,13 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
       // Currency
       createController.getCurrencyById(invoice.currency!);
 
-      // createController.currencyIcon.value = invoice.currencyIcon!;
-      // createController.currencyCode.value = invoice.currencyCode!;
+
 
       // GST Enabled
 
       createController.isGstEnabled.value = (invoice.tax ?? 0) > 0;
 
-      // if (invoice.items.isNotEmpty) {
-      //   createController.selectedProducts.assignAll(
-      //     invoice.items.map((e) => e.productId).toList(),
-      //   );
-      // }
+
 
       // Products
       createController.selectedProducts.assignAll(
@@ -580,11 +575,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
             )
             .toList(),
       );
-      // createController.getProductsByIds(
-      //   invoice.items.map((e) => e.productId).toList(),
-      // );
-      // final products = invoice.items.map((e) => e.productId).toList();
-      // createController.selectedProducts.assignAll(products);
+
 
       // Quantity Controllers
       createController.quantityControllers.assignAll(
@@ -623,10 +614,7 @@ class _SalesInvoiceCreatePageState extends State<SalesInvoiceCreatePage> {
       // Payment status
       createController.paymentStatus.value = invoice.paymentStatus ?? '';
 
-      // Subtotal, Discount, Total
-      // createController.subtotalController.text = invoice.subTotal?.toString() ?? '0';
-      // createController.discountController.text = invoice.discount?.toString() ?? '0';
-      // createController.totalController.text = invoice.total?.toString() ?? '0';
+
     }
 
     return PopScope(

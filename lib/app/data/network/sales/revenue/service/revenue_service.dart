@@ -31,7 +31,7 @@ class RevenueService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print("[DEBUG]=> $baseUrl ---- ${response.body}");
+        print("=> $baseUrl ---- ${response.body}");
         return RevenueModel.fromJson(data);
       } else {
         print("Failed to load revenues: ${response.statusCode}");
@@ -41,34 +41,6 @@ class RevenueService {
     }
     return null;
   }
-  // Future<List<RevenueData>> fetchRevenues({
-  //     int page = 1,
-  //     int pageSize = 10,
-  //     String search = '',
-  //   }) async {
-  //     try {
-  //       final uri = Uri.parse(baseUrl).replace(
-  //         queryParameters: {
-  //           'page': page.toString(),
-  //           'pageSize': pageSize.toString(),
-  //           'search': search,
-  //         },
-  //       );
-  //
-  //       final response = await http.get(uri, headers: await headers());
-  //
-  //       if (response.statusCode == 200) {
-  //         final data = jsonDecode(response.body);
-  //         final List<dynamic> revenues = data["message"]["data"];
-  //         return revenues.map((json) => RevenueData.fromJson(json)).toList();
-  //       } else {
-  //         print("Failed to load revenues: ${response.statusCode}");
-  //       }
-  //     } catch (e) {
-  //       print("Exception in fetchRevenues: $e");
-  //     }
-  //     return [];
-  //   }
 
   /// Get single revenue by ID
   Future<RevenueData?> getRevenueById(String id) async {
@@ -91,13 +63,13 @@ class RevenueService {
   /// Create new revenue
   Future<bool> createRevenue(RevenueData revenue) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${revenue.toJson()}");
+      print("=> $baseUrl ---- ${revenue.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(revenue.toJson()),
       );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create revenue exception: $e");

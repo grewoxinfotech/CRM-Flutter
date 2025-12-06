@@ -1067,7 +1067,7 @@ class _RevenueChartState extends State<RevenueChart> {
                               sideTitles: SideTitles(
                                 showTitles: true,
                                 reservedSize: 40,
-                                interval: maxY / 5,
+                                interval: maxY / 5 == 0 ? 10 : maxY / 5,
                                 getTitlesWidget: (value, meta) {
                                   double realValue =
                                       useLog ? exp(value) - 1 : value;
@@ -1144,22 +1144,35 @@ class _RevenueChartState extends State<RevenueChart> {
                                   int index = value.toInt();
                                   int total = dates.length;
 
-                                  if (total == 0) return const SizedBox.shrink();
+                                  if (total == 0)
+                                    return const SizedBox.shrink();
 
                                   int first = 0;
                                   int last = total - 1;
                                   int middle1 = (total / 3).floor();
                                   int middle2 = (2 * total / 3).floor();
-                                  List<int> labelIndices = [first, middle1, middle2, last];
+                                  List<int> labelIndices = [
+                                    first,
+                                    middle1,
+                                    middle2,
+                                    last,
+                                  ];
 
-                                  if (!labelIndices.contains(index)) return const SizedBox.shrink();
+                                  if (!labelIndices.contains(index))
+                                    return const SizedBox.shrink();
 
                                   // Add left/right padding for first/last labels
                                   EdgeInsets padding;
                                   if (index == first) {
-                                    padding = const EdgeInsets.only(left: 30, top: 8);
+                                    padding = const EdgeInsets.only(
+                                      left: 30,
+                                      top: 8,
+                                    );
                                   } else if (index == last) {
-                                    padding = const EdgeInsets.only(right: 30, top: 8);
+                                    padding = const EdgeInsets.only(
+                                      right: 30,
+                                      top: 8,
+                                    );
                                   } else {
                                     padding = const EdgeInsets.only(top: 8);
                                   }
@@ -1174,7 +1187,6 @@ class _RevenueChartState extends State<RevenueChart> {
                                 },
                               ),
                             ),
-
                           ),
                           borderData: FlBorderData(show: false),
                           lineBarsData: [

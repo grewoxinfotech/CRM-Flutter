@@ -255,19 +255,22 @@ class AddEmployeeController extends GetxController {
           message: 'Employee updated successfully',
           contentType: ContentType.success,
         );
-        final index = employeeController.items.indexWhere((e) => e.id == employeeId);
+        final index = employeeController.items.indexWhere(
+          (e) => e.id == employeeId,
+        );
         if (index != -1) {
-          employeeController.items[index] = employee; // replace with updated employee
+          employeeController.items[index] =
+              employee; // replace with updated employee
           employeeController.items.refresh(); // notify UI
         }
 
         Get.back(); // close edit screen
       } else {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: 'Error',
-          message: 'Failed to update employee',
-          contentType: ContentType.failure,
-        );
+        // CrmSnackBar.showAwesomeSnackbar(
+        //   title: 'Error',
+        //   message: 'Failed to update employee',
+        //   contentType: ContentType.failure,
+        // );
       }
     } catch (e) {
       isLoading.value = false;
@@ -279,7 +282,6 @@ class AddEmployeeController extends GetxController {
     }
   }
 
-
   Future<void> submit() async {
     if (!formKey.currentState!.validate()) return;
 
@@ -287,7 +289,6 @@ class AddEmployeeController extends GetxController {
       Get.snackbar("Error", "Please select Joining Date");
       return;
     }
-
 
     final employee = EmployeeData(
       accountholder: accountHolderController.text.trim() ?? '',
@@ -315,7 +316,7 @@ class AddEmployeeController extends GetxController {
     try {
       final token = await _service.createEmployee(employee);
       if (token != null) {
-        isLoading.value=false;
+        isLoading.value = false;
         Get.dialog(
           PopScope(
             canPop: false,
@@ -350,41 +351,42 @@ class AddEmployeeController extends GetxController {
                     ),
                     const SizedBox(height: 20),
                     Obx(
-                      ()=> isLoading.value ?
-                          Center(child: CircularProgressIndicator())
-                          :Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => Get.back(), // close dialog
-                            child: const Text("Cancel"),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              isLoading.value = true;
-                              final success = await _service.verifyOtp(
-                                otpController.text.trim(),
-                                token,
-                              );
-                              if (success) {
-                                isLoading.value = false;
-                                Get.back();
-                                Get.back();
-                              }else{
-                                Get.back();
-                                isLoading.value = false;
-                                otpController.clear();
-                                CrmSnackBar.showAwesomeSnackbar(
-                                  title: 'Error',
-                                  message: 'Invalid OTP',
-                                  contentType: ContentType.failure,
-                                );
-                              }
-                            },
-                            child: const Text("Submit"),
-                          ),
-                        ],
-                      ),
+                      () =>
+                          isLoading.value
+                              ? Center(child: CircularProgressIndicator())
+                              : Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () => Get.back(), // close dialog
+                                    child: const Text("Cancel"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      isLoading.value = true;
+                                      final success = await _service.verifyOtp(
+                                        otpController.text.trim(),
+                                        token,
+                                      );
+                                      if (success) {
+                                        isLoading.value = false;
+                                        Get.back();
+                                        Get.back();
+                                      } else {
+                                        Get.back();
+                                        isLoading.value = false;
+                                        otpController.clear();
+                                        CrmSnackBar.showAwesomeSnackbar(
+                                          title: 'Error',
+                                          message: 'Invalid OTP',
+                                          contentType: ContentType.failure,
+                                        );
+                                      }
+                                    },
+                                    child: const Text("Submit"),
+                                  ),
+                                ],
+                              ),
                     ),
                   ],
                 ),

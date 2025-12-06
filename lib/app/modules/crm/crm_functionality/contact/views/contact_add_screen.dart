@@ -115,12 +115,7 @@ class ContactAddScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
 
-                        // CrmTextField(
-                        //   title: "Phone Number",
-                        //   isRequired: true,
-                        //   controller: contactController.phone,
-                        //   validator: (phone) => phoneValidation(phone),
-                        // ),
+
                         Row(
                           children: [
                             Obx(
@@ -176,10 +171,7 @@ class ContactAddScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
 
-                        // CrmTextField(
-                        //   title: "Company Name",
-                        //   controller: contactController.companyName,
-                        // ),
+
                         Obx(
                           () => CrmDropdownField<String>(
                             title: "Company Name",
@@ -217,10 +209,7 @@ class ContactAddScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        // CrmTextField(
-                        //   title: "Company Source",
-                        //   controller: contactController.contactSource,
-                        // ),
+
 
                         // Source
                         Obx(

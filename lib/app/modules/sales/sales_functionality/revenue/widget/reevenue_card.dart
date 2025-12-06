@@ -91,17 +91,6 @@ class _RevenueCardState extends State<RevenueCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Revenue ID
-                      // Text(
-                      //   "REV-${formatRevenueId(widget.revenue.id)}",
-                      //   style: const TextStyle(
-                      //     fontSize: 18,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      //   maxLines: 1,
-                      //   overflow: TextOverflow.ellipsis,
-                      // ),
-                      // const SizedBox(height: 6),
 
                       // Customer Name
                       if (widget.revenue.description != null &&

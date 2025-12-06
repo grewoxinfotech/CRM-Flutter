@@ -40,13 +40,7 @@ class RoleScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Roles")),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     controller.resetForm();
-      //     Get.to(() => AddRoleScreen());
-      //   },
-      //   child: const Icon(Icons.add, color: Colors.white),
-      // ),
+
       body: FutureBuilder(
         future: controller.loadInitial(),
         builder: (context, snapshot) {
@@ -95,32 +89,7 @@ class RoleScreen extends StatelessWidget {
                               bottom: 8,
                               child: Row(
                                 children: [
-                                  // IconButton(
-                                  //   icon: const Icon(
-                                  //     Icons.edit,
-                                  //     color: Colors.blue,
-                                  //   ),
-                                  //   onPressed: () {
-                                  //     Get.to(
-                                  //           () => AddRoleScreen(
-                                  //         role: role,
-                                  //         isFromEdit: true,
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  // ),
-                                  // IconButton(
-                                  //   icon: const Icon(
-                                  //     Icons.delete,
-                                  //     color: Colors.red,
-                                  //   ),
-                                  //   onPressed: () {
-                                  //     _deleteRole(
-                                  //       role.id ?? '',
-                                  //       role.roleName ?? 'Role',
-                                  //     );
-                                  //   },
-                                  // ),
+
                                 ],
                               ),
                             ),

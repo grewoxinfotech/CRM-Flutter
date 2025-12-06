@@ -59,64 +59,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  // Future<void> _saveProfile() async {
-  //   if (!_formKey.currentState!.validate()) return;
-  //
-  //   setState(() => _loading = true);
-  //   final user = await SecureStorage.getUserData();
-  //   // Replace with your API call
-  //   final updatedUser = user;
-  //
-  //   await SecureStorage.saveUserData(updatedUser); // 👈 add this in service
-  //
-  //   setState(() => _loading = false);
-  //   Get.back(result: true);
-  //   Get.snackbar(
-  //     "Success",
-  //     "Profile updated successfully",
-  //     backgroundColor: Colors.green,
-  //     colorText: Colors.white,
-  //   );
-  // }
 
-  // Future<void> _saveProfile() async {
-  //   if (!_formKey.currentState!.validate()) return;
-  //
-  //   setState(() => _loading = true);
-  //
-  //   try {
-  //     final user = await SecureStorage.getUserData();
-  //
-  //     final data = UserModel(
-  //       createdAt: user!.createdAt,
-  //       updatedAt: updatedAt,
-  //       currency: currency,
-  //     );
-  //
-  //     // 🔹 Call your API service here
-  //     final updatedUser = await AuthService.updateProfile(user!);
-  //
-  //     // 🔹 Save latest user data in local storage
-  //     await SecureStorage.saveUserData(updatedUser);
-  //
-  //     setState(() => _loading = false);
-  //     Get.back(result: true);
-  //     Get.snackbar(
-  //       "Success",
-  //       "Profile updated successfully",
-  //       backgroundColor: Colors.green,
-  //       colorText: Colors.white,
-  //     );
-  //   } catch (e) {
-  //     setState(() => _loading = false);
-  //     Get.snackbar(
-  //       "Error",
-  //       e.toString(),
-  //       backgroundColor: Colors.red,
-  //       colorText: Colors.white,
-  //     );
-  //   }
-  // }
 
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;

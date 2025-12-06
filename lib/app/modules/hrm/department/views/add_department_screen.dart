@@ -29,21 +29,13 @@ class AddDepartmentScreen extends StatelessWidget {
       departmentName: controller.departmentNameController.text,
       branch: controller.selectedBranch.value,
     );
-    print("[DEBUG]=> ${departmentData.toJson()}");
+    print("=> ${departmentData.toJson()}");
 
     controller.isLoading.value = true;
     final success = await controller.createDepartment(departmentData);
 
     controller.isLoading.value = false;
     if (success) Get.back();
-    // CrmSnackBar.showAwesomeSnackbar(
-    //   title: success ? "Success" : "Error",
-    //   message:
-    //       success
-    //           ? "Department added successfully"
-    //           : "Failed to add department",
-    //   contentType: success ? ContentType.success : ContentType.failure,
-    // );
   }
 
   void _update() async {
@@ -53,7 +45,7 @@ class AddDepartmentScreen extends StatelessWidget {
       departmentName: controller.departmentNameController.text,
       branch: controller.selectedBranch.value,
     );
-    print("[DEBUG]=> ${departmentData.toJson()}");
+    print("=> ${departmentData.toJson()}");
 
     controller.isLoading.value = true;
     final success = await controller.updateDepartment(
@@ -66,14 +58,6 @@ class AddDepartmentScreen extends StatelessWidget {
       Get.back();
       controller.loadInitial();
     }
-    // CrmSnackBar.showAwesomeSnackbar(
-    //   title: success ? "Success" : "Error",
-    //   message:
-    //       success
-    //           ? "Department updated successfully"
-    //           : "Failed to update department",
-    //   contentType: success ? ContentType.success : ContentType.failure,
-    // );
   }
 
   @override

@@ -32,14 +32,6 @@ class DepartmentCard extends StatelessWidget {
       await branchController.getBranchById(department.branch!);
     });
 
-    // // Get branch name using ID
-    // String branchName = '';
-    // if (department.branch != null && department.branch!.isNotEmpty) {
-    //   final branch = branchController.items.firstWhereOrNull(
-    //     (b) => b.id == department.branch,
-    //   );
-    //   branchName = branch?.branchName ?? department.branch!;
-    // }
 
     return GestureDetector(
       child: CrmCard(

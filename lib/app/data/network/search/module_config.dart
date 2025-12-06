@@ -96,12 +96,8 @@ final Map<String, dynamic> screenMapper = {
   "ProductServicesScreen": () => ProductsServicesScreen(),
   "AttendanceListScreen": () => AttendanceScreen(),
 
-  // "UsersListScreen": () => UsersListScreen(),
-  // "ProposalScreen": () => ProposalScreen(),
-  // "SystemSetupScreen": () => SystemSetupScreen(),
   "JobListScreen": () => JobListScreen(),
-  // "ProjectListScreen": () => ProjectListScreen(),
-  // "ClientListScreen": () => ClientListScreen(),
+
   "JobInterviewScreen": () => AddInterviewScheduleScreen(),
   "JobCandidateScreen": () => JobCandidateScreen(),
   "JobOnboardingScreen": () => JobOnboardingScreen(),
@@ -118,18 +114,18 @@ class ModuleIconMapper {
     "extra-hrm-payroll": ICRes.payroll,
     "extra-hrm-role": ICRes.role,
     "extra-hrm-branch": ICRes.branch,
-    // "extra-users-list": ICRes.user,
+
     "extra-hrm-holiday": ICRes.holiday,
     "extra-hrm-meeting": ICRes.meeting,
     "extra-hrm-document": ICRes.document,
-    // "dashboards-proposal":ICRes.payroll,
+
     "extra-hrm-department": ICRes.department,
     "extra-hrm-designation": ICRes.designation,
-    // "dashboards-systemsetup": ICRes.deal,
+
     "extra-hrm-announcement": ICRes.announcement,
     "extra-hrm-jobs-joblist": ICRes.jobList,
     "dashboards-TaskCalendar": ICRes.calendar,
-    // "dashboards-project-list": ICRes.deal,
+
     "extra-hrm-trainingSetup": ICRes.training,
     "extra-users-client-list": ICRes.customer,
     "dashboards-sales-invoice": ICRes.salesInvoice,

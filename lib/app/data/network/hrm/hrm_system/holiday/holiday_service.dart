@@ -63,13 +63,13 @@ class HolidayService {
   /// Create new holiday
   Future<bool> createHoliday(HolidayData holiday) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${holiday.toJson()}");
+      print("=> $baseUrl ---- ${holiday.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(holiday.toJson()),
       );
-      print("[DEBUG]=> response ---- ${response.body}");
+      print("=> response ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create holiday exception: $e");

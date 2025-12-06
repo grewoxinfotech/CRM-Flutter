@@ -54,7 +54,7 @@ class PlanController extends GetxController {
       }
     } catch (e) {
       error.value = 'Failed to load plans: $e';
-      debugPrint("Exception in fetchPlans: $e");
+       ("Exception in fetchPlans: $e");
     } finally {
       isLoading.value = false;
     }
@@ -145,7 +145,7 @@ class PlanController extends GetxController {
       'theme': {'color': '#3399cc'},
     };
 
-    debugPrint("Opening Razorpay with options: $options");
+     ("Opening Razorpay with options: $options");
     _razorpay.open(options);
   }
 
@@ -158,11 +158,11 @@ class PlanController extends GetxController {
       colorText: Colors.white,
     );
 
-    debugPrint("Payment Success: ${response.paymentId}");
+     ("Payment Success: ${response.paymentId}");
 
     final order = orderResponse.value?.data;
     if (order == null) {
-      debugPrint("No order data found for verification.");
+       ("No order data found for verification.");
       return;
     }
 
@@ -218,7 +218,7 @@ class PlanController extends GetxController {
       backgroundColor: Colors.redAccent,
       colorText: Colors.white,
     );
-    debugPrint("Payment Error: ${response.message}");
+     ("Payment Error: ${response.message}");
   }
 
   /// 💳 External Wallet Selected

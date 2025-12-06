@@ -185,11 +185,6 @@ class DealDetailScreen extends StatelessWidget {
     String pipelineName,
   ) {
     final ContactController contactController = Get.put(ContactController());
-    // final contactData = contactController.getContactById(deal.id!).then((contact){
-    //   if (contact != null) {
-    //     return contact;
-    //   }
-    // });
 
     // Get deal members information
     final memberIds = deal.dealMembers.map((m) => m.memberId).toList();
@@ -369,17 +364,10 @@ class DealDetailScreen extends StatelessWidget {
             itemBuilder: (context, i) {
               final note = noteController.notes[i];
               return NoteCard(
-                // id: note.id,
-                // relatedId: note.relatedId,
                 noteTitle: note.noteTitle,
                 noteType: note.notetype,
                 description: note.description,
-                // clientId: note.clientId,
-                // createdBy: note.createdBy,
-                // updatedBy: note.updatedBy,
-                // createdAt: formatDate(note.createdAt.toString()),
-                // updatedAt: formatDate(note.updatedAt.toString()),
-                // onDelete: () => noteController.deleteNote(note.id, dealId),
+
                 onDelete:
                     (accessController.can(
                           AccessModule.deal,

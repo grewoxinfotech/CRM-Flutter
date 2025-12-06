@@ -120,15 +120,6 @@ class BillingCard extends StatelessWidget {
 
                       const SizedBox(height: 4),
 
-                      // Customer Name
-                      // Text(
-                      //   customerName,
-                      //   style: const TextStyle(
-                      //     fontSize: 14,
-                      //     color: Colors.blueGrey,
-                      //   ),
-                      //   overflow: TextOverflow.ellipsis,
-                      // ),
                       const SizedBox(height: 4),
 
                       // Total Amount

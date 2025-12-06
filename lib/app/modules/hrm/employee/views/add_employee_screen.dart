@@ -70,7 +70,7 @@ class AddEmployeeScreen extends StatelessWidget {
       controller.bankNameController.text = employeeData!.bankname ?? '';
       controller.ifscController.text = employeeData!.ifsc ?? '';
       controller.bankLocationController.text = employeeData!.banklocation ?? '';
-      // print("[DEBUG]=> password ${employeeData!.password}");
+      // print("=> password ${employeeData!.password}");
 
       // Reactive fields
       controller.joiningDate.value = employeeData!.joiningDate;

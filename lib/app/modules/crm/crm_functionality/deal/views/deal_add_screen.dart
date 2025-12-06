@@ -303,38 +303,7 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   children: [
-                    //     Text(
-                    //       'Select Existing',
-                    //       style: TextStyle(
-                    //         fontSize: 16,
-                    //         fontWeight: FontWeight.w500,
-                    //       ),
-                    //     ),
-                    //     SizedBox(width: 8),
-                    //     Obx(
-                    //       () => Switch(
-                    //         value: dealController.isSelectFromExisting.value,
-                    //         onChanged: (newValue) {
-                    //           dealController.isSelectFromExisting.value =
-                    //               newValue;
-                    //         },
-                    //         activeColor: Theme.of(context).primaryColor,
-                    //       ),
-                    //     ),
-                    //     SizedBox(width: 8),
-                    //     Text(
-                    //       'Create New',
-                    //       style: TextStyle(
-                    //         fontSize: 16,
-                    //         fontWeight: FontWeight.w500,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
+
                     Obx(
                       () => ToggleButtons(
                         borderRadius: BorderRadius.circular(12),
@@ -739,22 +708,10 @@ class _DealCreateScreenState extends State<DealCreateScreen> {
       final createdDeal = await dealController.createDeal(newDeal);
 
       if (createdDeal != null) {
-        //   CrmSnackBar.showAwesomeSnackbar(
-        //     title: 'Success',
-        //     message: 'Lead converted into deal successfully',
-        //     contentType: ContentType.success,
-        //   );
-        //
+
         Get.back(result: createdDeal.id);
       }
-      //   // ✅ Now you have a valid id from backend
-      // } else {
-      //   CrmSnackBar.showAwesomeSnackbar(
-      //     title: 'Error',
-      //     message: 'Failed to convert lead into deal',
-      //     contentType: ContentType.failure,
-      //   );
-      // }
+
     } finally {
       dealController.isCreating(false);
     }

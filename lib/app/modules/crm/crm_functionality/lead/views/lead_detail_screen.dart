@@ -305,28 +305,6 @@ class LeadDetailScreen extends StatelessWidget {
             ),
         onEdit: () => _handleEdit(lead, leadController),
 
-        // onConvert: () async {
-        //   Get.lazyPut(() => DealController());
-        //   final dealController = Get.find<DealController>();
-        //   dealController.dealTitle.text = lead.leadTitle.toString();
-        //   dealController.dealValue.text = lead.leadValue.toString();
-        //   print("[DEBUG]=> Lead Value : ${lead.leadValue}");
-        //   dealController.currency.value = lead.currency.toString();
-        //   dealController.selectedPipelineId.value = lead.pipeline.toString();
-        //   dealController.selectedStageId.value = lead.leadStage.toString();
-        //   dealController.selectedSource.value = lead.source.toString();
-        //   dealController.selectedCategory.value = lead.category.toString();
-        //   dealController.selectedStatus.value = lead.status.toString();
-        //   dealController.selectedContact.value = lead.contactId.toString();
-        //   dealController.selectedCompany.value = lead.companyId.toString();
-        //   dealController.selectedLeadId.value = lead.id.toString();
-        //
-        //   final createDealId = await Get.to(() => DealCreateScreen());
-        //   if (createDealId != null && lead.id != null) {
-        //     final data = LeadModel(isConverted: true, dealId: createDealId);
-        //     leadController.updateLead(lead.id!, data);
-        //   }
-        // },
         onConvert: () async {
           try {
             // ✅ Ensure DealController is available
@@ -353,16 +331,14 @@ class LeadDetailScreen extends StatelessWidget {
                 lead.companyId?.toString() ?? '';
             dealController.selectedLeadId.value = lead.id?.toString() ?? '';
 
-            print(
-              "[DEBUG]=> Pre-filling DealCreateScreen from Lead ${lead.id}",
-            );
+            print("=> Pre-filling DealCreateScreen from Lead ${lead.id}");
 
             // ✅ Open DealCreateScreen and wait for result
             final createdDealId = await Get.to(() => DealCreateScreen());
 
             // ✅ If user canceled or deal creation failed, do nothing
             if (createdDealId == null) {
-              print("[DEBUG]=> Deal creation cancelled for Lead ${lead.id}");
+              print("=> Deal creation cancelled for Lead ${lead.id}");
               return;
             }
 
@@ -612,17 +588,10 @@ class LeadDetailScreen extends StatelessWidget {
             itemBuilder: (context, i) {
               final note = noteController.notes[i];
               return NoteCard(
-                // id: note.id,
-                // relatedId: note.relatedId,
                 noteTitle: note.noteTitle,
                 noteType: note.notetype,
                 description: note.description,
-                // clientId: note.clientId,
-                // createdBy: note.createdBy,
-                // updatedBy: note.updatedBy,
-                // createdAt: formatDate(note.createdAt.toString()),
-                // updatedAt: formatDate(note.updatedAt.toString()),
-                // onDelete: () => noteController.deleteNote(note.id, leadId),
+
                 onDelete:
                     (accessController.can(
                           AccessModule.deal,

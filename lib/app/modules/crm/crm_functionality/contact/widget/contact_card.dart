@@ -78,23 +78,7 @@ class ContactCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(formattedDate, style: const TextStyle(fontSize: 12)),
-                    if (contact.contactSource != null &&
-                        contact.contactSource!.isNotEmpty)
-                      Container(
-                        margin: const EdgeInsets.only(top: 4),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          contact.contactSource!,
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                      ),
+
                   ],
                 ),
               ],

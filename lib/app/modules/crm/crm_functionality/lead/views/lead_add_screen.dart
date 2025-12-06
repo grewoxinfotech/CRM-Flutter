@@ -32,24 +32,7 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
     final stageController = Get.find<StageController>();
     final LeadController leadController = Get.find<LeadController>();
 
-    // // Load pipelines and stages initially
-    // if (pipelineController.pipelines.isEmpty) {
-    //   pipelineController.getPipelines().then((_) {
-    //     if (pipelineController.pipelines.isNotEmpty) {
-    //       leadController.selectedPipelineId.value =
-    //           pipelineController.pipelines.first.id!;
-    //       stageController.getStagesByPipeline(
-    //         pipelineController.pipelines.first.id!,
-    //       );
-    //     }
-    //   });
-    // } else {
-    //   leadController.selectedPipelineId.value =
-    //       pipelineController.pipelines.first.id!;
-    //   stageController.getStagesByPipeline(
-    //     pipelineController.pipelines.first.id!,
-    //   );
-    // }
+
 
     // Load pipelines and select first as default
     pipelineController.getPipelines().then((_) {
@@ -169,30 +152,7 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Stage
-                    // Obx(
-                    //   () => CrmDropdownField<String>(
-                    //     title: "Stage",
-                    //     value:
-                    //         leadController.selectedStageId.value != null
-                    //             ? null
-                    //             : leadController.selectedStageId.value,
-                    //     items:
-                    //         stageController.stages.map((stage) {
-                    //           return DropdownMenuItem(
-                    //             value: stage.id,
-                    //             child: Text(stage.stageName ?? ''),
-                    //           );
-                    //         }).toList(),
-                    //     onChanged: (value) {
-                    //       if (value != null) {
-                    //         leadController.selectedStageId.value = value;
-                    //       }
-                    //     },
-                    //     hintText: "Select stage",
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 16),
+
 
                     // Lead Value
                     Row(
@@ -370,39 +330,6 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Status
-                    // Obx(
-                    //   () => CrmDropdownField<String>(
-                    //     title: "Status",
-                    //     value: leadController.selectedStatus.value,
-                    //     items:
-                    //         leadController.statusOptions.isEmpty
-                    //             ? [
-                    //               DropdownMenuItem(
-                    //                 value: '',
-                    //                 child: Text('No statuses available'),
-                    //               ),
-                    //             ]
-                    //             : leadController.statusOptions.map((status) {
-                    //               return DropdownMenuItem(
-                    //                 value: status['id'],
-                    //                 child: Text(
-                    //                   (status['name'] ?? '').capitalizeFirst!,
-                    //                 ),
-                    //               );
-                    //             }).toList(),
-                    //     onChanged:
-                    //         leadController.statusOptions.isEmpty
-                    //             ? (_) {}
-                    //             : (value) {
-                    //               if (value != null) {
-                    //                 leadController.selectedStatus.value = value;
-                    //               }
-                    //             },
-                    //     hintText: "Select status",
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 16),
 
                     // Team Members
                     Column(
@@ -766,7 +693,7 @@ class _LeadCreateScreenState extends State<LeadCreateScreen> {
         leadMembers: LeadMembers(leadMembers: selectedMembers.value),
         currency: leadController.currency.value,
       );
-      print("[DEBUG]=> data ${newLead.toJson()}");
+      print("=> data ${newLead.toJson()}");
       final success = await leadController.createLead(newLead);
 
       if (success) {

@@ -37,12 +37,7 @@ class SearchModuleScreen extends StatelessWidget {
                 itemCount: controller.filteredModules.length,
                 itemBuilder: (context, index) {
                   final module = controller.filteredModules[index];
-                  // return ListTile(
-                  //   title: Text(module.name),
-                  //   subtitle: Text(module.tag),
-                  //   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  //   onTap: () => controller.openModule(module),
-                  // );
+
                   return SearchModuleCard(
                     module: module,
                     onTap: () => controller.openModule(module),

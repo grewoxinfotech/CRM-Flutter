@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 class UserModel {
   final String? id;
   final String? employeeId;
@@ -36,7 +39,7 @@ class UserModel {
   final String? clientId;
   final String? clientPlanId;
   final String? documents;
-  final String? conversations;
+  final dynamic conversations; // Can be String or Map
   final String? resetPasswordOTP;
   final DateTime? resetPasswordOTPExpiry;
   final String? createdBy;
@@ -146,7 +149,21 @@ class UserModel {
       clientId: json['client_id']?.toString(),
       clientPlanId: json['client_plan_id']?.toString(),
       documents: json['documents']?.toString(),
-      conversations: json['conversations']?.toString(),
+      conversations: (() {
+        final data = json['conversations'];
+        if (data == null) return null;
+        if (data is Map<String, dynamic>) {
+          return data;
+        }
+        if (data is String) {
+          try {
+            return jsonDecode(data);
+          } catch (e) {
+            log("Error parsing conversations as Map: $e");
+            return null;
+          }
+        }
+      }()), // Keep dynamic
       resetPasswordOTP: json['resetPasswordOTP']?.toString(),
       resetPasswordOTPExpiry:
           json['resetPasswordOTPExpiry'] != null
@@ -197,7 +214,7 @@ class UserModel {
       'accountholder': accountHolder,
       'accountnumber': accountNumber,
       'bankname': bankName,
-      'ifsc': num.tryParse(ifsc ?? ''),
+      'ifsc': ifsc,
       'gstIn': gstIn,
       'banklocation': bankLocation,
       'cv_path': cvPath,
@@ -207,7 +224,10 @@ class UserModel {
       'client_id': clientId,
       'client_plan_id': clientPlanId,
       'documents': documents,
-      'conversations': conversations,
+      if (conversations != null)
+        "conversations":
+            conversations is Map ? conversations : conversations.toString(),
+
       'resetPasswordOTP': resetPasswordOTP,
       'resetPasswordOTPExpiry': resetPasswordOTPExpiry?.toIso8601String(),
       'created_by': createdBy,

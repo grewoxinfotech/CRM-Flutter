@@ -64,87 +64,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                // int selectedYear =
-                                //     controller.focusedMonth.value.year;
-                                // int selectedMonth =
-                                //     controller.focusedMonth.value.month;
-                                //
-                                // await showDialog(
-                                //   context: context,
-                                //   builder: (context) {
-                                //     return AlertDialog(
-                                //       title: const Text("Select Month & Year"),
-                                //       content: Row(
-                                //         children: [
-                                //           DropdownButton<int>(
-                                //             value: selectedMonth,
-                                //             items:
-                                //                 List.generate(12, (i) => i + 1)
-                                //                     .map(
-                                //                       (m) => DropdownMenuItem(
-                                //                         value: m,
-                                //                         child: Text(
-                                //                           DateFormat.MMMM()
-                                //                               .format(
-                                //                                 DateTime(0, m),
-                                //                               ),
-                                //                         ),
-                                //                       ),
-                                //                     )
-                                //                     .toList(),
-                                //             onChanged:
-                                //                 (v) =>
-                                //                     selectedMonth =
-                                //                         v ?? selectedMonth,
-                                //           ),
-                                //           const SizedBox(width: 16),
-                                //           DropdownButton<int>(
-                                //             value: selectedYear,
-                                //             items:
-                                //                 List.generate(
-                                //                       21,
-                                //                       (i) =>
-                                //                           DateTime.now().year -
-                                //                           10 +
-                                //                           i,
-                                //                     )
-                                //                     .map(
-                                //                       (y) => DropdownMenuItem(
-                                //                         value: y,
-                                //                         child: Text("$y"),
-                                //                       ),
-                                //                     )
-                                //                     .toList(),
-                                //             onChanged:
-                                //                 (v) =>
-                                //                     selectedYear =
-                                //                         v ?? selectedYear,
-                                //           ),
-                                //         ],
-                                //       ),
-                                //       actions: [
-                                //         TextButton(
-                                //           onPressed:
-                                //               () => Navigator.pop(context),
-                                //           child: const Text("Cancel"),
-                                //         ),
-                                //         TextButton(
-                                //           onPressed: () {
-                                //             controller
-                                //                 .focusedMonth
-                                //                 .value = DateTime(
-                                //               selectedYear,
-                                //               selectedMonth,
-                                //               1,
-                                //             );
-                                //             Navigator.pop(context);
-                                //           },
-                                //           child: const Text("OK"),
-                                //         ),
-                                //       ],
-                                //     );
-                                //   },
-                                // );
+
                               },
                               child: Text(
                                 DateFormat.yMMMM().format(
@@ -212,53 +132,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
             ),
             const Divider(),
-            // Events List
-            // Obx(() {
-            //   if (controller.selectedDay.value == null) {
-            //     return const Expanded(
-            //       child: Center(child: Text("Select a day to see events")),
-            //     );
-            //   }
-            //   final events = controller.getEventsForDay(
-            //     controller.selectedDay.value!,
-            //   );
-            //   if (events.isEmpty) {
-            //     return const Expanded(
-            //       child: Center(child: Text("No events for this day")),
-            //     );
-            //   }
-            //   return Expanded(
-            //     child: ListView.builder(
-            //       itemCount: events.length,
-            //       itemBuilder:
-            //           (context, index) => Padding(
-            //             padding: const EdgeInsets.all(8.0),
-            //             child: CrmCard(
-            //               padding: EdgeInsets.all(AppSpacing.small),
-            //               child: ListTile(
-            //                 leading: Icon(
-            //                   Icons.event_rounded,
-            //                   color: _getColorByLabel(events[index].label),
-            //                 ),
-            //                 title: Text(events[index].name ?? "Unnamed Event"),
-            //                 subtitle: Text(
-            //                   formatDateString(events[index].startDate!),
-            //                 ),
-            //                 trailing: Text(
-            //                   events[index].label ?? "Other",
-            //                   style: TextStyle(
-            //                     fontWeight: FontWeight.w500,
-            //                     color: _getColorByLabel(events[index].label),
-            //                   ),
-            //                 ),
-            //               ),
-            //             ),
-            //           ),
-            //     ),
-            //   );
-            // }),
 
-            // Events List
             Obx(() {
               List<CalendarData> events;
 

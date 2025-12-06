@@ -26,9 +26,9 @@ class RoleService {
           'search': search,
         },
       );
-      print("[DEBUG]=> $uri");
+      print("=> $uri");
       final response = await http.get(uri, headers: await headers());
-      print("[DEBUG]=> $response");
+      print("=> $response");
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -64,13 +64,13 @@ class RoleService {
   /// Create new role
   Future<bool> createRole(RoleData role) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${role.toJson()}");
+      print("=> $baseUrl ---- ${role.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(role.toJson()),
       );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create role exception: $e");

@@ -10,6 +10,8 @@ import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../widgets/forget_password/view/forget_password_screen.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -109,7 +111,9 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           GestureDetector(
-                            onTap: authController.fillTestCredentials,
+                            onTap: () {
+                              Get.to(() => ForgotPasswordScreen());
+                            },
                             child: Text(
                               'Forgot Password?',
                               style: TextStyle(

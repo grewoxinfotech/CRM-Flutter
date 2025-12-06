@@ -36,7 +36,7 @@ class AddBranchScreen extends StatelessWidget {
       branchManager: controller.selectedManager.value!.id,
       // branchManager: selectedManager!.id,
     );
-    print("[DEBUG]=> ${branch.toJson()}");
+    print("=> ${branch.toJson()}");
     controller.isLoading.value = true;
     final success = await controller.createBranch(branch);
 
@@ -55,7 +55,7 @@ class AddBranchScreen extends StatelessWidget {
       branchManager: controller.selectedManager.value!.id,
       // branchManager: selectedManager!.id,
     );
-    print("[DEBUG]=> ${branchData.toJson()}");
+    print("=> ${branchData.toJson()}");
     controller.isLoading.value = true;
     final success = await controller.updateBranch(branch!.id!, branchData);
 

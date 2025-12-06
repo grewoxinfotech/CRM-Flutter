@@ -30,16 +30,7 @@ class AddAnnouncementScreen extends StatelessWidget {
   }
 
   ///  New validator to check date logic
-  // String? dateRangeValidator() {
-  //   final start = controller.selectedDate.value;
-  //
-  //   if (start != null) {
-  //     if (start.isBefore(DateTime.now())) {
-  //       return "Date cannot be in the past";
-  //     }
-  //   }
-  //   return null;
-  // }
+
 
   /// Date cannot be before today
   String? dateRangeValidator() {
@@ -179,32 +170,7 @@ class AddAnnouncementScreen extends StatelessWidget {
     );
   }
 
-  // static String? validateDate(String? value, {String expectedFormat = "yyyy-MM-dd"}) {
-  //   if (value == null || value.trim().isEmpty) {
-  //     return "Date is required";
-  //   }
-  //
-  //   try {
-  //     // Try parsing the date
-  //     final parsedDate = DateTime.tryParse(value);
-  //
-  //     if (parsedDate == null) {
-  //       return "Invalid date format. Expected $expectedFormat";
-  //     }
-  //
-  //     // Example extra validation: disallow future dates
-  //     final today = DateTime.now();
-  //
-  //     // Example extra validation: disallow very old dates
-  //     if (parsedDate.isBefore(DateTime(1900))) {
-  //       return "Date in the past is not allowed";
-  //     }
-  //
-  //     return null; // ✅ valid
-  //   } catch (e) {
-  //     return "Invalid date: ${e.toString()}";
-  //   }
-  // }
+
 
   /// Update
   void _update() async {

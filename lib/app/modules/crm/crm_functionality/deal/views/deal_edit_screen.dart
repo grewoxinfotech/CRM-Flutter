@@ -1288,7 +1288,7 @@ class _DealCreateScreenState extends State<DealEditScreen> {
 
       // Call the service to add the contact
       final ContactData? success = await _contactService.addContact(newContact);
-      print("[DEBUG]=> success ${success!.toJson()}");
+      print("=> success ${success!.toJson()}");
       dealController.selectedContact.value = success!.id!;
 
       if (success != null) {
@@ -1389,12 +1389,12 @@ class _DealCreateScreenState extends State<DealEditScreen> {
         files: widget.deal.files,
         clientId: userId,
       );
-      print("[DEBUG]=> data ${newDeal.toJson()}");
+      print("=> data ${newDeal.toJson()}");
 
       final success = await dealController.updateDeal(widget.deal.id!, newDeal);
 
       if (success) {
-        print("[DEBUG]=> success");
+        print("=> success");
         CrmSnackBar.showAwesomeSnackbar(
           title: 'Success',
           message: 'Deal updated successfully',

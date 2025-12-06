@@ -3,7 +3,7 @@ class ICRes {
   static const IconPath = "assets/icons/";
 
   // app logo icon in png
-  static const appLogoPNG = "${IconPath}app_logo.png";
+  static const appLogoPNG = "assets/logo/app_logo.png";
 
   // comments icons
   static const CommentsPath = "${IconPath}comments/";

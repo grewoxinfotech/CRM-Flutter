@@ -127,12 +127,7 @@ class CrmFunctionController extends GetxController {
           screenBuilder: TaskScreen(),
         ),
 
-      // FunctionModel(
-      //   title: 'Contract',
-      //   iconPath: ICRes.contract,
-      //   color: const Color(0xff3400AD),
-      //   count: 66,
-      // ),
+
     ];
   }
 }

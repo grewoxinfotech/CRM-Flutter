@@ -25,10 +25,7 @@ class RoleController extends GetxController {
       final rolesList = await _rolesService.getRoles();
       roles.assignAll(rolesList);
 
-      // print("Loaded ${roles.length} roles:");
-      // for (var role in roles) {
-      //   print("Role ID: ${role.id}, Name: ${role.roleName}");
-      // }
+
 
       if (roles.isEmpty) {
         error.value = 'No roles found';

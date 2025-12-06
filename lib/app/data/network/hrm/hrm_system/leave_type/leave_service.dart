@@ -3,7 +3,6 @@ import 'package:crm_flutter/app/care/constants/url_res.dart';
 import 'package:crm_flutter/app/data/network/hrm/leave/leave/leave_model.dart';
 import 'package:http/http.dart' as http;
 
-import 'leave_types_model.dart' hide LeaveData;
 
 class LeaveService {
   final String baseUrl = UrlRes.leaves; // Define in UrlRes
@@ -65,13 +64,13 @@ class LeaveService {
   /// Create new leave
   Future<bool> createLeave(LeaveData leave) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${leave.toJson()}");
+      print("=> $baseUrl ---- ${leave.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(leave.toJson()),
       );
-      print("[DEBUG]=> response ---- ${response.body}");
+      print("=> response ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create leave exception: $e");
@@ -82,14 +81,14 @@ class LeaveService {
   Future<bool> approveLeave(LeaveData leave) async {
     try {
       final url = "$approve/${leave.id}";
-      print("[DEBUG]=> $baseUrl ---- ${url}");
+      print("=> $baseUrl ---- ${url}");
 
       final response = await http.put(
         Uri.parse(url),
         headers: await headers(),
         body: jsonEncode(leave.toJson()),
       );
-      print("[DEBUG]=> response ---- ${response.body}");
+      print("=> response ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create leave exception: $e");

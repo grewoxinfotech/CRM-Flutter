@@ -54,7 +54,7 @@ class AddDocumentScreen extends StatelessWidget {
       role: controller.selectedRole.value,
       description: controller.descriptionController.text, // Binary file
     );
-    print("[DEBUG]=> $docData");
+    print("=> $docData");
 
     controller.isLoading.value = true;
     final success = await controller.createDocument(docData,controller.selectedFile.value);
@@ -85,7 +85,7 @@ class AddDocumentScreen extends StatelessWidget {
       role: controller.selectedRole.value,
       description: controller.descriptionController.text,
     );
-    print("[DEBUG][UPDATE] => $docData");
+    print("[UPDATE] => $docData");
 
 
     controller.isLoading.value = true;

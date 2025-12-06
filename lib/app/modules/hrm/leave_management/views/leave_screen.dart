@@ -1,6 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:crm_flutter/app/care/constants/access_res.dart';
-import 'package:crm_flutter/app/data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
 import 'package:crm_flutter/app/modules/hrm/leave_management/views/add_leave_screen.dart';
 import 'package:crm_flutter/app/widgets/_screen/view_screen.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';

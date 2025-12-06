@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import '../../../../care/constants/url_res.dart';
 import '../../../../data/network/hrm/employee/employee_model.dart';
 import '../../../../data/network/hrm/hrm_system/leave_type/leave_service.dart';
-import '../../../../data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
 import '../../employee/controllers/employee_controller.dart';
 
 class LeaveController extends PaginatedController<LeaveData> {

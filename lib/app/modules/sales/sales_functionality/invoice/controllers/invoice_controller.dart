@@ -119,10 +119,4 @@ class InvoiceController extends PaginatedController<SalesInvoice> {
     }
   }
 
-  //
-  // /// Extra helper to get customer name from customerId inside invoice
-  // String getCustomerName(CustomerData? customer) {
-  //   if (customer == null) return '';
-  //   return '${customer.name}'.trim();
-  // }
 }

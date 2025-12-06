@@ -56,7 +56,7 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
               action ??
               [
                 GestureDetector(
-                  onTap: ()=> Get.to(()=>SearchModuleScreen()),
+                  onTap: () => Get.to(() => SearchModuleScreen()),
                   child: CrmIc(
                     iconPath: ICRes.search,
                     color: Get.theme.colorScheme.onPrimary,
@@ -72,17 +72,7 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onTap: () {
                     Get.to(() => ProfileScreen());
                   },
-                  child: const CircleAvatar(
-                    radius: 15,
-                    child: Text(
-                      "G",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                  child: CrmAppLogo(),
                 ),
               ],
         ),

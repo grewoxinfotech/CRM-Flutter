@@ -512,13 +512,7 @@ class PlansScreen extends StatelessWidget {
   ) async {
     final controller = Get.find<PlanController>();
 
-    print('Plan Purchase Details:');
-    print('Plan ID: ${plan.id}');
-    print('Plan Name: ${plan.name}');
-    print('Price: ${plan.price}');
-    print('Duration: ${plan.duration}');
-    print('Start Date: ${DateFormat('yyyy-MM-dd').format(startDate)}');
-    print('End Date: ${DateFormat('yyyy-MM-dd').format(endDate)}');
+
 
     // ✅ Step 1: Show snackbar feedback
     Get.snackbar(

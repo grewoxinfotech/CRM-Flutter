@@ -117,20 +117,13 @@ class LeadScreen extends StatelessWidget {
                         currency: currency != null ? currency.currencyIcon : '',
                         leadValue: data.leadValue?.toString() ?? '',
                         source: source != null ? source['name'] ?? '' : '',
-                        // companyName: controller.getCompanyDisplayName(data),
-                        // firstName: data.firstName ?? '',
-                        // lastName: data.lastName ?? '',
-                        // phoneCode: data.phoneCode ?? '',
-                        // telephone: data.telephone ?? '',
-                        // email: data.email ?? '',
-                        // address: data.address ?? '',
+
                         leadMembers:
                             data.leadMembers?.leadMembers?.isNotEmpty == true
                                 ? data.leadMembers!.leadMembers!.length.toString()
                                 : '',
                         category: category != null ? category['name'] ?? '' : '',
-                        // files: data.files.isNotEmpty ? data.files.length.toString() : '',
-                        // Use the status directly from the API instead of trying to map it
+
                         status:
                             status != null ? status['name']!.capitalize ?? '' : '',
 

@@ -16,7 +16,7 @@ class CrmImagePicker {
       );
       return pickedFile != null ? File(pickedFile.path) : null;
     } catch (e) {
-      debugPrint('Error picking from gallery: $e');
+       ('Error picking from gallery: $e');
       return null;
     }
   }
@@ -30,7 +30,7 @@ class CrmImagePicker {
       );
       return pickedFile != null ? File(pickedFile.path) : null;
     } catch (e) {
-      debugPrint('Error picking from camera: $e');
+       ('Error picking from camera: $e');
       return null;
     }
   }
@@ -43,7 +43,7 @@ class CrmImagePicker {
       );
       return pickedFiles.map((file) => File(file.path)).toList();
     } catch (e) {
-      debugPrint('Error picking multiple images: $e');
+       ('Error picking multiple images: $e');
       return [];
     }
   }

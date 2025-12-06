@@ -126,7 +126,7 @@ class AddJobScreen extends StatelessWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await controller.getManagerById(job!.recruiter!);
         controller.selectedManager.value = controller.managers.firstWhereOrNull(
-              (r) => r.id == job!.recruiter,
+          (r) => r.id == job!.recruiter,
         );
       });
 
@@ -139,24 +139,28 @@ class AddJobScreen extends StatelessWidget {
       controller.locationController.text = job!.location ?? '';
 
       // ✅ Fix: assign list directly
-      controller.interviewRoundsList.assignAll(job!.interviewRounds?.interviewRounds ?? []);
-
+      controller.interviewRoundsList.assignAll(
+        job!.interviewRounds?.interviewRounds ?? [],
+      );
 
       if (job!.endDate != null) {
         final endDate = DateTime.tryParse(job!.endDate!);
-        if(endDate != null) {
+        if (endDate != null) {
           controller.selectedEndDate.value = endDate;
-          controller.endDateController.text = DateFormat('yyyy-MM-dd').format(endDate);
+          controller.endDateController.text = DateFormat(
+            'yyyy-MM-dd',
+          ).format(endDate);
         }
       }
-       if (job!.startDate != null) {
+      if (job!.startDate != null) {
         final startDate = DateTime.tryParse(job!.startDate!);
-        if(startDate != null) {
+        if (startDate != null) {
           controller.selectedStartDate.value = startDate;
-          controller.startDateController.text = DateFormat('yyyy-MM-dd').format(startDate);
+          controller.startDateController.text = DateFormat(
+            'yyyy-MM-dd',
+          ).format(startDate);
         }
       }
-
 
       controller.totalOpeningsController.text =
           job!.totalOpenings?.toString() ?? '';
@@ -167,7 +171,6 @@ class AddJobScreen extends StatelessWidget {
       controller.selectedJobType.value = job!.jobType ?? "Full-time";
       controller.currency.value = job!.currency ?? "";
     }
-
 
     return Scaffold(
       appBar: AppBar(title: Text(isFromEdit ? 'Edit Job' : 'Add Job')),
@@ -212,14 +215,6 @@ class AddJobScreen extends StatelessWidget {
 
               SizedBox(height: AppSpacing.medium),
 
-              // CrmTextField(
-              //   controller: controller.interviewRoundsController,
-              //   title: "Interview Rounds",
-              //   keyboardType: TextInputType.number,
-              //   isRequired: true,
-              //   hintText: "Enter interview rounds",
-              //   validator: (v) => requiredValidator(v, "Interview rounds is required"),
-              // ),
               TagsInputField(
                 title: 'Interview Rounds',
                 hintText: "Enter Interview Rounds",
@@ -368,32 +363,6 @@ class AddJobScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.medium),
 
               /// Status Dropdown
-
-              // CrmTextField(
-              //   controller: controller.workExperienceController,
-              //   title: "Work Experience",
-              //   isRequired: true,
-              // ),
-              // SizedBox(height: AppSpacing.medium),
-
-              /// Currency Dropdown
-              // Obx(() => CrmDropdownField<String>(
-              //   title: "Currency",
-              //   value: controller.selectedCurrency.value,
-              //   items: controller.currencies
-              //       .map((c) =>
-              //       DropdownMenuItem(value: c.id, child: Text(c.currencyCode)))
-              //       .toList(),
-              //   onChanged: (c) => controller.selectedCurrency.value = c,
-              //   isRequired: true,
-              // )),
-              // SizedBox(height: AppSpacing.medium),
-              //
-              // CrmTextField(
-              //   controller: controller.expectedSalaryController,
-              //   title: "Expected Salary",
-              //   isRequired: true,
-              // ),
               Row(
                 children: [
                   Expanded(
@@ -500,60 +469,6 @@ class AddJobScreen extends StatelessWidget {
     );
   }
 }
-
-// class SkillTagsInput extends StatelessWidget {
-//   final JobListController controller = Get.find();
-//
-//   SkillTagsInput({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         /// Input field with add button
-//         Row(
-//           crossAxisAlignment: CrossAxisAlignment.end,
-//           children: [
-//             Expanded(
-//               child: CrmTextField(
-//                 title: "Skills",
-//                 isRequired: true,
-//                 controller: controller.skillTextController,
-//                 focusNode: controller.skillFocusNode,
-//                 hintText: "Enter skills",
-//               ),
-//             ),
-//             SizedBox(width: AppSpacing.small),
-//             CrmButton(
-//               width: 100,
-//               title: "Add",
-//               onTap: controller.addSkill,
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 8),
-//
-//         /// Show added tags
-//         Obx(
-//               () => Wrap(
-//             spacing: 6,
-//             runSpacing: -8,
-//             children: controller.skillsList
-//                 .map(
-//                   (skill) => Chip(
-//                 label: Text(skill),
-//                 deleteIcon: const Icon(Icons.close, size: 16),
-//                 onDeleted: () => controller.removeSkill(skill),
-//               ),
-//             )
-//                 .toList(),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
 
 class TagsInputField extends StatelessWidget {
   final String title;

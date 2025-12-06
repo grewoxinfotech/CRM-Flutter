@@ -109,56 +109,12 @@ class AttendanceDetailScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  // const SizedBox(width: 8),
-                  // Expanded(
-                  //   child: DropdownButton<int>(
-                  //     isExpanded: true,
-                  //     value: controller.selectedYear.value,
-                  //     items: List.generate(5, (index) {
-                  //       final year = DateTime.now().year - 2 + index;
-                  //       return DropdownMenuItem(
-                  //         value: year,
-                  //         child: Text(year.toString()),
-                  //       );
-                  //     }),
-                  //     onChanged: (value) {
-                  //       if (value != null) {
-                  //         controller.changeMonth(
-                  //           controller.selectedMonth.value,
-                  //           value,
-                  //         );
-                  //       }
-                  //     },
-                  //   ),
-                  // ),
+
                 ],
               );
             }),
 
-            // CrmButton(
-            //   width: double.infinity,
-            //   title: 'Get',
-            //   onTap: () async {
-            //     final DateTime now = DateTime.now();
-            //     final DateTime startOfMonth = DateTime(now.year, now.month, 1);
-            //     final DateTime endOfMonth = DateTime(
-            //       now.year,
-            //       now.month + 1,
-            //       0,
-            //     ); // last day of m
-            //
-            //     final data = await attendanceController
-            //         .getAttendanceForEmployee(
-            //           attendanceData.map((e) => e.employee).toList().id ?? "",
-            //           startOfMonth,
-            //           endOfMonth,
-            //         );
-            //     Get.back();
-            //     Get.to(
-            //       () => AttendanceDetailScreen(attendanceData: attendanceData),
-            //     );
-            //   },
-            // ),
+
             const SizedBox(height: 16),
 
             // Attendance List

@@ -28,7 +28,6 @@ import '../../lead/widgets/lead_card.dart';
 import '../controller/contact_controller.dart';
 import '../widget/contact_overview_card.dart';
 
-//
 class ContactDetailScreen extends StatefulWidget {
   final String? id;
   final bool isFromCompanyScreen;
@@ -42,125 +41,7 @@ class ContactDetailScreen extends StatefulWidget {
   @override
   State<ContactDetailScreen> createState() => _ContactDetailScreenState();
 }
-//
-// class _ContactDetailScreenState extends State<ContactDetailScreen> {
-//   final controller = Get.put(ContactController());
-//   ContactModel? contact;
-//   @override
-//   void initState() async {
-//     final contact = await controller.getContactById(widget.id!);
-//     super.initState();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     print('''
-// id: ${contact!.id}
-// contactOwner: ${contact!.contactOwner}
-// firstName: ${contact!.firstName}
-// lastName: ${contact!.lastName}
-// companyId: ${contact!.companyId}
-// ''');
-//
-//     DealBinding().dependencies();
-//
-//     final tabBarController = Get.find<TabBarController>();
-//     final dealController = Get.find<DealController>();
-//     final contactController = Get.find<ContactController>();
-//
-//     dealController.getAllUsers();
-//
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("Contact Overview"),
-//         leading: CrmBackButton(),
-//         bottom: CrmTabBar(
-//           items: [
-//             TabBarModel(iconPath: ICRes.attach, label: "Overview"),
-//             TabBarModel(iconPath: ICRes.attach, label: "Contact Leads"),
-//             TabBarModel(iconPath: ICRes.attach, label: "Contact Deals"),
-//           ],
-//         ),
-//       ),
-//       body: Obx(() {
-//         if (dealController.deal.isEmpty) {
-//           contactController.refreshData();
-//           return const Center(child: CircularProgressIndicator());
-//         }
-//
-//         final deal = dealController.deal.first;
-//
-//         List<Widget> widgets = [
-//           //  _buildOverviewTab(contactController,),
-//
-//           //other tab add here
-//         ];
-//
-//         return PageView.builder(
-//           itemCount: widgets.length,
-//           controller: tabBarController.pageController,
-//           onPageChanged: tabBarController.onPageChanged,
-//           itemBuilder: (context, i) => widgets[i],
-//         );
-//       }),
-//     );
-//   }
-//
-//   Widget _buildOverviewTab(
-//     ContactModel contact,
-//     ContactController dealController,
-//     String sourceName,
-//     String statusName,
-//     String pipelineName,
-//   ) {
-//     return ContactOverviewCard(
-//       color: Colors.blue,
-//       id: contact.id.toString(),
-//       firstName: contact.firstName.toString(),
-//       lastName: contact.lastName.toString(),
-//       email: contact.email.toString(),
-//       phone: contact.phone.toString(),
-//       source: sourceName,
-//       companyName: contact.companyId.toString(),
-//       website: contact.website.toString(),
-//       address: contact.address.toString(),
-//       createdBy: contact.createdBy.toString(),
-//       createdAt: contact.createdAt.toString(),
-//       onDelete:
-//           () => CrmDeleteDialog(
-//             // entityType: contact.dealTitle.toString(),
-//             //  onConfirm: () {
-//             //    contactController.deleteContact(contact.id.toString());
-//             //    Get.back();
-//             //  },
-//           ),
-//       //onEdit: () => _handleEdit(deal, dealController),
-//     );
-//   }
-//
-//   Future<void> _handleEdit(
-//     DealModel deal,
-//     DealController dealController,
-//   ) async {
-//     dealController.dealTitle.text = deal.dealTitle ?? '';
-//     dealController.dealValue.text = deal.value?.toString() ?? '';
-//     dealController.firstName.text = deal.firstName ?? '';
-//     dealController.lastName.text = deal.lastName ?? '';
-//     dealController.email.text = deal.email ?? '';
-//     dealController.phoneNumber.text = deal.phone ?? '';
-//     dealController.companyName.text = deal.companyName ?? '';
-//     dealController.address.text = deal.address ?? '';
-//
-//     dealController.selectedPipeline.value = deal.pipeline ?? '';
-//     dealController.selectedSource.value = deal.source ?? '';
-//     dealController.selectedStatus.value = deal.status ?? '';
-//     dealController.selectedStage.value = deal.stage ?? '';
-//
-//     await Get.to(() => DealEditScreen(dealId: deal.id.toString()));
-//     await dealController.getDealById(deal.id.toString());
-//     await dealController.refreshData();
-//   }
-// }
+
 
 class _ContactDetailScreenState extends State<ContactDetailScreen> {
   final controller = Get.put(ContactController());
@@ -311,35 +192,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // return ViewScreen(
-          //   itemCount: leads.length,
-          //   itemBuilder: (context, index) {
-          //     final lead = leads[index];
-          //     return LeadCard(
-          //       id: lead.id ?? '',
-          //       color: Colors.green,
-          //       inquiryId: lead.inquiryId ?? '',
-          //       leadTitle: lead.leadTitle ?? '',
-          //       currency: lead.currency ?? '',
-          //       leadValue: lead.leadValue?.toString() ?? '',
-          //       leadMembers:
-          //           lead.leadMembers?.leadMembers?.isNotEmpty == true
-          //               ? lead.leadMembers!.leadMembers!.length.toString()
-          //               : '',
-          //       status: lead.status ?? '',
-          //
-          //       interestLevel: lead.interestLevel ?? '',
-          //       leadScore: lead.leadScore?.toString() ?? '',
-          //       isConverted: lead.isConverted?.toString() ?? '',
-          //       clientId: lead.clientId ?? '',
-          //       createdBy: lead.createdBy ?? '',
-          //       updatedBy: lead.updatedBy ?? '',
-          //       createdAt: formatDate(lead.createdAt?.toString() ?? ''),
-          //       updatedAt: formatDate(lead.updatedAt?.toString() ?? ''),
-          //       onTap: () => _navigateToDetail(lead, leadController),
-          //     );
-          //   },
-          // );
+
           return ViewScreen(
             itemCount: leads.length,
             itemBuilder: (context, i) {
@@ -370,20 +223,13 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 currency: currency != null ? currency.currencyIcon : '',
                 leadValue: data.leadValue?.toString() ?? '',
                 source: source != null ? source['name'] ?? '' : '',
-                // companyName: controller.getCompanyDisplayName(data),
-                // firstName: data.firstName ?? '',
-                // lastName: data.lastName ?? '',
-                // phoneCode: data.phoneCode ?? '',
-                // telephone: data.telephone ?? '',
-                // email: data.email ?? '',
-                // address: data.address ?? '',
+
                 leadMembers:
                     data.leadMembers?.leadMembers?.isNotEmpty == true
                         ? data.leadMembers!.leadMembers!.length.toString()
                         : '',
                 category: category != null ? category['name'] ?? '' : '',
-                // files: data.files.isNotEmpty ? data.files.length.toString() : '',
-                // Use the status directly from the API instead of trying to map it
+
                 status: status != null ? status['name']!.capitalize ?? '' : '',
 
                 interestLevel: data.interestLevel ?? '',
@@ -425,50 +271,6 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // return ViewScreen(
-          //   itemCount: deals.length,
-          //   itemBuilder: (context, index) {
-          //     final deal = deals[index];
-          //     return DealCard(
-          //       id: deal.id.toString(),
-          //       dealTitle: deal.dealTitle.toString(),
-          //       currency: deal.currency.toString(),
-          //       value: deal.value.toString(),
-          //       pipeline: deal.pipeline.toString(),
-          //       stage: deal.stage.toString(),
-          //       status: deal.status.toString(),
-          //       label: deal.label.toString(),
-          //       closedDate: deal.closedDate.toString(),
-          //       firstName: deal.firstName.toString(),
-          //       lastName: deal.lastName.toString(),
-          //       email: deal.email.toString(),
-          //       phone: deal.phone.toString(),
-          //       source: deal.source.toString(),
-          //       companyName: deal.companyName.toString(),
-          //       website: deal.website.toString(),
-          //       address: deal.address.toString(),
-          //       products: deal.products.toString(),
-          //       files: deal.files.toString(),
-          //       assignedTo: deal.assignedTo.toString(),
-          //       clientId: deal.clientId.toString(),
-          //       isWon: deal.isWon.toString(),
-          //       companyId: deal.companyId.toString(),
-          //       contactId: deal.contactId.toString(),
-          //       createdBy: formatDate(deal.createdBy.toString()),
-          //       updatedBy: formatDate(deal.updatedBy.toString()),
-          //       createdAt: formatDate(deal.createdAt.toString()),
-          //       updatedAt: formatDate(deal.updatedAt.toString()),
-          //       color: Get.theme.colorScheme.error,
-          //       onTap:
-          //           () =>
-          //               (deal.id != null)
-          //                   ? Get.to(() => DealDetailScreen(id: deal.id!))
-          //                   : Get.snackbar('Error', 'deal ID is missing'),
-          //       onEdit: () {},
-          //       onDelete: () {},
-          //     );
-          //   },
-          // );
 
           return ViewScreen(
             itemCount: deals.length,

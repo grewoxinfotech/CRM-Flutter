@@ -70,7 +70,7 @@ class SocketService {
 
       // Catch-all for debugging
       _socket!.onAny((event, data) {
-        print('📡 Event: $event → ${jsonEncode(data)}');
+
         _safeAdd(SocketEvent(event, data));
       });
     } catch (e) {
@@ -95,7 +95,7 @@ class SocketService {
   void sendMessage(ChatMessage message) {
     if (isConnected) {
       final data = message.toJson();
-      print('📤 Sending message: ${jsonEncode(data)}');
+
       _socket?.emit('send_message', data);
     } else {
       print('❌ Cannot send message: not connected');
@@ -106,14 +106,14 @@ class SocketService {
   void sendFileChat(UploadChatFilesRequest data) {
     if (isConnected) {
       _socket?.emit('upload_chat_files', data);
-      print('📤 Sent file chat: ${data.toJson()}');
+
     }
   }
 
   void markMessagesRead(ReadReceipt receipt) {
     if (isConnected) {
       _socket?.emit('mark_messages_read', receipt.toJson());
-      print('📤 Marked messages read in conversation: ${receipt.toJson()}');
+
     }
   }
 
@@ -126,7 +126,7 @@ class SocketService {
   void sendTyping(TypingEvent typing) {
     if (isConnected) {
       _socket?.emit('typing', typing.toJson());
-      print('📤 Sent typing: ${typing.toJson()}');
+
     }
   }
 

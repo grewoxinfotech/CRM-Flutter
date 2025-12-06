@@ -110,16 +110,6 @@ class MeetingCard extends StatelessWidget {
 
                       const SizedBox(height: 4),
 
-                      // Department
-                      // if (meeting.department != null &&
-                      //     meeting.department!.isNotEmpty)
-                      //   Text(
-                      //     'Dept: ${meeting.department}',
-                      //     style: const TextStyle(
-                      //       fontSize: 13,
-                      //       color: Colors.indigo,
-                      //     ),
-                      //   ),
                     ],
                   ),
                 ),

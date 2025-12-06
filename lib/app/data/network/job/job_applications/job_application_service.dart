@@ -63,39 +63,10 @@ class JobApplicationService {
     return null;
   }
 
-  /// Create a new job application
-  // Future<bool> createJobApplication(JobApplicationData application) async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse(baseUrl),
-  //       headers: await headers(),
-  //       body: jsonEncode(application.toJson()),
-  //     );
-  //
-  //     final responseData = jsonDecode(response.body);
-  //
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       CrmSnackBar.showAwesomeSnackbar(
-  //         title: "Success",
-  //         message: responseData["message"] ?? "Job application created successfully",
-  //         contentType: ContentType.success,
-  //       );
-  //       return true;
-  //     } else {
-  //       CrmSnackBar.showAwesomeSnackbar(
-  //         title: "Error",
-  //         message: responseData["message"] ?? "Failed to create job application",
-  //         contentType: ContentType.failure,
-  //       );
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     print("Create job application exception: $e");
-  //     return false;
-  //   }
-  // }
-
-  Future<bool> createJobApplication(JobApplicationData application, File file) async {
+  Future<bool> createJobApplication(
+    JobApplicationData application,
+    File file,
+  ) async {
     try {
       final uri = Uri.parse(baseUrl);
 
@@ -121,9 +92,7 @@ class JobApplicationService {
 
       // Add file
       if (file.existsSync()) {
-        request.files.add(
-          await http.MultipartFile.fromPath("file", file.path),
-        );
+        request.files.add(await http.MultipartFile.fromPath("file", file.path));
       }
 
       // Send request
@@ -135,14 +104,16 @@ class JobApplicationService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
-          message: responseData["message"] ?? "Job application created successfully",
+          message:
+              responseData["message"] ?? "Job application created successfully",
           contentType: ContentType.success,
         );
         return true;
       } else {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Error",
-          message: responseData["message"] ?? "Failed to create job application",
+          message:
+              responseData["message"] ?? "Failed to create job application",
           contentType: ContentType.failure,
         );
         return false;
@@ -155,10 +126,10 @@ class JobApplicationService {
 
   /// Update existing job application
   Future<bool> updateJobApplication(
-      String id,
-      JobApplicationData application,
-        File? file,
-      ) async {
+    String id,
+    JobApplicationData application,
+    File? file,
+  ) async {
     try {
       final uri = Uri.parse("$baseUrl/$id");
 
@@ -184,9 +155,7 @@ class JobApplicationService {
 
       // Add file only if provided
       if (file != null && file.existsSync()) {
-        request.files.add(
-          await http.MultipartFile.fromPath("file", file.path),
-        );
+        request.files.add(await http.MultipartFile.fromPath("file", file.path));
       }
 
       // Send request
@@ -199,7 +168,7 @@ class JobApplicationService {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Success",
           message:
-          responseData["message"] ?? "Job application updated successfully",
+              responseData["message"] ?? "Job application updated successfully",
           contentType: ContentType.success,
         );
         return true;
@@ -207,7 +176,7 @@ class JobApplicationService {
         CrmSnackBar.showAwesomeSnackbar(
           title: "Error",
           message:
-          responseData["message"] ?? "Failed to update job application",
+              responseData["message"] ?? "Failed to update job application",
           contentType: ContentType.failure,
         );
         return false;
@@ -222,7 +191,6 @@ class JobApplicationService {
       return false;
     }
   }
-
 
   /// Delete job application
   Future<bool> deleteJobApplication(String id) async {

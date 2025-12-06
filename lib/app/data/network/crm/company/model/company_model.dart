@@ -58,9 +58,9 @@ class CompanyData {
   String? id;
   String? accountOwner;
   String? companyName;
-  Null? companySource;
+  String? companySource;
   String? email;
-  Null? companyNumber;
+  String? companyNumber;
   String? companyType;
   String? companyCategory;
   String? companyRevenue;

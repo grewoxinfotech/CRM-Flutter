@@ -16,58 +16,6 @@ class AddProductScreen extends StatelessWidget {
   AddProductScreen({Key? key, this.isFromEdit = false, this.product})
     : super(key: key);
 
-  // Widget _buildImagePicker() {
-  //   return GetBuilder<ProductsServicesController>(
-  //     builder: (_) {
-  //       return Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           const Text(
-  //             'Product Image',
-  //             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-  //           ),
-  //           const SizedBox(height: 8),
-  //           controller.selectedImage == null
-  //               ? GestureDetector(
-  //                 onTap: controller.pickImage,
-  //                 child: _imageBox(
-  //                   Icon(
-  //                     Icons.add_a_photo,
-  //                     color: Get.theme.colorScheme.primary,
-  //                   ),
-  //                 ),
-  //               )
-  //               : Stack(
-  //                 children: [
-  //                   ClipRRect(
-  //                     borderRadius: BorderRadius.circular(8),
-  //                     child: Image.file(
-  //                       File(controller.selectedImage!.path),
-  //                       width: 100,
-  //                       height: 100,
-  //                       fit: BoxFit.cover,
-  //                     ),
-  //                   ),
-  //                   Positioned(
-  //                     right: -10,
-  //                     top: -10,
-  //                     child: IconButton(
-  //                       icon: const Icon(
-  //                         Icons.cancel,
-  //                         color: Colors.redAccent,
-  //                         size: 24,
-  //                       ),
-  //                       onPressed: controller.removeImage,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
   Widget _buildImagePicker() {
     return GetBuilder<ProductsServicesController>(
       builder: (_) {
@@ -372,26 +320,7 @@ class AddProductScreen extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: 20),
-                // CrmDropdownField<String>(
-                //   title: 'Currency',
-                //   value: controller.selectedCurrencyCode,
-                //   items:
-                //       controller.currencies
-                //           .map(
-                //             (cur) => DropdownMenuItem(
-                //               value: cur['code'],
-                //               child: Text('${cur['symbol']} (${cur['name']})'),
-                //             ),
-                //           )
-                //           .toList(),
-                //   onChanged: (v) => controller.selectedCurrencyCode = v,
-                //   isRequired: true,
-                //   validator:
-                //       (v) => controller.requiredValidator(
-                //         v,
-                //         'Please select currency',
-                //       ),
-                // ),
+
                 Obx(
                   () => CrmDropdownField<String>(
                     title: 'Currency',

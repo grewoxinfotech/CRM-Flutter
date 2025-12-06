@@ -91,7 +91,7 @@ class AddHolidayScreen extends StatelessWidget {
       endDate: controller.selectedEndDate.value?.toIso8601String(),
       section: "holiday",
     );
-    print("[DEBUG]=> ${holidayData.toJson()}");
+    print("=> ${holidayData.toJson()}");
 
     controller.isLoading.value = true;
     final success = await controller.createHoliday(holidayData);
@@ -126,7 +126,7 @@ class AddHolidayScreen extends StatelessWidget {
       endDate: controller.selectedEndDate.value?.toIso8601String(),
       section: "holiday",
     );
-    print("[DEBUG]=> ${holidayData.toJson()}");
+    print("=> ${holidayData.toJson()}");
 
     controller.isLoading.value = true;
     final success = await controller.updateHoliday(holiday!.id!, holidayData);
@@ -150,10 +150,10 @@ class AddHolidayScreen extends StatelessWidget {
       controller.holidayNameController.text = holiday!.holidayName ?? '';
       controller.selectedLeaveType.value = holiday!.leaveType ?? '';
       if (holiday!.startDate != null) {
-        print('[DEBUG]=>date ${holiday!.startDate!}');
+        print('=>date ${holiday!.startDate!}');
         final start = DateTime.tryParse(holiday!.startDate!);
         if (start != null) {
-          print('[DEBUG]=>date ${start}');
+          print('=>date ${start}');
           controller.selectedStartDate.value = start;
           controller.startDateController.text = DateFormat(
             'dd-MM-yyyy',

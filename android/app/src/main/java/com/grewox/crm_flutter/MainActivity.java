@@ -1,4 +1,4 @@
-package com.grewox.crm_flutter;
+package in.raiser.crm;
 
 import io.flutter.embedding.android.FlutterActivity;
 

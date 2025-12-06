@@ -262,10 +262,7 @@ class HrmFunctionController extends GetxController {
           count: 66,
           screenBuilder: AttendanceScreen(),
         ),
-      // if (accessController.can(AccessModule.taskCalendar, AccessAction.view) ||
-      //     accessController.can(AccessModule.employee, AccessAction.create) ||
-      //     accessController.can(AccessModule.employee, AccessAction.update) ||
-      //     accessController.can(AccessModule.employee, AccessAction.delete))
+
       FunctionModel(
         title: 'Calendar',
         iconPath: ICRes.calendar,

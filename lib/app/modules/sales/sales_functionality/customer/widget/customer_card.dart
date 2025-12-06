@@ -64,15 +64,7 @@ class CustomerCard extends StatelessWidget {
                       // Email
                       if (customer.email != null && customer.email!.isNotEmpty)
                        CommonWidget.buildText(customer.email ?? '',"Email: "),
-                        // Text(
-                        //   customer.email!,
-                        //   style: const TextStyle(
-                        //     fontSize: 14,
-                        //     color: Colors.blueGrey,
-                        //   ),
-                        //   maxLines: 1,
-                        //   overflow: TextOverflow.ellipsis,
-                        // ),
+
 
                       const SizedBox(height: 4),
 
@@ -81,26 +73,6 @@ class CustomerCard extends StatelessWidget {
                           customer.contact!.isNotEmpty)
                         CommonWidget.buildText(customer.contact ?? '',"Contact: "),
 
-                        // Text(
-                        //   customer.contact!,
-                        //   style: const TextStyle(
-                        //     fontSize: 14,
-                        //     color: Colors.black87,
-                        //   ),
-                        // ),
-
-                      // Optional Address
-                      // if (customer.shippingAddress != null)
-                      //   Padding(
-                      //     padding: const EdgeInsets.only(top: 6),
-                      //     child: Text(
-                      //       'Address: ${Address.formatAddress(customer.shippingAddress)}',
-                      //       style: TextStyle(
-                      //         fontSize: 13,
-                      //         color: Colors.grey[700],
-                      //       ),
-                      //     ),
-                      //   ),
                     ],
                   ),
                 ),

@@ -43,11 +43,11 @@ class CurrencyController extends GetxController {
       );
 
       if (currency == null) {
-        CrmSnackBar.showAwesomeSnackbar(
-          title: 'Not Found',
-          message: 'Currency with ID "$currencyId" not found.',
-          contentType: ContentType.warning,
-        );
+        // CrmSnackBar.showAwesomeSnackbar(
+        //   title: 'Not Found',
+        //   message: 'Currency with ID "$currencyId" not found.',
+        //   contentType: ContentType.warning,
+        // );
       }
 
       return currency;

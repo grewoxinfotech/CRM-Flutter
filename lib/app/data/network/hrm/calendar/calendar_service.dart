@@ -63,13 +63,13 @@ class CalendarService {
   /// Create new event
   Future<bool> createCalendar(CalendarData event) async {
     try {
-      print("[DEBUG]=> $baseUrl ---- ${event.toJson()}");
+      print("=> $baseUrl ---- ${event.toJson()}");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: await headers(),
         body: jsonEncode(event.toJson()),
       );
-      print("[DEBUG]=> $baseUrl ---- ${response.body}");
+      print("=> $baseUrl ---- ${response.body}");
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
       print("Create calendar exception: $e");

@@ -2,13 +2,8 @@ import 'package:crm_flutter/app/care/constants/color_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
 import 'package:crm_flutter/app/widgets/button/crm_button.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../data/network/hrm/hrm_system/leave_type/leave_types_model.dart';
 import '../../../../data/network/hrm/leave/leave/leave_model.dart';
 
-// Call this where you need the dialog:
-// final result = await showLeaveReasonDialog(context, leave);
-// if (result == 'approve') { ... } else if (result == 'reject') { ... }
 
 Future<String?> showLeaveReasonDialog(BuildContext context, LeaveData leave) {
   return showDialog<String>(

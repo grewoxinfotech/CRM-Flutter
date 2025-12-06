@@ -145,7 +145,7 @@ class AddMeetingScreen extends StatelessWidget {
       status: controller.status.value,
     );
 
-    print("[DEBUG]=> ${meetingData.toJson()}");
+    print("=> ${meetingData.toJson()}");
 
     controller.isLoading.value = true;
     final success = await controller.createMeeting(meetingData);
@@ -206,7 +206,7 @@ class AddMeetingScreen extends StatelessWidget {
       status: controller.status.value,
     );
 
-    print("[DEBUG]=> ${meetingData.toJson()}");
+    print("=> ${meetingData.toJson()}");
 
     controller.isLoading.value = true;
     final success = await controller.updateMeeting(meeting!.id!, meetingData);
@@ -317,28 +317,7 @@ class AddMeetingScreen extends StatelessWidget {
 
               /// Employees Dropdown (multi-select simulation)
               /// Branch Dropdown
-              // Obx(
-              //   () => CrmDropdownField<String>(
-              //     title: 'Employee',
-              //     value: controller.selectedEmployees,
-              //     isMultiSelect: true,
-              //     items:
-              //         controller.employees
-              //             .map(
-              //               (employee) => DropdownMenuItem<String>(
-              //                 value: employee.id!,
-              //                 child: Text(employee.firstName ?? ''),
-              //               ),
-              //             )
-              //             .toList(),
-              //     onChanged: (branchId) {
-              //       controller.selectedEmployees.value = branchId!;
-              //     },
-              //     isRequired: true,
-              //   ),
-              // ),
 
-              // /// Branch Dropdown
               Obx(
                 () => CrmDropdownField<EmployeeData>(
                   title: 'Employee',
