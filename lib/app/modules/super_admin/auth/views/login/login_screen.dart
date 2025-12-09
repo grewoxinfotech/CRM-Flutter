@@ -7,14 +7,23 @@ import 'package:crm_flutter/app/widgets/common/display/crm_card.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:crm_flutter/app/widgets/common/indicators/crm_loading_circle.dart';
 import 'package:crm_flutter/app/widgets/common/inputs/crm_text_field.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../care/constants/string_res.dart';
 import '../../../../../widgets/forget_password/view/forget_password_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.put(AuthController());
@@ -31,12 +40,13 @@ class LoginScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Sign In to Grewox',
+                        'Sign In to ${StringRes.appName}',
                         style: TextStyle(
                           fontSize: 20,
                           color: Get.theme.colorScheme.onPrimary,
                           fontWeight: FontWeight.w800,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 30),
                       Form(
@@ -126,13 +136,75 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Checkbox(
+                            value: isChecked,
+                            onChanged: (value) {
+                              setState(() {
+                                isChecked = value ?? false;
+                              });
+                            },
+                            side: const BorderSide(
+                              color: Colors.black,
+                              width: 2,
+                            ),
+                            checkColor: Get.theme.colorScheme.primary,
+                            activeColor: Colors.transparent,
+                          ),
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(color: Colors.black),
+                                children: [
+                                  TextSpan(text: 'I agree to the '),
+                                  TextSpan(
+                                    text: 'Privacy Policy',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer:
+                                        TapGestureRecognizer()
+                                          ..onTap = () {
+                                            _launchURL(
+                                              'https://sites.google.com/view/privacy-policy-raisercrm/home',
+                                            );
+                                          },
+                                  ),
+                                  TextSpan(text: ' and '),
+                                  TextSpan(
+                                    text: 'Terms & Conditions',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer:
+                                        TapGestureRecognizer()
+                                          ..onTap = () {
+                                            _launchURL(
+                                              'https://sites.google.com/view/terms-conditions-raisercrm/home',
+                                            );
+                                          },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
                       CrmButton(
                         title: "Login",
                         onTap:
-                            () => authController.login(
-                              authController.emailController.text.trim(),
-                              authController.passwordController.text.trim(),
-                            ),
+                            isChecked
+                                ? () => authController.login(
+                                  authController.emailController.text.trim(),
+                                  authController.passwordController.text.trim(),
+                                )
+                                : null,
+                        backgroundColor: isChecked ? null : Colors.grey,
                       ),
                       const SizedBox(height: 20),
                       InkWell(
@@ -157,5 +229,11 @@ class LoginScreen extends StatelessWidget {
         }),
       ),
     );
+  }
+
+  void _launchURL(String url) async {
+    final uri = Uri.parse(url);
+
+    await launchUrl(uri);
   }
 }

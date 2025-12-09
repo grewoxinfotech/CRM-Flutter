@@ -1,3 +1,4 @@
+import 'package:crm_flutter/app/care/constants/string_res.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class AuthBackground extends StatelessWidget {
             CrmAppLogo(),
             const SizedBox(width: 10),
             Text(
-              "Grewox",
+              StringRes.appName,
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w700,

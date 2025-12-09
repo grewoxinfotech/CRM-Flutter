@@ -1,12 +1,15 @@
 import 'package:crm_flutter/app/care/constants/ic_res.dart';
 import 'package:crm_flutter/app/care/constants/key_res.dart';
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/network/super_admin/auth/model/user_model.dart';
 import 'package:crm_flutter/app/modules/search/views/search_screen.dart';
 import 'package:crm_flutter/app/modules/users/view/profile_screen.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_app_logo.dart';
 import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../data/database/storage/secure_storage_service.dart';
 
 class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
@@ -24,6 +27,12 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    Rxn<UserModel> _user = Rxn<UserModel>(null);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final user = await SecureStorage.getUserData();
+      _user.value = user;
+    });
     return SafeArea(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: AppMargin.small),
@@ -72,7 +81,16 @@ class CrmAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onTap: () {
                     Get.to(() => ProfileScreen());
                   },
-                  child: CrmAppLogo(),
+                  child: Obx(() {
+                    if (_user.value?.profilePic != null &&
+                        _user.value!.profilePic!.isNotEmpty) {
+                      return CircleAvatar(
+                        radius: 15,
+                        backgroundImage: NetworkImage(_user.value!.profilePic!),
+                      );
+                    }
+                    return CrmAppLogo();
+                  }),
                 ),
               ],
         ),

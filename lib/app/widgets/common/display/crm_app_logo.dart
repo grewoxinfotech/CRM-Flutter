@@ -10,7 +10,10 @@ class CrmAppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logo = Image.asset(ICRes.appLogoPNG, width: width ?? 40);
+    final logo = ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Image.asset(ICRes.appLogoPNG, width: width ?? 40),
+    );
 
     return GestureDetector(
       onTap: onTap,

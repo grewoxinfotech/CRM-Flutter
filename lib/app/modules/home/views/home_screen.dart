@@ -1,4 +1,6 @@
 import 'package:crm_flutter/app/care/constants/size_manager.dart';
+import 'package:crm_flutter/app/data/database/storage/secure_storage_service.dart';
+import 'package:crm_flutter/app/data/network/super_admin/auth/model/user_model.dart';
 import 'package:crm_flutter/app/modules/functions/controller/function_controller.dart';
 import 'package:crm_flutter/app/modules/home/widgets/attendance/views/attendance_widget.dart';
 import 'package:crm_flutter/app/modules/home/widgets/deal_overview_with_graph.dart';
@@ -13,11 +15,16 @@ import '../widgets/lead_overview_with_graph.dart';
 class HomeScreen extends StatelessWidget {
   final controller = Get.put(FunctionController());
   final RevenueController revenueController = Get.put(RevenueController());
+  Rxn<UserModel> user = Rxn<UserModel>(null);
 
   HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final user = await SecureStorage.getUserData();
+      this.user.value = user;
+    });
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,14 +37,19 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Hi Evan, Welcome back!",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Get.theme.colorScheme.onSecondary,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                Obx(() {
+                  if (user.value == null) {
+                    return SizedBox.shrink();
+                  }
+                  return Text(
+                    "Hi ${user.value!.username}, Welcome back!",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Get.theme.colorScheme.onSecondary,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  );
+                }),
                 AppSpacing.verticalSmall,
                 Text(
                   "Dashboard",

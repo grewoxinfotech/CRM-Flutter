@@ -8,6 +8,7 @@ import 'package:crm_flutter/app/widgets/common/display/crm_ic.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../care/constants/string_res.dart';
 import '../../modules/job/job_functions/view/job_screen.dart';
 //
 // class CrmDrawer extends StatelessWidget {
@@ -229,8 +230,8 @@ class CrmDrawer extends StatelessWidget {
                 children: [
                   CrmAppLogo(),
                   const SizedBox(width: 12),
-                  const Text(
-                    "Grewox",
+                  Text(
+                    StringRes.appName,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                   ),
                 ],
@@ -245,7 +246,7 @@ class CrmDrawer extends StatelessWidget {
               itemCount: items.length,
               itemBuilder: (context, i) {
                 return Obx(
-                      () => GestureDetector(
+                  () => GestureDetector(
                     onTap: () => drawerController.onChange(i),
                     child: CrmCard(
                       padding: const EdgeInsets.all(AppPadding.small),
@@ -253,17 +254,19 @@ class CrmDrawer extends StatelessWidget {
                       borderRadius: BorderRadius.circular(
                         AppRadius.large - AppPadding.small,
                       ),
-                      color: drawerController.selectedIndex.value == i
-                          ? Get.theme.colorScheme.primary.withAlpha(20)
-                          : null,
+                      color:
+                          drawerController.selectedIndex.value == i
+                              ? Get.theme.colorScheme.primary.withAlpha(20)
+                              : null,
                       child: Row(
                         children: [
                           CrmIc(
                             iconPath: items[i].iconPath!,
                             width: 18,
-                            color: drawerController.selectedIndex.value == i
-                                ? Get.theme.colorScheme.primary
-                                : Get.theme.colorScheme.onSecondary,
+                            color:
+                                drawerController.selectedIndex.value == i
+                                    ? Get.theme.colorScheme.primary
+                                    : Get.theme.colorScheme.onSecondary,
                           ),
                           AppSpacing.horizontalSmall,
                           Text(
@@ -271,12 +274,13 @@ class CrmDrawer extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight:
-                              drawerController.selectedIndex.value == i
-                                  ? FontWeight.w700
-                                  : FontWeight.w600,
-                              color: drawerController.selectedIndex.value == i
-                                  ? Get.theme.colorScheme.primary
-                                  : Get.theme.colorScheme.onSecondary,
+                                  drawerController.selectedIndex.value == i
+                                      ? FontWeight.w700
+                                      : FontWeight.w600,
+                              color:
+                                  drawerController.selectedIndex.value == i
+                                      ? Get.theme.colorScheme.primary
+                                      : Get.theme.colorScheme.onSecondary,
                             ),
                           ),
                         ],
@@ -291,36 +295,35 @@ class CrmDrawer extends StatelessWidget {
             AppSpacing.verticalSmall,
 
             /// Support Button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.medium),
-                    ),
-                  ),
-                  onPressed: () {},
-                  icon: CrmIc(iconPath: ICRes.notifications, color: Colors.white),
-                  label: const Text(
-                    "Support",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ),
-            ),
-
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            //   child: SizedBox(
+            //     width: double.infinity,
+            //     child: ElevatedButton.icon(
+            //       style: ElevatedButton.styleFrom(
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(AppRadius.medium),
+            //         ),
+            //       ),
+            //       onPressed: () {},
+            //       icon: CrmIc(iconPath: ICRes.notifications, color: Colors.white),
+            //       label: const Text(
+            //         "Support",
+            //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             const Spacer(),
 
             /// Logout
             Padding(
               padding: const EdgeInsets.all(AppPadding.medium),
               child: GestureDetector(
-                onTap: ()  {
+                onTap: () {
                   Get.lazyPut<AuthController>(() => AuthController());
                   Get.find<AuthController>().logout();
-                  },
+                },
                 child: Row(
                   children: [
                     CrmIc(
@@ -366,7 +369,7 @@ class CustomDrawerController extends GetxController {
 
   void onChange(int index) {
     if (index == 5) {
-      Get.to(() =>  JobScreen());
+      Get.to(() => JobScreen());
     } else {
       navigationController.changeIndex(index);
       Get.back();
@@ -375,7 +378,6 @@ class CustomDrawerController extends GetxController {
     selectedIndex.value = index;
   }
 }
-
 
 class DrawerModel {
   final String? title;

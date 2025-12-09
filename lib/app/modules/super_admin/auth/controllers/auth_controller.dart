@@ -25,6 +25,7 @@ class AuthController extends GetxController {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final RxBool isPolicyAccepted = false.obs;
   final formKey = GlobalKey<FormState>();
 
   final RolesController roleController = Get.put(RolesController());
@@ -35,6 +36,10 @@ class AuthController extends GetxController {
   void fillTestCredentials() {
     emailController.text = "g@yopmail.com";
     passwordController.text = "SuperAdmin@123";
+  }
+
+  void toggleCheckbox(bool? value) {
+    isPolicyAccepted.value = value ?? false;
   }
 
   Future<void> login(String userName, String password) async {
